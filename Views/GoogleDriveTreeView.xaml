@@ -27,6 +27,7 @@
                             <ColumnDefinition  x:Name="Rectangle" />
                             <ColumnDefinition  x:Name="Empty1" Width="10" />
                             <ColumnDefinition  x:Name="Department" />
+                            <ColumnDefinition  x:Name="Empty2" Width="10" />
                             <ColumnDefinition  x:Name="GoogleDriveHyperlink" />
                         </Grid.ColumnDefinitions>
 
@@ -68,7 +69,7 @@
                         <!--textblock to display the names of catalogs-->
                         <TextBlock x:Name="textBlockHeader"    Grid.Column="3" Grid.Row="1" Text="{Binding Name}" FontSize="9"   />
 
-                        <Button Grid.Column="4" Grid.Row="1"  Height="10" Width="10">
+                        <Button Grid.Column="5" Grid.Row="1"  Height="12" Width="12">
                             <Button.Template>
                                 <ControlTemplate>
                                     <Image Source="..\Resources\Images\Icons\Marcus-Roberto-Google-Play-Google-Drive.ico"/>

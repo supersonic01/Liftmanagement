@@ -3,6 +3,7 @@ using Liftmanagement.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Runtime.Remoting;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,10 +47,62 @@ namespace Liftmanagement.View
         private void gridCustomers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Customer customer = gridCustomers.SelectedItem as Customer;
-            if (customer != null)
+            if (customer == null)
             {
-                Console.WriteLine("Customer :" + customer.Address);
+                return;
+
             }
+
+            Console.WriteLine("Customer :" + customer.Address);
+
+            lblCompanyName.Content = customer.GetDisplayName<Customer>(nameof(customer.CompanyName)) + ":";
+            lblContactPerson.Content = customer.GetDisplayName<Customer>(nameof(customer.ContactPerson)) + ":";
+            lblAddress.Content = customer.GetDisplayName<Customer>(nameof(customer.Address)) + ":";
+            lblPostcode.Content = customer.GetDisplayName<Customer>(nameof(customer.Postcode)) + ":";
+            lblCity.Content = customer.GetDisplayName<Customer>(nameof(customer.City)) + ":";
+            lblPhoneWork.Content = customer.GetDisplayName<Customer>(nameof(customer.PhoneWork)) + ":";
+            lblMobile.Content = customer.GetDisplayName<Customer>(nameof(customer.Mobile)) + ":";
+
+            txtCompanyName.Text = customer.CompanyName;
+            txtContactPerson.Text = customer.ContactPerson;
+            txtAddress.Text = customer.Address;
+            txtPostcode.Text = customer.Postcode;
+            txtCity.Text = customer.City;
+            txtPhoneWork.Text = customer.PhoneWork;
+            txtMobile.Text = customer.Mobile;
+
+
+            List<Location> locations = TestData.GetLocations();
+
+            var location = locations.Where(c => c.CustomerId == customer.CustomerId).FirstOrDefault();
+
+            if (location == null)
+            {
+                return;
+            }
+
+            lblLocationAdditionalInfo.Content = location.GetDisplayName<Location>(nameof(location.AdditionalInfo)) + ":";
+            lblLocationContactPerson.Content = location.GetDisplayName<Location>(nameof(location.ContactPerson)) + ":";
+            lblLocationAddress.Content = location.GetDisplayName<Location>(nameof(location.Address)) + ":";
+            lblLocationPostcode.Content = location.GetDisplayName<Location>(nameof(location.Postcode)) + ":";
+            lblLocationCity.Content = location.GetDisplayName<Location>(nameof(location.City)) + ":";
+            lblLocationPhoneWork.Content = location.GetDisplayName<Location>(nameof(location.PhoneWork)) + ":";
+            lblLocationMobile.Content = location.GetDisplayName<Location>(nameof(location.Mobile)) + ":";
+
+            txtLocationAdditionalInfo.Text = location.AdditionalInfo;
+            txtLocationContactPerson.Text = location.ContactPerson;
+            txtLocationAddress.Text = location.Address;
+            txtLocationPostcode.Text = location.Postcode;
+            txtLocationCity.Text = location.City;
+            txtLocationPhoneWork.Text = location.PhoneWork;
+            txtLocationMobile.Text = location.Mobile;
+
+        }
+
+        private void expanderCustomers_Collapsed(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("expanderCustomers_Collapsed" );
+            gridResizableCustomers.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
         }
     }
 }

@@ -1,0 +1,87 @@
+﻿<UserControl x:Class="Liftmanagement.Views.GoogleDriveTreeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Liftmanagement.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>            
+        </Grid.RowDefinitions>
+        
+        <TreeView x:Name="GoogleDriveFolderHierarchy" Grid.Row="0" BorderThickness="1" 
+                  MinWidth="300" MinHeight="440"  Width="Auto"      ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+                  Margin="1,1,1,1"  Height="Auto">
+
+            <TreeView.Resources>
+
+                <HierarchicalDataTemplate  DataType= "{x:Type local:GoogleDriveTreeNodeViewModel}" ItemsSource="{Binding Children}"   >
+
+                    <Grid >
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition  x:Name="Line" Width="20" />
+                            <ColumnDefinition  x:Name="Rectangle" />
+                            <ColumnDefinition  x:Name="Empty1" Width="10" />
+                            <ColumnDefinition  x:Name="Department" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--drawing Connecting Lines -->
+                        <!-- Horizontal Lines -->
+
+                        <Border Grid.Column="0"  x:Name="HorLn" Margin="9,0,0,2" HorizontalAlignment="Stretch" Height="1" BorderThickness="0,0,0,1" VerticalAlignment="Bottom">
+                            <Border.BorderBrush>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="2,0" SpreadMethod="Repeat" MappingMode="Absolute">
+                                    <GradientStop Color="Transparent" Offset="0" />
+                                    <GradientStop Color="Transparent" Offset="0.499" />
+                                    <GradientStop Color="#999" Offset="0.5" />
+                                </LinearGradientBrush>
+                            </Border.BorderBrush>
+                        </Border>
+
+                        <!-- Vertical Lines -->
+                        <Border Grid.Column="0"  x:Name="VerLn" Margin="0,0,1,2" Grid.RowSpan="2" VerticalAlignment="Stretch" Width="1" BorderThickness="0,0,1,0" >
+                            <Border.BorderBrush>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,2" SpreadMethod="Repeat" MappingMode="Absolute">
+                                    <GradientStop Color="Transparent" Offset="0" />
+                                    <GradientStop Color="Transparent" Offset="0.499" />
+                                    <GradientStop Color="#999" Offset="0.5" />
+                                </LinearGradientBrush>
+                            </Border.BorderBrush>
+                        </Border>
+
+                        <!--drawing catalog shapes-->
+                        <Rectangle  Grid.Column="1"    Width="14" Height="10" Stroke="Gold"  SnapsToDevicePixels="true" VerticalAlignment="Center"    >
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,2" StartPoint="0.5,0">
+                                    <GradientStop Color="White" Offset="0"/>
+                                    <GradientStop Color="Gold" Offset="0.5"/>
+                                    <GradientStop Color="Honeydew" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle  Grid.Column="1"    Width="7" Height="4" Stroke="Gold"  SnapsToDevicePixels="true" VerticalAlignment="Top" HorizontalAlignment="Left"  Fill="White"  />
+                        <!--textblock to display the names of catalogs-->
+                        <TextBlock x:Name="textBlockHeader"    Grid.Column="3" Grid.Row="1" Text="{Binding Name}"     FontSize="9"   />
+                    </Grid>
+
+                </HierarchicalDataTemplate>
+                <!--trriger to expand nodes-->
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Expand}"  Value="True">
+                            <Setter Property="IsExpanded" Value="True"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TreeView.Resources>
+        </TreeView>
+        
+        <Button x:Name="btnCancel" Grid.Row="1" Content="Abbrechen" Width="120" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Stretch" Click="btnCancel_Click"/>
+        <Button x:Name="btnSave" Grid.Row="1" Content="Übernehmen" Width="120" HorizontalAlignment="Right" Margin="5,5,150,5" VerticalAlignment="Stretch" Click="btnSave_Click"/>
+
+    </Grid>
+</UserControl>

@@ -1,6 +1,9 @@
-﻿using Liftmanagement.Models;
+﻿using Liftmanagement.Data;
+using Liftmanagement.Helper;
+using Liftmanagement.Models;
 using Liftmanagement.View;
 using Liftmanagement.ViewModels;
+using Liftmanagement.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -52,6 +55,11 @@ namespace Liftmanagement
             DataList.Add(CategoryVM.Categories.First());
             MyDataGrid.ItemsSource = DataList;
 
+            // MySQLDataAccess.TestConnection();
+            // new CalendarQuickstart();
+          //  new DriveQuickstart();
+          //  new DirectoryQuickstart();
+
         }
 
         private void DataGridRow_KeyDown(object sender, KeyEventArgs e)
@@ -62,7 +70,8 @@ namespace Liftmanagement
         private void DataGridRow_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Console.WriteLine("MouseDonw");
-            frameDetail.Content = new  CustomerView();
+            // frameDetail.Content = new  CustomerView();
+            frameDetail.Content = new GoogleDriveTreeView();
         }
     }
 }

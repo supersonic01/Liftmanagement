@@ -15,17 +15,17 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid x:Name="gridResizableCustomers">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0"/>
-            <ColumnDefinition Width="473"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
+        
         </Grid.ColumnDefinitions>
 
-        <Expander x:Name="expanderCustomers" Grid.Column="0" ExpandDirection="Right" HorizontalAlignment="Left" VerticalAlignment="Stretch" IsExpanded="True" Expanded="expanderCustomers_Expanded" Grid.ColumnSpan="2" >
+        <Expander x:Name="expanderCustomers" Grid.Column="0" ExpandDirection="Right" HorizontalAlignment="Left" VerticalAlignment="Stretch" IsExpanded="True" Expanded="expanderCustomers_Expanded"  Collapsed="expanderCustomers_Collapsed">
 
-            <StackPanel x:Name="spCustomers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Beige" MinWidth="450" Loaded="spCustomers_Loaded">
+            <StackPanel x:Name="spCustomers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="450" Background="LightBlue">
                 <DataGrid  x:Name="gridCustomers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False"  SelectionUnit="FullRow" SelectionChanged="gridCustomers_SelectionChanged"  >
                     <DataGrid.Columns >
                         <DataGridTemplateColumn x:Name="CompanyName" Width="Auto">
@@ -56,7 +56,7 @@
             </StackPanel>
         </Expander>
         <!--<GridSplitter Grid.Column="1" Width="5" Background="DarkGray"  ResizeDirection="Columns" VerticalAlignment="Stretch"/>-->
-        <GridSplitter x:Name="gspCustomer" Grid.Column="2" Width="15"
+        <GridSplitter x:Name="gspCustomer" Grid.Column="1" Width="15"
                   HorizontalAlignment="Center" VerticalAlignment="Stretch"
                   BorderBrush="White" BorderThickness="1"
                   Style="{StaticResource GridSplitterStyle1}">
@@ -69,10 +69,115 @@
                 </LinearGradientBrush>
             </GridSplitter.Background>
         </GridSplitter>
-        <StackPanel  Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Blue">
-            <Expander Header="Expander" Height="100" Template="{StaticResource SimpleExpanderTemp}">
-                <Grid Background="#FFE5E5E5"/>
+        <StackPanel Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid>
+               
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                
+                <Expander Header="Kunde" Grid.Row="0" Template="{StaticResource SimpleExpanderTemp}" IsExpanded="True">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                        </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        </Grid.RowDefinitions>
+                    
+                        <Label x:Name="lblCompanyName" Grid.Row="0" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblContactPerson" Grid.Row="0" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblAddress" Grid.Row="0" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblPostcode" Grid.Row="0" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblCity" Grid.Row="0" Grid.Column="4"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblPhoneWork" Grid.Row="2" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblMobile" Grid.Row="2" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+
+
+                        <TextBox x:Name="txtCompanyName" Grid.Row="1" Grid.Column="0" Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtContactPerson" Grid.Row="1" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtAddress" Grid.Row="1" Grid.Column="2"  Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtPostcode" Grid.Row="1" Grid.Column="3" Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtCity" Grid.Row="1" Grid.Column="4"  Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtPhoneWork" Grid.Row="3" Grid.Column="0"  Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtMobile" Grid.Row="3" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
+                    </Grid>
             </Expander>
+                <Expander Header="Standort"  Grid.Row="1"  Template="{StaticResource SimpleExpanderTemp}" IsExpanded="True">
+                    <Grid Background="#FFE5E5E5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                        </Grid.RowDefinitions>
+
+                      
+                        <Label x:Name="lblLocationContactPerson" Grid.Row="0" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblLocationAddress" Grid.Row="0" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblLocationPostcode" Grid.Row="0" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblLocationCity" Grid.Row="0" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblLocationPhoneWork" Grid.Row="2" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblLocationMobile" Grid.Row="2" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblLocationAdditionalInfo" Grid.Row="2" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+                      
+                        <TextBox x:Name="txtLocationContactPerson" Grid.Row="1" Grid.Column="0"  Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtLocationAddress" Grid.Row="1" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtLocationPostcode" Grid.Row="1" Grid.Column="2" Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtLocationCity" Grid.Row="1" Grid.Column="3"  Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtLocationPhoneWork" Grid.Row="3" Grid.Column="0"  Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtLocationMobile" Grid.Row="3" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtLocationAdditionalInfo" Grid.Row="1" Grid.Column="2" Style="{StaticResource TextBoxStyle}"/>
+                    </Grid>
+                </Expander>
+                <Expander Header="Wartungsvertrag" Grid.Row="2" Template="{StaticResource SimpleExpanderTemp}" IsExpanded="True">
+                    <Grid Background="#FFE5E5E5">
+                    </Grid>
+                </Expander>
+
+                <Expander Header="Notrufvertrag" Grid.Row="3" Template="{StaticResource SimpleExpanderTemp}" IsExpanded="True">
+                    <Grid Background="#FFE5E5E5">
+                    </Grid>
+                </Expander>
+
+                <Expander Header="Anlage" Grid.Row="4" Template="{StaticResource SimpleExpanderTemp}" IsExpanded="True">
+                    <Grid Background="#FFE5E5E5">
+                    </Grid>
+                </Expander>
+
+                <Expander Header="Kosten" Grid.Row="5" Template="{StaticResource SimpleExpanderTemp}" IsExpanded="True">
+                    <Grid Background="#FFE5E5E5">
+                    </Grid>
+                </Expander>
+
+                <Expander Header="Termine" Grid.Row="6" Template="{StaticResource SimpleExpanderTemp}" IsExpanded="True">
+                    <Grid Background="#FFE5E5E5">
+                    </Grid>
+                </Expander>
+
+            </Grid>
 
         </StackPanel>
     </Grid>

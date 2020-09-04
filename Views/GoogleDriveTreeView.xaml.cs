@@ -36,7 +36,12 @@ namespace Liftmanagement.Views
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-           var item=  GoogleDriveFolderHierarchy.SelectedItem;
+           var node=  GoogleDriveFolderHierarchy.SelectedItem as GoogleDriveTreeNodeViewModel ;
+            if(node != null)
+            {
+                Console.WriteLine(node.WebLink);
+            }
+
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)

@@ -34,6 +34,14 @@ namespace Liftmanagement.ViewModels
             set { webLink = value; }
         }
 
+        private int level;
+
+        public int Level
+        {
+            get { return level; }
+            set { level = value; }
+        }
+
 
 
         public ObservableCollection<GoogleDriveTreeNodeViewModel> Children { get; set; }

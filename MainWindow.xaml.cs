@@ -70,8 +70,8 @@ namespace Liftmanagement
         private void DataGridRow_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Console.WriteLine("MouseDonw");
-            // frameDetail.Content = new  CustomerView();
-            frameDetail.Content = new GoogleDriveTreeView();
+             frameDetail.Content = new  CustomerView();
+            //frameDetail.Content = new GoogleDriveTreeView();
         }
     }
 }

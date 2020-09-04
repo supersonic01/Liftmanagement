@@ -1,5 +1,6 @@
 ﻿using Liftmanagement.Helper;
 using Liftmanagement.Models;
+using Liftmanagement.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,26 +28,36 @@ namespace Liftmanagement.View
         public CustomerView()
         {
             InitializeComponent();
-            gridCustomers.ItemsSource = TestData.GetCustomers(); ;
+            var customersView = new CustomersView();
+            frameCustomers.Content = customersView;
+            customersView.expanderCustomers.Collapsed += ExpanderCustomers_Collapsed;
+            customersView.dgCustomers.SelectionChanged += DgCustomers_SelectionChanged;
         }
 
-        private void expanderCustomers_Expanded(object sender, RoutedEventArgs e)
-        {
-            Console.WriteLine(" is expanded");
 
-        }
+        /*
+private void expanderCustomers_Expanded(object sender, RoutedEventArgs e)
+{
+   Console.WriteLine(" is expanded");
 
-        private void spCustomers_Loaded(object sender, RoutedEventArgs e)
-        {
-            //Work around
-            Console.WriteLine(string.Format("sp: {0} ", spCustomers.Width));
-            spCustomers.Width = 451;
-            spCustomers.Width = 450;
-        }
+}
 
-        private void gridCustomers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+private void spCustomers_Loaded(object sender, RoutedEventArgs e)
+{
+   //Work around
+   Console.WriteLine(string.Format("sp: {0} ", spCustomers.Width));
+   spCustomers.Width = 451;
+   spCustomers.Width = 450;
+}
+*/
+
+        private void DgCustomers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Customer customer = gridCustomers.SelectedItem as Customer;
+            Customer customer = null;
+            var dgCustomers = sender as DataGrid;
+            if (dgCustomers != null)
+                 customer = dgCustomers.SelectedItem as Customer;
+                                               
             if (customer == null)
             {
                 return;
@@ -95,13 +106,14 @@ namespace Liftmanagement.View
             txtLocationPostcode.Text = location.Postcode;
             txtLocationCity.Text = location.City;
             txtLocationPhoneWork.Text = location.PhoneWork;
-            txtLocationMobile.Text = location.Mobile;
-
+            txtLocationMobile.Text = location.Mobile;            
         }
 
-        private void expanderCustomers_Collapsed(object sender, RoutedEventArgs e)
+
+        private void ExpanderCustomers_Collapsed(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("expanderCustomers_Collapsed" );
+
+            Console.WriteLine("expanderCustomers_Collapsed");
             gridResizableCustomers.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
         }
     }

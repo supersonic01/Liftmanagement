@@ -22,39 +22,8 @@
             <ColumnDefinition Width="*"/>
         
         </Grid.ColumnDefinitions>
+        <Frame x:Name="frameCustomers" Grid.Column="0" Content="Customers"/>
 
-        <Expander x:Name="expanderCustomers" Grid.Column="0" ExpandDirection="Right" HorizontalAlignment="Left" VerticalAlignment="Stretch" IsExpanded="True" Expanded="expanderCustomers_Expanded"  Collapsed="expanderCustomers_Collapsed">
-
-            <StackPanel x:Name="spCustomers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="450" Background="LightBlue">
-                <DataGrid  x:Name="gridCustomers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False"  SelectionUnit="FullRow" SelectionChanged="gridCustomers_SelectionChanged"  >
-                    <DataGrid.Columns >
-                        <DataGridTemplateColumn x:Name="CompanyName" Width="Auto">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding Path=CompanyName}" FontSize="12" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-
-                        <DataGridTemplateColumn x:Name="Postcode" Width="Auto">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding Path=Postcode}" FontSize="12" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-
-                        <DataGridTemplateColumn x:Name="City" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding Path=City}" FontSize="12" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </StackPanel>
-        </Expander>
         <!--<GridSplitter Grid.Column="1" Width="5" Background="DarkGray"  ResizeDirection="Columns" VerticalAlignment="Stretch"/>-->
         <GridSplitter x:Name="gspCustomer" Grid.Column="1" Width="15"
                   HorizontalAlignment="Center" VerticalAlignment="Stretch"

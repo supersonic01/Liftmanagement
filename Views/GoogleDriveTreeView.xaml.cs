@@ -36,15 +36,37 @@ namespace Liftmanagement.Views
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-           var node=  GoogleDriveFolderHierarchy.SelectedItem as GoogleDriveTreeNodeViewModel ;
-            if(node != null)
-            {
-                Console.WriteLine(node.WebLink);
-            }
+            GetSelectedNode();
 
         }
 
+        private GoogleDriveTreeNodeViewModel GetSelectedNode()
+        {
+            var node = GoogleDriveFolderHierarchy.SelectedItem as GoogleDriveTreeNodeViewModel;
+            //if (node != null)
+            //{
+            //    Console.WriteLine(node.WebLink);
+            //}
+            return node;
+        }
+
         private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnShowInGoogleDrive_Click(object sender, RoutedEventArgs e)
+        {
+            var node = GetSelectedNode();
+            if (node != null)
+            {
+                Console.WriteLine(node.WebLink);
+                System.Diagnostics.Process.Start(node.WebLink);
+            }
+           
+        }
+
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
 
         }

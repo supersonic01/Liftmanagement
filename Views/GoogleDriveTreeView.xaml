@@ -9,9 +9,9 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="30"/>            
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        
+
         <TreeView x:Name="GoogleDriveFolderHierarchy" Grid.Row="0" BorderThickness="1" 
                   MinWidth="300" MinHeight="440"  Width="Auto"      ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" 
                   Margin="1,1,1,1"  Height="Auto">
@@ -27,8 +27,6 @@
                             <ColumnDefinition  x:Name="Rectangle" />
                             <ColumnDefinition  x:Name="Empty1" Width="10" />
                             <ColumnDefinition  x:Name="Department" />
-                            <ColumnDefinition  x:Name="Empty2" Width="10" />
-                            <ColumnDefinition  x:Name="GoogleDriveHyperlink" />
                         </Grid.ColumnDefinitions>
 
                         <!--drawing Connecting Lines -->
@@ -68,15 +66,6 @@
                         <Rectangle  Grid.Column="1"    Width="7" Height="4" Stroke="Gold"  SnapsToDevicePixels="true" VerticalAlignment="Top" HorizontalAlignment="Left"  Fill="White"  />
                         <!--textblock to display the names of catalogs-->
                         <TextBlock x:Name="textBlockHeader"    Grid.Column="3" Grid.Row="1" Text="{Binding Name}" FontSize="9"   />
-
-                        <Button Grid.Column="5" Grid.Row="1"  Height="12" Width="12">
-                            <Button.Template>
-                                <ControlTemplate>
-                                    <Image Source="..\Resources\Images\Icons\Marcus-Roberto-Google-Play-Google-Drive.ico"/>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
-
                     </Grid>
 
                 </HierarchicalDataTemplate>
@@ -90,9 +79,46 @@
                 </Style>
             </TreeView.Resources>
         </TreeView>
-        
-        <Button x:Name="btnCancel" Grid.Row="1" Content="Abbrechen" Width="120" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Stretch" Click="btnCancel_Click"/>
-        <Button x:Name="btnSave" Grid.Row="1" Content="Übernehmen" Width="120" HorizontalAlignment="Right" Margin="5,5,150,5" VerticalAlignment="Stretch" Click="btnSave_Click"/>
+        <StackPanel Grid.Row="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
+                <StackPanel Grid.Column="0"  HorizontalAlignment="Left" Background="Azure" >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="btnUpdate" Grid.Column="0" Content="Aktualisieren" Width="120" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Stretch" Click="btnUpdate_Click"/>
+                        <!--<Button x:Name="btnShowInGoogleDrive" Grid.Column="1" Content="Google Drive öffnen" Width="150" HorizontalAlignment="Right" Margin="5,5,150,5" VerticalAlignment="Stretch" Click="btnShowInGoogleDrive_Click"/>-->
+
+                        <Button x:Name="btnShowInGoogleDrive" Grid.Column="1"  Width="150" HorizontalAlignment="Right" Margin="5,5,150,5" VerticalAlignment="Stretch" Click="btnShowInGoogleDrive_Click">
+                            <DockPanel HorizontalAlignment="Stretch"   VerticalAlignment="Stretch" Height="Auto">
+                                <StackPanel Orientation="Horizontal"  DockPanel.Dock="Left" Width="Auto" >
+                                    <Image Source="..\Resources\Images\Icons\Marcus-Roberto-Google-Play-Google-Drive.ico" Stretch="Uniform" Width="24" Height="24" HorizontalAlignment="Left"/>
+                                    <Label FontSize="16">"Google Drive öffnen"</Label>
+                                </StackPanel>
+                            </DockPanel>
+                        </Button>
+
+                    </Grid>
+                </StackPanel>
+                <StackPanel Grid.Column="1"  HorizontalAlignment="Right" Background="Bisque" >
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="btnCancel" Grid.Column="1" Content="Abbrechen" Width="120" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Stretch" Click="btnCancel_Click"/>
+                        <Button x:Name="btnSave" Grid.Column="0" Content="Übernehmen" Width="120" HorizontalAlignment="Right"  Margin="5" VerticalAlignment="Stretch" Click="btnSave_Click"/>
+
+                    </Grid>
+
+                </StackPanel>
+            </Grid>
+        </StackPanel>
     </Grid>
 </UserControl>

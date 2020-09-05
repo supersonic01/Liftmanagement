@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Liftmanagement"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-
+        Title="Hesse Aufzugsberatung Liftmanagement " Height="450" Width="800" Icon="Resources\Images\Icons\hesse_icon.png">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -16,15 +15,18 @@
         </ResourceDictionary>
     </Window.Resources>
 
+        <Grid x:Name="gridResizableCustomers">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>              
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-
-    <Grid>
-        <Frame x:Name="frameDetail" Content="Frame" HorizontalAlignment="Stretch"  Margin="260,10,10,10" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden"/>
-        <StackPanel x:Name="stPanelCategory" HorizontalAlignment="Left" Margin="10,10,10,10" VerticalAlignment="Stretch" Width="250"  Background="LightGray" >
+        <Expander x:Name="expanderCustomers" Grid.Column="0" ExpandDirection="Right" HorizontalAlignment="Left" VerticalAlignment="Stretch" IsExpanded="True">
+            <StackPanel x:Name="stPanelCategory"  HorizontalAlignment="Left" Margin="10,10,10,10" VerticalAlignment="Stretch" Width="300"  Background="LightGray" >
             <!--<Image Name="MyImage" Source="{Binding ImagePath}" />-->
-            <DataGrid Name="MyDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True"  GridLinesVisibility="None"
-                  ItemsSource="{Binding}" RowDetailsVisibilityMode="VisibleWhenSelected" Background="Transparent" RowBackground="Transparent" 
-                     HeadersVisibility="None" BorderBrush="Transparent" BorderThickness="0" SelectionUnit="FullRow" >
+            <DataGrid Name="dgCategory" AutoGenerateColumns="False" EnableRowVirtualization="True"  GridLinesVisibility="None"
+                  RowDetailsVisibilityMode="VisibleWhenSelected" Background="Transparent" RowBackground="Transparent" 
+                     HeadersVisibility="None" BorderBrush="Transparent" BorderThickness="0" SelectionUnit="FullRow" SelectionChanged="dgCategory_SelectionChanged" >
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="BorderThickness" Value="0"/>
@@ -36,7 +38,7 @@
                 <DataGrid.ItemContainerStyle>
                     <Style TargetType="DataGridRow">
                         <!--<EventSetter Event="KeyDown" Handler="DataGridRow_KeyDown" />-->
-                        <EventSetter Event="MouseDown" Handler="DataGridRow_MouseDown" />
+                        <!--<EventSetter Event="MouseDown" Handler="DataGridRow_MouseDown" />-->
                     </Style>
                 </DataGrid.ItemContainerStyle>
                 <DataGrid.Columns>
@@ -76,6 +78,7 @@
             </Button>-->
 
         </StackPanel>
-        <TreeView HorizontalAlignment="Left" Height="100" Margin="-419,162,0,0" VerticalAlignment="Top" Width="100"/>
+        </Expander>
+        <Frame x:Name="frameDetail" Grid.Column="1" Content="Frame" HorizontalAlignment="Stretch"  Margin="10" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

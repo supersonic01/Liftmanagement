@@ -1,5 +1,6 @@
 ﻿using Liftmanagement.Helper;
 using Liftmanagement.Models;
+using Liftmanagement.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +23,23 @@ namespace Liftmanagement.Views
     /// </summary>
     public partial class CustomersView : UserControl
     {
+        private CustomersViewModel  customersVM = new CustomersViewModel() ;
+
+        public CustomersViewModel CustomersVM { 
+            get { return customersVM; }
+            set { customersVM = value; }
+        }
+
         public CustomersView()
         {
             InitializeComponent();
-            dgCustomers.ItemsSource = TestData.GetCustomers(); ;
+
+            Binding binding = new Binding("CustomersVM.Customers")
+            {
+                Source = this
+            };
+
+            dgCustomers.SetBinding(DataGrid.ItemsSourceProperty, binding);
         }      
     }
 }

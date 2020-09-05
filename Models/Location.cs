@@ -15,5 +15,8 @@ namespace Liftmanagement.Models
 
         [DisplayName("Zusätzliche Informationen")]
         public string AdditionalInfo { get; set; }
+
+        [DisplayName("Beim Störungsfall kontaktieren")]
+        public bool ContactByDefect { get; set; }
     }
 }

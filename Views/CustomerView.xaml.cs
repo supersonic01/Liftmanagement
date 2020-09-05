@@ -1,8 +1,10 @@
 ﻿using Liftmanagement.Helper;
 using Liftmanagement.Models;
+using Liftmanagement.ViewModels;
 using Liftmanagement.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Runtime.Remoting;
@@ -25,39 +27,47 @@ namespace Liftmanagement.View
     /// </summary>
     public partial class CustomerView : UserControl
     {
+
+        public CustomerViewModel CustomerVM { get; set; } = new CustomerViewModel();
+
         public CustomerView()
         {
             InitializeComponent();
+
             var customersView = new CustomersView();
             frameCustomers.Content = customersView;
             customersView.expanderCustomers.Collapsed += ExpanderCustomers_Collapsed;
             customersView.dgCustomers.SelectionChanged += DgCustomers_SelectionChanged;
+            customersView.spCustomers.Loaded += SpCustomers_Loaded;
+
+            //Binding binding = new Binding("CustomerVM.LocationDetailViews")
+            //{
+            //    Source = this
+            //};
+
+            //gridLocation.SetBinding(ListBox.ItemsSourceProperty, binding);
+
         }
 
+        private void SpCustomers_Loaded(object sender, RoutedEventArgs e)
+        {
+            var spCustomers = sender as StackPanel;
+            if (spCustomers == null)
+                return;
 
-        /*
-private void expanderCustomers_Expanded(object sender, RoutedEventArgs e)
-{
-   Console.WriteLine(" is expanded");
-
-}
-
-private void spCustomers_Loaded(object sender, RoutedEventArgs e)
-{
-   //Work around
-   Console.WriteLine(string.Format("sp: {0} ", spCustomers.Width));
-   spCustomers.Width = 451;
-   spCustomers.Width = 450;
-}
-*/
+            //Work around
+            Console.WriteLine(string.Format("sp: {0} ", spCustomers.Width));
+            spCustomers.Width = 451;
+            spCustomers.Width = 450;
+        }
 
         private void DgCustomers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Customer customer = null;
             var dgCustomers = sender as DataGrid;
             if (dgCustomers != null)
-                 customer = dgCustomers.SelectedItem as Customer;
-                                               
+                customer = dgCustomers.SelectedItem as Customer;
+
             if (customer == null)
             {
                 return;
@@ -85,28 +95,16 @@ private void spCustomers_Loaded(object sender, RoutedEventArgs e)
 
             List<Location> locations = TestData.GetLocations();
 
-            var location = locations.Where(c => c.CustomerId == customer.CustomerId).FirstOrDefault();
+            //  var location = locations.Where(c => c.CustomerId == customer.CustomerId).FirstOrDefault();
 
-            if (location == null)
-            {
-                return;
-            }
+              ObservableCollection<LocationDetailView> locationDetailViews = new ObservableCollection<LocationDetailView>();
+        locations.ForEach(c => locationDetailViews.Add(new LocationDetailView(c)));
+            locations.ForEach(c => locationDetailViews.Add(new LocationDetailView(c)));
+            //  CustomerVM.LocationDetailViews = locationDetailViews;
+            //gridLocation.ItemsSource = CustomerVM.LocationDetailViews;
 
-            lblLocationAdditionalInfo.Content = location.GetDisplayName<Location>(nameof(location.AdditionalInfo)) + ":";
-            lblLocationContactPerson.Content = location.GetDisplayName<Location>(nameof(location.ContactPerson)) + ":";
-            lblLocationAddress.Content = location.GetDisplayName<Location>(nameof(location.Address)) + ":";
-            lblLocationPostcode.Content = location.GetDisplayName<Location>(nameof(location.Postcode)) + ":";
-            lblLocationCity.Content = location.GetDisplayName<Location>(nameof(location.City)) + ":";
-            lblLocationPhoneWork.Content = location.GetDisplayName<Location>(nameof(location.PhoneWork)) + ":";
-            lblLocationMobile.Content = location.GetDisplayName<Location>(nameof(location.Mobile)) + ":";
+            DtContactDetailListView.ItemsSource = locationDetailViews;
 
-            txtLocationAdditionalInfo.Text = location.AdditionalInfo;
-            txtLocationContactPerson.Text = location.ContactPerson;
-            txtLocationAddress.Text = location.Address;
-            txtLocationPostcode.Text = location.Postcode;
-            txtLocationCity.Text = location.City;
-            txtLocationPhoneWork.Text = location.PhoneWork;
-            txtLocationMobile.Text = location.Mobile;            
         }
 
 

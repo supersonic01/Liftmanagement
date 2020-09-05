@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Liftmanagement.Views;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -18,7 +19,13 @@ namespace Liftmanagement.ViewModels
         }
 
 
+        private List<LocationDetailView> locationDetailViews = new List<LocationDetailView>();
 
+        public List<LocationDetailView> LocationDetailViews
+        {
+            get { return locationDetailViews; }
+            set { SetField(ref locationDetailViews, value); }
+        }
 
     }
 }

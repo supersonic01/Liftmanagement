@@ -49,17 +49,30 @@ namespace Liftmanagement
                         gridCategory.Columns.Add(textColumn1);
             */
             // gridCategory.ItemsSource = CategoryVM.Categories;
-           // MyImage.DataContext = CategoryVM.Categories.First();
-            ObservableCollection<Category> DataList = new ObservableCollection<Category>();
+            // MyImage.DataContext = CategoryVM.Categories.First();
 
-            DataList.Add(CategoryVM.Categories.First());
-            MyDataGrid.ItemsSource = DataList;
+
+
+            //  dgCategory.ItemsSource = CategoryVM.Categories;
 
             // MySQLDataAccess.TestConnection();
             // new CalendarQuickstart();
-          //  new DriveQuickstart();
-          //  new DirectoryQuickstart();
+            //  new DriveQuickstart();
+            //  new DirectoryQuickstart();
+            /*
+            Binding b = new Binding("Temp2")
+            {
+                Source = this
+            };
+            listView1.SetBinding(ListView.ItemsSourceProperty, b);
+            */
 
+            Binding binding = new Binding("CategoryVM.Categories")
+            {
+                Source = this
+            };
+
+            dgCategory.SetBinding(DataGrid.ItemsSourceProperty, binding);
         }
 
         private void DataGridRow_KeyDown(object sender, KeyEventArgs e)
@@ -72,6 +85,49 @@ namespace Liftmanagement
             Console.WriteLine("MouseDonw");
              frameDetail.Content = new  CustomerView();
             //frameDetail.Content = new GoogleDriveTreeView();
+        }
+
+
+        private void dgCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            Category category = null;
+            var dgCustomers = sender as DataGrid;
+            if (dgCustomers != null)
+                category = dgCategory.SelectedItem as Category;
+
+            if (category == null)
+            {
+                return;
+
+            }
+
+            switch (category.MangementType)
+            {
+                case Helper.Helper.TTypeMangement.Customer:
+                    frameDetail.Content = new CustomerView();
+                    break;
+                case Helper.Helper.TTypeMangement.Location:
+                    frameDetail.Content = new LocationView();
+                    break;
+                case Helper.Helper.TTypeMangement.MaintenanceAgreement:
+                    break;
+                case Helper.Helper.TTypeMangement.EmergencyAgreement:
+                    break;
+                case Helper.Helper.TTypeMangement.MachineInformation:
+                    break;
+                case Helper.Helper.TTypeMangement.Task:
+                    break;
+                case Helper.Helper.TTypeMangement.Profil:
+                    break;
+                case Helper.Helper.TTypeMangement.Update:
+                    break;
+                case Helper.Helper.TTypeMangement.Managment:
+                    break;
+                default:
+                    break;
+            }
+
         }
     }
 }

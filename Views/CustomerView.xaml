@@ -87,39 +87,16 @@
                     </Grid>
             </Expander>
                 <Expander Header="Standort"  Grid.Row="1"  Template="{StaticResource SimpleExpanderTemp}" IsExpanded="True">
-                    <Grid Background="#FFE5E5E5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="200" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30" />
-                            <RowDefinition Height="30" />
-                            <RowDefinition Height="30" />
-                            <RowDefinition Height="30" />
-                            <RowDefinition Height="30" />
-                        </Grid.RowDefinitions>
+                
 
-                      
-                        <Label x:Name="lblLocationContactPerson" Grid.Row="0" Grid.Column="0"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblLocationAddress" Grid.Row="0" Grid.Column="1"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblLocationPostcode" Grid.Row="0" Grid.Column="2"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblLocationCity" Grid.Row="0" Grid.Column="3"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblLocationPhoneWork" Grid.Row="2" Grid.Column="0"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblLocationMobile" Grid.Row="2" Grid.Column="1"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblLocationAdditionalInfo" Grid.Row="2" Grid.Column="2"  Style="{StaticResource LableStyle}" />
-                      
-                        <TextBox x:Name="txtLocationContactPerson" Grid.Row="1" Grid.Column="0"  Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtLocationAddress" Grid.Row="1" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtLocationPostcode" Grid.Row="1" Grid.Column="2" Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtLocationCity" Grid.Row="1" Grid.Column="3"  Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtLocationPhoneWork" Grid.Row="3" Grid.Column="0"  Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtLocationMobile" Grid.Row="3" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtLocationAdditionalInfo" Grid.Row="1" Grid.Column="2" Style="{StaticResource TextBoxStyle}"/>
-                    </Grid>
+                    <ListView x:Name="DtContactDetailListView" ItemsSource="{Binding}" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Content="{Binding}" HorizontalAlignment="Stretch" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListView>
+                    
                 </Expander>
                 <Expander Header="Wartungsvertrag" Grid.Row="2" Template="{StaticResource SimpleExpanderTemp}" IsExpanded="True">
                     <Grid Background="#FFE5E5E5">

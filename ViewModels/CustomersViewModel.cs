@@ -1,4 +1,5 @@
-﻿using Liftmanagement.Models;
+﻿using Liftmanagement.Helper;
+using Liftmanagement.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,9 +23,10 @@ namespace Liftmanagement.ViewModels
 
         public CustomersViewModel()
         {
-
+            customers = TestData.GetCustomers();
         }
 
+       
 
     }
 }

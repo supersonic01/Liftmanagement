@@ -8,7 +8,7 @@ namespace Liftmanagement.Models
 
         public int CustomerId { get; set; }
 
-        [DisplayName("Firmenname")]
+        [DisplayName("Kundenname")]
         public string CompanyName { get; set; }
 
         [DisplayName("Google Drive")]
@@ -21,7 +21,7 @@ namespace Liftmanagement.Models
         }
 
         [DisplayName("Verwalter Firma")]
-        public string AdministratorCompany  { get; set; }
+        public AdministratorCompany Administrator  { get; set; }
 
         public static implicit operator string(Customer v)
         {

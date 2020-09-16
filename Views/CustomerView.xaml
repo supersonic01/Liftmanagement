@@ -20,7 +20,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
-        
+
         </Grid.ColumnDefinitions>
         <Frame x:Name="frameCustomers" Grid.Column="0" Content="Customers"/>
 
@@ -40,7 +40,7 @@
         </GridSplitter>
         <StackPanel Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid>
-               
+
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -50,8 +50,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                
-                <Expander Header="Kunde" Grid.Row="0" Template="{StaticResource SimpleExpanderTemp}" IsExpanded="True">
+
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="200" />
@@ -59,69 +58,81 @@
                         <ColumnDefinition Width="200" />
                         <ColumnDefinition Width="200" />
                         <ColumnDefinition Width="200" />
-                        </Grid.ColumnDefinitions>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" x:Name="Header" />
                         <RowDefinition Height="30" />
                         <RowDefinition Height="30" />
                         <RowDefinition Height="30" />
+                        <RowDefinition Height="10" />
                         <RowDefinition Height="30" />
                         <RowDefinition Height="30" />
-                        </Grid.RowDefinitions>
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="60" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5"  Content="Kunde" FontSize="24" Margin="10" Padding="10"
+                           HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center"/>
+
+                    <Label x:Name="lblCompanyName" Grid.Row="2" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblContactPerson" Grid.Row="2" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblAddress" Grid.Row="2" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblPostcode" Grid.Row="2" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblCity" Grid.Row="2" Grid.Column="4"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblPhoneWork" Grid.Row="5" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblMobile" Grid.Row="5" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblGoogleDriveLink" Grid.Row="5" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+
+                    <Label x:Name="lblAdditionalInfo" Grid.Row="8" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+
+
+                    <TextBox x:Name="txtCompanyName" Grid.Row="3" Grid.Column="0" Style="{StaticResource TextBoxStyle}"/>
+                    <TextBox x:Name="txtContactPerson" Grid.Row="3" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
+                    <TextBox x:Name="txtAddress" Grid.Row="3" Grid.Column="2"  Style="{StaticResource TextBoxStyle}"/>
+                    <TextBox x:Name="txtPostcode" Grid.Row="3" Grid.Column="3" Style="{StaticResource TextBoxStyle}"/>
+                    <TextBox x:Name="txtCity" Grid.Row="3" Grid.Column="4"  Style="{StaticResource TextBoxStyle}"/>
+                    <TextBox x:Name="txtPhoneWork" Grid.Row="6" Grid.Column="0"  Style="{StaticResource TextBoxStyle}"/>
+                    <TextBox x:Name="txtMobile" Grid.Row="6" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
+                    <TextBox x:Name="txtAdditionalInfo" Grid.Row="9"  Grid.Column="0" Grid.ColumnSpan="5" Margin="10,0,10,0"
+                                 TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True"/>
+                    <TextBlock x:Name="txtGoogleDriveHyperlink" Grid.Row="6" Grid.Column="2" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Hyperlink  x:Name="hyperlinkGoogleDrive" NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate">                             
+                            <TextBlock x:Name="txtGoogleDriveFolderName"/>
+                        </Hyperlink>
+                    </TextBlock>
+
+                    <!--<TextBlock Grid.Row="6" Grid.Column="3" HorizontalAlignment="Center"  VerticalAlignment="Center">
+                        <Hyperlink NavigateUri="http:\\www.vbcity.com" RequestNavigate="Hyperlink_RequestNavigate">
+                            <Image Source="..\Resources\Images\Icons\Marcus-Roberto-Google-Play-Google-Drive.ico"></Image>
+                        </Hyperlink>
+                    </TextBlock>-->
+                    <Button  Grid.Row="6" Grid.Column="3" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="Button_Click" BorderThickness="0" Background="Transparent">
+                        <StackPanel>
+                            <Image Source="..\Resources\Images\Icons\Marcus-Roberto-Google-Play-Google-Drive.ico" Height="30"/>                           
+                        </StackPanel>
+                    </Button>
                     
-                        <Label x:Name="lblCompanyName" Grid.Row="0" Grid.Column="0"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblContactPerson" Grid.Row="0" Grid.Column="1"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblAddress" Grid.Row="0" Grid.Column="2"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblPostcode" Grid.Row="0" Grid.Column="3"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblCity" Grid.Row="0" Grid.Column="4"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblPhoneWork" Grid.Row="2" Grid.Column="0"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblMobile" Grid.Row="2" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+                    <Button  Grid.Row="6" Grid.Column="4" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="Button_Click" BorderThickness="0" Background="Transparent">
+                        <StackPanel>
+                            <Image Source="..\Resources\Images\Icons\Marcus-Roberto-Google-Play-Gmail.ico" Height="32"/>
+                        </StackPanel>
+                    </Button>
 
+                    <!--<Border BorderBrush=" White BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Background="#FF2196F3">
+                        <Hyperlink TextDecorations="None" Foreground="White">
+                            <StackPanel Margin="10">
+                                <Image Source="..\Resources\Images\Icons\Marcus-Roberto-Google-Play-Google-Drive.ico"
+                       Margin="0 0 0 5"
+                       Width="32"/>
+                            </StackPanel>
+                        </Hyperlink>
+                        </TextBlock>
+                    </Border>-->
 
-                        <TextBox x:Name="txtCompanyName" Grid.Row="1" Grid.Column="0" Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtContactPerson" Grid.Row="1" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtAddress" Grid.Row="1" Grid.Column="2"  Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtPostcode" Grid.Row="1" Grid.Column="3" Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtCity" Grid.Row="1" Grid.Column="4"  Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtPhoneWork" Grid.Row="3" Grid.Column="0"  Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtMobile" Grid.Row="3" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
-                    </Grid>
-            </Expander>
-                <Expander Header="Standort"  Grid.Row="1"  Template="{StaticResource SimpleExpanderTemp}" IsExpanded="True">
-                
-
-                    <ListView x:Name="DtContactDetailListView" ItemsSource="{Binding}" ScrollViewer.VerticalScrollBarVisibility="Visible">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Frame Content="{Binding}" HorizontalAlignment="Stretch" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListView>
-                    
-                </Expander>
-                <Expander Header="Wartungsvertrag" Grid.Row="2" Template="{StaticResource SimpleExpanderTemp}" IsExpanded="True">
-                    <Grid Background="#FFE5E5E5">
-                    </Grid>
-                </Expander>
-
-                <Expander Header="Notrufvertrag" Grid.Row="3" Template="{StaticResource SimpleExpanderTemp}" IsExpanded="True">
-                    <Grid Background="#FFE5E5E5">
-                    </Grid>
-                </Expander>
-
-                <Expander Header="Anlage" Grid.Row="4" Template="{StaticResource SimpleExpanderTemp}" IsExpanded="True">
-                    <Grid Background="#FFE5E5E5">
-                    </Grid>
-                </Expander>
-
-                <Expander Header="Kosten" Grid.Row="5" Template="{StaticResource SimpleExpanderTemp}" IsExpanded="True">
-                    <Grid Background="#FFE5E5E5">
-                    </Grid>
-                </Expander>
-
-                <Expander Header="Termine" Grid.Row="6" Template="{StaticResource SimpleExpanderTemp}" IsExpanded="True">
-                    <Grid Background="#FFE5E5E5">
-                    </Grid>
-                </Expander>
+                </Grid>
 
             </Grid>
 

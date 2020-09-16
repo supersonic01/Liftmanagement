@@ -1,0 +1,221 @@
+﻿<UserControl x:Class="Liftmanagement.Views.MaintenanceAgreementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Liftmanagement.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/LiftmanagementStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+    <Grid x:Name="gridResizableLocations">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="gdframCustomers" Width="Auto"/>
+            <ColumnDefinition x:Name="gridSplitterCustomers" Width="Auto"/>
+            <ColumnDefinition x:Name="gdframLocations" Width="Auto"/>
+            <ColumnDefinition x:Name="gridSplitterLocations" Width="Auto"/>
+            <ColumnDefinition x:Name="gdframMachineInformations" Width="Auto"/>
+            <ColumnDefinition x:Name="gridSplitterMachineInformations" Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Frame x:Name="frameCustomers" Grid.Column="0" Content="Customers"/>
+
+        <GridSplitter x:Name="gspCustomer" Grid.Column="1" Width="15"
+                  HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                  BorderBrush="White" BorderThickness="1"
+                  Style="{StaticResource GridSplitterStyle1}">
+            <GridSplitter.Background>
+                <LinearGradientBrush EndPoint="0.5,0" StartPoint="0.5,1">
+                    <GradientStop Color="#A0A0A0" Offset="0"/>
+                    <GradientStop Color="#E5E5E5" Offset="0.15"/>
+                    <GradientStop Color="#ECECEC" Offset="0.8"/>
+                    <GradientStop Color="#E5E5E5" Offset="1"/>
+                </LinearGradientBrush>
+            </GridSplitter.Background>
+        </GridSplitter>
+
+        <Frame x:Name="frameLocations" Grid.Column="2" Content="Locations"/>
+
+        <GridSplitter x:Name="gspLocation" Grid.Column="3" Width="15"
+                  HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                  BorderBrush="White" BorderThickness="1"
+                  Style="{StaticResource GridSplitterStyle1}">
+            <GridSplitter.Background>
+                <LinearGradientBrush EndPoint="0.5,0" StartPoint="0.5,1">
+                    <GradientStop Color="#A0A0A0" Offset="0"/>
+                    <GradientStop Color="#E5E5E5" Offset="0.15"/>
+                    <GradientStop Color="#ECECEC" Offset="0.8"/>
+                    <GradientStop Color="#E5E5E5" Offset="1"/>
+                </LinearGradientBrush>
+            </GridSplitter.Background>
+        </GridSplitter>
+
+        <Expander x:Name="expanderMachineInformations"  Grid.Column="4" ExpandDirection="Right" HorizontalAlignment="Left" VerticalAlignment="Stretch" IsExpanded="False">
+            <Expander.Header>
+                <TextBlock x:Name="txtExpanderHeader"  Style="{StaticResource TextBlockStyle }">
+                    <TextBlock.LayoutTransform>
+                        <RotateTransform Angle="270"/>
+                    </TextBlock.LayoutTransform>
+                </TextBlock>
+            </Expander.Header>
+            <Frame x:Name="frameMachineInformations" Content="Customers"/>
+        </Expander>
+
+        <GridSplitter x:Name="gspMachineInformations" Grid.Column="5" Width="15"
+                  HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                  BorderBrush="White" BorderThickness="1"
+                  Style="{StaticResource GridSplitterStyle1}">
+            <GridSplitter.Background>
+                <LinearGradientBrush EndPoint="0.5,0" StartPoint="0.5,1">
+                    <GradientStop Color="#A0A0A0" Offset="0"/>
+                    <GradientStop Color="#E5E5E5" Offset="0.15"/>
+                    <GradientStop Color="#ECECEC" Offset="0.8"/>
+                    <GradientStop Color="#E5E5E5" Offset="1"/>
+                </LinearGradientBrush>
+            </GridSplitter.Background>
+        </GridSplitter>
+        <Grid  Grid.Column="6" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!--<StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="AntiqueWhite">-->
+            <Frame x:Name="frameMaintenanceAgreements" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            <!--</StackPanel>-->
+
+            <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" x:Name="MasterDatatInfo"/>
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="Auto" x:Name="Header" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="60" />
+
+                    </Grid.RowDefinitions>
+
+                    <Frame x:Name="frameMasterDataInfo" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                    <Line  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" X1="0" Y1="0" X2="1"  Y2="0" 
+              Stroke="Black" StrokeThickness="2" Stretch="Uniform"/>
+                    <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5"  Content="Wartungsvertrag" FontSize="24" Margin="10" Padding="10"
+                           HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center"/>
+                    <!--<StackPanel Grid.Row="2" Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                        <Button x:Name="btnEdit" Grid.Column="0" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnEdit_Click" BorderThickness="0" Background="Transparent">
+                            <StackPanel>
+                                <Image Source="..\Resources\Images\Icons\Turbomilk-Livejournal-10-Pencil.ico" Height="30"/>
+                            </StackPanel>
+                        </Button>
+                        <Button  x:Name="btnAdd" Grid.Column="1" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnAdd_Click" BorderThickness="0" Background="Transparent">
+                            <StackPanel>
+                                <Image Source="..\Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" Height="30"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>-->
+
+                    <StackPanel Grid.Row="2" Grid.RowSpan="8" Grid.Column="4" Orientation="Vertical" HorizontalAlignment="Center">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="25"/>
+                                <RowDefinition Height="40"/>
+                            </Grid.RowDefinitions>
+                            <Button x:Name="btnEdit" Grid.Row="0"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnEdit_Click" BorderThickness="0" Background="Transparent">
+                                <StackPanel>
+                                    <Image Source="..\Resources\Images\Icons\Turbomilk-Livejournal-10-Pencil.ico" Height="30"/>
+                                </StackPanel>
+                            </Button>
+                            <Button  x:Name="btnAdd" Grid.Row="1" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnAdd_Click" BorderThickness="0" Background="Transparent">
+                                <StackPanel>
+                                    <Image Source="..\Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" Height="30"/>
+                                </StackPanel>
+                            </Button>
+                            <Button  x:Name="btnCancel" Grid.Row="2" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnCancel_Click" BorderThickness="0" Background="Transparent">
+                                <StackPanel>
+                                    <Image Source="..\Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-edit-delete.ico" Height="30"/>
+                                </StackPanel>
+                            </Button>
+                            <Button  x:Name="btnSave"  Visibility="Hidden" Grid.Row="5"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSave_Click" BorderThickness="0" Background="Transparent">
+                                <StackPanel>
+                                    <Image Source="..\Resources\Images\Icons\Treetog-I-Floppy-Small.ico" Height="30"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+
+                    <Label x:Name="lblDuration" Grid.Row="3" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblTerminated" Grid.Row="3" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblNoticeOfPeriod" Grid.Row="3" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblAgreementDate" Grid.Row="3" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblAdditionalInfo" Grid.Row="5" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+
+                    <DatePicker x:Name="datePickerDuration" Grid.Row="4" Grid.Column="0" Style="{StaticResource DatePickerStyle}" PreviewTextInput="datePickerDuration_PreviewTextInput">
+                        <DatePicker.Resources>
+                            <Style TargetType="{x:Type DatePickerTextBox}">
+                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                <Setter Property="Control.Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <TextBox x:Name="PART_TextBox"  Text="{Binding Path=SelectedDate, StringFormat='dd.MM.yyyy', 
+                                                RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DatePicker.Resources>
+                    </DatePicker>
+                    <ComboBox x:Name="cbTerminated" Grid.Row="4" Grid.Column="1" IsEditable="True" Style="{StaticResource ComboBoxStyle}"   
+                              />
+                    <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal"  HorizontalAlignment="Stretch">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="140"/>
+
+                            </Grid.ColumnDefinitions>
+                            <ComboBox x:Name="cbNoticeOfPeriodMonth" Grid.Column="0" IsEditable="True" Style="{StaticResource ComboBoxStyle}" HorizontalAlignment="Left" Width="40"/>
+                            <TextBox x:Name="txtNoticeOfPeriod"  Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="0,0,10,0" HorizontalAlignment="Stretch" IsReadOnly="True"  />
+                        </Grid>
+
+                    </StackPanel>
+                    <DatePicker x:Name="datePickerAgreementDate" Grid.Row="4" Grid.Column="3" Style="{StaticResource DatePickerStyle}" />
+                    <TextBox x:Name="txtAdditionalInfo" Grid.Row="6" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="4"  Margin="10,0,10,0"
+                                 TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True"/>
+
+
+                    <Line  Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="6" X1="0" Y1="0" X2="1"  Y2="0" 
+              Stroke="Black" StrokeThickness="2" Stretch="Uniform"/>
+                </Grid>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

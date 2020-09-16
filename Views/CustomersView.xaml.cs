@@ -40,6 +40,14 @@ namespace Liftmanagement.Views
             };
 
             dgCustomers.SetBinding(DataGrid.ItemsSourceProperty, binding);
-        }      
+
+            txtExpanderHeader.Text = new CategoryViewModel().Categories.Where(c => c.MangementType == Helper.Helper.TTypeMangement.Customer).Select(c => c.Name).FirstOrDefault();
+            expanderCustomers.Expanded += ExpanderCustomers_Expanded;
+        }
+
+        private void ExpanderCustomers_Expanded(object sender, RoutedEventArgs e)
+        {
+            spCustomers.Width = spCustomers .ActualWidth;       
+        }
     }
 }

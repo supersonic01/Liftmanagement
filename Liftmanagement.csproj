@@ -173,8 +173,11 @@
     <Compile Include="Helper\Helper.cs" />
     <Compile Include="Helper\TestData.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\DisplayNameRetriever.cs" />
     <Compile Include="Models\GoogleDriveFolder.cs" />
     <Compile Include="Models\Location.cs" />
+    <Compile Include="Models\MachineInformation.cs" />
+    <Compile Include="Models\MaintenanceAgreement.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -183,7 +186,13 @@
     <Compile Include="ViewModels\GoogleDriveTreeNodeViewModel.cs" />
     <Compile Include="ViewModels\GoogleDriveTreeViewModel.cs" />
     <Compile Include="ViewModels\LocationsViewModel.cs" />
+    <Compile Include="ViewModels\MachineInformationsViewModel.cs" />
+    <Compile Include="ViewModels\MachineInformationViewModel.cs" />
+    <Compile Include="ViewModels\MaintenanceAgreementsViewModel.cs" />
+    <Compile Include="ViewModels\MaintenanceAgreementViewModel.cs" />
+    <Compile Include="ViewModels\MasterDataInfoViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
+    <Compile Include="Views\CustomColumnHeadersProperty.cs" />
     <Compile Include="Views\CustomersView.xaml.cs">
       <DependentUpon>CustomersView.xaml</DependentUpon>
     </Compile>
@@ -201,6 +210,24 @@
     </Compile>
     <Compile Include="Views\LocationView.xaml.cs">
       <DependentUpon>LocationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MachineInformationsShortView.xaml.cs">
+      <DependentUpon>MachineInformationsShortView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MachineInformationsView.xaml.cs">
+      <DependentUpon>MachineInformationsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MachineInformationView.xaml.cs">
+      <DependentUpon>MachineInformationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MaintenanceAgreementsView.xaml.cs">
+      <DependentUpon>MaintenanceAgreementsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MaintenanceAgreementView.xaml.cs">
+      <DependentUpon>MaintenanceAgreementView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MasterDataInfoView.xaml.cs">
+      <DependentUpon>MasterDataInfoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Test.xaml.cs">
       <DependentUpon>Test.xaml</DependentUpon>
@@ -242,6 +269,30 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LocationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MachineInformationsShortView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MachineInformationsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MachineInformationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MaintenanceAgreementsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MaintenanceAgreementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MasterDataInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -312,6 +363,28 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Icons\hesse_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Cornmanthe3rd-Squareplex-Utilities-google-calendar.ico" />
+    <Resource Include="Resources\Images\Icons\Custom-Icon-Design-Pretty-Office-9-Open-file.ico" />
+    <Resource Include="Resources\Images\Icons\Marcus-Roberto-Google-Play-Gmail.ico" />
+    <Resource Include="Resources\Images\Icons\Mcdo-Design-Letter-Letter-GMail-pen.ico" />
+    <Resource Include="Resources\Images\Icons\Papirus-Team-Papirus-Apps-Google-agenda.ico" />
+    <Resource Include="Resources\Images\Icons\Wwalczyszyn-Android-Style-Mail.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Hopstarter-Soft-Scraps-Edit-Document.ico" />
+    <Resource Include="Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" />
+    <Resource Include="Resources\Images\Icons\Turbomilk-Livejournal-10-Pencil.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Treetog-I-Floppy-Small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-edit-delete.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Hopstarter-Soft-Scraps-File-Delete.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets" Condition="Exists('packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets')" />

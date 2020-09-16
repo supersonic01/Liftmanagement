@@ -22,6 +22,13 @@
             </Grid.ColumnDefinitions>
 
         <Expander x:Name="expanderCustomers" Grid.Column="0" ExpandDirection="Right" HorizontalAlignment="Left" VerticalAlignment="Stretch" IsExpanded="True">
+            <Expander.Header>
+                <TextBlock x:Name="txtExpanderHeader" Text="Home" Style="{StaticResource TextBlockStyle }">
+                    <TextBlock.LayoutTransform>
+                        <RotateTransform Angle="270"/>
+                    </TextBlock.LayoutTransform>
+                </TextBlock>
+            </Expander.Header>
             <StackPanel x:Name="stPanelCategory"  HorizontalAlignment="Left" Margin="10,10,10,10" VerticalAlignment="Stretch" Width="300"  Background="LightGray" >
             <!--<Image Name="MyImage" Source="{Binding ImagePath}" />-->
             <DataGrid Name="dgCategory" AutoGenerateColumns="False" EnableRowVirtualization="True"  GridLinesVisibility="None"

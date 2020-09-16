@@ -12,11 +12,14 @@ namespace Liftmanagement.Models
 
         public int LocationId { get; set; }
         public int CustomerId { get; set; }
-
-        [DisplayName("Zusätzliche Informationen")]
-        public string AdditionalInfo { get; set; }
+      
 
         [DisplayName("Beim Störungsfall kontaktieren")]
         public bool ContactByDefect { get; set; }
+
+        protected override string GetFullName()
+        {
+            return string.Format("{0}, {1} {2}", Address, Postcode, City);
+        }
     }
 }

@@ -24,16 +24,16 @@ namespace Liftmanagement.Helper
         static string[] Scopes = { CalendarService.Scope.Calendar };
         static string ApplicationName = "Google Calendar API .NET Quickstart";
 
-        public  CalendarQuickstart()
+        public  CalendarQuickstart(DateTime startDate,DateTime endDate, string summary, string description)
         {
             UserCredential credential;
 
             using (var stream =
-                new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
+                new FileStream("credentialsCalendar.json", FileMode.Open, FileAccess.Read))
             {
                 // The file token.json stores the user's access and refresh tokens, and is created
                 // automatically when the authorization flow completes for the first time.
-                string credPath = "token.json";
+                string credPath = "tokenCalendar.json";
                 credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
                     Scopes,
@@ -81,20 +81,24 @@ namespace Liftmanagement.Helper
 
             var ev = new Event();
             EventDateTime start = new EventDateTime();
-            start.DateTime = new DateTime(2020,9 , 4, 12, 0, 0);
+            start.DateTime = startDate;// new DateTime(2020,9 , 4, 12, 0, 0);
 
             EventDateTime end = new EventDateTime();
-            end.DateTime = new DateTime(2020, 9, 4, 13, 30, 0);
+            end.DateTime = endDate; // new DateTime(2020, 9, 4, 13, 30, 0);
 
 
             ev.Start = start;
             ev.End = end;
-            ev.Summary = "New Event2";
-            ev.Description = "Description.2..";
+            ev.Summary = summary; //"New Event2";
+            ev.Description = description;// "Description.2..";
 
             var reminder = new EventReminder();
             reminder.Method = "popup";
-            reminder.Minutes = 60;
+            reminder.Minutes = 2;
+
+            var reminderMail = new EventReminder();
+            reminder.Method = "email";
+            reminder.Minutes = 2;
 
 
             /* Dim reminderList As New List(Of EventReminder)
@@ -106,6 +110,8 @@ namespace Liftmanagement.Helper
 
             var reminderList = new List<EventReminder>();
             reminderList.Add(reminder);
+            reminderList.Add(reminderMail);
+
 
             var reminderData = new Event.RemindersData
             {

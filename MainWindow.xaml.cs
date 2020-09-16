@@ -4,6 +4,7 @@ using Liftmanagement.Models;
 using Liftmanagement.View;
 using Liftmanagement.ViewModels;
 using Liftmanagement.Views;
+using Org.BouncyCastle.Asn1.Icao;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -111,10 +112,12 @@ namespace Liftmanagement
                     frameDetail.Content = new LocationView();
                     break;
                 case Helper.Helper.TTypeMangement.MaintenanceAgreement:
+                    frameDetail.Content = new MaintenanceAgreementView();
                     break;
                 case Helper.Helper.TTypeMangement.EmergencyAgreement:
                     break;
                 case Helper.Helper.TTypeMangement.MachineInformation:
+                    frameDetail.Content = new MachineInformationView();
                     break;
                 case Helper.Helper.TTypeMangement.Task:
                     break;
@@ -123,6 +126,8 @@ namespace Liftmanagement
                 case Helper.Helper.TTypeMangement.Update:
                     break;
                 case Helper.Helper.TTypeMangement.Managment:
+                    //frameDetail.Content = new Test();
+                    frameDetail.Content = new MasterDataInfoView();
                     break;
                 default:
                     break;

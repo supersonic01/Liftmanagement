@@ -8,36 +8,25 @@ using System.Threading.Tasks;
 
 namespace Liftmanagement.Models
 {
-    public class Person
+    public class Person: DisplayNameRetriever
     {
-        [DisplayName("Ansprechpartner")]
-        public string ContactPerson { get; set; }
+
         [DisplayName("Adresse")]
         public string Address { get; set; }
         [DisplayName("PLZ")]
         public string Postcode { get; set; }
         [DisplayName("Stadt")]
         public string City { get; set; }
-        [DisplayName("Tel. geschäftli.")]
-        public string PhoneWork { get; set; }
-        [DisplayName("Mobil")]
-        public string Mobile { get; set; }
+        
         [DisplayName("Merken")]
         public bool Selected { get; set; }
 
+        [DisplayName("Zusätzliche Informationen")]
+        public string AdditionalInfo { get; set; }
 
-        public string GetDisplayName<T>(string propertyName)
-        {
-            MemberInfo property = typeof(T).GetProperty(propertyName);
-            var attribute = property.GetCustomAttributes(typeof(DisplayNameAttribute), true)
-                .Cast<DisplayNameAttribute>().Single();       
+        [DisplayName("Ansprechpartner")]
+        public ContactPartner ContactPerson { get; set; }
 
-            if (attribute.DisplayName != null)
-            {
-                return attribute.DisplayName;
-            }
-            return string.Empty;
-        }
     }
 
 }

@@ -31,16 +31,24 @@ namespace Liftmanagement.Views
             InitializeComponent();
 
             // binding TreeView component with TreeModel
+            //  GoogleDriveFolderHierarchy.ItemsSource = new GoogleDriveTreeViewModel().Items;
+            this.Loaded += GoogleDriveTreeView_Loaded;
+        }
+
+        private void GoogleDriveTreeView_Loaded(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("GoogleDriveTreeView_Loaded");
+            // binding TreeView component with TreeModel
             GoogleDriveFolderHierarchy.ItemsSource = new GoogleDriveTreeViewModel().Items;
         }
 
-        private void btnSave_Click(object sender, RoutedEventArgs e)
-        {
-            GetSelectedNode();
+        //private void btnSave_Click(object sender, RoutedEventArgs e)
+        //{
+        //    GetSelectedNode();
 
-        }
+        //}
 
-        private GoogleDriveTreeNodeViewModel GetSelectedNode()
+        public GoogleDriveTreeNodeViewModel GetSelectedNode()
         {
             var node = GoogleDriveFolderHierarchy.SelectedItem as GoogleDriveTreeNodeViewModel;
             //if (node != null)
@@ -48,11 +56,6 @@ namespace Liftmanagement.Views
             //    Console.WriteLine(node.WebLink);
             //}
             return node;
-        }
-
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void btnShowInGoogleDrive_Click(object sender, RoutedEventArgs e)
@@ -68,7 +71,8 @@ namespace Liftmanagement.Views
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
-
+            GoogleDriveFolderHierarchy.ItemsSource = new GoogleDriveTreeViewModel().Items;
         }
+       
     }
 }

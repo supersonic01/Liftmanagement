@@ -103,15 +103,18 @@ namespace Liftmanagement.Views
 
             lblAdditionalInfo.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.AdditionalInfo)) + ":";
             lblDuration.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.Duration)) + ":";
-            lblTerminated.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.Terminated)) + ":";
+            lblTerminated.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.CanBeCancelled )) + ":";
             lblNoticeOfPeriod.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.NoticeOfPeriod)) + ":";
             lblAgreementDate.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.AgreementDate)) + ":";         
 
             txtAdditionalInfo.Text = maintenanceAgreement.AdditionalInfo;
-           datePickerDuration.SelectedDate = DateTime.ParseExact(maintenanceAgreement.Duration, "dd.MM.yyyy",
-                                       System.Globalization.CultureInfo.InvariantCulture); 
-            datePickerAgreementDate.SelectedDate= DateTime.ParseExact(maintenanceAgreement.AgreementDate, "dd.MM.yyyy",
-                                       System.Globalization.CultureInfo.InvariantCulture);
+            //datePickerDuration.SelectedDate = DateTime.ParseExact(maintenanceAgreement.Duration, "dd.MM.yyyy",
+            //                            System.Globalization.CultureInfo.InvariantCulture); 
+            // datePickerAgreementDate.SelectedDate= DateTime.ParseExact(maintenanceAgreement.AgreementDate, "dd.MM.yyyy",
+            //                            System.Globalization.CultureInfo.InvariantCulture);
+            datePickerDuration.SelectedDate = maintenanceAgreement.Duration;
+            datePickerAgreementDate.SelectedDate = maintenanceAgreement.AgreementDate;
+
             cbTerminated.SelectedIndex = 0;
             cbNoticeOfPeriodMonth.SelectedIndex = 2;
             

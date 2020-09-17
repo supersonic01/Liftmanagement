@@ -1,31 +1,37 @@
-﻿using System;
+﻿using Liftmanagement.Helper;
+using System;
 using System.ComponentModel;
 
 namespace Liftmanagement.Models
 {
-    public class Customer : Person
+    public class Customer : Person, IDatabaseObject
     {
-
-        public int CustomerId { get; set; }
-
-        [DisplayName("Kundenname")]
+        [DisplayName("Kundenname"), DatabaseAttribute(Length ="100")]
         public string CompanyName { get; set; }
 
         [DisplayName("Google Drive")]
         public string GoogleDriveFolderName { get; set; }
+
+        [DatabaseAttribute(Length = "200")]
         public string GoogleDriveLink { get; set; }
+
+
+        [DisplayName("Verwalter Firma")]
+        public AdministratorCompany Administrator { get; set; } = new AdministratorCompany();
+
+        public static implicit operator string(Customer v)
+        {
+            throw new NotImplementedException();
+        }
 
         protected override string GetFullName()
         {
             return string.Format("{0}, {1} {2}", CompanyName, Postcode, City);
         }
 
-        [DisplayName("Verwalter Firma")]
-        public AdministratorCompany Administrator  { get; set; }
-
-        public static implicit operator string(Customer v)
+        public static string GetIndexFields()
         {
-            throw new NotImplementedException();
+            return nameof(CompanyName) + "," + nameof(Address) + "," + nameof(Postcode) + "," + nameof(City);
         }
     }
 

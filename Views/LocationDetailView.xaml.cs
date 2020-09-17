@@ -35,16 +35,16 @@ namespace Liftmanagement.Views
             lblLocationAddress.Content = location.GetDisplayName<Location>(nameof(location.Address)) + ":";
             lblLocationPostcode.Content = location.GetDisplayName<Location>(nameof(location.Postcode)) + ":";
             lblLocationCity.Content = location.GetDisplayName<Location>(nameof(location.City)) + ":";
-            lblLocationPhoneWork.Content = location.GetDisplayName<Location>(nameof(location.PhoneWork)) + ":";
-            lblLocationMobile.Content = location.GetDisplayName<Location>(nameof(location.Mobile)) + ":";
+            lblLocationPhoneWork.Content = location.GetDisplayName<Location>(nameof(location.ContactPerson.PhoneWork)) + ":";
+            lblLocationMobile.Content = location.GetDisplayName<Location>(nameof(location.ContactPerson.Mobile)) + ":";
 
             txtLocationAdditionalInfo.Text = location.AdditionalInfo;
-            txtLocationContactPerson.Text = location.ContactPerson;
+            txtLocationContactPerson.Text = location.ContactPerson.Name;
             txtLocationAddress.Text = location.Address;
             txtLocationPostcode.Text = location.Postcode;
             txtLocationCity.Text = location.City;
-            txtLocationPhoneWork.Text = location.PhoneWork;
-            txtLocationMobile.Text = location.Mobile;
+            txtLocationPhoneWork.Text = location.ContactPerson.PhoneWork;
+            txtLocationMobile.Text = location.ContactPerson.Mobile;
         }
     }
 }

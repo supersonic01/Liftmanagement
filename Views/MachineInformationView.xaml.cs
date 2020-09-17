@@ -87,7 +87,7 @@ namespace Liftmanagement.Views
             lblContactByDefect.Content = machineInformation.GetDisplayName<MachineInformation>(nameof(machineInformation.ContactByDefect)) + ":";
 
             txtName.Text = machineInformation.Name;
-            txtYearOfConstruction.Text = machineInformation.YearOfConstruction;
+            txtYearOfConstruction.Text = machineInformation.YearOfConstruction.ToString("dd.MM.yyyy");
             txtSerialNumber.Text = machineInformation.SerialNumber;
             txtHoldingPositions.Text = machineInformation.HoldingPositions.ToString();
             txtEntrances.Text = machineInformation.Entrances.ToString();

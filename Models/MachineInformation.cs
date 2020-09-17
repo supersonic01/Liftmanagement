@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Liftmanagement.Helper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,16 +8,15 @@ using System.Threading.Tasks;
 
 namespace Liftmanagement.Models
 {
-    public class MachineInformation: DisplayNameRetriever
+    public class MachineInformation : BaseDatabaseField,IDatabaseObject
     {
-        public int LocationId { get; set; }
-        public int CustomerId { get; set; }
-        public int MachineInformationId { get; set; }
+        public Int64 LocationId { get; set; }
+        public Int64 CustomerId { get; set; }     
 
         [DisplayName("Name")]
         public string Name { get; set; }
         [DisplayName("Baujahr")]
-        public string YearOfConstruction { get; set; }
+        public DateTime YearOfConstruction { get; set; }
         [DisplayName("Fabriknummer")]
         public string SerialNumber { get; set; }
         [DisplayName("Haltestellen")]
@@ -26,7 +26,7 @@ namespace Liftmanagement.Models
         [DisplayName("Zuladung in Kg")]
         public int Payload { get; set; }
 
-        [DisplayName("Beschreibung")]
+        [DisplayName("Beschreibung"), DatabaseAttribute(Length = "200")]
         public string Description { get; set; }
 
         [DisplayName("Ansprechpartner")]
@@ -40,12 +40,17 @@ namespace Liftmanagement.Models
         [DisplayName("Beim Störungsfall kontaktieren")]
         public bool ContactByDefect { get; set; }
 
-        [DisplayName("Zusätzliche Informationen")]
+        [DisplayName("Zusätzliche Informationen"), DatabaseAttribute(Length = "200")]
         public string AdditionalInfo { get; set; }
 
         protected override string GetFullName()
         {
             return string.Format("{0}, {1}, {2}",Name, SerialNumber,YearOfConstruction);
+        }
+
+        public static string GetIndexFields()
+        {
+            return nameof(Name) + "," + nameof(SerialNumber) + "," + nameof(Description);
         }
     }
 }

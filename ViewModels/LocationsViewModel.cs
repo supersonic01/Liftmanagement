@@ -27,7 +27,7 @@ namespace Liftmanagement.ViewModels
 
         public void LocationsByCustomer(Customer customer)
         {
-            Locations= TestData.GetLocations().Where(c=>c.CustomerId == customer.CustomerId).ToList();
+            Locations= TestData.GetLocations().Where(c=>c.CustomerId == customer.Id).ToList();
         }
     
     }

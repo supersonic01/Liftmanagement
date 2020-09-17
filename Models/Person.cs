@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Liftmanagement.Helper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -8,24 +9,25 @@ using System.Threading.Tasks;
 
 namespace Liftmanagement.Models
 {
-    public class Person: DisplayNameRetriever
+    public class Person: BaseDatabaseField 
     {
-
-        [DisplayName("Adresse")]
+        [DisplayName("Adresse"), DatabaseAttribute(Length = "50")]
         public string Address { get; set; }
-        [DisplayName("PLZ")]
+
+        [DisplayName("PLZ"), DatabaseAttribute(Length = "10")]
         public string Postcode { get; set; }
-        [DisplayName("Stadt")]
+
+        [DisplayName("Stadt"), DatabaseAttribute(Length = "50")]
         public string City { get; set; }
         
         [DisplayName("Merken")]
         public bool Selected { get; set; }
 
-        [DisplayName("Zusätzliche Informationen")]
+        [DisplayName("Zusätzliche Informationen"), DatabaseAttribute(Length = "300")]
         public string AdditionalInfo { get; set; }
 
         [DisplayName("Ansprechpartner")]
-        public ContactPartner ContactPerson { get; set; }
+        public ContactPartner ContactPerson { get; set; } = new ContactPartner();
 
     }
 

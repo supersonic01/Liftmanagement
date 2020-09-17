@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Liftmanagement.Helper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,30 +8,56 @@ using System.Threading.Tasks;
 
 namespace Liftmanagement.Models
 {
-    public class MaintenanceAgreement : DisplayNameRetriever
+    public class MaintenanceAgreement : BaseDatabaseField,IDatabaseObject
     {
-        public int LocationId { get; set; }
-        public int CustomerId { get; set; }
-        public int MachineInformationId { get; set; }
-        public int MaintenanceAgreementId { get; set; }
+        public Int64 LocationId { get; set; }
+        public Int64 CustomerId { get; set; }
+        public Int64 MachineInformationId { get; set; }
 
+        /// <summary>
+        /// Laufzeit Vertrag bis 31.12.2019
+        /// </summary>
         [DisplayName("Laufzeit Vertrag")]
-        public string Duration { get; set; }
+        public DateTime Duration { get; set; }
 
+        /// <summary>
+        /// jährlich Kündbar
+        /// </summary>
         [DisplayName("Kündbar")]
-        public string Terminated { get; set; }
+        public string CanBeCancelled  { get; set; }
 
+        /// <summary>
+        /// durch Kunde
+        /// </summary>
+        [DisplayName("Vertrag gekündigt durch")]
+        public string ArreementCancelledBy { get; set; }
+
+        /// <summary>
+        /// Frist 3 Monate vorher
+        /// </summary>
         [DisplayName("Kündigungsfrist")]
-        public string NoticeOfPeriod { get; set; }
+        public int NoticeOfPeriod { get; set; }
 
+        /// <summary>
+        /// abgeschlossen: 01/01/2011
+        /// </summary>
         [DisplayName("Vertragsdatum")]
-        public string AgreementDate { get; set; }
+        public DateTime AgreementDate { get; set; }
 
-        [DisplayName("Zusätzliche Informationen")]
+        /// <summary>
+        /// Vollwartung, Systemwartung
+        /// </summary>
+        [DisplayName("Wartungsart")]
+        public string MaintenanceType { get; set; }
+
+        [DisplayName("Zusätzliche Informationen"), DatabaseAttribute(Length = "200")]
         public string AdditionalInfo { get; set; }
         //notice  agreement date
 
-
+        public static string GetIndexFields()
+        {
+            return nameof(AgreementDate) + "," + nameof(NoticeOfPeriod) + "," + nameof(CanBeCancelled );
+        }
     }
 }
 

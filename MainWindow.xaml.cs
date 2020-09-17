@@ -56,7 +56,7 @@ namespace Liftmanagement
 
             //  dgCategory.ItemsSource = CategoryVM.Categories;
 
-            // MySQLDataAccess.TestConnection();
+             MySQLDataAccess.TestConnection();
             // new CalendarQuickstart();
             //  new DriveQuickstart();
             //  new DirectoryQuickstart();
@@ -67,6 +67,8 @@ namespace Liftmanagement
             };
             listView1.SetBinding(ListView.ItemsSourceProperty, b);
             */
+
+           // new TableGenerator();
 
             Binding binding = new Binding("CategoryVM.Categories")
             {

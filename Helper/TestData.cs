@@ -13,6 +13,7 @@ namespace Liftmanagement.Helper
         public static List<Customer> GetCustomers()
         {
             List<Customer> customers = new List<Customer>();
+            /*
             customers.Add(new Customer
             {
                 CustomerId = 1,
@@ -59,8 +60,8 @@ namespace Liftmanagement.Helper
                 PhoneWork = "0724357770",
                 Mobile = "01724357770"
             });
-
-
+            */
+            
             return customers;
         }
 
@@ -71,9 +72,9 @@ namespace Liftmanagement.Helper
             {
                 CustomerId = 1,
                 LocationId = 1,
-                MachineInformationId = 1,
+                Id = 1,
                 Name = "SHERPA",
-                YearOfConstruction = "11.09.2002",
+                YearOfConstruction = new DateTime(2002,09,11),
                 SerialNumber = "224",
                 HoldingPositions = 6,
                 Entrances = 6,
@@ -83,9 +84,9 @@ namespace Liftmanagement.Helper
             {
                 CustomerId = 2,
                 LocationId = 2,
-                MachineInformationId = 2,
+                Id = 2,
                 Name = "ESCORTA",
-                YearOfConstruction = "12.02.2000",
+                YearOfConstruction = new DateTime(2012, 02, 12),
                 SerialNumber = "244",
                 HoldingPositions = 10,
                 Entrances = 10,
@@ -95,9 +96,9 @@ namespace Liftmanagement.Helper
             {
                 CustomerId = 3,
                 LocationId = 3,
-                MachineInformationId = 3,
+                Id = 3,
                 Name = "ELEGANCA",
-                YearOfConstruction = "25.06.2018",
+                YearOfConstruction = new DateTime(2018, 06, 25),
                 SerialNumber = "264",
                 HoldingPositions = 12,
                 Entrances = 12,
@@ -107,9 +108,9 @@ namespace Liftmanagement.Helper
             {
                 CustomerId = 4,
                 LocationId = 4,
-                MachineInformationId = 4,
+                Id = 4,
                 Name = "VERTIC",
-                YearOfConstruction = "09.08.1996",
+                YearOfConstruction = new DateTime(1996, 08, 09),
                 SerialNumber = "284",
                 HoldingPositions = 4,
                 Entrances = 4,
@@ -119,9 +120,9 @@ namespace Liftmanagement.Helper
             {
                 CustomerId = 4,
                 LocationId = 5,
-                MachineInformationId = 5,
+                Id = 5,
                 Name = "PLANTINO",
-                YearOfConstruction = "05.02.2020",
+                YearOfConstruction = new DateTime(2020, 02, 05),
                 SerialNumber = "314",
                 HoldingPositions = 4,
                 Entrances = 4,
@@ -131,9 +132,9 @@ namespace Liftmanagement.Helper
             {
                 CustomerId = 4,
                 LocationId = 5,
-                MachineInformationId = 6,
+                Id = 6,
                 Name = "PEGASOS",
-                YearOfConstruction = "06.02.2000",
+                YearOfConstruction = new DateTime(2000, 02, 06),
                 SerialNumber = "324",
                 HoldingPositions = 8,
                 Entrances = 8,
@@ -145,6 +146,7 @@ namespace Liftmanagement.Helper
         public static List<Location> GetLocations()
         {
             List<Location> locations = new List<Location>();
+            /*
             locations.Add(new Location
             {
                 CustomerId = 1,
@@ -198,7 +200,7 @@ namespace Liftmanagement.Helper
                 AdditionalInfo = "Kellereingang ist ums Haus"
             });
 
-
+            */
 
             return locations;
         }
@@ -211,9 +213,9 @@ namespace Liftmanagement.Helper
                 CustomerId = 1,
                 LocationId = 1,
                 MachineInformationId = 1,
-                MaintenanceAgreementId = 1,
-                Duration = "31.12.2020",
-                AgreementDate = "31.12.2019",
+                Id = 1,
+                Duration = new DateTime(2020, 12, 31),
+                AgreementDate = new DateTime(2019,12,31),
                 AdditionalInfo = "Türe-Türteile"
             });
 
@@ -222,9 +224,9 @@ namespace Liftmanagement.Helper
                 CustomerId = 2,
                 LocationId = 2,
                 MachineInformationId = 2,
-                MaintenanceAgreementId = 2,
-                Duration = "31.12.2020",
-                AgreementDate = "31.12.2019",
+                Id = 2,
+                Duration = new DateTime(2020, 12, 31),
+                AgreementDate = new DateTime(2019, 12, 31),
                 AdditionalInfo = "Türe-Türteile"
             });
 
@@ -233,9 +235,9 @@ namespace Liftmanagement.Helper
                 CustomerId = 3,
                 LocationId = 3,
                 MachineInformationId = 3,
-                MaintenanceAgreementId = 3,
-                Duration = "31.12.2020",
-                AgreementDate = "31.12.2019",
+                Id = 3,
+                Duration = new DateTime(2020, 12, 31),
+                AgreementDate = new DateTime(2019, 12, 31),
                 AdditionalInfo = "Türe-Türteile"
             });
 
@@ -244,9 +246,9 @@ namespace Liftmanagement.Helper
                 CustomerId = 4,
                 LocationId = 4,
                 MachineInformationId = 4,
-                MaintenanceAgreementId = 4,
-                Duration = "31.12.2020",
-                AgreementDate = "31.12.2019",
+                Id = 4,
+                Duration = new DateTime(2020, 12, 31),
+                AgreementDate = new DateTime(2019, 12, 31),
                 AdditionalInfo = "Türe-Türteile"
             });
 
@@ -255,9 +257,9 @@ namespace Liftmanagement.Helper
                 CustomerId = 4,
                 LocationId = 5,
                 MachineInformationId = 5,
-                MaintenanceAgreementId = 4,
-                Duration = "31.12.2020",
-                AgreementDate = "31.12.2019",
+                Id = 4,
+                Duration = new DateTime(2020, 12, 31),
+                AgreementDate = new DateTime(2019, 12, 31),
                 AdditionalInfo = "Türe-Türteile"
             });
 
@@ -266,9 +268,9 @@ namespace Liftmanagement.Helper
                 CustomerId = 4,
                 LocationId = 5,
                 MachineInformationId = 6,
-                MaintenanceAgreementId = 4,
-                Duration = "31.12.2020",
-                AgreementDate = "31.12.2019",
+                Id = 4,
+                Duration = new DateTime(2020, 12, 31),
+                AgreementDate = new DateTime(2019, 12, 31),
                 AdditionalInfo = "Türe-Türteile"
             });
 

@@ -77,7 +77,7 @@ namespace Liftmanagement.Views
                 return;
             }
 
-            cbMachineInformations.ItemsSource = masterDataInfoViewModel.MachineInformations.Where(c => c.LocationId == location.LocationId).ToList();
+            cbMachineInformations.ItemsSource = masterDataInfoViewModel.MachineInformations.Where(c => c.LocationId == location.Id).ToList();
 
             lblAddressLocation.Content = location.Address;
             lblPostcodeCityLocation.Content = location.Postcode + ", " + location.City;
@@ -89,7 +89,7 @@ namespace Liftmanagement.Views
                 lblAdditionalInfoLocation.Visibility = Visibility.Collapsed;
             }
 
-            if (string.IsNullOrWhiteSpace(location.ContactPerson))
+            if (string.IsNullOrWhiteSpace(location.ContactPerson.Name))
             {
                 lblContactPersonLocation.Visibility = Visibility.Collapsed;
             }
@@ -108,7 +108,7 @@ namespace Liftmanagement.Views
                 return;
             }
 
-            cbLocations.ItemsSource = masterDataInfoViewModel.Locations.Where(c => c.CustomerId == customer.CustomerId).ToList();
+            cbLocations.ItemsSource = masterDataInfoViewModel.Locations.Where(c => c.CustomerId == customer.Id).ToList();
 
             lblCompanyName.Content = customer.CompanyName;
 
@@ -118,7 +118,7 @@ namespace Liftmanagement.Views
 
             }
 
-            if (string.IsNullOrWhiteSpace(customer.ContactPerson))
+            if (string.IsNullOrWhiteSpace(customer.ContactPerson.Name))
             {
 
                 lblContactPerson.Visibility = Visibility.Collapsed;

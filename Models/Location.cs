@@ -7,12 +7,9 @@ using System.Threading.Tasks;
 
 namespace Liftmanagement.Models
 {
-    public class Location : Person
-    {
-
-        public int LocationId { get; set; }
-        public int CustomerId { get; set; }
-      
+    public class Location : Person, IDatabaseObject
+    {             
+        public Int64 CustomerId { get; set; }      
 
         [DisplayName("Beim Störungsfall kontaktieren")]
         public bool ContactByDefect { get; set; }
@@ -20,6 +17,11 @@ namespace Liftmanagement.Models
         protected override string GetFullName()
         {
             return string.Format("{0}, {1} {2}", Address, Postcode, City);
+        }
+
+        public static string GetIndexFields()
+        {
+            return nameof(Address) + "," + nameof(Postcode) + "," + nameof(City);
         }
     }
 }

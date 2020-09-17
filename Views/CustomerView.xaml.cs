@@ -83,16 +83,16 @@ namespace Liftmanagement.View
             lblAddress.Content = customer.GetDisplayName<Customer>(nameof(customer.Address)) + ":";
             lblPostcode.Content = customer.GetDisplayName<Customer>(nameof(customer.Postcode)) + ":";
             lblCity.Content = customer.GetDisplayName<Customer>(nameof(customer.City)) + ":";
-            lblPhoneWork.Content = customer.GetDisplayName<Customer>(nameof(customer.PhoneWork)) + ":";
-            lblMobile.Content = customer.GetDisplayName<Customer>(nameof(customer.Mobile)) + ":";
+            lblPhoneWork.Content = customer.GetDisplayName<Customer>(nameof(customer.ContactPerson.PhoneWork)) + ":";
+            lblMobile.Content = customer.GetDisplayName<Customer>(nameof(customer.ContactPerson.Mobile)) + ":";
 
             txtCompanyName.Text = customer.CompanyName;
-            txtContactPerson.Text = customer.ContactPerson;
+            txtContactPerson.Text = customer.ContactPerson.Name;
             txtAddress.Text = customer.Address;
             txtPostcode.Text = customer.Postcode;
             txtCity.Text = customer.City;
-            txtPhoneWork.Text = customer.PhoneWork;
-            txtMobile.Text = customer.Mobile;
+            txtPhoneWork.Text = customer.ContactPerson.PhoneWork;
+            txtMobile.Text = customer.ContactPerson.Mobile;
 
 
             List<Location> locations = TestData.GetLocations();

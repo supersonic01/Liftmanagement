@@ -10,8 +10,8 @@ namespace Liftmanagement.Models
 {
     public class MachineInformation : BaseDatabaseField,IDatabaseObject
     {
-        public Int64 LocationId { get; set; } = -1;
-        public Int64 CustomerId { get; set; } = -1;
+        public long LocationId { get; set; } = -1;
+        public long CustomerId { get; set; } = -1;
 
         [DisplayName("Name")]
         public string Name { get; set; }

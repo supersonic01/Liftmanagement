@@ -40,7 +40,7 @@ namespace Liftmanagement.Data
             databaseConnection.Close();
         }
 
-        public static int AddCustomer(Customer customer)
+        public static SQLQueryResult AddCustomer(Customer customer)
         {
             if (databaseConnection == null)
             {
@@ -55,11 +55,12 @@ namespace Liftmanagement.Data
             MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
 
             databaseConnection.Open();
-            int id = execQuery.ExecuteNonQuery();
+            int records = execQuery.ExecuteNonQuery();
+            long id = execQuery.LastInsertedId;
             customer.ContactPerson.ForeignKey = id;
             AddContactPartner(customer.ContactPerson);
             customer.Administrator.CustomerId = id;
-            int adminId = AddAdministratorCompany(customer.Administrator);
+            long adminId = AddAdministratorCompany(customer.Administrator);
 
             foreach (var contactPerson in customer.Administrator.ContactPerson)
             {
@@ -72,7 +73,7 @@ namespace Liftmanagement.Data
             return id;
         }
 
-        private static int AddContactPartner(ContactPartner contactpartner)
+        private static long AddContactPartner(ContactPartner contactpartner)
         {
             string query = "INSERT INTO CONTACTPARTNER(ForeignKey,ForeignKeyType,Name,PhoneWork,Mobile,EMail,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
             string values = "VALUE(" + contactpartner.ForeignKey + "," + contactpartner.ForeignKeyType + ",'" + contactpartner.Name + "','" + contactpartner.PhoneWork + "','" + contactpartner.Mobile + "','" + contactpartner.EMail + "','" + contactpartner.CreatedPersonName + "','" + contactpartner.ModifiedPersonName + "'," + contactpartner.ReadOnly + ",'" + contactpartner.UsedBy + "')";
@@ -81,7 +82,8 @@ namespace Liftmanagement.Data
 
             MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
 
-            int id = execQuery.ExecuteNonQuery();
+            int records = execQuery.ExecuteNonQuery();
+            long id = execQuery.LastInsertedId;
             return id;
         }
 
@@ -94,7 +96,8 @@ namespace Liftmanagement.Data
 
             MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
 
-            int id = execQuery.ExecuteNonQuery();
+            int records = execQuery.ExecuteNonQuery();
+            long id = execQuery.LastInsertedId;
             return id;
         }
 

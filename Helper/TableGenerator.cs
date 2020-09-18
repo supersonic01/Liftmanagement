@@ -81,7 +81,7 @@ namespace Liftmanagement.Helper
             {
                 // Add the rest of your CLR Types to SQL Types mapping here
                 Dictionary<Type, String> dataMapper = new Dictionary<Type, string>();
-                dataMapper.Add(typeof(Int64), "BIGINT");
+                dataMapper.Add(typeof(long), "BIGINT");
                 dataMapper.Add(typeof(int), "INT");
                 dataMapper.Add(typeof(string), "VARCHAR(50)");
                 dataMapper.Add(typeof(bool), "BOOLEAN");

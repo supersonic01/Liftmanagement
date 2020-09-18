@@ -10,7 +10,7 @@ namespace Liftmanagement.Models
 {
   public class AdministratorCompany : BaseDatabaseField, IDatabaseObject
     {
-        public Int64 CustomerId { get; set; }
+        public long CustomerId { get; set; }
 
         [DisplayName("Verwalter Firma"), DatabaseAttribute(DatabaseAttribute.NOT_NULL)]
         public string Name { get; set; }

@@ -10,9 +10,9 @@ namespace Liftmanagement.Models
 {
     public class MaintenanceAgreement : BaseDatabaseField,IDatabaseObject
     {
-        public Int64 LocationId { get; set; }
-        public Int64 CustomerId { get; set; }
-        public Int64 MachineInformationId { get; set; }
+        public long LocationId { get; set; }
+        public long CustomerId { get; set; }
+        public long MachineInformationId { get; set; }
 
         /// <summary>
         /// Laufzeit Vertrag bis 31.12.2019

@@ -208,7 +208,7 @@ namespace Liftmanagement.Helper
         {
             Dictionary<Type, string> typeMapper = new Dictionary<Type, string>();
             typeMapper.Add(typeof(string), "GetString");
-            typeMapper.Add(typeof(Int64), "GetInt64");
+            typeMapper.Add(typeof(long), "GetInt64");
             typeMapper.Add(typeof(int), "GetInt32");
             typeMapper.Add(typeof(bool), "GetBoolean");
             typeMapper.Add(typeof(DateTime), "GetDateTime");

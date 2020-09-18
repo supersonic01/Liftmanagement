@@ -9,7 +9,7 @@ namespace Liftmanagement.Models
 {
     public class Location : Person, IDatabaseObject
     {             
-        public Int64 CustomerId { get; set; }      
+        public long CustomerId { get; set; }      
 
         [DisplayName("Beim Störungsfall kontaktieren")]
         public bool ContactByDefect { get; set; }

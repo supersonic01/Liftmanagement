@@ -167,6 +167,7 @@
     <Compile Include="BusinessLogic\GoogleManagement\DriveLiftmanagement.cs" />
     <Compile Include="Data\DataAccess.cs" />
     <Compile Include="Data\MySQLDataAccess.cs" />
+    <Compile Include="Data\SQLQueryResult.cs" />
     <Compile Include="Helper\CalendarQuickstart.cs" />
     <Compile Include="Helper\DatabaseAttribute.cs" />
     <Compile Include="Helper\DBHelper.cs" />

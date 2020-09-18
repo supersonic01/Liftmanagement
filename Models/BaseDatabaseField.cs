@@ -11,7 +11,7 @@ namespace Liftmanagement.Models
   public class BaseDatabaseField: DisplayNameRetriever
     {
         [DatabaseAttribute(DatabaseAttribute.AUTO_INCREMENT, Updateable =false)]
-        public Int64 Id { get; set; }
+        public long Id { get; set; }
 
         [DatabaseAttribute(DatabaseAttribute.DEFAULT_DATETIME, Updateable = false)]
         public DateTime CreatedDate { get; set; }

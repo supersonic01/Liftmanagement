@@ -1,6 +1,6 @@
 ﻿namespace Liftmanagement.Models
 {
-    internal interface IDatabaseObject
+    public interface IDatabaseObject
     {
       // static string GetIndexFields();
     }

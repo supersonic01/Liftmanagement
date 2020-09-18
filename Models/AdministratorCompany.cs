@@ -15,8 +15,21 @@ namespace Liftmanagement.Models
         [DisplayName("Verwalter Firma"), DatabaseAttribute(DatabaseAttribute.NOT_NULL)]
         public string Name { get; set; }
 
-        [DisplayName("Ansprechpartner")]       
+        [DisplayName("Ansprechpartner"), DatabaseAttribute(Updateable = false)]               
         public List<ContactPartner> ContactPerson { get; set; } = new List<ContactPartner>();
+
+        public AdministratorCompany()
+        {
+
+        }
+
+        public AdministratorCompany(BaseDatabaseField baseField)
+        {
+            CreatedPersonName = baseField.CreatedPersonName;
+            ModifiedPersonName = baseField.ModifiedPersonName;
+            ReadOnly = baseField.ReadOnly;
+            UsedBy = baseField.UsedBy;
+        }
 
         public static string GetIndexFields()
         {

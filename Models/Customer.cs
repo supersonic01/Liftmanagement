@@ -16,7 +16,7 @@ namespace Liftmanagement.Models
         public string GoogleDriveLink { get; set; }
 
 
-        [DisplayName("Verwalter Firma")]
+        [DisplayName("Verwalter Firma"), DatabaseAttribute(Updateable = false)]
         public AdministratorCompany Administrator { get; set; } = new AdministratorCompany();
 
         public static implicit operator string(Customer v)

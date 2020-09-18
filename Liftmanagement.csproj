@@ -186,6 +186,7 @@
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\MachineInformation.cs" />
     <Compile Include="Models\MaintenanceAgreement.cs" />
+    <Compile Include="Models\CollectionOfVariety.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="Models\Customer.cs" />

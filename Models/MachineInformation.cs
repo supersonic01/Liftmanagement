@@ -10,8 +10,8 @@ namespace Liftmanagement.Models
 {
     public class MachineInformation : BaseDatabaseField,IDatabaseObject
     {
-        public Int64 LocationId { get; set; }
-        public Int64 CustomerId { get; set; }     
+        public Int64 LocationId { get; set; } = -1;
+        public Int64 CustomerId { get; set; } = -1;
 
         [DisplayName("Name")]
         public string Name { get; set; }
@@ -29,13 +29,8 @@ namespace Liftmanagement.Models
         [DisplayName("Beschreibung"), DatabaseAttribute(Length = "200")]
         public string Description { get; set; }
 
-        [DisplayName("Ansprechpartner")]
-        public string ContactPerson { get; set; }
-
-        [DisplayName("Tel. geschäftli.")]
-        public string PhoneWork { get; set; }
-        [DisplayName("Mobil")]
-        public string Mobile { get; set; }
+        [DisplayName("Ansprechpartner"), DatabaseAttribute(Updateable = false)]
+        public ContactPartner ContactPerson { get; set; }
 
         [DisplayName("Beim Störungsfall kontaktieren")]
         public bool ContactByDefect { get; set; }

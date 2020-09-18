@@ -10,14 +10,14 @@ namespace Liftmanagement.Models
 {
   public class BaseDatabaseField: DisplayNameRetriever
     {
-        [DatabaseAttribute(DatabaseAttribute.AUTO_INCREMENT)]
+        [DatabaseAttribute(DatabaseAttribute.AUTO_INCREMENT, Updateable =false)]
         public Int64 Id { get; set; }
 
-        [DatabaseAttribute(DatabaseAttribute.DEFAULT_DATETIME)]
+        [DatabaseAttribute(DatabaseAttribute.DEFAULT_DATETIME, Updateable = false)]
         public DateTime CreatedDate { get; set; }
-        [DatabaseAttribute(DatabaseAttribute.UPDATE_DATETIME)]
+        [DatabaseAttribute(DatabaseAttribute.UPDATE_DATETIME, Updateable = false)]
         public DateTime ModifiedDate { get; set; }
-        [DatabaseAttribute(DatabaseAttribute.UPDATE_TIMESTAMP)]
+        [DatabaseAttribute(DatabaseAttribute.UPDATE_TIMESTAMP, Updateable = false)]
         public Timestamp Timestamp { get; set; }
         [DatabaseAttribute(DatabaseAttribute.NOT_NULL)]
         public string CreatedPersonName { get; set; }

@@ -32,5 +32,18 @@ namespace Liftmanagement.Models
             return nameof(Name);
         }
 
+        public ContactPartner(BaseDatabaseField baseField)
+        {
+            CreatedPersonName = baseField.CreatedPersonName;
+            ModifiedPersonName = baseField.ModifiedPersonName;
+            ReadOnly = baseField.ReadOnly;
+            UsedBy = baseField.UsedBy;
+
+            ForeignKeyType = Helper.Helper.GetForeignKeyType(baseField);
+        }
+
+        public ContactPartner()
+        {
+        }
     }
 }

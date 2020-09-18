@@ -26,7 +26,7 @@ namespace Liftmanagement.Models
         [DisplayName("Zusätzliche Informationen"), DatabaseAttribute(Length = "300")]
         public string AdditionalInfo { get; set; }
 
-        [DisplayName("Ansprechpartner")]
+        [DisplayName("Ansprechpartner"), DatabaseAttribute(Updateable = false)]
         public ContactPartner ContactPerson { get; set; } = new ContactPartner();
 
     }

@@ -53,9 +53,9 @@ namespace Liftmanagement.Views
             frameMasterDataInfo.Content = masterDataInfo;
 
 
-
-            cbTerminated.ItemsSource = Enum.GetValues(typeof(Helper.Helper.TTypeTermination)).Cast<Helper.Helper.TTypeTermination>();
-            cbTerminated.SelectedIndex = 0;
+            //TODO
+           // cbTerminated.ItemsSource = Enum.GetValues(typeof(Helper.Helper.TTypeTermination)).Cast<Helper.Helper.TTypeTermination>();
+           // cbTerminated.SelectedIndex = 0;
 
             cbNoticeOfPeriodMonth.ItemsSource = GetMonths();
             cbNoticeOfPeriodMonth.SelectedIndex = 2;

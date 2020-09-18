@@ -56,7 +56,26 @@ namespace Liftmanagement
 
             //  dgCategory.ItemsSource = CategoryVM.Categories;
 
-             MySQLDataAccess.TestConnection();
+            //MySQLDataAccess.CreateConnection();
+            // MySQLDataAccess.CreateTables();
+
+
+
+            //MySQLDataAccess.AddCustomer(TestData.GetCustomers().FirstOrDefault());
+           MySQLDataAccess.AddMachineInformation(TestData.GetMachineInformations().FirstOrDefault());
+            //MySQLDataAccess.AddMaintenanceAgreement(TestData.GetMaintenanceAgreements().FirstOrDefault());
+
+            //MySQLDataAccess.GetCustomers();
+
+//           Helper.Helper.GenerateInsert( typeof(MachineInformation));
+            //            Helper.Helper.GenerateInsert(typeof(MaintenanceAgreement));
+
+           // Helper.Helper.GenerateSelect(typeof(MachineInformation));
+           // Helper.Helper.GenerateSelect(typeof(MaintenanceAgreement));
+
+
+
+            //Helper.Helper.GetTabelValueHeaders(16);
             // new CalendarQuickstart();
             //  new DriveQuickstart();
             //  new DirectoryQuickstart();
@@ -68,7 +87,7 @@ namespace Liftmanagement
             listView1.SetBinding(ListView.ItemsSourceProperty, b);
             */
 
-           // new TableGenerator();
+            // new TableGenerator();
 
             Binding binding = new Binding("CategoryVM.Categories")
             {

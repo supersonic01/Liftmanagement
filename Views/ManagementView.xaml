@@ -15,7 +15,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="#FFE5E5E5">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="Auto"/>
@@ -25,37 +25,103 @@
         <StackPanel Grid.Row="0" Background="AliceBlue">
 
         </StackPanel>
-        <StackPanel Grid.Row="1" Background="AntiqueWhite">
+        <StackPanel Grid.Row="1" >
 
-            <Grid Background="#FFE5E5E5" >
+            <Grid >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="300" />
                     <ColumnDefinition Width="300" />
-                    <ColumnDefinition Width="120" />
-                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition Width="300" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="40" />
                 </Grid.RowDefinitions>
-
-                <Label x:Name="lblCustomer" Grid.Row="0" Grid.Column="0" Content="Kunde:" Style="{StaticResource LableHeaderStyle}" />
+                <Label x:Name="lblAdministrator" Grid.Row="0" Grid.Column="0" Content="Verwalter Firma:" Style="{StaticResource LableHeaderStyle}"/>
+                <Label x:Name="lblCustomer" Grid.Row="0" Grid.Column="2" Content="Kunde:" Style="{StaticResource LableHeaderStyle}"/>
                 <Label x:Name="lblLocation" Grid.Row="0" Grid.Column="1" Content="Standort:" Style="{StaticResource LableHeaderStyle}"  />
-                <Label x:Name="lblMachineInformation" Grid.Row="0" Grid.Column="2"  Content="Anlage:" Style="{StaticResource LableHeaderStyle}" />
+                <Label x:Name="lblMachineInformation" Grid.Row="0" Grid.Column="3"  Content="Anlage:" Style="{StaticResource LableHeaderStyle}" />
 
-                <ComboBox x:Name="cbCustomers" Grid.Row="1" Grid.Column="0"  Style="{StaticResource ComboBoxStyle}"
+
+                <local:FilterableComboBox ItemsSource="{Binding MyItemsSource}"
+                                          SelectedItem="{Binding MySelectedItem}"
+                                          DisplayMemberPath="FullName" 
+                                          IsEditable="True" 
+                                          IsTextSearchEnabled="False" 
+                                          StaysOpenOnEdit="True"
+                                          Grid.Row="1" Grid.Column="0" 
+                                          x:Name="cbAdministrators"
+                                          OnlyValuesInList="True"
+                                          Style="{StaticResource ComboBoxStyle}">
+                    <local:FilterableComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel VirtualizationMode="Recycling" />
+                        </ItemsPanelTemplate>
+                    </local:FilterableComboBox.ItemsPanel>
+                </local:FilterableComboBox>
+
+                <local:FilterableComboBox Grid.Row="1" Grid.Column="2" x:Name="cbCustomers" 
+                                          ItemsSource="{Binding MyItemsSource}"
+                                          SelectedItem="{Binding MySelectedItem}"
+                                          DisplayMemberPath="FullName" 
+                                          IsEditable="True" 
+                                          IsTextSearchEnabled="False" 
+                                          StaysOpenOnEdit="True"
+                                          OnlyValuesInList="True"
+                                          Style="{StaticResource ComboBoxStyle}" >
+                    <local:FilterableComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel VirtualizationMode="Recycling" />
+                        </ItemsPanelTemplate>
+                    </local:FilterableComboBox.ItemsPanel>
+                </local:FilterableComboBox>
+
+                <local:FilterableComboBox x:Name="cbLocations" Grid.Row="1" Grid.Column="1"
+                                          ItemsSource="{Binding MyItemsSource}"
+                                          SelectedItem="{Binding MySelectedItem}"
+                                          DisplayMemberPath="FullName" 
+                                          IsEditable="True" 
+                                          IsTextSearchEnabled="False" 
+                                          StaysOpenOnEdit="True"
+                                          OnlyValuesInList="True"
+                                          Style="{StaticResource ComboBoxStyle}" >
+                    <local:FilterableComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel VirtualizationMode="Recycling" />
+                        </ItemsPanelTemplate>
+                    </local:FilterableComboBox.ItemsPanel>
+                </local:FilterableComboBox>
+
+                <local:FilterableComboBox x:Name="cbMachineInformations" Grid.Row="1" Grid.Column="3"
+                                          ItemsSource="{Binding MyItemsSource}"
+                                          SelectedItem="{Binding MySelectedItem}"
+                                          DisplayMemberPath="FullName" 
+                                          IsEditable="True" 
+                                          IsTextSearchEnabled="False" 
+                                          StaysOpenOnEdit="True"
+                                          OnlyValuesInList="True"
+                                          Style="{StaticResource ComboBoxStyle}" >
+                    <local:FilterableComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel VirtualizationMode="Recycling" />
+                        </ItemsPanelTemplate>
+                    </local:FilterableComboBox.ItemsPanel>
+                </local:FilterableComboBox>
+
+                <!--<ComboBox x:Name="cbCustomers" Grid.Row="1" Grid.Column="1"  Style="{StaticResource ComboBoxStyle}" IsTextSearchEnabled="True"
                           DisplayMemberPath="FullName" SelectedValuePath="CustomerId"  IsEditable="True" />
 
-                <ComboBox x:Name="cbLocations" Grid.Row="1" Grid.Column="1"  Style="{StaticResource ComboBoxStyle}"
+                <ComboBox x:Name="cbLocations" Grid.Row="1" Grid.Column="2"  Style="{StaticResource ComboBoxStyle}"
                           DisplayMemberPath="FullName" SelectedValuePath="LocationId"/>
-                <ComboBox x:Name="cbMachineInformations" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Style="{StaticResource ComboBoxStyle}"
-                          DisplayMemberPath="FullName" SelectedValuePath="MachineInformationId"/>
+                <ComboBox x:Name="cbMachineInformations" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Style="{StaticResource ComboBoxStyle}"
+                          DisplayMemberPath="FullName" SelectedValuePath="MachineInformationId"/>-->
 
             </Grid>
         </StackPanel>
 
         <ScrollViewer  Grid.Row="2"  HorizontalScrollBarVisibility="Visible">
-            <StackPanel Background="Aquamarine">
+            <StackPanel>
                 <Grid ScrollViewer.HorizontalScrollBarVisibility="Visible">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -75,7 +141,7 @@
                         <ColumnDefinition Width="200"/>
                         <ColumnDefinition Width="200"/>
                     </Grid.ColumnDefinitions>
-
+                   
                     <StackPanel Grid.Row="0" Grid.Column="0">
                         <Label x:Name="lblOthersHeader" Content="Sonstiges:" Style="{StaticResource LableHeaderManagementStyle}" />
                         <StackPanel x:Name="spOthers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,0,0,0" >
@@ -97,6 +163,9 @@
                             </DataGrid>
                         </StackPanel>
                     </StackPanel>
+
+                    <Rectangle Grid.Row="0" Grid.Column="1"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
+
                     <StackPanel Grid.Row="0" Grid.Column="1">
                         <Label x:Name="lblContactPersonHeader" Content="Ansprechpartner:" Style="{StaticResource LableHeaderManagementStyle}" />
 
@@ -121,6 +190,9 @@
                             </DataGrid>
                         </StackPanel>
                     </StackPanel>
+
+                    <Rectangle Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
+                    
                     <StackPanel Grid.Row="0" Grid.Column="2">
                         <Label x:Name="lblLocationHeader" Content="Standort:" Style="{StaticResource LableHeaderManagementStyle}" />
                         <Label x:Name="lblAddressLocation" Content="lblAddressLocation"   Style="{StaticResource LableManagementStyle}"/>
@@ -132,6 +204,9 @@
                         <Label x:Name="lblAddress" Content="lblAddressLocation"  Style="{StaticResource LableManagementStyle}" />
                         <Label x:Name="lblPostcodeCity"  Content="lblAddressLocation"  Style="{StaticResource LableManagementStyle}" />
                     </StackPanel>
+
+                    <Rectangle Grid.Row="0" Grid.Column="3"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
+
                     <StackPanel Grid.Row="0" Grid.Column="3">
                         <Label x:Name="lblMaintenanceHeader" Content="Wartungsvertrag:" Style="{StaticResource LableHeaderManagementStyle}" />
                         <Grid>
@@ -178,6 +253,9 @@
                             </StackPanel>
                         </Grid>
                     </StackPanel>
+
+                    <Rectangle Grid.Row="0" Grid.Column="4"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
+
                     <StackPanel Grid.Row="0" Grid.Column="4">
                         <Label x:Name="lblMachineInfoHeader" Content="Anlagedaten:" Style="{StaticResource LableHeaderManagementStyle}" />
                         <Grid>
@@ -206,9 +284,15 @@
                             </StackPanel>
                         </Grid>
                     </StackPanel>
+
+                    <Rectangle Grid.Row="0" Grid.Column="5"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
+
                     <StackPanel Grid.Row="0" Grid.Column="5">
                         <Label x:Name="lblMaintenanceIntervalHeader" Height="60" Content="Wartungsinterval:/4x /vierteljährlich:" Style="{StaticResource LableHeaderManagementStyle}" />
                     </StackPanel>
+
+                    <Rectangle Grid.Row="0" Grid.Column="6"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
+
                     <StackPanel Grid.Row="0" Grid.Column="6">
                         <Label x:Name="lblEmergencyMaintenanceHeader" Content="Notruf+Wartung:" Style="{StaticResource LableHeaderManagementStyle}" />
                     </StackPanel>

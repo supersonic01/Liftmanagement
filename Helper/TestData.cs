@@ -19,6 +19,7 @@ namespace Liftmanagement.Helper
 
             var customer = new Customer
             {
+                Id =1,
                 CompanyName = "SEMEX-EngCon GmbH",
                 Address = "Carl-Metz-Straße 26",
                 Postcode = "76275",
@@ -48,6 +49,7 @@ namespace Liftmanagement.Helper
             
             customer = new Customer
             {
+                Id = 2,
                 CompanyName = "Sit SteuerungsTechnik GmbH",
                 Address = "Einsteinstraße 26-32",
                 Postcode = "76275",
@@ -77,6 +79,7 @@ namespace Liftmanagement.Helper
 
             customer = new Customer
             {
+                Id = 3,
                 CompanyName = "ISCAR Germany GmbH",
                 Address = "Eisenstockstraße 14",
                 Postcode = "76275",
@@ -108,6 +111,7 @@ namespace Liftmanagement.Helper
 
             customer = new Customer
             {
+                Id = 4,
                 CompanyName = "VBE Kamm GmbH",
                 Address = "Am Erlengraben 2",
                 Postcode = "76275",
@@ -132,7 +136,7 @@ namespace Liftmanagement.Helper
                 new ContactPartner(customer.Administrator) { Name = "Josef Jäger3", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" },
                 new ContactPartner (customer.Administrator){ Name = "Josef Jäger4", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" },
                 new ContactPartner(customer.Administrator) { Name = "Josef Jäger5", PhoneWork = "07243514825255", Mobile = "0172435148252", EMail = "halo@web.de" },
-                new ContactPartner(customer.Administrator) { Name = "Josef Jäger6", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" }
+                new ContactPartner(customer.Administrator) { Name = "Josef Jäger", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" }
             };
 
 
@@ -148,8 +152,9 @@ namespace Liftmanagement.Helper
 
             var machine = new MachineInformation
             {
-                CustomerId = -1,
-                LocationId = -1,
+                CustomerId = 1,
+                LocationId = 1,
+                Id = 1,
                 Name = "SHERPA",
                 YearOfConstruction = new DateTime(2002, 09, 11),
                 SerialNumber = "224",
@@ -164,66 +169,118 @@ namespace Liftmanagement.Helper
             machine.ContactPerson = new ContactPartner(machine) { Name = "Steffan2 Winterhut2", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
             machineInformations.Add(machine);
 
-            //machineInformations.Add(new MachineInformation
-            //{
-            //    CustomerId = 2,
-            //    LocationId = 2,
-            //    Id = 2,
-            //    Name = "ESCORTA",
-            //    YearOfConstruction = new DateTime(2012, 02, 12),
-            //    SerialNumber = "244",
-            //    HoldingPositions = 10,
-            //    Entrances = 10,
-            //    Description = "Gütern bis zu 3.000 kg, bis zu 18 Meter Höhe. Mit freistehenden Schachtkonstruktionen, Regalsysteme und Doppelkreisbremssystem",
-            //});
-            //machineInformations.Add(new MachineInformation
-            //{
-            //    CustomerId = 3,
-            //    LocationId = 3,
-            //    Id = 3,
-            //    Name = "ELEGANCA",
-            //    YearOfConstruction = new DateTime(2018, 06, 25),
-            //    SerialNumber = "264",
-            //    HoldingPositions = 12,
-            //    Entrances = 12,
-            //    Description = "Geräuscharm (konform zur VDI 2566-2),Energieklasse A, Max. Personen 8, Max. Förderhöhe 	45 m,Nutzlast 1.000 kg, Max. Anzahl Haltestellen 21",
-            //});
-            //machineInformations.Add(new MachineInformation
-            //{
-            //    CustomerId = 4,
-            //    LocationId = 4,
-            //    Id = 4,
-            //    Name = "VERTIC",
-            //    YearOfConstruction = new DateTime(1996, 08, 09),
-            //    SerialNumber = "284",
-            //    HoldingPositions = 4,
-            //    Entrances = 4,
-            //    Description = "Max. Tragfähigkeit 500kg, Plattformmaße(B x L) 1000 x1500mm, Schachtmaße(B x L) 1360x1520, 	Einbaumaße (B x L) 1400 x 1630, Türbreite 900 m",
-            //});
-            //machineInformations.Add(new MachineInformation
-            //{
-            //    CustomerId = 4,
-            //    LocationId = 5,
-            //    Id = 5,
-            //    Name = "PLANTINO",
-            //    YearOfConstruction = new DateTime(2020, 02, 05),
-            //    SerialNumber = "314",
-            //    HoldingPositions = 4,
-            //    Entrances = 4,
-            //    Description = "Tragfähigkeit 225/300 kg,Nenngeschwindigkeit 0,11 m/s,Neigungswinkel 0 - 47 Grad,Anzahl Haltestellen mehrere Geschosse möglich,Plattformbreite 800 mm, Plattformtiefe 	800 / 900 / 1000 mm,Platzbedarf (eingeklappt) 	250 mm,Anschlußspannung 	230 V (16 A),Akkubetrieb DC 24 Volts (4 wartungsfreie Akkus),Schallpegel 63 db ",
-            //});
-            //machineInformations.Add(new MachineInformation
-            //{
-            //    CustomerId = 4,
-            //    LocationId = 5,
-            //    Id = 6,
-            //    Name = "PEGASOS",
-            //    YearOfConstruction = new DateTime(2000, 02, 06),
-            //    SerialNumber = "324",
-            //    HoldingPositions = 8,
-            //    Entrances = 8,
-            //    Description = "Auto Lift,Förderhöhe max. 80 m, Nenngeschwindigkeit 0,15 m/s,Grubentiefe 150 mm,Nennlast 2.700 – 3.100 kg, Kabinenbreite 2.500 – 3.000 mm,Kabinentiefe 5.500 – 6.000 mm,Kabinenhöhe 2.100 mm ",
-            //});
+             machine = new MachineInformation
+            {
+                CustomerId = 2,
+                LocationId = 2,
+                Id = 2,
+                Name = "ESCORTA",
+                YearOfConstruction = new DateTime(2012, 02, 12),
+                SerialNumber = "244",
+                HoldingPositions = 10,
+                Entrances = 10,
+                Description = "Gütern bis zu 3.000 kg, bis zu 18 Meter Höhe. Mit freistehenden Schachtkonstruktionen, Regalsysteme und Doppelkreisbremssystem",
+                Payload = 400,
+                AdditionalInfo = "Keine Info vorhanden, bitte was schreiben",
+
+            };
+
+            machine.ContactPerson = new ContactPartner(machine) { Name = "Steffan20 Winterhut2", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
+            machineInformations.Add(machine);
+          
+            machine = new MachineInformation
+            {
+                CustomerId = 3,
+                LocationId = 3,
+                Id = 3,
+                Name = "ELEGANCA",
+                YearOfConstruction = new DateTime(2018, 06, 25),
+                SerialNumber = "264",
+                HoldingPositions = 12,
+                Entrances = 12,
+                Description = "Geräuscharm (konform zur VDI 2566-2),Energieklasse A, Max. Personen 8, Max. Förderhöhe 	45 m,Nutzlast 1.000 kg, Max. Anzahl Haltestellen 21",
+                Payload = 400,
+                AdditionalInfo = "Keine Info vorhanden, bitte was schreiben",
+
+            };
+
+            machine.ContactPerson = new ContactPartner(machine) { Name = "Steffan20 Winterhut2", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
+            machineInformations.Add(machine);
+
+            machine = new MachineInformation
+            {
+                CustomerId = 3,
+                LocationId = 3,
+                Id = 7,
+                Name = "ELEGANCA",
+                YearOfConstruction = new DateTime(2018, 06, 25),
+                SerialNumber = "266",
+                HoldingPositions = 12,
+                Entrances = 12,
+                Description = "Geräuscharm (konform zur VDI 2566-2),Energieklasse A, Max. Personen 8, Max. Förderhöhe 	45 m,Nutzlast 1.000 kg, Max. Anzahl Haltestellen 21",
+                Payload = 400,
+                AdditionalInfo = "Keine Info vorhanden, bitte was schreiben",
+
+            };
+
+            machine.ContactPerson = new ContactPartner(machine) { Name = "Steffan20 Winterhut2", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
+            machineInformations.Add(machine);
+
+            machine = new MachineInformation
+            {
+                CustomerId = 4,
+                LocationId = 4,
+                Id = 4,
+                Name = "VERTIC",
+                YearOfConstruction = new DateTime(1996, 08, 09),
+                SerialNumber = "284",
+                HoldingPositions = 4,
+                Entrances = 4,
+                Description = "Max. Tragfähigkeit 500kg, Plattformmaße(B x L) 1000 x1500mm, Schachtmaße(B x L) 1360x1520, 	Einbaumaße (B x L) 1400 x 1630, Türbreite 900 m",
+                Payload = 400,
+                AdditionalInfo = "Keine Info vorhanden, bitte was schreiben",
+
+            };
+
+            machine.ContactPerson = new ContactPartner(machine) { Name = "Steffan20 Winterhut2", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
+            machineInformations.Add(machine);
+
+            machine = new MachineInformation
+            {
+                CustomerId = 4,
+                LocationId = 5,
+                Id = 5,
+                Name = "PLANTINO",
+                YearOfConstruction = new DateTime(2020, 02, 05),
+                SerialNumber = "314",
+                HoldingPositions = 4,
+                Entrances = 4,
+                Description = "Tragfähigkeit 225/300 kg,Nenngeschwindigkeit 0,11 m/s,Neigungswinkel 0 - 47 Grad,Anzahl Haltestellen mehrere Geschosse möglich,Plattformbreite 800 mm, Plattformtiefe 	800 / 900 / 1000 mm,Platzbedarf (eingeklappt) 	250 mm,Anschlußspannung 	230 V (16 A),Akkubetrieb DC 24 Volts (4 wartungsfreie Akkus),Schallpegel 63 db ",
+                Payload = 400,
+                AdditionalInfo = "Keine Info vorhanden, bitte was schreiben"
+            };
+
+            machine.ContactPerson = new ContactPartner(machine) { Name = "Steffan20 Winterhut2", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
+            machineInformations.Add(machine);
+
+            machine = new MachineInformation
+            {
+                CustomerId = 4,
+                LocationId = 5,
+                Id = 6,
+                Name = "PEGASOS",
+                YearOfConstruction = new DateTime(2000, 02, 06),
+                SerialNumber = "324",
+                HoldingPositions = 8,
+                Entrances = 8,
+                Description = "Auto Lift,Förderhöhe max. 80 m, Nenngeschwindigkeit 0,15 m/s,Grubentiefe 150 mm,Nennlast 2.700 – 3.100 kg, Kabinenbreite 2.500 – 3.000 mm,Kabinentiefe 5.500 – 6.000 mm,Kabinenhöhe 2.100 mm ",
+                Payload = 400,
+                AdditionalInfo = "Keine Info vorhanden, bitte was schreiben"
+            };
+
+            machine.ContactPerson = new ContactPartner(machine) { Name = "Steffan20 Winterhut2", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
+            machineInformations.Add(machine);
+
             return machineInformations;
         }
 
@@ -233,7 +290,7 @@ namespace Liftmanagement.Helper
 
             var location = new Location
             {
-                CustomerId = -1,
+                CustomerId = 1,
                 Id = 1,
                 Address = "Carl-Metz-Straße 26",
                 Postcode = "76275",
@@ -246,47 +303,62 @@ namespace Liftmanagement.Helper
             location.ContactPerson = new ContactPartner(location) { Name = "Anna Cremer", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
             locations.Add(location);
 
-            /*
-            locations.Add(new Location
+             location = new Location
             {
                 CustomerId = 2,
-                LocationId = 2,
-                ContactPerson = "Brigitte Esser",
-                Address = "Einsteinstraße 26-32",
-                Postcode = "76275",
+                Id = 2,
+                Address = "Königstraße 26",
+                 Postcode = "76275",
                 City = "Ettlingen",
-                PhoneWork = "07243561710",
-                Mobile = "017243561710",
-                AdditionalInfo = "Code für Eingang = 2585"
-            });
+                AdditionalInfo = "Code für Eingang = 2585",
+                ContactByDefect = true
+            };
 
-            locations.Add(new Location
+            location.ContactPerson = new ContactPartner(location) { Name = "Brigitte Esser", PhoneWork = "07243561710", Mobile = "017243561710", EMail = "halo@web.de" };
+            locations.Add(location);
+
+            location = new Location
             {
-                CustomerId = 4,
-                LocationId = 4,
-                ContactPerson = "Elisabeth Hoffmann",
+                CustomerId = 3,
+                Id = 3,
                 Address = "Am Erlengraben 2",
                 Postcode = "76275",
                 City = "Ettlingen",
-                PhoneWork = "0724357770",
-                Mobile = "01724357770",
-                AdditionalInfo = "Bewohner im 3. Stock (Herr Walter) informieren"
-            });
+                AdditionalInfo = "Bewohner im 3. Stock (Herr Walter) informieren",
+                ContactByDefect = true
+            };
 
-            locations.Add(new Location
+            location.ContactPerson = new ContactPartner(location) { Name = "Elisabeth Hoffmann", PhoneWork = "0724357770", Mobile = "01724357770", EMail = "halo@web.de" };
+            locations.Add(location);
+
+
+            location = new Location
             {
                 CustomerId = 4,
-                LocationId = 5,
-                ContactPerson = "Manfred Becker",
+                Id = 4,
+                Address = "Am Erlengraben 2",
+                Postcode = "76275",
+                City = "Ettlingen",
+                AdditionalInfo = "Bewohner im 3. Stock (Herr Walter) informieren",
+                ContactByDefect = true
+            };
+
+            location.ContactPerson = new ContactPartner(location) { Name = "Elisabeth Hoffmann", PhoneWork = "0724357770", Mobile = "01724357770", EMail = "halo@web.de" };
+            locations.Add(location);
+
+            location = new Location
+            {
+                CustomerId = 4,
+                Id = 5,
                 Address = "Amselweg 2",
                 Postcode = "76467",
                 City = "Bietigheim",
-                PhoneWork = "0724357770",
-                Mobile = "01724357770",
-                AdditionalInfo = "Kellereingang ist ums Haus"
-            });
+                AdditionalInfo = "Kellereingang ist ums Haus",
+                ContactByDefect = true
+            };
 
-            */
+            location.ContactPerson = new ContactPartner(location) { Name = "Manfred Becker", PhoneWork = "0724357770", Mobile = "01724357770", EMail = "halo@web.de" };
+            locations.Add(location);
 
             return locations;
         }
@@ -296,9 +368,10 @@ namespace Liftmanagement.Helper
             List<MaintenanceAgreement> maintenanceAgreement = new List<MaintenanceAgreement>();
             maintenanceAgreement.Add(new MaintenanceAgreement
             {
-                CustomerId = -1,
-                LocationId = -1,
-                MachineInformationId = -1,
+                CustomerId = 1,
+                LocationId = 1,
+                MachineInformationId = 1,
+                Id = 1,
                 Duration = new DateTime(2020, 12, 31),
                 CanBeCancelled = "jährlich",
                 ArreementCancelledBy = "Kunde",
@@ -308,16 +381,20 @@ namespace Liftmanagement.Helper
                 AdditionalInfo = "Türe-Türteile"
             });
 
-            /*  maintenanceAgreement.Add(new MaintenanceAgreement
+             maintenanceAgreement.Add(new MaintenanceAgreement
               {
                   CustomerId = 2,
                   LocationId = 2,
                   MachineInformationId = 2,
                   Id = 2,
                   Duration = new DateTime(2020, 12, 31),
+                  CanBeCancelled = "jährlich",
+                  ArreementCancelledBy = "Kunde",
+                  MaintenanceType = "Vollwartung",
+                  NoticeOfPeriod = 3,
                   AgreementDate = new DateTime(2019, 12, 31),
                   AdditionalInfo = "Türe-Türteile"
-              });
+             });
 
               maintenanceAgreement.Add(new MaintenanceAgreement
               {
@@ -326,17 +403,41 @@ namespace Liftmanagement.Helper
                   MachineInformationId = 3,
                   Id = 3,
                   Duration = new DateTime(2020, 12, 31),
+                  CanBeCancelled = "jährlich",
+                  ArreementCancelledBy = "Kunde",
+                  MaintenanceType = "Vollwartung",
+                  NoticeOfPeriod = 3,
                   AgreementDate = new DateTime(2019, 12, 31),
                   AdditionalInfo = "Türe-Türteile"
               });
 
+
               maintenanceAgreement.Add(new MaintenanceAgreement
+              {
+                  CustomerId = 3,
+                  LocationId = 3,
+                  MachineInformationId = 7,
+                  Id = 7,
+                  Duration = new DateTime(2020, 12, 31),
+                  CanBeCancelled = "jährlich",
+                  ArreementCancelledBy = "Kunde",
+                  MaintenanceType = "Vollwartung",
+                  NoticeOfPeriod = 3,
+                  AgreementDate = new DateTime(2019, 12, 31),
+                  AdditionalInfo = "Türe-Türteile"
+              });
+
+            maintenanceAgreement.Add(new MaintenanceAgreement
               {
                   CustomerId = 4,
                   LocationId = 4,
                   MachineInformationId = 4,
                   Id = 4,
                   Duration = new DateTime(2020, 12, 31),
+                  CanBeCancelled = "jährlich",
+                  ArreementCancelledBy = "Kunde",
+                  MaintenanceType = "Vollwartung",
+                  NoticeOfPeriod = 3,
                   AgreementDate = new DateTime(2019, 12, 31),
                   AdditionalInfo = "Türe-Türteile"
               });
@@ -346,8 +447,12 @@ namespace Liftmanagement.Helper
                   CustomerId = 4,
                   LocationId = 5,
                   MachineInformationId = 5,
-                  Id = 4,
+                  Id = 5,
                   Duration = new DateTime(2020, 12, 31),
+                  CanBeCancelled = "jährlich",
+                  ArreementCancelledBy = "Kunde",
+                  MaintenanceType = "Vollwartung",
+                  NoticeOfPeriod = 3,
                   AgreementDate = new DateTime(2019, 12, 31),
                   AdditionalInfo = "Türe-Türteile"
               });
@@ -357,12 +462,16 @@ namespace Liftmanagement.Helper
                   CustomerId = 4,
                   LocationId = 5,
                   MachineInformationId = 6,
-                  Id = 4,
+                  Id = 6,
                   Duration = new DateTime(2020, 12, 31),
+                  CanBeCancelled = "jährlich",
+                  ArreementCancelledBy = "Kunde",
+                  MaintenanceType = "Vollwartung",
+                  NoticeOfPeriod = 3,
                   AgreementDate = new DateTime(2019, 12, 31),
                   AdditionalInfo = "Türe-Türteile"
               });
-             */
+           
             return maintenanceAgreement;
         }
 

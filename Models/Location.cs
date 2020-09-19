@@ -23,6 +23,10 @@ namespace Liftmanagement.Models
         {
             return nameof(Address) + "," + nameof(Postcode) + "," + nameof(City);
         }
-               
+
+        public override string ToString()
+        {
+            return GetFullName();
+        }
     }
 }

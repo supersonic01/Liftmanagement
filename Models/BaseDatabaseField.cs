@@ -26,5 +26,7 @@ namespace Liftmanagement.Models
        
         public bool ReadOnly { get; set; }       
         public string UsedBy { get; set; }
+
+        public delegate string GetFullNameDelegate();
     }
 }

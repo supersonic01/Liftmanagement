@@ -2,7 +2,9 @@
 using Liftmanagement.ViewModels;
 using System;
 using System.CodeDom;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,8 +24,8 @@ namespace Liftmanagement.Views
     /// Interaction logic for ManagementView.xaml
     /// </summary>
     public partial class ManagementView : UserControl
-    {      
-        private ManagementViewModel managementVM= new ManagementViewModel();
+    {
+        private ManagementViewModel managementVM = new ManagementViewModel();
 
         public ManagementViewModel ManagementVM
         {
@@ -39,33 +41,139 @@ namespace Liftmanagement.Views
             lblCustomerHeader.Content = "Rechnungsadresse:";
             lblLocationHeader.Content = "Standort:";
             lblMaintenanceIntervalHeader.Content = "Wartungsinterval:\n4x / vierteljährlich";
-            
+
+            BindingControll(cbAdministrators, nameof(ManagementVM.Administrators));
             BindingControll(cbCustomers, nameof(ManagementVM.Customers));
+            BindingControll(cbLocations, nameof(ManagementVM.Locations));
+            BindingControll(cbMachineInformations, nameof(ManagementVM.MachineInformations));
             BindingControll(dgOthers, nameof(ManagementVM.OtherInformations));
 
-            var location = ManagementVM.Locations.FirstOrDefault();
-            var customer = ManagementVM.Customers.FirstOrDefault();
-            var maintenanceAgreement = ManagementVM.MaintenanceAgreements.FirstOrDefault();
-            var machineInfo = ManagementVM.MachineInformations.FirstOrDefault();
 
+
+            //cbAdministrators.SelectionEffectivelyChanged += CbAdministrators_SelectionEffectivelyChanged;
+            //cbCustomers.SelectionEffectivelyChanged += CbCustomers_SelectionEffectivelyChanged;
+            cbAdministrators.SelectionChanged += CbAdministrators_SelectionChanged;
+            cbCustomers.SelectionChanged += CbCustomers_SelectionChanged;
+            cbLocations.SelectionChanged += CbLocations_SelectionChanged;
+            cbMachineInformations.SelectionChanged += CbMachineInformations_SelectionChanged;
+
+            dgOthers.PreviewKeyDown += DgOthers_PreviewKeyDown;
+
+            //TODO dgOthers cell  make vertical scrollabl
+            //TODO Keyordnavigation
+        }
+
+        private void CbMachineInformations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var location = cbLocations.SelectedItem as Location;
+            var customer = cbCustomers.SelectedItem as Customer;
+            var machineInfo = cbMachineInformations.SelectedItem as MachineInformation;
+            var maintenanceAgreement = ManagementVM.MaintenanceAgreements
+                .Where(c => c.MachineInformationId == machineInfo.Id).FirstOrDefault();
+          
             SetLocationData(location);
             SetCustomerData(customer);
             SetMaintenanceAgreementData(maintenanceAgreement);
             SetEmergencyAgreementData(maintenanceAgreement);
             SetMachineInformationData(machineInfo);
 
-            dgContactPersons.ItemsSource = customer.Administrator.ContactPersons;
+            List<ContactPartner> contactPersons = new List<ContactPartner>();
+
+            contactPersons.AddRange(customer.Administrator.ContactPersons);
+            contactPersons.Add(customer.ContactPerson);
+            contactPersons.Add(location.ContactPerson);
+            contactPersons.Add(machineInfo.ContactPerson);
+
+            dgContactPersons.ItemsSource = contactPersons;
             dgContactPersons.Tag = ManagementVM.NotVisibleColumns;
-
-         
-            dgOthers.PreviewKeyDown += DgOthers_PreviewKeyDown;
-
-            //TODO dgOthers cell  make vertical scrollabl
         }
 
-        private void BindingControll(ItemsControl control,  string source)
+        private void CbLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Binding binding = new Binding("ManagementVM."+source)
+           FilterLocationSelected(cbLocations.SelectedItem as Location);
+        }
+
+        private void CbAdministrators_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            FilterAdministratorSelected(cbAdministrators.SelectedItem as AdministratorCompany);
+        }
+
+        private void CbCustomers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //var customer = cbCustomers.SelectedItem as Customer;
+            //cbLocations.ItemsSource = ManagementVM.Locations.Where(c => c.CustomerId == customer.Id);
+            //cbLocations.SelectedIndex = 0;
+            //var location = cbLocations.SelectedItem as Location;
+            //cbLocations.Text = location.ToString();
+
+            FilterCustomerSelected(cbCustomers.SelectedItem as Customer);
+        }
+
+        private void CbCustomers_SelectionEffectivelyChanged(FilterableComboBox arg1, object arg2)
+        {
+            var customer = arg2 as Customer;
+            cbLocations.ItemsSource = ManagementVM.Locations.Where(c => c.CustomerId == customer.Id);
+            cbLocations.SelectedIndex = 0;
+            var location = cbLocations.SelectedItem as Location;
+            cbLocations.Text = location.ToString();
+
+        }
+
+        private void CbAdministrators_SelectionEffectivelyChanged(FilterableComboBox arg1, object arg2)
+        {
+            FilterAdministratorSelected(arg2 as AdministratorCompany);
+        }
+
+        private void FilterLocationSelected(Location location)
+        {
+            if (location == null)
+                return;
+
+            SetFilterSelectedCbItem(cbMachineInformations, () =>
+            {
+                return ManagementVM.MachineInformations.Where(c => c.LocationId == location.Id);
+            });
+        }
+
+        private void FilterCustomerSelected(Customer customer)
+        {
+            if (customer == null)
+                return;
+
+            SetFilterSelectedCbItem(cbLocations, () =>
+            {
+                return ManagementVM.Locations.Where(c => c.CustomerId == customer.Id);
+            });
+        }
+
+        private void FilterAdministratorSelected(AdministratorCompany administrator)
+        {
+            if (administrator == null)
+                return;
+
+            SetFilterSelectedCbItem(cbCustomers, () =>
+            {
+                return ManagementVM.Customers.Where(c => c.Id == administrator.CustomerId);
+            });
+
+        }
+
+        private void SetFilterSelectedCbItem(ComboBox comboBox, Func<IEnumerable> filteredSource)
+        {
+            if (filteredSource == null)
+                return;
+
+            comboBox.ItemsSource = filteredSource();
+            comboBox.SelectedIndex = 0;
+            var model = comboBox.SelectedItem as BaseDatabaseField;
+
+            if (model != null)
+                comboBox.Text = model.ToString();
+        }
+
+        private void BindingControll(ItemsControl control, string source)
+        {
+            Binding binding = new Binding("ManagementVM." + source)
             {
                 Source = this
             };
@@ -88,13 +196,13 @@ namespace Liftmanagement.Views
                     dgOthers.Items[dgOthers.SelectedIndex + 1], dgOthers.Columns[0]);
                 dgOthers.BeginEdit();
 
-              
+
             }
         }
-     
+
         private void SetMaintenanceAgreementData(MaintenanceAgreement maintenanceAgreement)
         {
-            lblMaintenanceDuration.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.Duration))+":";
+            lblMaintenanceDuration.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.Duration)) + ":";
             lblMaintenanceDate.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.AgreementDate)) + ":";
             lblMaintenanceNoticeOfPeriod.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.NoticeOfPeriod)) + ":";
             lblMaintenanceCanBeCancelled.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.CanBeCancelled)) + ":";
@@ -102,7 +210,7 @@ namespace Liftmanagement.Views
             lblMaintenanceDurationValue.Content = maintenanceAgreement.Duration.ToString("dd.MM.yyyy");
             lblMaintenanceDateValue.Content = maintenanceAgreement.AgreementDate.ToString("dd.MM.yyyy");
             lblMaintenanceNoticeOfPeriodValue.Content = maintenanceAgreement.NoticeOfPeriod;
-            lblMaintenanceCanBeCancelledValue.Content = maintenanceAgreement.CanBeCancelled;          
+            lblMaintenanceCanBeCancelledValue.Content = maintenanceAgreement.CanBeCancelled;
         }
 
         //TODO
@@ -132,10 +240,10 @@ namespace Liftmanagement.Views
             lblMachineInfoSerialNumberValue.Content = machineInformation.SerialNumber;
             lblMachineInfoHoldingPositionsValue.Content = machineInformation.HoldingPositions;
             lblMachineInfoEntrancesValue.Content = machineInformation.Entrances;
-            lblMachineInfoYearOfConstructionValue.Content = machineInformation.YearOfConstruction.ToString("dd.MM.yyyy"); 
+            lblMachineInfoYearOfConstructionValue.Content = machineInformation.YearOfConstruction.ToString("dd.MM.yyyy");
             lblMachineInfoPayloadValue.Content = machineInformation.Payload;
         }
-              
+
         private void SetLocationData(Location location)
         {
             lblAddressLocation.Content = location.Address;
@@ -149,6 +257,6 @@ namespace Liftmanagement.Views
             lblPostcodeCity.Content = customer.GetPostcodeCity();
         }
 
-        }
-    
+    }
+
 }

@@ -86,7 +86,7 @@
                     <Label x:Name="lblAddress" Grid.Row="2" Grid.Column="1"  Style="{StaticResource LableStyle}" />
                     <Label x:Name="lblPostcode" Grid.Row="2" Grid.Column="2"  Style="{StaticResource LableStyle}" />
                     <Label x:Name="lblCity" Grid.Row="2" Grid.Column="3"  Style="{StaticResource LableStyle}" />
-                    <Label x:Name="lblGoogleDriveLink" Content="link" Grid.Row="2" Grid.Column="4"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblGoogleDriveLink" Content="link" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center"  Style="{StaticResource LableStyle}" />
 
                     <Label x:Name="lblContactPerson" Grid.Row="5" Grid.Column="0"  Style="{StaticResource LableStyle}" />
                     <Label x:Name="lblPhoneWork" Grid.Row="5" Grid.Column="1"  Style="{StaticResource LableStyle}" />

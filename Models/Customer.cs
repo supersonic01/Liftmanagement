@@ -15,21 +15,27 @@ namespace Liftmanagement.Models
         [DisplayName("Google Drive Ordner"),DatabaseAttribute(Length = "200")]
         public string GoogleDriveLink { get; set; }
 
+        private AdministratorCompany administrator = new AdministratorCompany();
 
         [DisplayName("Verwalter Firma"), DatabaseAttribute(Updateable = false)]
-        public AdministratorCompany Administrator { get; set; } = new AdministratorCompany();
-
-        public string FullNameAdministrator
+        public AdministratorCompany Administrator
         {
             get
             {
-                return GetFullNameAdministrator();
+                administrator.GetParentFullName = new GetFullNameDelegate(GetFullName);
+                return administrator;
             }
+            set { administrator = value; }
         }
 
-        public static implicit operator string(Customer v)
+
+        public Customer()
         {
-            throw new NotImplementedException();
+
+        }
+        public override string ToString()
+        {
+            return CompanyName;
         }
 
         protected override string GetFullName()
@@ -37,16 +43,11 @@ namespace Liftmanagement.Models
             return string.Format("{0},{3} {1} {2}", CompanyName, Postcode, City, Address);
         }
 
-
-        protected  string GetFullNameAdministrator()
-        {
-            return string.Format("{0}, {1}", Administrator.Name, GetFullName());
-        }
-
         public static string GetIndexFields()
         {
             return nameof(CompanyName) + "," + nameof(Address) + "," + nameof(Postcode) + "," + nameof(City);
         }
+
     }
 
    

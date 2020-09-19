@@ -40,12 +40,17 @@ namespace Liftmanagement.Models
 
         protected override string GetFullName()
         {
-            return string.Format("{0}, {1}, {2}",Name, SerialNumber,YearOfConstruction);
+            return string.Format("{0}, {1}, {2}",Name, SerialNumber,YearOfConstruction.ToString("dd.MM.yyyy"));
         }
 
         public static string GetIndexFields()
         {
             return nameof(Name) + "," + nameof(SerialNumber) + "," + nameof(Description);
+        }
+
+        public override string ToString()
+        {
+            return GetFullName();
         }
     }
 }

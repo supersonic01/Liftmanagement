@@ -10,6 +10,8 @@ using System.Windows.Input;
 
 namespace Liftmanagement.Views
 {
+    //https://stackoverflow.com/questions/2001842/dynamic-filter-of-wpf-combobox-based-on-text-input/
+
     public class FilterableComboBox : ComboBox
     {
         /// <summary>
@@ -166,7 +168,7 @@ namespace Liftmanagement.Views
             {
                 var isDropDownOpen = IsDropDownOpen;
                 //always hide because showing it enables the user to pick with up and down keys, otherwise it's not working because of the glitch in view.Refresh()
-                IsDropDownOpenUC.Set(false);
+             //   IsDropDownOpenUC.Set(false);
                 view.Refresh();
 
                 if (!string.IsNullOrEmpty(CurrentFilter) || isDropDownOpen)

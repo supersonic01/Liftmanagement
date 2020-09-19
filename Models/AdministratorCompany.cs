@@ -8,15 +8,17 @@ using System.Threading.Tasks;
 
 namespace Liftmanagement.Models
 {
-  public class AdministratorCompany : BaseDatabaseField, IDatabaseObject
+    public class AdministratorCompany : BaseDatabaseField, IDatabaseObject
     {
         public long CustomerId { get; set; }
 
         [DisplayName("Verwalter Firma"), DatabaseAttribute(DatabaseAttribute.NOT_NULL)]
         public string Name { get; set; }
 
-        [DisplayName("Ansprechpartner"), DatabaseAttribute(Updateable = false)]               
+        [DisplayName("Ansprechpartner"), DatabaseAttribute(Updateable = false)]
         public List<ContactPartner> ContactPersons { get; set; } = new List<ContactPartner>();
+
+        public GetFullNameDelegate GetParentFullName { get; set; }
 
         public AdministratorCompany()
         {
@@ -29,11 +31,22 @@ namespace Liftmanagement.Models
             ModifiedPersonName = baseField.ModifiedPersonName;
             ReadOnly = baseField.ReadOnly;
             UsedBy = baseField.UsedBy;
+            CustomerId = baseField.Id;
         }
 
         public static string GetIndexFields()
         {
             return nameof(Name);
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+
+        protected override string GetFullName()
+        {
+            return string.Format("{0}, {1}", Name, GetParentFullName());
         }
 
     }

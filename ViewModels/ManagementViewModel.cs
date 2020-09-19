@@ -29,7 +29,6 @@ namespace Liftmanagement.ViewModels
             set { SetField(ref otherInformations, value); }
         }
 
-
         public ManagementViewModel()
         {
             maintenanceAgreements = TestData.GetMaintenanceAgreements();

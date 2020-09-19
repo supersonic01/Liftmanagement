@@ -19,6 +19,14 @@ namespace Liftmanagement.Models
         [DisplayName("Verwalter Firma"), DatabaseAttribute(Updateable = false)]
         public AdministratorCompany Administrator { get; set; } = new AdministratorCompany();
 
+        public string FullNameAdministrator
+        {
+            get
+            {
+                return GetFullNameAdministrator();
+            }
+        }
+
         public static implicit operator string(Customer v)
         {
             throw new NotImplementedException();
@@ -26,7 +34,13 @@ namespace Liftmanagement.Models
 
         protected override string GetFullName()
         {
-            return string.Format("{0}, {1} {2}", CompanyName, Postcode, City);
+            return string.Format("{0},{3} {1} {2}", CompanyName, Postcode, City, Address);
+        }
+
+
+        protected  string GetFullNameAdministrator()
+        {
+            return string.Format("{0}, {1}", Administrator.Name, GetFullName());
         }
 
         public static string GetIndexFields()

@@ -39,8 +39,9 @@ namespace Liftmanagement.Views
             lblCustomerHeader.Content = "Rechnungsadresse:";
             lblLocationHeader.Content = "Standort:";
             lblMaintenanceIntervalHeader.Content = "Wartungsinterval:\n4x / vierteljährlich";
-
-            cbCustomers.ItemsSource = ManagementVM.Customers;
+            
+            BindingControll(cbCustomers, nameof(ManagementVM.Customers));
+            BindingControll(dgOthers, nameof(ManagementVM.OtherInformations));
 
             var location = ManagementVM.Locations.FirstOrDefault();
             var customer = ManagementVM.Customers.FirstOrDefault();
@@ -56,20 +57,20 @@ namespace Liftmanagement.Views
             dgContactPersons.ItemsSource = customer.Administrator.ContactPersons;
             dgContactPersons.Tag = ManagementVM.NotVisibleColumns;
 
-            BindingControll(nameof(ManagementVM.OtherInformations));
+         
             dgOthers.PreviewKeyDown += DgOthers_PreviewKeyDown;
 
             //TODO dgOthers cell  make vertical scrollabl
         }
 
-        private void BindingControll(string source)
+        private void BindingControll(ItemsControl control,  string source)
         {
-            Binding binding = new Binding(source)
+            Binding binding = new Binding("ManagementVM."+source)
             {
                 Source = this
             };
 
-            dgOthers.SetBinding(ItemsControl.ItemsSourceProperty, binding);
+            control.SetBinding(ItemsControl.ItemsSourceProperty, binding);
         }
 
         private void DgOthers_PreviewKeyDown(object sender, KeyEventArgs e)

@@ -212,6 +212,7 @@
       <DependentUpon>CustomerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DataGridBehavior.cs" />
+    <Compile Include="Views\FilterableComboBox.cs" />
     <Compile Include="Views\GoogleDriveTreeView.xaml.cs">
       <DependentUpon>GoogleDriveTreeView.xaml</DependentUpon>
     </Compile>

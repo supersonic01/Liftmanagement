@@ -44,7 +44,7 @@
                 <Label x:Name="lblMachineInformation" Grid.Row="0" Grid.Column="2"  Content="Anlage:" Style="{StaticResource LableHeaderStyle}" />
 
                 <ComboBox x:Name="cbCustomers" Grid.Row="1" Grid.Column="0"  Style="{StaticResource ComboBoxStyle}"
-                          DisplayMemberPath="FullName" SelectedValuePath="CustomerId"   />
+                          DisplayMemberPath="FullName" SelectedValuePath="CustomerId"  IsEditable="True" />
 
                 <ComboBox x:Name="cbLocations" Grid.Row="1" Grid.Column="1"  Style="{StaticResource ComboBoxStyle}"
                           DisplayMemberPath="FullName" SelectedValuePath="LocationId"/>

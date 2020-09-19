@@ -29,6 +29,10 @@ namespace Liftmanagement.Models
         [DisplayName("Ansprechpartner"), DatabaseAttribute(Updateable = false)]
         public ContactPartner ContactPerson { get; set; } = new ContactPartner();
 
+        public string GetPostcodeCity()
+        {
+            return Postcode + ", " + City;
+        }
     }
 
 }

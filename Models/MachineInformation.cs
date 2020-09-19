@@ -13,7 +13,7 @@ namespace Liftmanagement.Models
         public long LocationId { get; set; } = -1;
         public long CustomerId { get; set; } = -1;
 
-        [DisplayName("Name")]
+        [DisplayName("Hersteller")]
         public string Name { get; set; }
         [DisplayName("Baujahr")]
         public DateTime YearOfConstruction { get; set; }

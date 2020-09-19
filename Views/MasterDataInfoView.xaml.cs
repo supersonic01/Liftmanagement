@@ -30,9 +30,7 @@ namespace Liftmanagement.Views
             cbCustomers.ItemsSource = masterDataInfoViewModel.Customers;
             cbLocations.ItemsSource = masterDataInfoViewModel.Locations;
             cbMachineInformations.ItemsSource = masterDataInfoViewModel.MachineInformations;
-
-           
-
+                      
             cbCustomers.SelectionChanged += CbCustomers_SelectionChanged;
             cbLocations.SelectionChanged += CbLocations_SelectionChanged;
             cbMachineInformations.SelectionChanged += CbMachineInformations_SelectionChanged;
@@ -76,11 +74,12 @@ namespace Liftmanagement.Views
             {
                 return;
             }
-
-            cbMachineInformations.ItemsSource = masterDataInfoViewModel.MachineInformations.Where(c => c.LocationId == location.Id).ToList();
+            //TODO
+            cbMachineInformations.ItemsSource = masterDataInfoViewModel.MachineInformations;
+            //masterDataInfoViewModel.MachineInformations.Where(c => c.LocationId == location.Id).ToList();
 
             lblAddressLocation.Content = location.Address;
-            lblPostcodeCityLocation.Content = location.Postcode + ", " + location.City;
+            lblPostcodeCityLocation.Content = location.GetPostcodeCity();
             lblAdditionalInfoLocation.Content = location.AdditionalInfo;
             lblContactPersonLocation.Content = location.ContactPerson;
 
@@ -107,8 +106,9 @@ namespace Liftmanagement.Views
             {
                 return;
             }
-
-            cbLocations.ItemsSource = masterDataInfoViewModel.Locations.Where(c => c.CustomerId == customer.Id).ToList();
+            //TODO
+            cbLocations.ItemsSource = masterDataInfoViewModel.Locations;
+            //masterDataInfoViewModel.Locations.Where(c => c.CustomerId == customer.Id).ToList();
 
             lblCompanyName.Content = customer.CompanyName;
 

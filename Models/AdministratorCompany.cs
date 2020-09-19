@@ -16,7 +16,7 @@ namespace Liftmanagement.Models
         public string Name { get; set; }
 
         [DisplayName("Ansprechpartner"), DatabaseAttribute(Updateable = false)]               
-        public List<ContactPartner> ContactPerson { get; set; } = new List<ContactPartner>();
+        public List<ContactPartner> ContactPersons { get; set; } = new List<ContactPartner>();
 
         public AdministratorCompany()
         {

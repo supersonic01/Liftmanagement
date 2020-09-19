@@ -62,7 +62,7 @@ namespace Liftmanagement
 
 
             //MySQLDataAccess.AddCustomer(TestData.GetCustomers().FirstOrDefault());
-           MySQLDataAccess.AddMachineInformation(TestData.GetMachineInformations().FirstOrDefault());
+         //  MySQLDataAccess.AddMachineInformation(TestData.GetMachineInformations().FirstOrDefault());
             //MySQLDataAccess.AddMaintenanceAgreement(TestData.GetMaintenanceAgreements().FirstOrDefault());
 
             //MySQLDataAccess.GetCustomers();
@@ -148,7 +148,8 @@ namespace Liftmanagement
                     break;
                 case Helper.Helper.TTypeMangement.Managment:
                     //frameDetail.Content = new Test();
-                    frameDetail.Content = new MasterDataInfoView();
+                    //frameDetail.Content = new MasterDataInfoView();
+                    frameDetail.Content = new ManagementView();
                     break;
                 default:
                     break;

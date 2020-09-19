@@ -57,23 +57,29 @@ namespace Liftmanagement.Data
             databaseConnection.Open();
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
-            customer.ContactPerson.ForeignKey = id;
-            AddContactPartner(customer.ContactPerson);
-            customer.Administrator.CustomerId = id;
-            long adminId = AddAdministratorCompany(customer.Administrator);
+            var result = new SQLQueryResult(records, id, typeof(Customer));
 
-            foreach (var contactPerson in customer.Administrator.ContactPerson)
+            customer.ContactPerson.ForeignKey = id;
+            var contactResult = AddContactPartner(customer.ContactPerson);
+            result.AddSQLSubQueryResult(contactResult, result);
+
+            customer.Administrator.CustomerId = id;
+            var adminResult = AddAdministratorCompany(customer.Administrator);
+            result.AddSQLSubQueryResult(adminResult, result);
+
+            foreach (var contactPerson in customer.Administrator.ContactPersons)
             {
-                contactPerson.ForeignKey = adminId;
-                AddContactPartner(contactPerson);
+                contactPerson.ForeignKey = adminResult.Id;
+                var res = AddContactPartner(contactPerson);
+                result.AddSQLSubQueryResult(res, adminResult);
             }
 
             databaseConnection.Close();
 
-            return id;
+            return result;
         }
 
-        private static long AddContactPartner(ContactPartner contactpartner)
+        private static SQLQueryResult AddContactPartner(ContactPartner contactpartner)
         {
             string query = "INSERT INTO CONTACTPARTNER(ForeignKey,ForeignKeyType,Name,PhoneWork,Mobile,EMail,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
             string values = "VALUE(" + contactpartner.ForeignKey + "," + contactpartner.ForeignKeyType + ",'" + contactpartner.Name + "','" + contactpartner.PhoneWork + "','" + contactpartner.Mobile + "','" + contactpartner.EMail + "','" + contactpartner.CreatedPersonName + "','" + contactpartner.ModifiedPersonName + "'," + contactpartner.ReadOnly + ",'" + contactpartner.UsedBy + "')";
@@ -84,10 +90,10 @@ namespace Liftmanagement.Data
 
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
-            return id;
+            return new SQLQueryResult(records, id, typeof(ContactPartner));
         }
 
-        private static int AddAdministratorCompany(AdministratorCompany administratorcompany)
+        private static SQLQueryResult AddAdministratorCompany(AdministratorCompany administratorcompany)
         {
             string query = "INSERT INTO ADMINISTRATORCOMPANY(CustomerId,Name,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
             string values = "VALUE(" + administratorcompany.CustomerId + ",'" + administratorcompany.Name + "','" + administratorcompany.CreatedPersonName + "','" + administratorcompany.ModifiedPersonName + "'," + administratorcompany.ReadOnly + ",'" + administratorcompany.UsedBy + "')";
@@ -98,10 +104,11 @@ namespace Liftmanagement.Data
 
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
-            return id;
+
+            return new SQLQueryResult(records, id, typeof(AdministratorCompany)); 
         }
 
-        public static long AddMachineInformation(MachineInformation machineinformation)
+        public static SQLQueryResult AddMachineInformation(MachineInformation machineinformation)
         {
             if (databaseConnection == null)
             {
@@ -118,14 +125,18 @@ namespace Liftmanagement.Data
             databaseConnection.Open();
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
+            var result=  new SQLQueryResult(records, id, typeof(MachineInformation));
+            
             machineinformation.ContactPerson.ForeignKey = (int)id;
-            AddContactPartner(machineinformation.ContactPerson);
+            var contactResult = AddContactPartner(machineinformation.ContactPerson);           
+            result.AddSQLSubQueryResult(contactResult, result);
+
             databaseConnection.Close();
-            return id;
+            return result;
         }
 
 
-        public static int AddMaintenanceAgreement(MaintenanceAgreement maintenanceagreement)
+        public static SQLQueryResult AddMaintenanceAgreement(MaintenanceAgreement maintenanceagreement)
         {
             if (databaseConnection == null)
             {
@@ -140,9 +151,12 @@ namespace Liftmanagement.Data
             MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
 
             databaseConnection.Open();
-            int id = execQuery.ExecuteNonQuery();
+            int records = execQuery.ExecuteNonQuery();
+            long id = execQuery.LastInsertedId;
+
             databaseConnection.Close();
-            return id;
+
+            return new SQLQueryResult(records, id, typeof(AdministratorCompany));
         }
 
         public static List<Customer> GetCustomers()
@@ -236,7 +250,7 @@ namespace Liftmanagement.Data
                     contactpartners.Add(contactpartner);
                 });
 
-                customer.Administrator.ContactPerson = contactpartners;
+                customer.Administrator.ContactPersons = contactpartners;
             }
 
             return customers;
@@ -329,7 +343,7 @@ namespace Liftmanagement.Data
                     machineinformation.ContactPerson = contactpartner;
                 });
             }
-                return machineinformations;
+            return machineinformations;
         }
 
         private static void SelectItems(string query, Action<MySqlDataReader> getRecords)

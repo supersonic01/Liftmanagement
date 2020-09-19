@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Liftmanagement.View"
+             xmlns:local="clr-namespace:Liftmanagement.Views"
              mc:Ignorable="d" 
              d:DesignHeight="633.857" d:DesignWidth="1118.857">
 
@@ -69,8 +69,14 @@
                         <RowDefinition Height="30" />
                         <RowDefinition Height="10" />
                         <RowDefinition Height="30" />
-                        <RowDefinition Height="60" />
+                        <RowDefinition Height="60" />                        
+                        <RowDefinition Height="10" x:Name="space" />
+                        <RowDefinition Height="30" x:Name="AdministratorCompany"/>
                         <RowDefinition Height="30" />
+                        <RowDefinition Height="10" x:Name="spaceContactPartner" />
+                        <RowDefinition Height="120" x:Name="AdministratorContactPartner"/>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" x:Name="EndSpacer"/>
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5"  Content="Kunde" FontSize="24" Margin="10" Padding="10"
@@ -79,15 +85,22 @@
                     <Label x:Name="lblCompanyName" Grid.Row="2" Grid.Column="0"  Style="{StaticResource LableStyle}" />                    
                     <Label x:Name="lblAddress" Grid.Row="2" Grid.Column="1"  Style="{StaticResource LableStyle}" />
                     <Label x:Name="lblPostcode" Grid.Row="2" Grid.Column="2"  Style="{StaticResource LableStyle}" />
-                    <Label x:Name="lblCity" Grid.Row="2" Grid.Column="2"  Style="{StaticResource LableStyle}" />
-                    
+                    <Label x:Name="lblCity" Grid.Row="2" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblGoogleDriveLink" Content="link" Grid.Row="2" Grid.Column="4"  Style="{StaticResource LableStyle}" />
+
                     <Label x:Name="lblContactPerson" Grid.Row="5" Grid.Column="0"  Style="{StaticResource LableStyle}" />
                     <Label x:Name="lblPhoneWork" Grid.Row="5" Grid.Column="1"  Style="{StaticResource LableStyle}" />
                     <Label x:Name="lblMobile" Grid.Row="5" Grid.Column="2"  Style="{StaticResource LableStyle}" />
-                    <Label x:Name="lblGoogleDriveLink" Grid.Row="5" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblEmail" Grid.Row="5" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+                   
 
                     <Label x:Name="lblAdditionalInfo" Grid.Row="8" Grid.Column="0"  Style="{StaticResource LableStyle}" />
 
+                    <Label x:Name="lblAdministratorCompanyName" Content="lbl" Grid.Row="11" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblAdministratorContactPerson" Grid.Row="11" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblAdministratorPhoneWork" Grid.Row="11" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblAdministratorMobile" Grid.Row="11" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+                    <Label x:Name="lblAdministratorEmail" Grid.Row="11" Grid.Column="4"  Style="{StaticResource LableStyle}" />
 
                     <TextBox x:Name="txtCompanyName" Grid.Row="3" Grid.Column="0" Style="{StaticResource TextBoxStyle}"/>                   
                     <TextBox x:Name="txtAddress" Grid.Row="3" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
@@ -97,8 +110,9 @@
                     <TextBox x:Name="txtContactPerson" Grid.Row="6" Grid.Column="0"  Style="{StaticResource TextBoxStyle}"/>
                     <TextBox x:Name="txtPhoneWork" Grid.Row="6" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
                     <TextBox x:Name="txtMobile" Grid.Row="6" Grid.Column="2"  Style="{StaticResource TextBoxStyle}"/>
-                   
-                    <TextBlock x:Name="txtGoogleDriveHyperlink" Grid.Row="6" Grid.Column="3" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBox x:Name="txtEmail" Grid.Row="6" Grid.Column="3"  Style="{StaticResource TextBoxStyle}"/>
+                    
+                    <TextBlock x:Name="txtGoogleDriveHyperlink" Grid.Row="3" Grid.Column="4" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Hyperlink  x:Name="hyperlinkGoogleDrive" NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate">                             
                             <TextBlock x:Name="txtGoogleDriveFolderName"/>
                         </Hyperlink>
@@ -112,7 +126,32 @@
                     
                     <TextBox x:Name="txtAdditionalInfo" Grid.Row="9"  Grid.Column="0" Grid.ColumnSpan="5" Margin="10,0,10,0"
                                  TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True"/>
-                    
+
+                    <TextBox x:Name="txtAdministratorCompanyName" Grid.Row="12" Grid.Column="0" Style="{StaticResource TextBoxStyle}"/>
+                    <TextBox x:Name="txtAdministratorContactPerson" Grid.Row="12" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
+                    <TextBox x:Name="txtAdministratorPhoneWork" Grid.Row="12" Grid.Column="2"  Style="{StaticResource TextBoxStyle}"/>
+                    <TextBox x:Name="txtAdministratorMobile" Grid.Row="12" Grid.Column="3"  Style="{StaticResource TextBoxStyle}"/>
+                    <TextBox x:Name="txtAdministratorEmail" Grid.Row="12" Grid.Column="4"  Style="{StaticResource TextBoxStyle}"/>
+
+                    <StackPanel x:Name="spAdministratorContactPersons" Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <DataGrid  x:Name="dgAdministratorContactPersons" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"  SelectionUnit="FullRow" 
+                           local:CustomColumnHeadersProperty.ItemType="{x:Type local:LocationView}" IsReadOnly="True" SelectionMode="Single"  ColumnWidth="*"
+                       CellStyle="{StaticResource Body_Content_DataGrid_Centering}">
+
+                            <DataGrid.RowStyle >
+                                <Style TargetType="DataGridRow">
+                                    <Setter Property="Height" Value="30"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#0078D7" />
+                                            <Setter Property="Foreground" Value="White" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>                         
+                        </DataGrid>
+                    </StackPanel>
+
                     <!--<TextBlock Grid.Row="6" Grid.Column="3" HorizontalAlignment="Center"  VerticalAlignment="Center">
                         <Hyperlink NavigateUri="http:\\www.vbcity.com" RequestNavigate="Hyperlink_RequestNavigate">
                             <Image Source="..\Resources\Images\Icons\Marcus-Roberto-Google-Play-Google-Drive.ico"></Image>

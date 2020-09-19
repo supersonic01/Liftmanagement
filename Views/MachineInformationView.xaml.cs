@@ -81,9 +81,9 @@ namespace Liftmanagement.Views
             lblHoldingPositions.Content = machineInformation.GetDisplayName<MachineInformation>(nameof(machineInformation.HoldingPositions)) + ":";
             lblEntrances.Content = machineInformation.GetDisplayName<MachineInformation>(nameof(machineInformation.Entrances)) + ":";
             lblDescription.Content = machineInformation.GetDisplayName<MachineInformation>(nameof(machineInformation.Description)) + ":";
-            lblContactPerson.Content = machineInformation.GetDisplayName<MachineInformation>(nameof(machineInformation.ContactPerson.Name)) + ":";
-            lblPhoneWork.Content = machineInformation.GetDisplayName<MachineInformation>(nameof(machineInformation.ContactPerson.PhoneWork)) + ":";
-            lblMobile.Content = machineInformation.GetDisplayName<MachineInformation>(nameof(machineInformation.ContactPerson.Mobile)) + ":";
+            lblContactPerson.Content = machineInformation.GetDisplayName<ContactPartner>(nameof(machineInformation.ContactPerson.Name)) + ":";
+            lblPhoneWork.Content = machineInformation.GetDisplayName<ContactPartner>(nameof(machineInformation.ContactPerson.PhoneWork)) + ":";
+            lblMobile.Content = machineInformation.GetDisplayName<ContactPartner>(nameof(machineInformation.ContactPerson.Mobile)) + ":";
             lblContactByDefect.Content = machineInformation.GetDisplayName<MachineInformation>(nameof(machineInformation.ContactByDefect)) + ":";
 
             txtName.Text = machineInformation.Name;

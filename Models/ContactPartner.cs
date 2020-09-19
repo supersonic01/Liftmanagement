@@ -11,7 +11,8 @@ namespace Liftmanagement.Models
 
     public class ContactPartner : BaseDatabaseField, IDatabaseObject
     {
-        public int ForeignKey { get; set; }
+        public long CustomerId { get; set; } = -1;
+        public long ForeignKey { get; set; }
         public int ForeignKeyType { get; set; }
      
         [DatabaseAttribute(DatabaseAttribute.NOT_NULL)]

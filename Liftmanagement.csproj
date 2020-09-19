@@ -200,7 +200,9 @@
     <Compile Include="ViewModels\MachineInformationViewModel.cs" />
     <Compile Include="ViewModels\MaintenanceAgreementsViewModel.cs" />
     <Compile Include="ViewModels\MaintenanceAgreementViewModel.cs" />
+    <Compile Include="ViewModels\ManagementViewModel.cs" />
     <Compile Include="ViewModels\MasterDataInfoViewModel.cs" />
+    <Compile Include="Models\OtherInformation.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\CustomColumnHeadersProperty.cs" />
     <Compile Include="Views\CustomersView.xaml.cs">
@@ -209,6 +211,7 @@
     <Compile Include="Views\CustomerView.xaml.cs">
       <DependentUpon>CustomerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\DataGridBehavior.cs" />
     <Compile Include="Views\GoogleDriveTreeView.xaml.cs">
       <DependentUpon>GoogleDriveTreeView.xaml</DependentUpon>
     </Compile>
@@ -235,6 +238,9 @@
     </Compile>
     <Compile Include="Views\MaintenanceAgreementView.xaml.cs">
       <DependentUpon>MaintenanceAgreementView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ManagementView.xaml.cs">
+      <DependentUpon>ManagementView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MasterDataInfoView.xaml.cs">
       <DependentUpon>MasterDataInfoView.xaml</DependentUpon>
@@ -299,6 +305,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MaintenanceAgreementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ManagementView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -23,5 +23,6 @@ namespace Liftmanagement.Models
         {
             return nameof(Address) + "," + nameof(Postcode) + "," + nameof(City);
         }
+               
     }
 }

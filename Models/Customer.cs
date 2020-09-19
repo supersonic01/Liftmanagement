@@ -12,7 +12,7 @@ namespace Liftmanagement.Models
         [DisplayName("Google Drive")]
         public string GoogleDriveFolderName { get; set; }
 
-        [DatabaseAttribute(Length = "200")]
+        [DisplayName("Google Drive Ordner"),DatabaseAttribute(Length = "200")]
         public string GoogleDriveLink { get; set; }
 
 

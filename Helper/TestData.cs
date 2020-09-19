@@ -2,6 +2,7 @@
 using Liftmanagement.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -18,69 +19,126 @@ namespace Liftmanagement.Helper
 
             var customer = new Customer
             {
-                CompanyName = "SEMEX-EngCon GmbH",               
+                CompanyName = "SEMEX-EngCon GmbH",
                 Address = "Carl-Metz-Straße 26",
                 Postcode = "76275",
                 City = "Ettlingen",
                 AdditionalInfo = "Keine Info vorhanden, bitte was schreiben",
                 GoogleDriveFolderName = "GoogleFolder",
-                GoogleDriveLink = "https://dict.leo.org/",                
+                GoogleDriveLink = "https://dict.leo.org/",
                 CreatedPersonName = "ich",
                 ModifiedPersonName = "Du",
                 ReadOnly = true,
                 UsedBy = "ich weiß nicht"
             };
 
-            customer.ContactPerson = new ContactPartner(customer) { Name = "Steffan Winterhut", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de"};
+            customer.ContactPerson = new ContactPartner(customer) { Name = "Steffan Winterhut", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
             customer.Administrator = new AdministratorCompany(customer)
             {
                 Name = "Stahl Immobilien"
             };
 
-            customer.Administrator.ContactPerson = new List<ContactPartner> {
+            customer.Administrator.ContactPersons = new List<ContactPartner> {
                     new ContactPartner (customer.Administrator){ Name = "Steffan0 Winterhut", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" },
-                    new ContactPartner(customer.Administrator) { Name = "Steffan1 Winterhut", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" },
+                    new ContactPartner(customer.Administrator) { Name = "Steffan1 Winterhut", PhoneWork = "07243514825255", Mobile = "0172435148252", EMail = "halo@web.de" },
                     new ContactPartner(customer.Administrator) { Name = "Steffan2 Winterhut", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" }};
 
 
             customers.Add(customer);
-
-            //customers.Add(new Customer
-            //{
-            //    CustomerId = 2,
-            //    CompanyName = "Sit SteuerungsTechnik GmbH",
-            //    ContactPerson = "Dieter Fischer",
-            //    Address = "Einsteinstraße 26-32",
-            //    Postcode = "76275",
-            //    City = "Ettlingen",
-            //    PhoneWork = "07243561710",
-            //    Mobile = "017243561710"
-            //});
-
-            //customers.Add(new Customer
-            //{
-            //    CustomerId = 3,
-            //    CompanyName = "ISCAR Germany GmbH",
-            //    ContactPerson = "Hans Hahn",
-            //    Address = "Eisenstockstraße 14",
-            //    Postcode = "76275",
-            //    City = "Ettlingen",
-            //    PhoneWork = "0724399080",
-            //    Mobile = "01724399080"
-            //});
-            //customers.Add(new Customer
-            //{
-            //    CustomerId = 4,
-            //    CompanyName = "VBE Kamm GmbH",
-            //    ContactPerson = "Josef Jäger",
-            //    Address = "Am Erlengraben 2",
-            //    Postcode = "76275",
-            //    City = "Ettlingen",
-            //    PhoneWork = "0724357770",
-            //    Mobile = "01724357770"
-            //});
-        
             
+            customer = new Customer
+            {
+                CompanyName = "Sit SteuerungsTechnik GmbH",
+                Address = "Einsteinstraße 26-32",
+                Postcode = "76275",
+                City = "Ettlingen",
+                AdditionalInfo = "Keine Info vorhanden, bitte was schreiben",
+                GoogleDriveFolderName = "GoogleFolder",
+                GoogleDriveLink = "https://dict.leo.org/",
+                CreatedPersonName = "ich",
+                ModifiedPersonName = "Du",
+                ReadOnly = true,
+                UsedBy = "ich weiß nicht"
+            };
+
+            customer.ContactPerson = new ContactPartner(customer) { Name = "Dieter Fischer", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
+            customer.Administrator = new AdministratorCompany(customer)
+            {
+                Name = "PODOMO"
+            };
+
+            customer.Administrator.ContactPersons = new List<ContactPartner> {
+                new ContactPartner (customer.Administrator){ Name = "Dieter Fischer1", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" },
+                new ContactPartner(customer.Administrator) { Name = "Dieter Fischer2", PhoneWork = "07243514825255", Mobile = "0172435148252", EMail = "halo@web.de" },
+                new ContactPartner(customer.Administrator) { Name = "Dieter Fischer3", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" }};
+
+
+            customers.Add(customer);
+
+            customer = new Customer
+            {
+                CompanyName = "ISCAR Germany GmbH",
+                Address = "Eisenstockstraße 14",
+                Postcode = "76275",
+                City = "Ettlingen",
+                AdditionalInfo = "Keine Info vorhanden, bitte was schreiben",
+                GoogleDriveFolderName = "GoogleFolder",
+                GoogleDriveLink = "https://dict.leo.org/",
+                CreatedPersonName = "ich",
+                ModifiedPersonName = "Du",
+                ReadOnly = true,
+                UsedBy = "ich weiß nicht"
+            };
+
+            customer.ContactPerson = new ContactPartner(customer) { Name = "Hans Hahn", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
+            customer.Administrator = new AdministratorCompany(customer)
+            {
+                Name = "DOMICILIA"
+            };
+
+            customer.Administrator.ContactPersons = new List<ContactPartner> {
+                new ContactPartner (customer.Administrator){ Name = "Hans Hahn1", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" },
+                new ContactPartner(customer.Administrator) { Name = "Hans Hahn2", PhoneWork = "07243514825255", Mobile = "0172435148252", EMail = "halo@web.de" },
+                new ContactPartner(customer.Administrator) { Name = "Hans Hahn3", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" },
+                new ContactPartner(customer.Administrator) { Name = "Hans Hahn4", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" }};
+    
+
+            customers.Add(customer);
+
+
+            customer = new Customer
+            {
+                CompanyName = "VBE Kamm GmbH",
+                Address = "Am Erlengraben 2",
+                Postcode = "76275",
+                AdditionalInfo = "Keine Info vorhanden, bitte was schreiben",
+                GoogleDriveFolderName = "GoogleFolder",
+                GoogleDriveLink = "https://dict.leo.org/",
+                CreatedPersonName = "ich",
+                ModifiedPersonName = "Du",
+                ReadOnly = true,
+                UsedBy = "ich weiß nicht"
+            };
+
+            customer.ContactPerson = new ContactPartner(customer) { Name = "Josef Jäger", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
+            customer.Administrator = new AdministratorCompany(customer)
+            {
+                Name = "FONCIA"
+            };
+
+            customer.Administrator.ContactPersons = new List<ContactPartner> {
+                new ContactPartner (customer.Administrator){ Name = "Josef Jäger1", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" },
+                new ContactPartner(customer.Administrator) { Name = "Josef Jäger2", PhoneWork = "07243514825255", Mobile = "0172435148252", EMail = "halo@web.de" },
+                new ContactPartner(customer.Administrator) { Name = "Josef Jäger3", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" },
+                new ContactPartner (customer.Administrator){ Name = "Josef Jäger4", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" },
+                new ContactPartner(customer.Administrator) { Name = "Josef Jäger5", PhoneWork = "07243514825255", Mobile = "0172435148252", EMail = "halo@web.de" },
+                new ContactPartner(customer.Administrator) { Name = "Josef Jäger6", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" }
+            };
+
+
+            customers.Add(customer);
+
+
             return customers;
         }
 
@@ -88,7 +146,7 @@ namespace Liftmanagement.Helper
         {
             List<MachineInformation> machineInformations = new List<MachineInformation>();
 
-           var machine= new MachineInformation
+            var machine = new MachineInformation
             {
                 CustomerId = -1,
                 LocationId = -1,
@@ -101,11 +159,11 @@ namespace Liftmanagement.Helper
                 Payload = 400,
                 AdditionalInfo = "Keine Info vorhanden, bitte was schreiben",
 
-           };
+            };
 
             machine.ContactPerson = new ContactPartner(machine) { Name = "Steffan2 Winterhut2", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
             machineInformations.Add(machine);
-                        
+
             //machineInformations.Add(new MachineInformation
             //{
             //    CustomerId = 2,
@@ -172,21 +230,23 @@ namespace Liftmanagement.Helper
         public static List<Location> GetLocations()
         {
             List<Location> locations = new List<Location>();
-            /*
-            locations.Add(new Location
+
+            var location = new Location
             {
-                CustomerId = 1,
-                LocationId = 1,
-                ContactPerson = "Anna Cremer",
+                CustomerId = -1,
+                Id = 1,
                 Address = "Carl-Metz-Straße 26",
                 Postcode = "76275",
                 City = "Ettlingen",
-                PhoneWork = "072435148252",
-                Mobile = "0172435148252",
-                AdditionalInfo = "Bitte alle Bewohner informieren, wenn Aufzug gewartete wird"
-            });
+                AdditionalInfo = "Bitte alle Bewohner informieren, wenn Aufzug gewartete wird",
+                ContactByDefect = true
 
+            };
 
+            location.ContactPerson = new ContactPartner(location) { Name = "Anna Cremer", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
+            locations.Add(location);
+
+            /*
             locations.Add(new Location
             {
                 CustomerId = 2,
@@ -242,67 +302,77 @@ namespace Liftmanagement.Helper
                 Duration = new DateTime(2020, 12, 31),
                 CanBeCancelled = "jährlich",
                 ArreementCancelledBy = "Kunde",
-                MaintenanceType="Vollwartung",
+                MaintenanceType = "Vollwartung",
+                NoticeOfPeriod = 3,
                 AgreementDate = new DateTime(2019, 12, 31),
                 AdditionalInfo = "Türe-Türteile"
             });
 
-          /*  maintenanceAgreement.Add(new MaintenanceAgreement
-            {
-                CustomerId = 2,
-                LocationId = 2,
-                MachineInformationId = 2,
-                Id = 2,
-                Duration = new DateTime(2020, 12, 31),
-                AgreementDate = new DateTime(2019, 12, 31),
-                AdditionalInfo = "Türe-Türteile"
-            });
+            /*  maintenanceAgreement.Add(new MaintenanceAgreement
+              {
+                  CustomerId = 2,
+                  LocationId = 2,
+                  MachineInformationId = 2,
+                  Id = 2,
+                  Duration = new DateTime(2020, 12, 31),
+                  AgreementDate = new DateTime(2019, 12, 31),
+                  AdditionalInfo = "Türe-Türteile"
+              });
 
-            maintenanceAgreement.Add(new MaintenanceAgreement
-            {
-                CustomerId = 3,
-                LocationId = 3,
-                MachineInformationId = 3,
-                Id = 3,
-                Duration = new DateTime(2020, 12, 31),
-                AgreementDate = new DateTime(2019, 12, 31),
-                AdditionalInfo = "Türe-Türteile"
-            });
+              maintenanceAgreement.Add(new MaintenanceAgreement
+              {
+                  CustomerId = 3,
+                  LocationId = 3,
+                  MachineInformationId = 3,
+                  Id = 3,
+                  Duration = new DateTime(2020, 12, 31),
+                  AgreementDate = new DateTime(2019, 12, 31),
+                  AdditionalInfo = "Türe-Türteile"
+              });
 
-            maintenanceAgreement.Add(new MaintenanceAgreement
-            {
-                CustomerId = 4,
-                LocationId = 4,
-                MachineInformationId = 4,
-                Id = 4,
-                Duration = new DateTime(2020, 12, 31),
-                AgreementDate = new DateTime(2019, 12, 31),
-                AdditionalInfo = "Türe-Türteile"
-            });
+              maintenanceAgreement.Add(new MaintenanceAgreement
+              {
+                  CustomerId = 4,
+                  LocationId = 4,
+                  MachineInformationId = 4,
+                  Id = 4,
+                  Duration = new DateTime(2020, 12, 31),
+                  AgreementDate = new DateTime(2019, 12, 31),
+                  AdditionalInfo = "Türe-Türteile"
+              });
 
-            maintenanceAgreement.Add(new MaintenanceAgreement
-            {
-                CustomerId = 4,
-                LocationId = 5,
-                MachineInformationId = 5,
-                Id = 4,
-                Duration = new DateTime(2020, 12, 31),
-                AgreementDate = new DateTime(2019, 12, 31),
-                AdditionalInfo = "Türe-Türteile"
-            });
+              maintenanceAgreement.Add(new MaintenanceAgreement
+              {
+                  CustomerId = 4,
+                  LocationId = 5,
+                  MachineInformationId = 5,
+                  Id = 4,
+                  Duration = new DateTime(2020, 12, 31),
+                  AgreementDate = new DateTime(2019, 12, 31),
+                  AdditionalInfo = "Türe-Türteile"
+              });
 
-            maintenanceAgreement.Add(new MaintenanceAgreement
-            {
-                CustomerId = 4,
-                LocationId = 5,
-                MachineInformationId = 6,
-                Id = 4,
-                Duration = new DateTime(2020, 12, 31),
-                AgreementDate = new DateTime(2019, 12, 31),
-                AdditionalInfo = "Türe-Türteile"
-            });
-           */
+              maintenanceAgreement.Add(new MaintenanceAgreement
+              {
+                  CustomerId = 4,
+                  LocationId = 5,
+                  MachineInformationId = 6,
+                  Id = 4,
+                  Duration = new DateTime(2020, 12, 31),
+                  AgreementDate = new DateTime(2019, 12, 31),
+                  AdditionalInfo = "Türe-Türteile"
+              });
+             */
             return maintenanceAgreement;
+        }
+
+        public static ObservableCollection<OtherInformation> GetOtherInformations()
+        {
+            ObservableCollection<OtherInformation> oi = new ObservableCollection<OtherInformation>();
+
+            oi.Add(new OtherInformation("Mit Auftragnehmer vereinbart: Aufträge bis 100 EUR netto können"));
+            oi.Add(new OtherInformation("text"));
+            return oi;
         }
     }
 }

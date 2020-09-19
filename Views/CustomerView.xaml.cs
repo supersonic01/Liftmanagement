@@ -44,6 +44,7 @@ namespace Liftmanagement.View
             customersView.dgCustomers.SelectionChanged += DgCustomers_SelectionChanged;
             customersView.spCustomers.Loaded += SpCustomers_Loaded;
             customersView.dgCustomers.SelectedIndex = 0;
+           
 
             //Binding binding = new Binding("CustomerVM.LocationDetailViews")
             //{
@@ -53,6 +54,7 @@ namespace Liftmanagement.View
             //gridLocation.SetBinding(ListBox.ItemsSourceProperty, binding);
             InitGoogleDriveDialogue();
         }
+
 
         private void SpCustomers_Loaded(object sender, RoutedEventArgs e)
         {
@@ -79,12 +81,22 @@ namespace Liftmanagement.View
             Console.WriteLine("Customer :" + customer.Address);
 
             lblCompanyName.Content = customer.GetDisplayName<Customer>(nameof(customer.CompanyName)) + ":";
-            lblContactPerson.Content = customer.GetDisplayName<Customer>(nameof(customer.ContactPerson)) + ":";
+            lblContactPerson.Content = customer.GetDisplayName<ContactPartner>(nameof(customer.ContactPerson.Name)) + ":";
             lblAddress.Content = customer.GetDisplayName<Customer>(nameof(customer.Address)) + ":";
             lblPostcode.Content = customer.GetDisplayName<Customer>(nameof(customer.Postcode)) + ":";
             lblCity.Content = customer.GetDisplayName<Customer>(nameof(customer.City)) + ":";
-            lblPhoneWork.Content = customer.GetDisplayName<Customer>(nameof(customer.ContactPerson.PhoneWork)) + ":";
-            lblMobile.Content = customer.GetDisplayName<Customer>(nameof(customer.ContactPerson.Mobile)) + ":";
+            lblPhoneWork.Content = customer.GetDisplayName<ContactPartner>(nameof(customer.ContactPerson.PhoneWork)) + ":";
+            lblMobile.Content = customer.GetDisplayName<ContactPartner>(nameof(customer.ContactPerson.Mobile)) + ":";
+            lblEmail.Content = customer.GetDisplayName<ContactPartner>(nameof(customer.ContactPerson.EMail)) + ":";
+            lblAdditionalInfo.Content = customer.GetDisplayName<Customer>(nameof(customer.AdditionalInfo)) + ":";
+            lblGoogleDriveLink.Content= customer.GetDisplayName<Customer>(nameof(customer.GoogleDriveFolderName)) + ":";
+
+            lblAdministratorCompanyName.Content = customer.GetDisplayName<AdministratorCompany>(nameof(customer.Administrator.Name)) + ":";
+            lblAdministratorContactPerson.Content = customer.GetDisplayName<ContactPartner>(nameof(customer.ContactPerson.Name)) + ":";
+            lblAdministratorPhoneWork.Content = customer.GetDisplayName<ContactPartner>(nameof(customer.ContactPerson.PhoneWork)) + ":";
+            lblAdministratorMobile.Content = customer.GetDisplayName<ContactPartner>(nameof(customer.ContactPerson.Mobile)) + ":";
+            lblAdministratorEmail.Content = customer.GetDisplayName<ContactPartner>(nameof(customer.ContactPerson.EMail)) + ":";
+
 
             txtCompanyName.Text = customer.CompanyName;
             txtContactPerson.Text = customer.ContactPerson.Name;
@@ -93,6 +105,13 @@ namespace Liftmanagement.View
             txtCity.Text = customer.City;
             txtPhoneWork.Text = customer.ContactPerson.PhoneWork;
             txtMobile.Text = customer.ContactPerson.Mobile;
+            txtAdditionalInfo.Text = customer.AdditionalInfo;
+            txtAdministratorCompanyName.Text = customer.Administrator.Name;
+
+            dgAdministratorContactPersons.SelectionChanged -= DgAdministratorContactPersons_SelectionChanged;
+            dgAdministratorContactPersons.ItemsSource = customer.Administrator.ContactPersons;            
+            dgAdministratorContactPersons.SelectionChanged += DgAdministratorContactPersons_SelectionChanged;
+            dgAdministratorContactPersons.SelectedIndex = 0;
 
 
             List<Location> locations = TestData.GetLocations();
@@ -105,7 +124,26 @@ namespace Liftmanagement.View
             //  CustomerVM.LocationDetailViews = locationDetailViews;
             //gridLocation.ItemsSource = CustomerVM.LocationDetailViews;
 
+        }
 
+
+        private void DgAdministratorContactPersons_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ContactPartner contactPartner = null;
+            var dgAdministratorContactPersons = sender as DataGrid;
+            if (dgAdministratorContactPersons != null)
+                contactPartner = dgAdministratorContactPersons.SelectedItem as ContactPartner;
+
+            if (contactPartner == null)
+            {
+                return;
+
+            }
+
+            txtAdministratorContactPerson.Text = contactPartner.Name;
+            txtAdministratorPhoneWork.Text = contactPartner.PhoneWork;
+            txtAdministratorMobile.Text = contactPartner.Mobile;
+            txtAdministratorEmail.Text = contactPartner.EMail;
 
         }
 
@@ -121,7 +159,7 @@ namespace Liftmanagement.View
 
         private void InitGoogleDriveDialogue()
         {
-            googlDriveTree = new GoogleDriveTreeView();           
+            googlDriveTree = new GoogleDriveTreeView();
             windowGoogleDriveTree = new Window
             {
                 Title = "Google Drvie",
@@ -151,12 +189,12 @@ namespace Liftmanagement.View
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-          var node=  googlDriveTree.GetSelectedNode();
+            var node = googlDriveTree.GetSelectedNode();
             hyperlinkGoogleDrive.NavigateUri = new Uri(node.WebLink);
             txtGoogleDriveFolderName.Text = node.Name;
 
 
-            var customer=  customersView.dgCustomers.SelectedItem as Customer;
+            var customer = customersView.dgCustomers.SelectedItem as Customer;
             if (customer != null)
             {
                 customer.GoogleDriveLink = node.WebLink;
@@ -190,7 +228,7 @@ namespace Liftmanagement.View
                 windowGoogleDriveTree.Title = windowGoogleDriveTree.Title + "  " + customer.CompanyName;
             }
 
-                windowGoogleDriveTree.ShowDialog();
+            windowGoogleDriveTree.ShowDialog();
         }
     }
 }

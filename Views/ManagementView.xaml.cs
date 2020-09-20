@@ -65,12 +65,14 @@ namespace Liftmanagement.Views
 
         private void CbMachineInformations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            FilterMachineInformationSelected(cbMachineInformations.SelectedItem as MachineInformation);
+
             var location = cbLocations.SelectedItem as Location;
             var customer = cbCustomers.SelectedItem as Customer;
             var machineInfo = cbMachineInformations.SelectedItem as MachineInformation;
             var maintenanceAgreement = ManagementVM.MaintenanceAgreements
                 .Where(c => c.MachineInformationId == machineInfo.Id).FirstOrDefault();
-          
+
             SetLocationData(location);
             SetCustomerData(customer);
             SetMaintenanceAgreementData(maintenanceAgreement);
@@ -91,6 +93,7 @@ namespace Liftmanagement.Views
         private void CbLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
            FilterLocationSelected(cbLocations.SelectedItem as Location);
+
         }
 
         private void CbAdministrators_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -124,15 +127,44 @@ namespace Liftmanagement.Views
             FilterAdministratorSelected(arg2 as AdministratorCompany);
         }
 
+
+        private void FilterMachineInformationSelected(MachineInformation machineInformation)
+        {
+            if (machineInformation == null)
+                return;
+
+            var location = cbLocations.SelectedItem as Location;
+            if (location == null || location.Id != machineInformation.LocationId)
+            {
+                SetFilterSelectedCbItem(cbLocations,
+                    () => { return ManagementVM.Locations.Where(c => c.Id == machineInformation.LocationId); });
+            }
+
+        }
+
         private void FilterLocationSelected(Location location)
         {
             if (location == null)
                 return;
 
-            SetFilterSelectedCbItem(cbMachineInformations, () =>
+            var machineInformation = cbMachineInformations.SelectedItem as MachineInformation;
+            if (machineInformation == null || machineInformation.LocationId != location.Id)
             {
-                return ManagementVM.MachineInformations.Where(c => c.LocationId == location.Id);
-            });
+                SetFilterSelectedCbItem(cbMachineInformations, () =>
+                {
+                    return ManagementVM.MachineInformations.Where(c => c.LocationId == location.Id);
+                });
+            }
+
+            var customer = cbCustomers.SelectedItem as Customer;
+            if (customer == null || customer.Id != location.CustomerId)
+            {
+                SetFilterSelectedCbItem(cbCustomers, () =>
+                {
+                    return ManagementVM.Customers.Where(c => c.Id == location.CustomerId);
+                });
+            }
+
         }
 
         private void FilterCustomerSelected(Customer customer)
@@ -140,10 +172,20 @@ namespace Liftmanagement.Views
             if (customer == null)
                 return;
 
-            SetFilterSelectedCbItem(cbLocations, () =>
+            var location = cbLocations.SelectedItem as Location;
+            if (location == null || location.CustomerId != customer.Id)
             {
-                return ManagementVM.Locations.Where(c => c.CustomerId == customer.Id);
-            });
+                SetFilterSelectedCbItem(cbLocations,
+                    () => { return ManagementVM.Locations.Where(c => c.CustomerId == customer.Id); });
+            }
+
+            var administrators = cbAdministrators.SelectedItem as AdministratorCompany;
+            if (administrators == null || administrators.CustomerId != customer.Id)
+            {
+                SetFilterSelectedCbItem(cbAdministrators,
+                    () => { return ManagementVM.Administrators.Where(c => c.CustomerId == customer.Id); });
+            }
+
         }
 
         private void FilterAdministratorSelected(AdministratorCompany administrator)
@@ -151,11 +193,12 @@ namespace Liftmanagement.Views
             if (administrator == null)
                 return;
 
-            SetFilterSelectedCbItem(cbCustomers, () =>
+            var customer = cbCustomers.SelectedItem as Customer;
+            if (customer == null || customer.Id != administrator.CustomerId)
             {
-                return ManagementVM.Customers.Where(c => c.Id == administrator.CustomerId);
-            });
-
+                SetFilterSelectedCbItem(cbCustomers,
+                    () => { return ManagementVM.Customers.Where(c => c.Id == administrator.CustomerId); });
+            }
         }
 
         private void SetFilterSelectedCbItem(ComboBox comboBox, Func<IEnumerable> filteredSource)

@@ -17,12 +17,27 @@
 
     <Grid Background="#FFE5E5E5">
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Background="AliceBlue">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBox x:Name="txtSearch"  Grid.Column="0" Style="{StaticResource TextBoxStyle}" Margin="10" />
+                <Button x:Name="btnSearch"  Grid.Column="1"  HorizontalAlignment="Center"  VerticalAlignment="Center" BorderThickness="0" Background="Transparent"  Margin="10" >
+                    <StackPanel>
+                        <Image Source="..\Resources\Images\Icons\Aha-Soft-Large-Seo-Look.ico" Height="30"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
 
         </StackPanel>
         <StackPanel Grid.Row="1" >
@@ -141,7 +156,7 @@
                         <ColumnDefinition Width="200"/>
                         <ColumnDefinition Width="200"/>
                     </Grid.ColumnDefinitions>
-                   
+
                     <StackPanel Grid.Row="0" Grid.Column="0">
                         <Label x:Name="lblOthersHeader" Content="Sonstiges:" Style="{StaticResource LableHeaderManagementStyle}" />
                         <StackPanel x:Name="spOthers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,0,0,0" >
@@ -192,7 +207,7 @@
                     </StackPanel>
 
                     <Rectangle Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
-                    
+
                     <StackPanel Grid.Row="0" Grid.Column="2">
                         <Label x:Name="lblLocationHeader" Content="Standort:" Style="{StaticResource LableHeaderManagementStyle}" />
                         <Label x:Name="lblAddressLocation" Content="lblAddressLocation"   Style="{StaticResource LableManagementStyle}"/>
@@ -309,5 +324,36 @@
             </StackPanel>
         </ScrollViewer>
 
+        <StackPanel Grid.Row="3"   Orientation="Horizontal" HorizontalAlignment="Right">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                    <Button x:Name="btnEdit" Grid.Column="1"  HorizontalAlignment="Center"  VerticalAlignment="Center"
+                            Click="btnEdit_Click" BorderThickness="0" Background="Transparent" Margin="10,0,10,0">
+                    <StackPanel>
+                        <Image Source="..\Resources\Images\Icons\Turbomilk-Livejournal-10-Pencil.ico" Height="30"/>
+                    </StackPanel>
+                </Button>
+                <Button  x:Name="btnAdd" Grid.Column="0" HorizontalAlignment="Center"  VerticalAlignment="Center" 
+                         Click="btnAdd_Click" BorderThickness="0" Background="Transparent" Margin="10,0,10,0">
+                    <StackPanel>
+                        <Image Source="..\Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" Height="30"/>
+                    </StackPanel>
+                </Button>
+                <Button  x:Name="btnDelete" Grid.Column="2" HorizontalAlignment="Center"  VerticalAlignment="Center" 
+                         Click="btnDelete_Click" BorderThickness="0" Background="Transparent" Margin="10,0,10,0">
+                    <StackPanel>
+                        <Image Source="..\Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-edit-delete.ico" Height="30"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </StackPanel>
+        <ScrollViewer Grid.Row="4" VerticalScrollBarVisibility="Auto" >
+        <Frame x:Name="frameRecordings" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+</ScrollViewer>
     </Grid>
 </UserControl>

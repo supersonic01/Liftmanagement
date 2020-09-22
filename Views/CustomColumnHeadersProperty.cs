@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace Liftmanagement.Views
 {
@@ -43,12 +44,20 @@ namespace Liftmanagement.Views
         static void dataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
 
-          //  var viewType = GetItemType(sender as DataGrid);
-            
-            var dataGrid= (sender as DataGrid);
+            //  var viewType = GetItemType(sender as DataGrid);
+
+            var dataGrid = (sender as DataGrid);
             var collection = dataGrid.ItemsSource;
             Type collectionType = collection.GetType();
+
+            var listCollection = collection as ListCollectionView;
+            if (listCollection != null)
+            {
+                collectionType = listCollection.SourceCollection.GetType();
+            }
+
             Type itemType = collectionType.GetGenericArguments().Single();
+
 
             MemberInfo property = itemType.GetProperty(e.PropertyName);
             var attribute = property.GetCustomAttributes(typeof(DisplayNameAttribute), true).FirstOrDefault();

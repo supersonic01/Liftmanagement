@@ -19,7 +19,7 @@ namespace Liftmanagement.Helper
 
             var customer = new Customer
             {
-                Id =1,
+                Id = 1,
                 CompanyName = "SEMEX-EngCon GmbH",
                 Address = "Carl-Metz-Straße 26",
                 Postcode = "76275",
@@ -46,7 +46,7 @@ namespace Liftmanagement.Helper
 
 
             customers.Add(customer);
-            
+
             customer = new Customer
             {
                 Id = 2,
@@ -104,7 +104,7 @@ namespace Liftmanagement.Helper
                 new ContactPartner(customer.Administrator) { Name = "Hans Hahn2", PhoneWork = "07243514825255", Mobile = "0172435148252", EMail = "halo@web.de" },
                 new ContactPartner(customer.Administrator) { Name = "Hans Hahn3", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" },
                 new ContactPartner(customer.Administrator) { Name = "Hans Hahn4", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" }};
-    
+
 
             customers.Add(customer);
 
@@ -169,7 +169,7 @@ namespace Liftmanagement.Helper
             machine.ContactPerson = new ContactPartner(machine) { Name = "Steffan2 Winterhut2", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
             machineInformations.Add(machine);
 
-             machine = new MachineInformation
+            machine = new MachineInformation
             {
                 CustomerId = 2,
                 LocationId = 2,
@@ -187,7 +187,7 @@ namespace Liftmanagement.Helper
 
             machine.ContactPerson = new ContactPartner(machine) { Name = "Steffan20 Winterhut2", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
             machineInformations.Add(machine);
-          
+
             machine = new MachineInformation
             {
                 CustomerId = 3,
@@ -303,12 +303,12 @@ namespace Liftmanagement.Helper
             location.ContactPerson = new ContactPartner(location) { Name = "Anna Cremer", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
             locations.Add(location);
 
-             location = new Location
+            location = new Location
             {
                 CustomerId = 2,
                 Id = 2,
                 Address = "Königstraße 26",
-                 Postcode = "76275",
+                Postcode = "76275",
                 City = "Ettlingen",
                 AdditionalInfo = "Code für Eingang = 2585",
                 ContactByDefect = true
@@ -381,97 +381,97 @@ namespace Liftmanagement.Helper
                 AdditionalInfo = "Türe-Türteile"
             });
 
-             maintenanceAgreement.Add(new MaintenanceAgreement
-              {
-                  CustomerId = 2,
-                  LocationId = 2,
-                  MachineInformationId = 2,
-                  Id = 2,
-                  Duration = new DateTime(2020, 12, 31),
-                  CanBeCancelled = "jährlich",
-                  ArreementCancelledBy = "Kunde",
-                  MaintenanceType = "Vollwartung",
-                  NoticeOfPeriod = 3,
-                  AgreementDate = new DateTime(2019, 12, 31),
-                  AdditionalInfo = "Türe-Türteile"
-             });
-
-              maintenanceAgreement.Add(new MaintenanceAgreement
-              {
-                  CustomerId = 3,
-                  LocationId = 3,
-                  MachineInformationId = 3,
-                  Id = 3,
-                  Duration = new DateTime(2020, 12, 31),
-                  CanBeCancelled = "jährlich",
-                  ArreementCancelledBy = "Kunde",
-                  MaintenanceType = "Vollwartung",
-                  NoticeOfPeriod = 3,
-                  AgreementDate = new DateTime(2019, 12, 31),
-                  AdditionalInfo = "Türe-Türteile"
-              });
-
-
-              maintenanceAgreement.Add(new MaintenanceAgreement
-              {
-                  CustomerId = 3,
-                  LocationId = 3,
-                  MachineInformationId = 7,
-                  Id = 7,
-                  Duration = new DateTime(2020, 12, 31),
-                  CanBeCancelled = "jährlich",
-                  ArreementCancelledBy = "Kunde",
-                  MaintenanceType = "Vollwartung",
-                  NoticeOfPeriod = 3,
-                  AgreementDate = new DateTime(2019, 12, 31),
-                  AdditionalInfo = "Türe-Türteile"
-              });
+            maintenanceAgreement.Add(new MaintenanceAgreement
+            {
+                CustomerId = 2,
+                LocationId = 2,
+                MachineInformationId = 2,
+                Id = 2,
+                Duration = new DateTime(2020, 12, 31),
+                CanBeCancelled = "jährlich",
+                ArreementCancelledBy = "Kunde",
+                MaintenanceType = "Vollwartung",
+                NoticeOfPeriod = 3,
+                AgreementDate = new DateTime(2019, 12, 31),
+                AdditionalInfo = "Türe-Türteile"
+            });
 
             maintenanceAgreement.Add(new MaintenanceAgreement
-              {
-                  CustomerId = 4,
-                  LocationId = 4,
-                  MachineInformationId = 4,
-                  Id = 4,
-                  Duration = new DateTime(2020, 12, 31),
-                  CanBeCancelled = "jährlich",
-                  ArreementCancelledBy = "Kunde",
-                  MaintenanceType = "Vollwartung",
-                  NoticeOfPeriod = 3,
-                  AgreementDate = new DateTime(2019, 12, 31),
-                  AdditionalInfo = "Türe-Türteile"
-              });
+            {
+                CustomerId = 3,
+                LocationId = 3,
+                MachineInformationId = 3,
+                Id = 3,
+                Duration = new DateTime(2020, 12, 31),
+                CanBeCancelled = "jährlich",
+                ArreementCancelledBy = "Kunde",
+                MaintenanceType = "Vollwartung",
+                NoticeOfPeriod = 3,
+                AgreementDate = new DateTime(2019, 12, 31),
+                AdditionalInfo = "Türe-Türteile"
+            });
 
-              maintenanceAgreement.Add(new MaintenanceAgreement
-              {
-                  CustomerId = 4,
-                  LocationId = 5,
-                  MachineInformationId = 5,
-                  Id = 5,
-                  Duration = new DateTime(2020, 12, 31),
-                  CanBeCancelled = "jährlich",
-                  ArreementCancelledBy = "Kunde",
-                  MaintenanceType = "Vollwartung",
-                  NoticeOfPeriod = 3,
-                  AgreementDate = new DateTime(2019, 12, 31),
-                  AdditionalInfo = "Türe-Türteile"
-              });
 
-              maintenanceAgreement.Add(new MaintenanceAgreement
-              {
-                  CustomerId = 4,
-                  LocationId = 5,
-                  MachineInformationId = 6,
-                  Id = 6,
-                  Duration = new DateTime(2020, 12, 31),
-                  CanBeCancelled = "jährlich",
-                  ArreementCancelledBy = "Kunde",
-                  MaintenanceType = "Vollwartung",
-                  NoticeOfPeriod = 3,
-                  AgreementDate = new DateTime(2019, 12, 31),
-                  AdditionalInfo = "Türe-Türteile"
-              });
-           
+            maintenanceAgreement.Add(new MaintenanceAgreement
+            {
+                CustomerId = 3,
+                LocationId = 3,
+                MachineInformationId = 7,
+                Id = 7,
+                Duration = new DateTime(2020, 12, 31),
+                CanBeCancelled = "jährlich",
+                ArreementCancelledBy = "Kunde",
+                MaintenanceType = "Vollwartung",
+                NoticeOfPeriod = 3,
+                AgreementDate = new DateTime(2019, 12, 31),
+                AdditionalInfo = "Türe-Türteile"
+            });
+
+            maintenanceAgreement.Add(new MaintenanceAgreement
+            {
+                CustomerId = 4,
+                LocationId = 4,
+                MachineInformationId = 4,
+                Id = 4,
+                Duration = new DateTime(2020, 12, 31),
+                CanBeCancelled = "jährlich",
+                ArreementCancelledBy = "Kunde",
+                MaintenanceType = "Vollwartung",
+                NoticeOfPeriod = 3,
+                AgreementDate = new DateTime(2019, 12, 31),
+                AdditionalInfo = "Türe-Türteile"
+            });
+
+            maintenanceAgreement.Add(new MaintenanceAgreement
+            {
+                CustomerId = 4,
+                LocationId = 5,
+                MachineInformationId = 5,
+                Id = 5,
+                Duration = new DateTime(2020, 12, 31),
+                CanBeCancelled = "jährlich",
+                ArreementCancelledBy = "Kunde",
+                MaintenanceType = "Vollwartung",
+                NoticeOfPeriod = 3,
+                AgreementDate = new DateTime(2019, 12, 31),
+                AdditionalInfo = "Türe-Türteile"
+            });
+
+            maintenanceAgreement.Add(new MaintenanceAgreement
+            {
+                CustomerId = 4,
+                LocationId = 5,
+                MachineInformationId = 6,
+                Id = 6,
+                Duration = new DateTime(2020, 12, 31),
+                CanBeCancelled = "jährlich",
+                ArreementCancelledBy = "Kunde",
+                MaintenanceType = "Vollwartung",
+                NoticeOfPeriod = 3,
+                AgreementDate = new DateTime(2019, 12, 31),
+                AdditionalInfo = "Türe-Türteile"
+            });
+
             return maintenanceAgreement;
         }
 
@@ -483,5 +483,251 @@ namespace Liftmanagement.Helper
             oi.Add(new OtherInformation("text"));
             return oi;
         }
+
+        public static ObservableCollection<ManagementOverviewFilter> GetManagementOverviewFilter()
+        {
+            ObservableCollection<ManagementOverviewFilter> overview = new ObservableCollection<ManagementOverviewFilter>();
+
+            var customrs = GetCustomers();
+            var locations = GetLocations();
+            var machine = GetMachineInformations();
+
+
+            foreach (var machineInformation in machine)
+            {
+                var item = new ManagementOverviewFilter();
+
+                item.MachineInformationId = machineInformation.Id;
+                item.Manufacturer = machineInformation.Name;
+                item.SerialNumber = machineInformation.SerialNumber;
+                item.YearOfConstruction = machineInformation.YearOfConstruction.ToString("dd.MM.yyyy");
+                item.CustomerId = machineInformation.CustomerId;
+                item.LocationId = machineInformation.LocationId;
+
+
+                var location = locations.Where(c => c.Id == machineInformation.LocationId).FirstOrDefault();
+                item.Location = string.Format("{0},{1} {2}", location.Address, location.Postcode, location.City);
+
+                var customer = customrs.Where(c => c.Id == machineInformation.CustomerId).FirstOrDefault();
+                item.CompanyName = customer.CompanyName;
+                item.Administrator = customer.Administrator.Name;
+
+                overview.Add(item);
+            }
+
+            return overview;
+        }
+
+        public static ObservableCollection<Recording> GetRecordings()
+        {
+
+            ObservableCollection<Recording> recordings = new ObservableCollection<Recording>();
+
+            var recording = new Recording
+            {
+                Date = new DateTime().Date,
+                Process = "TÜV Meldung",
+                CostType = "Reparatur / Instandhaltung",
+                MachineStoped = true,
+                Timesensitive = new DateTime().Date,
+                InvoiceNumber = "11132255",
+                IssueLevel = 1,
+                ReportedFrom = "Schindler",
+                Reason = "Notrufaufschaltung Jahresrechnung RN 460,88 EUR",
+                Storage = true,
+                NextStep = "Weiterverfolgen",
+                PersonResponsible = "Varga",
+                ReleaseFrom = "Verga",
+                CustomerInformed = true,
+                CustomerPrefers = "weiterverfolgen",
+                OfferPrice = 500,
+                BillingAmountCorrect = 450.25,
+                ExecutionCorrect = true,
+                VerifiedOnSpot = "Wartungskontrolle durchgeführt"
+            };
+
+            recordings.Add(recording);
+
+            recording = new Recording
+            {
+                Date = new DateTime().Date,
+                Process = "Rechnung AN",
+                CostType = "Betriebskosten",
+                MachineStoped = true,
+                Timesensitive = new DateTime().Date,
+                InvoiceNumber = "11132255",
+                IssueLevel = 1,
+                ReportedFrom = "Schindler",
+                Reason = "Prüfbericht Puffer tauschen, Mangel vorhanden",
+                Storage = true,
+                NextStep = "Weiterverfolgen",
+                PersonResponsible = "Varga",
+                ReleaseFrom = "Verga",
+                CustomerInformed = true,
+                CustomerPrefers = "weiterverfolgen",
+                OfferPrice = 500,
+                BillingAmountCorrect = 450,
+                ExecutionCorrect = true,
+                VerifiedOnSpot = "Wartungskontrolle durchgeführt"
+            };
+
+            recordings.Add(recording);
+
+            recording = new Recording
+            {
+                Date = DateTime.Now.Date,
+                Process = "Störungsmeldung AN",
+                CostType = "Betriebskosten",
+                MachineStoped = true,
+                Timesensitive = new DateTime().Date,
+                InvoiceNumber = "11132255",
+                IssueLevel = 1,
+                ReportedFrom = "Schindler",
+                Reason = "Prüfbericht Puffer tauschen, Mangel vorhanden",
+                Storage = true,
+                NextStep = "Weiterverfolgen",
+                PersonResponsible = "Varga",
+                ReleaseFrom = "Verga",
+                CustomerInformed = false,
+                CustomerPrefers = "weiterverfolgen",
+                OfferPrice = 500,
+                BillingAmountCorrect = 450,
+                ExecutionCorrect = true,
+                VerifiedOnSpot = "Wartungskontrolle durchgeführt"
+            };
+
+            recordings.Add(recording);
+
+            recording = new Recording
+            {
+                Date = DateTime.Now.Date,
+                Process = "Störungsmeldung AN",
+                CostType = "Betriebskosten",
+                MachineStoped = false,
+                Timesensitive = new DateTime().Date,
+                InvoiceNumber = "Angebot 80225456743",
+                IssueLevel = 1,
+                ReportedFrom = "Schindler",
+                Reason = "Prüfbericht Puffer tauschen, Mangel vorhanden",
+                Storage = true,
+                NextStep = "Weiterverfolgen",
+                PersonResponsible = "Varga",
+                ReleaseFrom = "Hesse",
+                CustomerInformed = true,
+                CustomerPrefers = "weiterverfolgen",
+                OfferPrice = 500,
+                BillingAmountCorrect = 450,
+                ExecutionCorrect = true,
+                VerifiedOnSpot = "Wartungskontrolle durchgeführt"
+            };
+
+            recordings.Add(recording);
+
+
+            recording = new Recording
+            {
+                Date = DateTime.Now.Date,
+                Process = "Störungsmeldung AN",
+                CostType = "Betriebskosten",
+                MachineStoped = true,
+                Timesensitive = new DateTime().Date,
+                InvoiceNumber = "Angebot 80225456743",
+                IssueLevel = 1,
+                ReportedFrom = "Schindler",
+                Reason = "Prüfbericht Puffer tauschen, Mangel vorhanden",
+                Storage = true,
+                NextStep = "Weiterverfolgen",
+                PersonResponsible = "Varga",
+                ReleaseFrom = "Hesse",
+                CustomerInformed = true,
+                CustomerPrefers = "weiterverfolgen",
+                OfferPrice = 500,
+                BillingAmountCorrect = 450,
+                ExecutionCorrect = true,
+                VerifiedOnSpot = "Wartungskontrolle durchgeführt"
+            };
+
+            recordings.Add(recording);
+
+            recording = new Recording
+            {
+                Date = new DateTime().Date,
+                Process = "Rechnung AN",
+                CostType = "Betriebskosten",
+                MachineStoped = false,
+                Timesensitive = new DateTime().Date,
+                InvoiceNumber = "11132255",
+                IssueLevel = 1,
+                ReportedFrom = "Schindler",
+                Reason = "Prüfbericht Puffer tauschen, Mangel vorhanden",
+                Storage = true,
+                NextStep = "Weiterverfolgen",
+                PersonResponsible = "Varga",
+                ReleaseFrom = "Verga",
+                CustomerInformed = false,
+                CustomerPrefers = "weiterverfolgen",
+                OfferPrice = 500,
+                BillingAmountCorrect = 450,
+                ExecutionCorrect = true,
+                VerifiedOnSpot = "Wartungskontrolle durchgeführt"
+            };
+
+            recordings.Add(recording);
+
+            recording = new Recording
+            {
+                Date = DateTime.Now.Date,
+                Process = "Störungsmeldung AN",
+                CostType = "Betriebskosten",
+                MachineStoped = true,
+                Timesensitive = new DateTime().Date,
+                InvoiceNumber = "11132255",
+                IssueLevel = 1,
+                ReportedFrom = "Schindler",
+                Reason = "Prüfbericht Puffer tauschen, Mangel vorhanden",
+                Storage = true,
+                NextStep = "Weiterverfolgen",
+                PersonResponsible = "Varga",
+                ReleaseFrom = "Verga",
+                CustomerInformed = true,
+                CustomerPrefers = "weiterverfolgen",
+                OfferPrice = 500,
+                BillingAmountCorrect = 450,
+                ExecutionCorrect = true,
+                VerifiedOnSpot = "Wartungskontrolle durchgeführt"
+            };
+
+            recordings.Add(recording);
+
+            recording = new Recording
+            {
+                Date = DateTime.Now.Date,
+                Process = "Störungsmeldung AN",
+                CostType = "Betriebskosten",
+                MachineStoped = true,
+                Timesensitive = new DateTime().Date,
+                InvoiceNumber = "Angebot 80225456743",
+                IssueLevel = 1,
+                ReportedFrom = "Schindler",
+                Reason = "Prüfbericht Puffer tauschen, Mangel vorhanden",
+                Storage = true,
+                NextStep = "Weiterverfolgen",
+                PersonResponsible = "Varga",
+                ReleaseFrom = "Hesse",
+                CustomerInformed = true,
+                CustomerPrefers = "weiterverfolgen",
+                OfferPrice = 500,
+                BillingAmountCorrect = 450,
+                ExecutionCorrect = true,
+                VerifiedOnSpot = "Wartungskontrolle durchgeführt"
+            };
+
+            recordings.Add(recording);
+
+
+            return recordings;
+
+        }
+
     }
 }

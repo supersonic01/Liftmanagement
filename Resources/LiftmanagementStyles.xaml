@@ -339,5 +339,22 @@
                 Value="0" />
     </Style>
 
- 
+
+    <Style x:Key="DataGridRecordingColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" >
+        <Setter Property="VerticalContentAlignment" Value="Top"/>
+    </Style>
+
+    <Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}">
+<Setter Property="HorizontalAlignment" Value="Center"/>
+<Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="LayoutTransform">
+            <Setter.Value>
+                <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>
+    
+    
+    

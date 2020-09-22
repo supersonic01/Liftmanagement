@@ -190,6 +190,7 @@
     <Compile Include="Models\CollectionOfVariety.cs" />
     <Compile Include="Models\ManagementOverviewFilter.cs" />
     <Compile Include="Models\Person.cs" />
+    <Compile Include="Models\Recording.cs" />
     <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="ViewModels\CustomersViewModel.cs" />
@@ -201,9 +202,12 @@
     <Compile Include="ViewModels\MachineInformationViewModel.cs" />
     <Compile Include="ViewModels\MaintenanceAgreementsViewModel.cs" />
     <Compile Include="ViewModels\MaintenanceAgreementViewModel.cs" />
+    <Compile Include="ViewModels\ManagementOverviewFilterViewModel.cs" />
     <Compile Include="ViewModels\ManagementViewModel.cs" />
     <Compile Include="ViewModels\MasterDataInfoViewModel.cs" />
     <Compile Include="Models\OtherInformation.cs" />
+    <Compile Include="ViewModels\RecordingsViewModel.cs" />
+    <Compile Include="ViewModels\RecordingViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\CustomColumnHeadersProperty.cs" />
     <Compile Include="Views\CustomersView.xaml.cs">
@@ -241,15 +245,25 @@
     <Compile Include="Views\MaintenanceAgreementView.xaml.cs">
       <DependentUpon>MaintenanceAgreementView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ManagementOverviewFilterView.xaml.cs">
+      <DependentUpon>ManagementOverviewFilterView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ManagementView.xaml.cs">
       <DependentUpon>ManagementView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MasterDataInfoView.xaml.cs">
       <DependentUpon>MasterDataInfoView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\RecordingsView.xaml.cs">
+      <DependentUpon>RecordingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RecordingView.xaml.cs">
+      <DependentUpon>RecordingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Test.xaml.cs">
       <DependentUpon>Test.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UserControlView.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -310,11 +324,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ManagementOverviewFilterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ManagementView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MasterDataInfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RecordingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RecordingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -407,6 +433,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Icons\Hopstarter-Soft-Scraps-File-Delete.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Aha-Soft-Large-Seo-Look.ico" />
+    <Resource Include="Resources\Images\Icons\Everaldo-Crystal-Clear-App-xmag-search.ico" />
+    <Resource Include="Resources\Images\Icons\Zerode-Plump-Search.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets" Condition="Exists('packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets')" />

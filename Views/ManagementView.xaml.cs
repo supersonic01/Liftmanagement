@@ -26,6 +26,11 @@ namespace Liftmanagement.Views
     public partial class ManagementView : UserControl
     {
         private ManagementViewModel managementVM = new ManagementViewModel();
+        private Window overviewFilterViewWindow;
+        private ManagementOverviewFilterView overviewFilterView;
+        private RecordingsView recordingsView;
+        private RecordingView recordingView;
+        private Window recordingViewWindow;
 
         public ManagementViewModel ManagementVM
         {
@@ -33,10 +38,11 @@ namespace Liftmanagement.Views
             set { managementVM = value; }
         }
 
-
         public ManagementView()
         {
             InitializeComponent();
+            recordingsView = new RecordingsView();
+            frameRecordings.Content = recordingsView;
 
             lblCustomerHeader.Content = "Rechnungsadresse:";
             lblLocationHeader.Content = "Standort:";
@@ -58,14 +64,168 @@ namespace Liftmanagement.Views
             cbMachineInformations.SelectionChanged += CbMachineInformations_SelectionChanged;
 
             dgOthers.PreviewKeyDown += DgOthers_PreviewKeyDown;
+            this.Loaded += ManagementView_Loaded;
+            btnSearch.Click += BtnSearch_Click;
+            txtSearch.KeyUp += TxtSearch_KeyUp;
 
             //TODO dgOthers cell  make vertical scrollabl
             //TODO Keyordnavigation
+
+
+        }
+
+        private void TxtSearch_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ShowOverviewFilterdItems();
+                e.Handled = true;
+            }
+
+            if (e.Key == Key.Escape)
+            {
+                ShowOverviewFilterdItems(false);
+                e.Handled = true;
+            }
+        }
+
+        private void ShowOverviewFilterdItems(bool userFilter = true)
+        {
+            overviewFilterViewWindow.Show();
+            string filter = txtSearch.Text;
+            overviewFilterView.SetFilter(userFilter ? filter : "");
+        }
+
+        private void ManagementView_Loaded(object sender, RoutedEventArgs e)
+        {
+            InitOverviewFilterView();
+            //overviewFilterView.SetDoubleClickEventHandler(Row_DoubleClick, Row_KeyUp);
+            overviewFilterView.SetDoubleClickEventHandler(Row_DoubleClick);
+
+            InitRecordView();
+
+        }
+        private void Row_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DataGridRow row = sender as DataGridRow;
+            ManagementOverviewFilter overviewFilter = row.DataContext as ManagementOverviewFilter; 
+            SetMachineInfoOverviewFilter(overviewFilter);
+            e.Handled = true;
+            overviewFilterViewWindow.Hide();
+        }
+        //TODO not working
+        //private void Row_KeyUp(object sender, KeyEventArgs e)
+        //{
+        //    if (e.Key == Key.Enter)
+        //    {
+        //        var u = e.OriginalSource as UIElement;
+        //        u.MoveFocus(new TraversalRequest(FocusNavigationDirection.Up));
+
+        //        DataGridRow row = sender as DataGridRow;
+        //        ManagementOverviewFilter overviewFilter = row.DataContext as ManagementOverviewFilter;
+        //        SetMachineInfoOverviewFilter(overviewFilter);
+        //        e.Handled = true;
+        //        overviewFilterViewWindow.Hide();
+        //    }
+        //}
+
+        public static bool IsWindowOpen<T>(string name = "") where T : Window
+        {
+            return string.IsNullOrEmpty(name)
+                ? Application.Current.Windows.OfType<T>().Any()
+                : Application.Current.Windows.OfType<T>().Any(w => w.Name.Equals(name));
+        }
+
+        private void BtnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            ShowOverviewFilterdItems();
+            e.Handled = true;
+        }
+
+        private void InitOverviewFilterView()
+        {
+            overviewFilterView = new ManagementOverviewFilterView();
+            overviewFilterViewWindow = new Window
+            {
+                Title = "Suche",
+                Content = overviewFilterView,
+                Name = "ManagementOverviewFilterWindow"
+            };
+            overviewFilterViewWindow.Height = 450;
+            overviewFilterViewWindow.Width = 800;
+            overviewFilterViewWindow.WindowStyle = WindowStyle.None;
+            overviewFilterViewWindow.Topmost = true;
+
+            var btnSearchLocation = txtSearch.PointToScreen(new Point(0, 0));
+
+            //window.Width = btnSearch.ActualWidth + 16;
+            //window.Height = 300;
+            overviewFilterViewWindow.Left = btnSearchLocation.X + 8;
+            overviewFilterViewWindow.Top = btnSearchLocation.Y + txtSearch.Height;
+
+            overviewFilterView.btnCancel.Click += BtnCancel_Click;
+            overviewFilterView.btnSave.Click += BtnSave_Click;
+        }
+
+        private void InitRecordView()
+        {
+            recordingView = new RecordingView();
+            recordingViewWindow = new Window
+            {
+                Content = recordingView,
+                Name = "ManagementRecordingViewWindow"
+            };
+            //recordingViewWindow.Height = 450;
+            //recordingViewWindow.Width = 800;
+           // recordingViewWindow.WindowStyle = WindowStyle.None;
+            recordingViewWindow.Topmost = true;
+            
+           recordingView.btnCancel.Click += BtnCancelRecord_Click;
+           recordingView.btnSave.Click += BtnSaveRecord_Click;
+        }
+
+        private void BtnSaveRecord_Click(object sender, RoutedEventArgs e)
+        {
+           recordingViewWindow.Hide();
+        }
+
+        private void BtnCancelRecord_Click(object sender, RoutedEventArgs e)
+        {
+            recordingViewWindow.Hide();
+        }
+
+        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        {
+            overviewFilterViewWindow.Hide();
+
+            var overviewFilter = overviewFilterView.dgOverviewFilter.SelectedItem as ManagementOverviewFilter;
+
+            SetMachineInfoOverviewFilter(overviewFilter);
+        }
+
+        private void SetMachineInfoOverviewFilter(ManagementOverviewFilter overviewFilter)
+        {
+            var machineInformation = ManagementVM.MachineInformations.Where(c => c.Id == overviewFilter.MachineInformationId)
+                .FirstOrDefault();
+            SetFilterMachineInformation(machineInformation);
+        }
+
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            overviewFilterViewWindow.Hide();
         }
 
         private void CbMachineInformations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            FilterMachineInformationSelected(cbMachineInformations.SelectedItem as MachineInformation);
+            SetFilterMachineInformation(cbMachineInformations.SelectedItem as MachineInformation);
+        }
+
+        private void SetFilterMachineInformation(MachineInformation machineInformation)
+        {
+            if (machineInformation == null)
+                return;
+            
+            FilterMachineInformationSelected(machineInformation);
 
             var location = cbLocations.SelectedItem as Location;
             var customer = cbCustomers.SelectedItem as Customer;
@@ -92,7 +252,7 @@ namespace Liftmanagement.Views
 
         private void CbLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-           FilterLocationSelected(cbLocations.SelectedItem as Location);
+            FilterLocationSelected(cbLocations.SelectedItem as Location);
 
         }
 
@@ -103,12 +263,6 @@ namespace Liftmanagement.Views
 
         private void CbCustomers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //var customer = cbCustomers.SelectedItem as Customer;
-            //cbLocations.ItemsSource = ManagementVM.Locations.Where(c => c.CustomerId == customer.Id);
-            //cbLocations.SelectedIndex = 0;
-            //var location = cbLocations.SelectedItem as Location;
-            //cbLocations.Text = location.ToString();
-
             FilterCustomerSelected(cbCustomers.SelectedItem as Customer);
         }
 
@@ -126,7 +280,6 @@ namespace Liftmanagement.Views
         {
             FilterAdministratorSelected(arg2 as AdministratorCompany);
         }
-
 
         private void FilterMachineInformationSelected(MachineInformation machineInformation)
         {
@@ -147,14 +300,6 @@ namespace Liftmanagement.Views
             if (location == null)
                 return;
 
-            var machineInformation = cbMachineInformations.SelectedItem as MachineInformation;
-            if (machineInformation == null || machineInformation.LocationId != location.Id)
-            {
-                SetFilterSelectedCbItem(cbMachineInformations, () =>
-                {
-                    return ManagementVM.MachineInformations.Where(c => c.LocationId == location.Id);
-                });
-            }
 
             var customer = cbCustomers.SelectedItem as Customer;
             if (customer == null || customer.Id != location.CustomerId)
@@ -165,6 +310,14 @@ namespace Liftmanagement.Views
                 });
             }
 
+            var machineInformation = cbMachineInformations.SelectedItem as MachineInformation;
+            if (machineInformation == null || machineInformation.LocationId != location.Id)
+            {
+                SetFilterSelectedCbItem(cbMachineInformations, () =>
+                {
+                    return ManagementVM.MachineInformations.Where(c => c.LocationId == location.Id);
+                });
+            }
         }
 
         private void FilterCustomerSelected(Customer customer)
@@ -300,6 +453,25 @@ namespace Liftmanagement.Views
             lblPostcodeCity.Content = customer.GetPostcodeCity();
         }
 
+        private void btnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            var vm= new RecordingViewModel();
+            vm.Record = recordingsView.GetSelectedItem();
+            recordingView.RcordingVM = vm;
+            recordingView.SetData();
+            recordingViewWindow.ShowDialog();
+
+        }
+
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            recordingViewWindow.ShowDialog();
+        }
+
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO PW
+        }
     }
 
 }

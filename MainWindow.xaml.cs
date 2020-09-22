@@ -149,7 +149,15 @@ namespace Liftmanagement
                 case Helper.Helper.TTypeMangement.Managment:
                     //frameDetail.Content = new Test();
                     //frameDetail.Content = new MasterDataInfoView();
-                    frameDetail.Content = new ManagementView();
+                     frameDetail.Content = new ManagementView();
+
+                    //var window = new Window
+                    //{
+                    //    Title = "Suche",
+                    //    Content = new RecordingView()
+                    //};
+                    //window.Show();
+
                     break;
                 default:
                     break;

@@ -9,12 +9,6 @@ namespace Liftmanagement.Models
         [DisplayName("Kundenname"), DatabaseAttribute(Length ="100")]
         public string CompanyName { get; set; }
 
-        [DisplayName("Google Drive")]
-        public string GoogleDriveFolderName { get; set; }
-
-        [DisplayName("Google Drive Ordner"),DatabaseAttribute(Length = "200")]
-        public string GoogleDriveLink { get; set; }
-
         private AdministratorCompany administrator = new AdministratorCompany();
 
         [DisplayName("Verwalter Firma"), DatabaseAttribute(Updateable = false)]

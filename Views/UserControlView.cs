@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
+using Liftmanagement.Models;
 
 namespace Liftmanagement.Views
 {
    public class UserControlView : UserControl
     {
+      
         public List<string> NotVisibleColumns { get; set; } = new List<string>();
 
         protected virtual string ViewModelName { get; }
@@ -85,5 +88,6 @@ namespace Liftmanagement.Views
             BindingItem(control, ComboBox.ItemsSourceProperty, path);
         }
 
+       
     }
 }

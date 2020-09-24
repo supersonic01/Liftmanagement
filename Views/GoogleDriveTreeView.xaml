@@ -4,10 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Liftmanagement.ViewModels"
+             xmlns:li="http://github.com/zeluisping/loadingIndicators/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="650">
-    <Grid>
-        <Grid.RowDefinitions>
+<Grid>
+        <Grid x:Name="MainContent" IsEnabled="False" >
+            <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
@@ -119,4 +121,9 @@
             </Grid>
         </StackPanel>
     </Grid>
+
+    <Grid x:Name="LoadingIndicatorPanel">
+        <li:LoadingIndicator x:Name="LoadingIndicatorx" SpeedRatio="1" IsActive="{Binding IsArcsActive}" Mode="Arcs" Foreground="DeepSkyBlue"/>
+        </Grid>
+</Grid>
 </UserControl>

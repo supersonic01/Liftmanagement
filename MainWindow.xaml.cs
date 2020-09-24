@@ -163,6 +163,10 @@ namespace Liftmanagement
                     //};
                     //window.Show();
 
+                    //var location = TestData.GetLocations().FirstOrDefault();
+                    //frameDetail.Content = new LocationDetailView(location);
+                   // frameDetail.Content = new BusyIndicatorView();
+
                     break;
                 default:
                     break;

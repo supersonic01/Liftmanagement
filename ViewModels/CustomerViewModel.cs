@@ -27,5 +27,6 @@ namespace Liftmanagement.ViewModels
             set { SetField(ref locationDetailViews, value); }
         }
 
+        
     }
 }

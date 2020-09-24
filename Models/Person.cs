@@ -29,6 +29,12 @@ namespace Liftmanagement.Models
         [DisplayName("Ansprechpartner"), DatabaseAttribute(Updateable = false)]
         public ContactPartner ContactPerson { get; set; } = new ContactPartner();
 
+        [DisplayName("Google Drive")]
+        public string GoogleDriveFolderName { get; set; }
+
+        [DisplayName("Google Drive Ordner"), DatabaseAttribute(Length = "200")]
+        public string GoogleDriveLink { get; set; }
+
         public string GetPostcodeCity()
         {
             return Postcode + ", " + City;

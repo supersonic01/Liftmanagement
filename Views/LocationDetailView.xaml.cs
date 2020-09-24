@@ -13,14 +13,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Liftmanagement.ViewModels;
 
 namespace Liftmanagement.Views
 {
     /// <summary>
     /// Interaction logic for LocationDetailView.xaml
     /// </summary>
-    public partial class LocationDetailView : UserControl
+    public partial class LocationDetailView : GoogleDriveDialogueView
     {
+        public LocationDetailViewModel LocationDetailVM { get; set; } = new LocationDetailViewModel();
+
+        protected override string ViewModelName => nameof(LocationDetailVM);
+        protected override string SourceObjectStringName => nameof(LocationDetailVM.Location);
+
         public LocationDetailView(Location location)
         {
             InitializeComponent();
@@ -30,21 +36,30 @@ namespace Liftmanagement.Views
                 return;
             }
 
-            lblLocationAdditionalInfo.Content = location.GetDisplayName<Location>(nameof(location.AdditionalInfo)) + ":";
-            lblLocationContactPerson.Content = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.Name)) + ":";
-            lblLocationAddress.Content = location.GetDisplayName<Location>(nameof(location.Address)) + ":";
-            lblLocationPostcode.Content = location.GetDisplayName<Location>(nameof(location.Postcode)) + ":";
-            lblLocationCity.Content = location.GetDisplayName<Location>(nameof(location.City)) + ":";
-            lblLocationPhoneWork.Content = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.PhoneWork)) + ":";
-            lblLocationMobile.Content = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.Mobile)) + ":";
+            lblAdditionalInfo.Content = location.GetDisplayName<Location>(nameof(location.AdditionalInfo)) + ":";
+            lblContactPerson.Content = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.Name)) + ":";
+            lblAddress.Content = location.GetDisplayName<Location>(nameof(location.Address)) + ":";
+            lblPostcode.Content = location.GetDisplayName<Location>(nameof(location.Postcode)) + ":";
+            lblCity.Content = location.GetDisplayName<Location>(nameof(location.City)) + ":";
+            lblPhoneWork.Content = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.PhoneWork)) + ":";
+            lblMobile.Content = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.Mobile)) + ":";
+            lblEmail.Content = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.EMail)) + ":";
+            lblContactByDefect.Content = location.GetDisplayName<Location>(nameof(location.ContactByDefect)) + ":";
+            lblGoogleDriveLink.Content = location.GetDisplayName<Location>(nameof(location.GoogleDriveLink)) + ":";
 
-            txtLocationAdditionalInfo.Text = location.AdditionalInfo;
-            txtLocationContactPerson.Text = location.ContactPerson.Name;
-            txtLocationAddress.Text = location.Address;
-            txtLocationPostcode.Text = location.Postcode;
-            txtLocationCity.Text = location.City;
-            txtLocationPhoneWork.Text = location.ContactPerson.PhoneWork;
-            txtLocationMobile.Text = location.ContactPerson.Mobile;
+            DataContext = location;
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO Set Titel
+            //var customer = customersView.dgCustomers.SelectedItem as Customer;
+            //if (customer != null)
+            //{
+            //    windowGoogleDriveTree.Title = windowGoogleDriveTree.Title + "  " + customer.CompanyName;
+            //}
+            windowGoogleDriveTree.ShowDialog();
+        }
+        
     }
 }

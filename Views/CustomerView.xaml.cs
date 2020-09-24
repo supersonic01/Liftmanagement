@@ -26,14 +26,12 @@ namespace Liftmanagement.View
     /// <summary>
     /// Interaction logic for CustomerView.xaml
     /// </summary>
-    public partial class CustomerView : UserControl
+    public partial class CustomerView : GoogleDriveDialogueView
     {
-        private GoogleDriveTreeView googlDriveTree;
-        private Window windowGoogleDriveTree;
         private CustomersView customersView;
 
         public CustomerViewModel CustomerVM { get; set; } = new CustomerViewModel();
-
+        
         public CustomerView()
         {
             InitializeComponent();
@@ -52,7 +50,7 @@ namespace Liftmanagement.View
             //};
 
             //gridLocation.SetBinding(ListBox.ItemsSourceProperty, binding);
-            InitGoogleDriveDialogue();
+           
         }
 
 
@@ -157,37 +155,16 @@ namespace Liftmanagement.View
             return customer;
         }
 
-        private void InitGoogleDriveDialogue()
+
+        private void ExpanderCustomers_Collapsed(object sender, RoutedEventArgs e)
         {
-            googlDriveTree = new GoogleDriveTreeView();
-            windowGoogleDriveTree = new Window
-            {
-                Title = "Google Drvie",
-                Content = googlDriveTree
-            };
 
-            Uri iconUri = new Uri("pack://application:,,,../Resources/Images/Icons/Marcus-Roberto-Google-Play-Google-Drive.ico", UriKind.RelativeOrAbsolute);
-            windowGoogleDriveTree.Icon = BitmapFrame.Create(iconUri);
-
-            googlDriveTree.btnSave.Click += BtnSave_Click;
-            googlDriveTree.btnCancel.Click += BtnCancel_Click;
-
-            windowGoogleDriveTree.Closing += WindowGoogleDriveTree_Closing;
+            Console.WriteLine("expanderCustomers_Collapsed");
+            gridResizableCustomers.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
         }
 
-        private void WindowGoogleDriveTree_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            e.Cancel = true;
-            windowGoogleDriveTree.Hide();
-        }
-
-        private void BtnCancel_Click(object sender, RoutedEventArgs e)
-        {
-            // windowGoogleDriveTree.Close();
-            windowGoogleDriveTree.Hide();
-        }
-
-        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        
+        protected override void BtnSaveGoogleDrive_Click(object sender, RoutedEventArgs e)
         {
             var node = googlDriveTree.GetSelectedNode();
             hyperlinkGoogleDrive.NavigateUri = new Uri(node.WebLink);
@@ -205,20 +182,6 @@ namespace Liftmanagement.View
             windowGoogleDriveTree.Hide();
 
         }
-
-        private void ExpanderCustomers_Collapsed(object sender, RoutedEventArgs e)
-        {
-
-            Console.WriteLine("expanderCustomers_Collapsed");
-            gridResizableCustomers.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
-        }
-
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
-            e.Handled = true;
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 

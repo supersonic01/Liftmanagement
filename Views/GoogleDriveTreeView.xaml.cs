@@ -17,13 +17,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Liftmanagement.Views
 {
     /// <summary>
     /// Interaction logic for GoogleDriveTreeView.xaml
     /// </summary>
-    public partial class GoogleDriveTreeView : UserControl
+    public partial class GoogleDriveTreeView : UserControl // Do not inherit from UserControlView
     {
 
         public GoogleDriveTreeView()
@@ -32,14 +33,31 @@ namespace Liftmanagement.Views
 
             // binding TreeView component with TreeModel
             //  GoogleDriveFolderHierarchy.ItemsSource = new GoogleDriveTreeViewModel().Items;
-            this.Loaded += GoogleDriveTreeView_Loaded;
+          this.Loaded += GoogleDriveTreeView_Loaded;
         }
+
+     
 
         private void GoogleDriveTreeView_Loaded(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("GoogleDriveTreeView_Loaded");
-            // binding TreeView component with TreeModel
-            GoogleDriveFolderHierarchy.ItemsSource = new GoogleDriveTreeViewModel().Items;
+            Task.Factory.StartNew(() =>
+            {
+                var googleDriveTreeViewModel = new GoogleDriveTreeViewModel().Items;
+
+                Application.Current.Dispatcher.BeginInvoke(
+                    DispatcherPriority.Background,
+                    new Action(() =>
+                    {
+                        GoogleDriveFolderHierarchy.ItemsSource = googleDriveTreeViewModel;
+            }));
+            }).ContinueWith((task) =>
+            {
+                LoadingIndicatorPanel.Visibility = Visibility.Collapsed;
+                MainContent.IsEnabled = true;
+            },TaskScheduler.FromCurrentSynchronizationContext());
+
+           //var task =  new Task(()=> GoogleDriveFolderHierarchy.ItemsSource = new GoogleDriveTreeViewModel().Items);
+           //task.Start();
         }
 
         //private void btnSave_Click(object sender, RoutedEventArgs e)

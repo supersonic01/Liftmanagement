@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Liftmanagement"
         mc:Ignorable="d"
-        Title="Hesse Aufzugsberatung Liftmanagement " Height="450" Width="800" Icon="Resources\Images\Icons\hesse_icon.png">
+        Title="Hesse Aufzugsberatung Liftmanagement " Height="450" Width="800" Icon="Resources\Images\Icons\hesse_icon.png"
+        WindowStartupLocation="CenterScreen" WindowState="Maximized">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -15,13 +16,22 @@
         </ResourceDictionary>
     </Window.Resources>
 
-        <Grid x:Name="gridResizableCustomers">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>              
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+    <Grid x:Name="gridResizableCustomers">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <Expander x:Name="expanderCustomers" Grid.Column="0" ExpandDirection="Right" HorizontalAlignment="Left" VerticalAlignment="Stretch" IsExpanded="True">
+        <StackPanel Grid.Row="0" Grid.Column="1"  Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0" >
+            <Frame x:Name="frameToDos" Margin="0,0,10,0" />
+            <Frame x:Name="frameAppointments"  />
+        </StackPanel>
+
+        <Expander x:Name="expanderCustomers" Grid.Row="1" Grid.Column="0" ExpandDirection="Right" HorizontalAlignment="Left" VerticalAlignment="Stretch" IsExpanded="True">
             <Expander.Header>
                 <TextBlock x:Name="txtExpanderHeader" Text="Home" Style="{StaticResource TextBlockStyle }">
                     <TextBlock.LayoutTransform>
@@ -30,42 +40,42 @@
                 </TextBlock>
             </Expander.Header>
             <StackPanel x:Name="stPanelCategory"  HorizontalAlignment="Left" Margin="10,10,10,10" VerticalAlignment="Stretch" Width="300"  Background="LightGray" >
-            <!--<Image Name="MyImage" Source="{Binding ImagePath}" />-->
-            <DataGrid Name="dgCategory" AutoGenerateColumns="False" EnableRowVirtualization="True"  GridLinesVisibility="None"
+                <!--<Image Name="MyImage" Source="{Binding ImagePath}" />-->
+                <DataGrid Name="dgCategory" AutoGenerateColumns="False" EnableRowVirtualization="True"  GridLinesVisibility="None"
                   RowDetailsVisibilityMode="VisibleWhenSelected" Background="Transparent" RowBackground="Transparent" 
                      HeadersVisibility="None" BorderBrush="Transparent" BorderThickness="0" SelectionUnit="FullRow" SelectionChanged="dgCategory_SelectionChanged" >
-                <DataGrid.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <Setter Property="BorderThickness" Value="0"/>
-                        <!-- Update from comments.
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <!-- Update from comments.
                  Remove the focus indication for the selected cell -->
-                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                    </Style>
-                </DataGrid.CellStyle>
-                <DataGrid.ItemContainerStyle>
-                    <Style TargetType="DataGridRow">
-                        <!--<EventSetter Event="KeyDown" Handler="DataGridRow_KeyDown" />-->
-                        <!--<EventSetter Event="MouseDown" Handler="DataGridRow_MouseDown" />-->
-                    </Style>
-                </DataGrid.ItemContainerStyle>
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn x:Name="ImageColumn" Header="Image" >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Image Source="{Binding Path=ImagePath}" Width="32" Height="32" Margin="20,10,10,10"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                        </Style>
+                    </DataGrid.CellStyle>
+                    <DataGrid.ItemContainerStyle>
+                        <Style TargetType="DataGridRow">
+                            <!--<EventSetter Event="KeyDown" Handler="DataGridRow_KeyDown" />-->
+                            <!--<EventSetter Event="MouseDown" Handler="DataGridRow_MouseDown" />-->
+                        </Style>
+                    </DataGrid.ItemContainerStyle>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn x:Name="ImageColumn" Header="Image" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding Path=ImagePath}" Width="32" Height="32" Margin="20,10,10,10"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn x:Name="Name" Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Label Content="{Binding Path=Name}" FontSize="24" Margin="10" Padding="10"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                        <DataGridTemplateColumn x:Name="Name" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Path=Name}" FontSize="24" Margin="10" Padding="10"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
 
-                    <!--<DataGridTextColumn x:Name="IdColumn" Binding="{Binding Path=Name}" Header="Id" FontSize="24" Width="*">
+                        <!--<DataGridTextColumn x:Name="IdColumn" Binding="{Binding Path=Name}" Header="Id" FontSize="24" Width="*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Margin" Value="10" />
@@ -73,9 +83,9 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>-->
-                </DataGrid.Columns>
-            </DataGrid>
-            <!--<Button>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <!--<Button>
                 <DockPanel HorizontalAlignment="Stretch"   VerticalAlignment="Stretch" Height="Auto">
                     <StackPanel Orientation="Horizontal"  DockPanel.Dock="Left" Width="Auto" >
                         <Image Source="Resources/Images/Icons/Office-Customer-Male-Light.ico"  Stretch="Uniform" Width="24" Height="24" HorizontalAlignment="Left"/>
@@ -84,8 +94,8 @@
                 </DockPanel>
             </Button>-->
 
-        </StackPanel>
+            </StackPanel>
         </Expander>
-        <Frame x:Name="frameDetail" Grid.Column="1" Content="Frame" HorizontalAlignment="Stretch"  Margin="10" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden"/>
+        <Frame x:Name="frameDetail" Grid.Row="1" Grid.Column="1" Content="Frame" HorizontalAlignment="Stretch"  Margin="10" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

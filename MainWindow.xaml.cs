@@ -95,6 +95,11 @@ namespace Liftmanagement
             };
 
             dgCategory.SetBinding(DataGrid.ItemsSourceProperty, binding);
+
+            dgCategory.SelectedIndex = 0;
+
+            frameToDos.Content = new ToDoView();
+            frameAppointments.Content = new AppointmentView();
         }
 
         private void DataGridRow_KeyDown(object sender, KeyEventArgs e)

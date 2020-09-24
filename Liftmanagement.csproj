@@ -209,6 +209,9 @@
     <Compile Include="ViewModels\RecordingsViewModel.cs" />
     <Compile Include="ViewModels\RecordingViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
+    <Compile Include="Views\AppointmentView.xaml.cs">
+      <DependentUpon>AppointmentView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CustomColumnHeadersProperty.cs" />
     <Compile Include="Views\CustomersView.xaml.cs">
       <DependentUpon>CustomersView.xaml</DependentUpon>
@@ -263,6 +266,9 @@
     <Compile Include="Views\Test.xaml.cs">
       <DependentUpon>Test.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ToDoView.xaml.cs">
+      <DependentUpon>ToDoView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControlView.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -277,6 +283,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Resources\LiftmanagementStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AppointmentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -345,6 +355,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Test.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ToDoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -438,6 +452,23 @@
     <Resource Include="Resources\Images\Icons\Aha-Soft-Large-Seo-Look.ico" />
     <Resource Include="Resources\Images\Icons\Everaldo-Crystal-Clear-App-xmag-search.ico" />
     <Resource Include="Resources\Images\Icons\Zerode-Plump-Search.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Aha-Soft-Standard-Portfolio-Inventory.ico" />
+    <Resource Include="Resources\Images\Icons\Ampeross-Qetto-2-Todo.ico" />
+    <Resource Include="Resources\Images\Icons\Dryicons-Aesthetica-2-Process-accept.ico" />
+    <Resource Include="Resources\Images\Icons\Dryicons-Aesthetica-2-Process-add.ico" />
+    <Resource Include="Resources\Images\Icons\Dryicons-Aesthetica-2-Process-remove%281%29.ico" />
+    <Resource Include="Resources\Images\Icons\Dryicons-Aesthetica-2-Process-remove.ico" />
+    <Resource Include="Resources\Images\Icons\Dryicons-Aesthetica-2-Process.ico" />
+    <Resource Include="Resources\Images\Icons\Umut-Pulat-Tulliana-2-Desktop.ico" />
+    <Resource Include="Resources\Images\Icons\Umut-Pulat-Tulliana-2-K-cm-system.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Umut-Pulat-Tulliana-2-K-cm-system.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Saki-NuoveXT-2-Apps-clock.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets" Condition="Exists('packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets')" />

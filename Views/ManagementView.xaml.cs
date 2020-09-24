@@ -182,6 +182,9 @@ namespace Liftmanagement.Views
             
            recordingView.btnCancel.Click += BtnCancelRecord_Click;
            recordingView.btnSave.Click += BtnSaveRecord_Click;
+
+           recordingView.RcordingVM.Recordings= recordingsView.RcordingsVM.Recordings;
+
         }
 
         private void BtnSaveRecord_Click(object sender, RoutedEventArgs e)
@@ -457,6 +460,8 @@ namespace Liftmanagement.Views
         {
             var vm= new RecordingViewModel();
             vm.Record = recordingsView.GetSelectedItem();
+            vm.Recordings = recordingsView.RcordingsVM.Recordings;
+
             recordingView.RcordingVM = vm;
             recordingView.SetData();
             recordingViewWindow.ShowDialog();
@@ -465,6 +470,10 @@ namespace Liftmanagement.Views
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
+            var vm = new RecordingViewModel();
+            vm.Recordings = recordingsView.RcordingsVM.Recordings;
+            recordingView.RcordingVM = vm;
+
             recordingViewWindow.ShowDialog();
         }
 

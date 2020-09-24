@@ -10,7 +10,7 @@ namespace Liftmanagement.Models
 {
   public class Recording: BaseDatabaseField
     {
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; }  
 
         [DisplayName("Datum")]
         public string DateVisual {
@@ -83,5 +83,8 @@ namespace Liftmanagement.Models
 
         [DisplayName("Vor Ort geprüft")]
         public string VerifiedOnSpot { get; set; }
+
+        [DisplayName("Vorgang abgeschlossen")]
+        public string ProcessCompleted { get; set; }
     }
 }

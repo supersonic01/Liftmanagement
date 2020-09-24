@@ -32,7 +32,7 @@ namespace Liftmanagement.Views
             InitializeComponent();
             this.Loaded += RecordingView_Loaded;
             
-            
+          
         }
 
         private void RecordingView_Loaded(object sender, RoutedEventArgs e)
@@ -41,7 +41,11 @@ namespace Liftmanagement.Views
         }
         
         public void  SetData()
-        {
+        { 
+            
+            SetComboBoxBindings();
+
+
             lblDate.Content = RcordingVM.Record.GetDisplayName<Recording>(nameof(RcordingVM.Record.DateVisual)) + ":";
             lblProcess.Content = RcordingVM.Record.GetDisplayName<Recording>(nameof(RcordingVM.Record.Process)) + ":";
             lblCostType.Content = RcordingVM.Record.GetDisplayName<Recording>(nameof(RcordingVM.Record.CostType)) + ":";
@@ -113,12 +117,12 @@ namespace Liftmanagement.Views
             BindingText(txtReason, nameof(RcordingVM.Record.Reason));
             BindingText(txtInvoiceNumber, nameof(RcordingVM.Record.InvoiceNumber));
 
-            BindingComboBox(cbReleaseFrom, nameof(RcordingVM.Record.ReleaseFrom));
-            BindingComboBox(cbPersonResponsible, nameof(RcordingVM.Record.PersonResponsible));
-            BindingComboBox(cbReportedFrom, nameof(RcordingVM.Record.ReportedFrom));
-            BindingComboBox(cbIssueLevel, nameof(RcordingVM.Record.IssueLevel));
-            BindingComboBox(cbCostType, nameof(RcordingVM.Record.CostType));
-            BindingComboBox(cbProcess, nameof(RcordingVM.Record.Process));
+            BindingComboBoxSelectedItem(cbReleaseFrom, nameof(RcordingVM.Record.ReleaseFrom));
+            BindingComboBoxSelectedItem(cbPersonResponsible, nameof(RcordingVM.Record.PersonResponsible));
+            BindingComboBoxSelectedItem(cbReportedFrom, nameof(RcordingVM.Record.ReportedFrom));
+            BindingComboBoxSelectedItem(cbIssueLevel, nameof(RcordingVM.Record.IssueLevel));
+            BindingComboBoxSelectedItem(cbCostType, nameof(RcordingVM.Record.CostType));
+            BindingComboBoxSelectedItem(cbProcess, nameof(RcordingVM.Record.Process));
 
 
             BindingCheckBox(cboxExecutionCorrect, nameof(RcordingVM.Record.ExecutionCorrect));
@@ -130,12 +134,33 @@ namespace Liftmanagement.Views
             BindingDatePicker(datePickerDate, nameof(RcordingVM.Record.Date));
         }
 
+        public void SetComboBoxBindings()
+        {
+            BindingComboBox(cbProcess, nameof(RcordingVM.Processes));
+            BindingComboBox(cbCostType, nameof(RcordingVM.CostTypes));
+            BindingComboBox(cbReportedFrom, nameof(RcordingVM.Reporters));
+            BindingComboBox(cbPersonResponsible, nameof(RcordingVM.PersonsResponsible));
+            BindingComboBox(cbReleaseFrom, nameof(RcordingVM.Releasers));
+            BindingComboBox(cbIssueLevel, nameof(RcordingVM.IssueLevels));
+
+        }
+
         private void datePickerDate_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
 
         }
 
         private void datePickerTimesensitive_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+
+        }
+
+        private void btnProcessCompleted_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnRequestForEditing_Click(object sender, RoutedEventArgs e)
         {
 
         }

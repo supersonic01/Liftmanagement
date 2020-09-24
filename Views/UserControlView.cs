@@ -65,7 +65,7 @@ namespace Liftmanagement.Views
             BindingItem(control, TextBox.TextProperty, string.Format("{0}.{1}",SourceObjectStringName,path));
         }
 
-        protected virtual void BindingComboBox(Control control, string path)
+        protected virtual void BindingComboBoxSelectedItem(Control control, string path)
         {
             BindingItem(control, ComboBox.SelectedItemProperty, string.Format("{0}.{1}", SourceObjectStringName, path));
         }
@@ -78,6 +78,11 @@ namespace Liftmanagement.Views
         protected virtual void BindingDatePicker(Control control, string path)
         {
             BindingItem(control, DatePicker.SelectedDateProperty, string.Format("{0}.{1}", SourceObjectStringName, path), "dd.MM.yyyy");
+        }
+
+        protected virtual void BindingComboBox(Control control, string path)
+        {
+            BindingItem(control, ComboBox.ItemsSourceProperty, path);
         }
 
     }

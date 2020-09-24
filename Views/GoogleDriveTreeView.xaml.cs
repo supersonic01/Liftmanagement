@@ -30,13 +30,8 @@ namespace Liftmanagement.Views
         public GoogleDriveTreeView()
         {
             InitializeComponent();
-
-            // binding TreeView component with TreeModel
-            //  GoogleDriveFolderHierarchy.ItemsSource = new GoogleDriveTreeViewModel().Items;
-          this.Loaded += GoogleDriveTreeView_Loaded;
+            this.Loaded += GoogleDriveTreeView_Loaded;
         }
-
-     
 
         private void GoogleDriveTreeView_Loaded(object sender, RoutedEventArgs e)
         {
@@ -49,30 +44,17 @@ namespace Liftmanagement.Views
                     new Action(() =>
                     {
                         GoogleDriveFolderHierarchy.ItemsSource = googleDriveTreeViewModel;
-            }));
+                    }));
             }).ContinueWith((task) =>
             {
                 LoadingIndicatorPanel.Visibility = Visibility.Collapsed;
                 MainContent.IsEnabled = true;
-            },TaskScheduler.FromCurrentSynchronizationContext());
-
-           //var task =  new Task(()=> GoogleDriveFolderHierarchy.ItemsSource = new GoogleDriveTreeViewModel().Items);
-           //task.Start();
+            }, TaskScheduler.FromCurrentSynchronizationContext());
         }
-
-        //private void btnSave_Click(object sender, RoutedEventArgs e)
-        //{
-        //    GetSelectedNode();
-
-        //}
 
         public GoogleDriveTreeNodeViewModel GetSelectedNode()
         {
             var node = GoogleDriveFolderHierarchy.SelectedItem as GoogleDriveTreeNodeViewModel;
-            //if (node != null)
-            //{
-            //    Console.WriteLine(node.WebLink);
-            //}
             return node;
         }
 
@@ -84,13 +66,12 @@ namespace Liftmanagement.Views
                 Console.WriteLine(node.WebLink);
                 System.Diagnostics.Process.Start(node.WebLink);
             }
-           
         }
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
             GoogleDriveFolderHierarchy.ItemsSource = new GoogleDriveTreeViewModel().Items;
         }
-       
+
     }
 }

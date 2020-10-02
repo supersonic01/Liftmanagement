@@ -47,8 +47,8 @@ namespace Liftmanagement.Data
                 CreateConnection();
             }
 
-            string query = "INSERT INTO CUSTOMER(CompanyName,GoogleDriveFolderName,GoogleDriveLink,Address,Postcode,City,Selected,AdditionalInfo,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
-            string values = "VALUE('" + customer.CompanyName + "','" + customer.GoogleDriveFolderName + "','" + customer.GoogleDriveLink + "','" + customer.Address + "','" + customer.Postcode + "','" + customer.City + "'," + customer.Selected + ",'" + customer.AdditionalInfo + "','" + customer.CreatedPersonName + "','" + customer.ModifiedPersonName + "'," + customer.ReadOnly + ",'" + customer.UsedBy + "')";
+            string query = "INSERT INTO CUSTOMER(CompanyName,Address,Postcode,City,Selected,AdditionalInfo,GoogleDriveFolderName,GoogleDriveLink,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
+            string values = "VALUE('" + customer.CompanyName + "','" + customer.Address + "','" + customer.Postcode + "','" + customer.City + "'," + customer.Selected + ",'" + customer.AdditionalInfo + "','" + customer.GoogleDriveFolderName + "','" + customer.GoogleDriveLink + "','" + customer.CreatedPersonName + "','" + customer.ModifiedPersonName + "'," + customer.ReadOnly + ",'" + customer.UsedBy + "')";
             query = query + values;
 
 
@@ -69,9 +69,14 @@ namespace Liftmanagement.Data
 
             foreach (var contactPerson in customer.Administrator.ContactPersons)
             {
-                contactPerson.ForeignKey = adminResult.Id;
-                var res = AddContactPartner(contactPerson);
-                result.AddSQLSubQueryResult(res, adminResult);
+                if (contactPerson.Id < 0)
+                {
+                    contactPerson.ForeignKey = adminResult.Id;
+                    contactPerson.ForeignKeyType =
+                        Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(AdministratorCompany)];
+                    var res = AddContactPartner(contactPerson);
+                    result.AddSQLSubQueryResult(res, adminResult);
+                }
             }
 
             databaseConnection.Close();
@@ -81,8 +86,8 @@ namespace Liftmanagement.Data
 
         private static SQLQueryResult AddContactPartner(ContactPartner contactpartner)
         {
-            string query = "INSERT INTO CONTACTPARTNER(ForeignKey,ForeignKeyType,Name,PhoneWork,Mobile,EMail,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
-            string values = "VALUE(" + contactpartner.ForeignKey + "," + contactpartner.ForeignKeyType + ",'" + contactpartner.Name + "','" + contactpartner.PhoneWork + "','" + contactpartner.Mobile + "','" + contactpartner.EMail + "','" + contactpartner.CreatedPersonName + "','" + contactpartner.ModifiedPersonName + "'," + contactpartner.ReadOnly + ",'" + contactpartner.UsedBy + "')";
+            string query = "INSERT INTO CONTACTPARTNER(CustomerId,ForeignKey,ForeignKeyType,Name,PhoneWork,Mobile,EMail,ContactByDefect,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
+            string values = "VALUE(" + contactpartner.CustomerId + "," + contactpartner.ForeignKey + "," + contactpartner.ForeignKeyType + ",'" + contactpartner.Name + "','" + contactpartner.PhoneWork + "','" + contactpartner.Mobile + "','" + contactpartner.EMail + "'," + contactpartner.ContactByDefect + ",'" + contactpartner.CreatedPersonName + "','" + contactpartner.ModifiedPersonName + "'," + contactpartner.ReadOnly + ",'" + contactpartner.UsedBy + "')";
             query = query + values;
 
 

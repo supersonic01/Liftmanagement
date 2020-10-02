@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -148,9 +149,9 @@ namespace Liftmanagement.Views
             control.SetBinding(dp, binding);
         }
 
-        protected virtual void BindingText1(Control control, string path)
+        protected virtual void BindingText<T>(Control control, Expression<Func<T>> action)
         {
-            BindingItem1(control, TextBox.TextProperty, path);
+            BindingItem1(control, TextBox.TextProperty, GetPropertyPath(action));
         }
 
         protected virtual void BindingText(Control control,  string path)
@@ -176,6 +177,34 @@ namespace Liftmanagement.Views
         protected virtual void BindingComboBox(Control control, string path)
         {
             BindingItem(control, ComboBox.ItemsSourceProperty, path);
+        }
+
+        protected virtual void BindingHyperlink(Hyperlink hyperlink, string path)
+        {
+            //TODO Rework
+
+            var binding = new Binding(path)
+            {
+                Source = this,
+            };
+
+            binding.Mode = BindingMode.TwoWay;
+            
+            hyperlink.SetBinding(Hyperlink.NavigateUriProperty, binding);
+        }
+
+        protected virtual void BindingTextBlock(TextBlock control, string path)
+        {
+            //TODO Rework
+
+            var binding = new Binding(path)
+            {
+                Source = this,
+            };
+
+            binding.Mode = BindingMode.TwoWay;
+
+            control.SetBinding(TextBlock.NameProperty, binding);
         }
 
 

@@ -18,6 +18,7 @@ namespace Liftmanagement.Models
         [DisplayName("Ansprechpartner"), DatabaseAttribute(Updateable = false)]
         public List<ContactPartner> ContactPersons { get; set; } = new List<ContactPartner>();
 
+        [ DatabaseAttribute(Updateable = false)]
         public GetFullNameDelegate GetParentFullName { get; set; }
 
         public AdministratorCompany()

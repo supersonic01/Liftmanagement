@@ -57,7 +57,8 @@ namespace Liftmanagement
             //  dgCategory.ItemsSource = CategoryVM.Categories;
 
             //MySQLDataAccess.CreateConnection();
-            // MySQLDataAccess.CreateTables();
+            
+            //MySQLDataAccess.CreateTables();
 
 
 
@@ -67,8 +68,8 @@ namespace Liftmanagement
 
             //MySQLDataAccess.GetCustomers();
 
-//           Helper.Helper.GenerateInsert( typeof(MachineInformation));
-            //            Helper.Helper.GenerateInsert(typeof(MaintenanceAgreement));
+          //Helper.Helper.GenerateInsert( typeof(ContactPartner));
+          //  Helper.Helper.GenerateInsert(typeof(AdministratorCompany));
 
            // Helper.Helper.GenerateSelect(typeof(MachineInformation));
            // Helper.Helper.GenerateSelect(typeof(MaintenanceAgreement));

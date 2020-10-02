@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Liftmanagement.Data;
 using Liftmanagement.Models;
 
 namespace Liftmanagement.ViewModels
@@ -36,6 +37,22 @@ namespace Liftmanagement.ViewModels
             set { SetField(ref customerSelected, value); }
         }
 
+        private ContactPartner contactPerson = new ContactPartner();
+
+        public ContactPartner ContactPerson 
+        {
+            get { return contactPerson; }
+            set { SetField(ref contactPerson, value); }
+        }
+
+        public SQLQueryResult Add()
+        {
+
+         return  MySQLDataAccess.AddCustomer(CustomerSelected);
+
+        }
+
+     
 
 
     }

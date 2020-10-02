@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -163,20 +164,23 @@ namespace Liftmanagement.View
 
             
             BindingText(txtCompanyName, nameof(CustomerVM.CustomerSelected.CompanyName));
-            BindingText1(txtContactPerson, GetPropertyPath(() => CustomerVM.CustomerSelected.ContactPerson.Name));
-            BindingText1(txtAddress, GetPropertyPath(() => CustomerVM.CustomerSelected.Address));
-            BindingText1(txtPostcode, GetPropertyPath(() => CustomerVM.CustomerSelected.Postcode));
-            BindingText1(txtCity, GetPropertyPath(() => CustomerVM.CustomerSelected.City));
-            BindingText1(txtPhoneWork, GetPropertyPath(() => CustomerVM.CustomerSelected.ContactPerson.PhoneWork));
-            BindingText1(txtMobile,  GetPropertyPath(() =>  CustomerVM.CustomerSelected.ContactPerson.Mobile));
+            BindingText(txtContactPerson, () => CustomerVM.CustomerSelected.ContactPerson.Name);
+            BindingText(txtAddress, () => CustomerVM.CustomerSelected.Address);
+            BindingText(txtPostcode, () => CustomerVM.CustomerSelected.Postcode);
+            BindingText(txtCity, () => CustomerVM.CustomerSelected.City);
+            BindingText(txtPhoneWork, () => CustomerVM.CustomerSelected.ContactPerson.PhoneWork);
+            BindingText(txtMobile,  () =>  CustomerVM.CustomerSelected.ContactPerson.Mobile);
+            BindingText(txtEmail, () => CustomerVM.CustomerSelected.ContactPerson.EMail);
             BindingText(txtAdditionalInfo, nameof( CustomerVM.CustomerSelected.AdditionalInfo));
             // BindingText(txtAdministratorCompanyName, nameof( CustomerVM.CustomerSelected.Administrator.Name));
-            //BindingText1(txtAdministratorCompanyName, GetFullPath(() => CustomerVM.CustomerSelected.Administrator.Name));
-            BindingText1(txtAdministratorCompanyName, GetPropertyPath(() => CustomerVM.CustomerSelected.Administrator.Name));
-            //BindingText1(txtAdministratorCompanyName, "CustomerVM.CustomerSelected.Administrator.Name");
-           // BindingText(txtAdministratorCompanyName, "Administrator.Name");
-           // var fullPath = GetFullPath(() => CustomerVM.CustomerSelected.Administrator.Name);
+            //BindingText(txtAdministratorCompanyName, GetFullPath(() => CustomerVM.CustomerSelected.Administrator.Name));
+            BindingText(txtAdministratorCompanyName, () => CustomerVM.CustomerSelected.Administrator.Name);
+            //BindingText(txtAdministratorCompanyName, "CustomerVM.CustomerSelected.Administrator.Name");
+            // BindingText(txtAdministratorCompanyName, "Administrator.Name");
+            // var fullPath = GetFullPath(() => CustomerVM.CustomerSelected.Administrator.Name);
 
+            BindingHyperlink(hyperlinkGoogleDrive, GetPropertyPath(() => CustomerVM.CustomerSelected.GoogleDriveLink));
+            BindingTextBlock(txtGoogleDriveFolderName, GetPropertyPath(() => CustomerVM.CustomerSelected.GoogleDriveFolderName));
         }
 
 
@@ -184,22 +188,22 @@ namespace Liftmanagement.View
         private void DgAdministratorContactPersons_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //TODO Administrator list do not expand if no elements inside
-          
-            contactPartner = new ContactPartner();
+         
             var dgAdministratorContactPersons = sender as DataGrid;
             if (dgAdministratorContactPersons != null && dgAdministratorContactPersons.SelectedItem != null)
                 contactPartner = dgAdministratorContactPersons.SelectedItem as ContactPartner;
 
-            //if (contactPartner == null)
-            //{   
-            //    contactPartner= new ContactPartner();
+         
+            //txtAdministratorContactPerson.Text = contactPartner.Name;
+            //txtAdministratorPhoneWork.Text = contactPartner.PhoneWork;
+            //txtAdministratorMobile.Text = contactPartner.Mobile;
+            //txtAdministratorEmail.Text = contactPartner.EMail;
 
-            //}
+            BindingText(txtAdministratorContactPerson, () => CustomerVM.ContactPerson.Name);
+            BindingText(txtAdministratorPhoneWork, () => CustomerVM.ContactPerson.PhoneWork);
+            BindingText(txtAdministratorMobile, () => CustomerVM.ContactPerson.Mobile);
+            BindingText(txtAdministratorEmail, () => CustomerVM.ContactPerson.EMail);
 
-            txtAdministratorContactPerson.Text = contactPartner.Name;
-            txtAdministratorPhoneWork.Text = contactPartner.PhoneWork;
-            txtAdministratorMobile.Text = contactPartner.Mobile;
-            txtAdministratorEmail.Text = contactPartner.EMail;
 
         }
 
@@ -224,17 +228,21 @@ namespace Liftmanagement.View
 
         protected override void BtnSaveGoogleDrive_Click(object sender, RoutedEventArgs e)
         {
+            //TODO Clean if not needed
             var node = googlDriveTree.GetSelectedNode();
-            hyperlinkGoogleDrive.NavigateUri = new Uri(node.WebLink);
-            txtGoogleDriveFolderName.Text = node.Name;
+            //hyperlinkGoogleDrive.NavigateUri = new Uri(node.WebLink);
+            //txtGoogleDriveFolderName.Text = node.Name;
 
 
-            var customer = customersView.dgCustomers.SelectedItem as Customer;
-            if (customer != null)
-            {
-                customer.GoogleDriveLink = node.WebLink;
-                customer.GoogleDriveFolderName = node.Name;
-            }
+            //var customer = customersView.dgCustomers.SelectedItem as Customer;
+            //if (customer != null)
+            //{
+            //    customer.GoogleDriveLink = node.WebLink;
+            //    customer.GoogleDriveFolderName = node.Name;
+            //}
+
+            CustomerVM.CustomerSelected.GoogleDriveLink = node.WebLink;
+            CustomerVM.CustomerSelected.GoogleDriveFolderName = node.Name;
 
             // windowGoogleDriveTree.Close();
             windowGoogleDriveTree.Hide();
@@ -259,7 +267,12 @@ namespace Liftmanagement.View
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-
+            if(!string.IsNullOrWhiteSpace(CustomerVM.ContactPerson.Name))
+            {
+                CustomerVM.CustomerSelected.Administrator.ContactPersons.Add(CustomerVM.ContactPerson);
+            }
+           
+            var dd =  CustomerVM.Add();
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)

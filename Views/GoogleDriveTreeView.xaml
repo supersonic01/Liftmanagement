@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="650">
 <Grid>
-        <Grid x:Name="MainContent" IsEnabled="False" >
+        <Grid x:Name="MainContent" >
             <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
@@ -99,7 +99,7 @@
 
                         <Button x:Name="btnShowInGoogleDrive" Grid.Column="1"  Width="150" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Stretch" Click="btnShowInGoogleDrive_Click">
                             <StackPanel Orientation="Horizontal" >
-                                <Image Source="..\Resources\Images\Icons\Marcus-Roberto-Google-Play-Google-Drive.ico" Stretch="Uniform" Width="16" Height="16" HorizontalAlignment="Left"/>
+                                <Image Source="..\Resources\Images\Icons\Google-Drive.ico" Stretch="Uniform" Width="16" Height="16" HorizontalAlignment="Left"/>
                                 <Label Content="Google Drive öffnen"/>
                             </StackPanel>
                         </Button>

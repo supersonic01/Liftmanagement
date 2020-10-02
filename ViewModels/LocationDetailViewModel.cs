@@ -3,18 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Liftmanagement.Data;
+using Liftmanagement.Helper;
 using Liftmanagement.Models;
 
 namespace Liftmanagement.ViewModels
 {
   public class LocationDetailViewModel: ViewModel
     {
-        private Location location;
+        private Location locationSelected = new Location();
 
-        public Location Location
+        public Location LocationSelected
         {
-            get { return location; }
-            set { SetField(ref location, value); }
+            get { return locationSelected; }
+            set { SetField(ref locationSelected, value); }
         }
+
+        public SQLQueryResult Add(Customer customer)
+        {
+
+            return null;
+        }
+
     }
 }

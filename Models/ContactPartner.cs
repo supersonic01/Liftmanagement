@@ -28,6 +28,9 @@ namespace Liftmanagement.Models
         [DisplayName("E-Mail")]
         public string EMail { get; set; }
 
+        [DisplayName("Beim Störungsfall kontaktieren"), Display(Order = 9)]
+        public bool ContactByDefect { get; set; }
+
         public static string GetIndexFields()
         {
             return nameof(Name);

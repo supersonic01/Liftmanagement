@@ -5,10 +5,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Liftmanagement.Models;
 
 namespace Liftmanagement.ViewModels
 {
-   public class CustomerViewModel : ViewModel
+    public class CustomerViewModel : ViewModel
     {
         private int myVar;
 
@@ -27,6 +28,15 @@ namespace Liftmanagement.ViewModels
             set { SetField(ref locationDetailViews, value); }
         }
 
-        
+        private Customer customerSelected = new Customer();
+
+        public Customer CustomerSelected
+        {
+            get { return customerSelected; }
+            set { SetField(ref customerSelected, value); }
+        }
+
+
+
     }
 }

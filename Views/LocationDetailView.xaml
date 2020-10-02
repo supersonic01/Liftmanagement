@@ -17,51 +17,87 @@
 
     <Grid x:Name="gridLocation">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" x:Name="gridRd0"/>
+            <RowDefinition Height="Auto" x:Name="gridRd1"/>
+            <RowDefinition Height="Auto" x:Name="gridRdLocations"/>
+
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid Background="#FFE5E5E5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="200" />
-                        <ColumnDefinition Width="200" />
-                        <ColumnDefinition Width="200" />
-                        <ColumnDefinition Width="200" />
-                        <ColumnDefinition Width="200" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" x:Name="Header" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" /> <!--2-->
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="10" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="10" />
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="100" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" x:Name="Header" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="30" />
-                        <!--8-->
+                    <!--2-->
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="30" />
+                    <!--8-->
                     <RowDefinition Height="60" />
-                        <RowDefinition Height="10" x:Name="space" />
-                        <RowDefinition Height="30" x:Name="AdministratorCompany"/>
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="10" x:Name="spaceContactPartner" />
-                        <RowDefinition Height="120" x:Name="AdministratorContactPartner"/>
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" x:Name="EndSpacer"/>
-                    </Grid.RowDefinitions>
+                    <RowDefinition Height="20" x:Name="space" />
 
-                   
-                    <Label x:Name="lblAddress" Grid.Row="2" Grid.Column="0"  Style="{StaticResource LableStyle}" />
-                    <Label x:Name="lblPostcode" Grid.Row="2" Grid.Column="1"  Style="{StaticResource LableStyle}" />
-                    <Label x:Name="lblCity" Grid.Row="2" Grid.Column="2"  Style="{StaticResource LableStyle}" />
-                    <Label x:Name="lblGoogleDriveLink" Content="link" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center"  Style="{StaticResource LableStyle}" />
+                </Grid.RowDefinitions>
 
-                    <Label x:Name="lblContactPerson" Grid.Row="5" Grid.Column="0"  Style="{StaticResource LableStyle}" />
-                    <Label x:Name="lblPhoneWork" Grid.Row="5" Grid.Column="1"  Style="{StaticResource LableStyle}" />
-                    <Label x:Name="lblMobile" Grid.Row="5" Grid.Column="2"  Style="{StaticResource LableStyle}" />
-                    <Label x:Name="lblEmail" Grid.Row="5" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+                <StackPanel Grid.Row="2" Grid.RowSpan="8" Grid.Column="5" Orientation="Vertical" >
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="80"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
+
+                        <Button  x:Name="btnAdd" Grid.Row="0" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnAdd_Click" BorderThickness="0" Background="Transparent">
+                            <StackPanel>
+                                <Image Source="..\Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" Height="30"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="btnEdit" Grid.Row="1"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnEdit_Click" BorderThickness="0" Background="Transparent">
+                            <StackPanel>
+                                <Image Source="..\Resources\Images\Icons\Turbomilk-Livejournal-10-Pencil.ico" Height="30"/>
+                            </StackPanel>
+                        </Button>
+                        <Button  x:Name="btnDelete" Grid.Row="3" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnDelete_Click" BorderThickness="0" Background="Transparent">
+                            <StackPanel>
+                                <Image Source="..\Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-edit-delete.ico" Height="30"/>
+                            </StackPanel>
+                        </Button>
+                        <Button  x:Name="btnSave"  Grid.Row="2"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSave_Click" BorderThickness="0" Background="Transparent">
+                            <StackPanel>
+                                <Image Source="..\Resources\Images\Icons\Treetog-I-Floppy-Small.ico" Height="30"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+
+                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5"  Content="Standort" FontSize="24"  Padding="10"
+                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center"/>
+
+                <Label x:Name="lblAddress" Grid.Row="2" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                <Label x:Name="lblPostcode" Grid.Row="2" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+                <Label x:Name="lblCity" Grid.Row="2" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+                <Label x:Name="lblGoogleDriveLink" Content="link" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center"  Style="{StaticResource LableStyle}" />
+
+                <Label x:Name="lblContactPerson" Grid.Row="5" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                <Label x:Name="lblPhoneWork" Grid.Row="5" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+                <Label x:Name="lblMobile" Grid.Row="5" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+                <Label x:Name="lblEmail" Grid.Row="5" Grid.Column="3"  Style="{StaticResource LableStyle}" />
                 <Label x:Name="lblContactByDefect" Grid.Row="5" Grid.Column="4"  Style="{StaticResource LableStyle}" />
 
                 <Label x:Name="lblAdditionalInfo" Grid.Row="8" Grid.Column="0"  Style="{StaticResource LableStyle}" />
@@ -75,29 +111,47 @@
                 <TextBox x:Name="txtMobile" Grid.Row="6" Grid.Column="2"  Text="{Binding Path=ContactPerson.Mobile}"   Style="{StaticResource TextBoxStyle}"/>
                 <TextBox x:Name="txtEmail" Grid.Row="6" Grid.Column="3"  Text="{Binding Path=ContactPerson.EMail}"   Style="{StaticResource TextBoxStyle}"/>
 
-                    <TextBlock x:Name="txtGoogleDriveHyperlink" Grid.Row="3" Grid.Column="3" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock x:Name="txtGoogleDriveHyperlink" Grid.Row="3" Grid.Column="3" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Hyperlink  x:Name="hyperlinkGoogleDrive" NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate">                             
                             <TextBlock x:Name="txtGoogleDriveFolderName"/>
                         </Hyperlink>
                     </TextBlock>
 
-                    <Button  Grid.Row="3" Grid.Column="4" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="Button_Click" BorderThickness="0" Background="Transparent">
-                        <StackPanel>
-                            <Image Source="..\Resources\Images\Icons\Marcus-Roberto-Google-Play-Google-Drive.ico" Height="30"/>
-                        </StackPanel>
-                    </Button>
+                <Button  Grid.Row="2" Grid.RowSpan="2" Grid.Column="4" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="Button_Click" BorderThickness="0" Background="Transparent">
+                    <StackPanel>
+                        <Image Source="..\Resources\Images\Icons\Google-Drive.ico" Height="30"/>
+                    </StackPanel>
+                </Button>
 
                 <CheckBox x:Name="cboxContactByDefect" Grid.Row="6" Grid.Column="4" IsChecked="{Binding Path=ContactByDefect}"  HorizontalAlignment="Center" VerticalAlignment="Center" >
-                        <CheckBox.LayoutTransform>
-                            <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                        </CheckBox.LayoutTransform>
-                    </CheckBox>
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
 
                 <TextBox x:Name="txtAdditionalInfo" Grid.Row="9"  Grid.Column="0" Grid.ColumnSpan="5" Margin="10,0,10,0"
                                  TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True"
                                  Text="{Binding Path=AdditionalInfo}"/>
-          
+
             </Grid>
         </StackPanel>
+
+        <StackPanel  x:Name="spLocations" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  CanVerticallyScroll="True">
+                <DataGrid  x:Name="dgLocations" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"  SelectionUnit="FullRow" 
+                           local:CustomColumnHeadersProperty.ItemType="{x:Type local:LocationDetailView}" IsReadOnly="True" SelectionMode="Single"
+                           CellStyle="{StaticResource Body_Content_DataGrid_Centering}"  Margin="10,0,110,0">
+                    <DataGrid.RowStyle >
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Height" Value="30"/>
+                            <Style.Triggers>
+                                <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#0078D7" />
+                                    <Setter Property="Foreground" Value="White" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+                </DataGrid>
+            </StackPanel>
     </Grid>
 </local:GoogleDriveDialogueView>

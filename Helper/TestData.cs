@@ -295,12 +295,10 @@ namespace Liftmanagement.Helper
                 Address = "Carl-Metz-Straße 26",
                 Postcode = "76275",
                 City = "Ettlingen",
-                AdditionalInfo = "Bitte alle Bewohner informieren, wenn Aufzug gewartete wird",
-                ContactByDefect = true
-
+                AdditionalInfo = "Bitte alle Bewohner informieren, wenn Aufzug gewartete wird"
             };
 
-            location.ContactPerson = new ContactPartner(location) { Name = "Anna Cremer", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
+            location.ContactPerson = new ContactPartner(location) { Name = "Anna Cremer", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de", ContactByDefect = true };
             locations.Add(location);
 
             location = new Location
@@ -310,11 +308,10 @@ namespace Liftmanagement.Helper
                 Address = "Königstraße 26",
                 Postcode = "76275",
                 City = "Ettlingen",
-                AdditionalInfo = "Code für Eingang = 2585",
-                ContactByDefect = true
+                AdditionalInfo = "Code für Eingang = 2585"
             };
 
-            location.ContactPerson = new ContactPartner(location) { Name = "Brigitte Esser", PhoneWork = "07243561710", Mobile = "017243561710", EMail = "halo@web.de" };
+            location.ContactPerson = new ContactPartner(location) { Name = "Brigitte Esser", PhoneWork = "07243561710", Mobile = "017243561710", EMail = "halo@web.de", ContactByDefect = true };
             locations.Add(location);
 
             location = new Location
@@ -324,11 +321,10 @@ namespace Liftmanagement.Helper
                 Address = "Am Erlengraben 2",
                 Postcode = "76275",
                 City = "Ettlingen",
-                AdditionalInfo = "Bewohner im 3. Stock (Herr Walter) informieren",
-                ContactByDefect = true
+                AdditionalInfo = "Bewohner im 3. Stock (Herr Walter) informieren"
             };
 
-            location.ContactPerson = new ContactPartner(location) { Name = "Elisabeth Hoffmann", PhoneWork = "0724357770", Mobile = "01724357770", EMail = "halo@web.de" };
+            location.ContactPerson = new ContactPartner(location) { Name = "Elisabeth Hoffmann", PhoneWork = "0724357770", Mobile = "01724357770", EMail = "halo@web.de", ContactByDefect = true };
             locations.Add(location);
 
 
@@ -339,11 +335,10 @@ namespace Liftmanagement.Helper
                 Address = "Am Erlengraben 2",
                 Postcode = "76275",
                 City = "Ettlingen",
-                AdditionalInfo = "Bewohner im 3. Stock (Herr Walter) informieren",
-                ContactByDefect = true
+                AdditionalInfo = "Bewohner im 3. Stock (Herr Walter) informieren"
             };
 
-            location.ContactPerson = new ContactPartner(location) { Name = "Elisabeth Hoffmann", PhoneWork = "0724357770", Mobile = "01724357770", EMail = "halo@web.de" };
+            location.ContactPerson = new ContactPartner(location) { Name = "Elisabeth Hoffmann", PhoneWork = "0724357770", Mobile = "01724357770", EMail = "halo@web.de", ContactByDefect = true };
             locations.Add(location);
 
             location = new Location
@@ -353,12 +348,12 @@ namespace Liftmanagement.Helper
                 Address = "Amselweg 2",
                 Postcode = "76467",
                 City = "Bietigheim",
-                AdditionalInfo = "Kellereingang ist ums Haus",
-                ContactByDefect = true
+                AdditionalInfo = "Kellereingang ist ums Haus"
             };
 
-            location.ContactPerson = new ContactPartner(location) { Name = "Manfred Becker", PhoneWork = "0724357770", Mobile = "01724357770", EMail = "halo@web.de" };
+            location.ContactPerson = new ContactPartner(location) { Name = "Manfred Becker", PhoneWork = "0724357770", Mobile = "01724357770", EMail = "halo@web.de", ContactByDefect = true };
             locations.Add(location);
+
 
             return locations;
         }

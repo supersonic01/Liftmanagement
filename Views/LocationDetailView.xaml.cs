@@ -1,6 +1,7 @@
 ﻿using Liftmanagement.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,18 +23,62 @@ namespace Liftmanagement.Views
     /// </summary>
     public partial class LocationDetailView : GoogleDriveDialogueView
     {
+        private readonly Customer _customer;
         public LocationDetailViewModel LocationDetailVM { get; set; } = new LocationDetailViewModel();
+        public LocationsViewModel LocationsVM { get; set; } = new LocationsViewModel();
 
-        protected override string ViewModelName => nameof(LocationDetailVM);
-        protected override string SourceObjectStringName => nameof(LocationDetailVM.Location);
+        //protected override string ViewModelName => nameof(LocationDetailVM);
+        //protected override string SourceObjectStringName => nameof(LocationDetailVM.Location);
 
-        public LocationDetailView(Location location)
+        public LocationDetailView(Customer customer)
         {
+            _customer = customer;
             InitializeComponent();
 
-            if (location == null)
+            Location location= new Location();
+
+            //TODO by SelectedIndex = 0  row will not highlighted
+            dgLocations.Columns.Add(new DataGridTextColumn
             {
-                return;
+                Header = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.Name)),
+                Binding = new Binding("ContactPerson.Name"),
+                DisplayIndex = 8
+            });
+
+            dgLocations.Columns.Add(new DataGridCheckBoxColumn() 
+            {
+                Header = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.ContactByDefect)),
+                Binding = new Binding("ContactPerson.ContactByDefect"),
+                DisplayIndex = 9
+            });
+
+            dgLocations.ItemsSource = LocationsVM.GetLocationsByCustomer(customer);
+            dgLocations.ItemsSource = LocationsVM.Locations;
+
+            Loaded += LocationDetailView_Loaded;
+            Application.Current.MainWindow.SizeChanged += MainWindow_SizeChanged;
+        }
+
+        private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            gridRdLocations.Height = new GridLength(gridRdLocations.ActualHeight);
+        }
+
+
+        private void LocationDetailView_Loaded(object sender, RoutedEventArgs e)
+        {
+            //gridRdLocations.Height = new GridLength(gridRdLocations.ActualHeight - 65.96);
+            dgLocations.SelectionChanged += DgLocations_SelectionChanged;
+            dgLocations.SelectedIndex = 0;
+        }
+
+        private void DgLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Location location = GetSelectedObject<Location>(sender);
+
+            if (location != null)
+            {
+                LocationDetailVM.LocationSelected = location;
             }
 
             lblAdditionalInfo.Content = location.GetDisplayName<Location>(nameof(location.AdditionalInfo)) + ":";
@@ -44,12 +89,15 @@ namespace Liftmanagement.Views
             lblPhoneWork.Content = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.PhoneWork)) + ":";
             lblMobile.Content = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.Mobile)) + ":";
             lblEmail.Content = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.EMail)) + ":";
-            lblContactByDefect.Content = location.GetDisplayName<Location>(nameof(location.ContactByDefect)) + ":";
-            lblGoogleDriveLink.Content = location.GetDisplayName<Location>(nameof(location.GoogleDriveLink)) + ":";
+            lblContactByDefect.Content = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.ContactByDefect)) + ":";
+            lblGoogleDriveLink.Content = location.GetDisplayName<Location>(nameof(location.GoogleDriveFolderName)) + ":";
 
-            DataContext = location;
+            BindingControl(this,ItemsControl.DataContextProperty,()=> LocationDetailVM.LocationSelected);
+            //DataContext = location;
+            EnableContoles(false);
         }
 
+        
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //TODO Set Titel
@@ -60,6 +108,26 @@ namespace Liftmanagement.Views
             //}
             windowGoogleDriveTree.ShowDialog();
         }
-        
+
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            LocationDetailVM.LocationSelected= new Location();
+            EnableContoles(true);
+        }
+
+        private void btnEdit_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            LocationDetailVM.Add(_customer);
+        }
     }
 }

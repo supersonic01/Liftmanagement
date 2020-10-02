@@ -22,7 +22,7 @@ namespace Liftmanagement.Models
 
         public AdministratorCompany()
         {
-
+           
         }
 
         public AdministratorCompany(BaseDatabaseField baseField)

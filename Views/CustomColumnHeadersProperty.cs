@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
 using System.Reflection;
@@ -10,6 +9,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Liftmanagement.Helper;
+using Liftmanagement.Models;
+
 
 namespace Liftmanagement.Views
 {
@@ -36,9 +38,34 @@ namespace Liftmanagement.Views
             var dataGrid = sender as DataGrid;
 
             if (args.NewValue != null)
+            {
                 dataGrid.AutoGeneratingColumn += dataGrid_AutoGeneratingColumn;
+                dataGrid.RowDetailsVisibilityChanged += DataGrid_RowDetailsVisibilityChanged;
+            }
             else
+            {
                 dataGrid.AutoGeneratingColumn -= dataGrid_AutoGeneratingColumn;
+                dataGrid.RowDetailsVisibilityChanged -= DataGrid_RowDetailsVisibilityChanged;
+            }
+        }
+
+        private static void DataGrid_RowDetailsVisibilityChanged(object sender, DataGridRowDetailsEventArgs e)
+        {
+            Console.WriteLine("DataGrid_RowDetailsVisibilityChanged");
+
+            DataGrid MainDataGrid = sender as DataGrid;
+            var cell = MainDataGrid.CurrentCell;
+
+            Location student = (MainDataGrid.CurrentItem as Location);
+            if (student == null)
+            {
+                return;
+            }
+            List<ContactPartner> MarksList = new List<ContactPartner>();
+            DataGrid DetailsDataGrid = e.DetailsElement as DataGrid;
+
+            MarksList.Add(new ContactPartner() { Name = student.ContactPerson.Name });
+            DetailsDataGrid.ItemsSource = MarksList;
         }
 
         static void dataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
@@ -67,21 +94,41 @@ namespace Liftmanagement.Views
 
                 return;
             }
-                
+
+            DisplayAttribute display = null;
+            var atbDisplay = property.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault();
+            if (atbDisplay != null)
+            {
+                display = property.GetCustomAttributes(typeof(DisplayAttribute), true).Cast<DisplayAttribute>().Single();
+            }
 
             var displayAttribute = property.GetCustomAttributes(typeof(DisplayNameAttribute), true).Cast<DisplayNameAttribute>().Single();
 
+
             if (displayAttribute.DisplayName != null)
             {
-                e.Column.Header = displayAttribute.DisplayName;              
+                e.Column.Header = displayAttribute.DisplayName;
+                if (display != null)
+                {
+                    if (display.Order > -1)
+                    {
+                        //TODO Set DisplayIndex proper
+                        // e.Column.DisplayIndex = display.Order
+                      var index= dataGrid.Columns.Count()-0;
+                        e.Column.DisplayIndex = index;
+
+                    }
+
+                    e.Column.Width = new DataGridLength(1, display.DataGridColumnWidth);
+                }
             }
 
-           
-           if (dataGrid.Tag!= null)
+
+            if (dataGrid.Tag != null)
             {
                 List<string> notVisibleColumns = (List<string>)dataGrid.Tag;
 
-                if(notVisibleColumns.Count > 0)
+                if (notVisibleColumns.Count > 0)
                 {
                     if (notVisibleColumns.Contains(e.PropertyName))
                     {
@@ -89,12 +136,16 @@ namespace Liftmanagement.Views
                     }
                 }
             }
-           //if(dataGrid.Columns.Where(c=> c.Visibility == Visibility.Visible).Last() == e.Column)
-           // {
-           //     Console.WriteLine();
-           //    e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-           // }
+
+
+
+            //if (dataGrid.Columns.Where(c => c.Visibility == Visibility.Visible).Last() == e.Column)
+            //{
+            //    Console.WriteLine();
+            //    e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            //}
 
         }
     }
+
 }

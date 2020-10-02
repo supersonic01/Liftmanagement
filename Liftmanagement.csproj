@@ -176,6 +176,7 @@
     <Compile Include="Helper\DatabaseAttribute.cs" />
     <Compile Include="Helper\DBHelper.cs" />
     <Compile Include="Helper\DirectoryQuickstart.cs" />
+    <Compile Include="Helper\DisplayAttribute.cs" />
     <Compile Include="Helper\DriveQuickstart.cs" />
     <Compile Include="Helper\Helper.cs" />
     <Compile Include="Helper\TableGenerator.cs" />
@@ -399,19 +400,45 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Resources\Images\Icons\Saki-NuoveXT-2-Apps-clock.icns" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Resources\lib\" />
+    <Folder Include="Resources\NewFolder1\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Aha-Soft-Large-Seo-Look.ico" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Resources\Images\Icons\Aha-Soft-Software-Signature.ico" />
+    <Resource Include="Resources\Images\Icons\Aha-Soft-Standard-Portfolio-Inventory.ico" />
+    <Resource Include="Resources\Images\Icons\Ampeross-Qetto-2-Todo.ico" />
     <Resource Include="Resources\Images\Icons\Bokehlicia-Pacifica-System-software-update.ico" />
+    <Resource Include="Resources\Images\Icons\Cornmanthe3rd-Squareplex-Utilities-google-calendar.ico" />
     <Resource Include="Resources\Images\Icons\Custom-Icon-Design-Flatastic-8-Maintenance.ico" />
-    <Resource Include="Resources\Images\Icons\Custom-Icon-Design-Pretty-Office-5-Maintenance.ico" />
+    <Resource Include="Resources\Images\Icons\Custom-Icon-Design-Pretty-Office-3-Process-Accept.ico" />
+    <Resource Include="Resources\Images\Icons\Maintenance.ico" />
+    <Resource Include="Resources\Images\Icons\Custom-Icon-Design-Pretty-Office-9-Open-file.ico" />
+    <Resource Include="Resources\Images\Icons\Dryicons-Aesthetica-2-Process-accept.ico" />
+    <Resource Include="Resources\Images\Icons\Dryicons-Aesthetica-2-Process-add.ico" />
+    <Resource Include="Resources\Images\Icons\Dryicons-Aesthetica-2-Process-remove%281%29.ico" />
+    <Resource Include="Resources\Images\Icons\Dryicons-Aesthetica-2-Process-remove.ico" />
+    <Resource Include="Resources\Images\Icons\Dryicons-Aesthetica-2-Process.ico" />
     <Resource Include="Resources\Images\Icons\elevator-symbol-1444871.jpg" />
+    <Resource Include="Resources\Images\Icons\Everaldo-Crystal-Clear-App-xmag-search.ico" />
+    <Resource Include="Resources\Images\Icons\Froyoshark-Enkel-Google-Drive.ico" />
     <Resource Include="Resources\Images\Icons\Gakuseisean-Ivista-2-Network-Globe-Disconnected.ico" />
     <Resource Include="Resources\Images\Icons\Gakuseisean-Ivista-2-Network-Upload.ico" />
+    <Resource Include="Resources\Images\Icons\hesse_aufzugberatung_logo.png" />
+    <Resource Include="Resources\Images\Icons\hesse_aufzugberatung_logo_2.png" />
+    <Resource Include="Resources\Images\Icons\hesse_icon.png" />
     <Resource Include="Resources\Images\Icons\Hopstarter-Sleek-Xp-Basic-Office-Girl.ico" />
+    <Resource Include="Resources\Images\Icons\Hopstarter-Soft-Scraps-Edit-Document.ico" />
+    <Resource Include="Resources\Images\Icons\Hopstarter-Soft-Scraps-File-Delete.ico" />
+    <Resource Include="Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" />
     <Resource Include="Resources\Images\Icons\Icons-Land-Vista-People-Groups-Meeting-Light.ico" />
     <Resource Include="Resources\Images\Icons\Icons-Land-Vista-People-Occupations-Firefighter-Female-Light.ico" />
     <Resource Include="Resources\Images\Icons\Icons-Land-Vista-People-Occupations-Firefighter-Male-Light.ico" />
@@ -423,68 +450,36 @@
     <Resource Include="Resources\Images\Icons\Iconshock-Real-Vista-Medical-Emergency.ico" />
     <Resource Include="Resources\Images\Icons\Iynque-Ios7-Style-Camera.ico" />
     <Resource Include="Resources\Images\Icons\Mag1cwind0w-Akisame-Tools.ico" />
-    <Resource Include="Resources\Images\Icons\Musett-Micro-File-Server.ico" />
-    <Resource Include="Resources\Images\Icons\Office-Customer-Male-Light.ico" />
-    <Resource Include="Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Apps-system-software-update.ico" />
-    <Resource Include="Resources\Images\Icons\Pixelkit-Flat-Jewels-Location.ico" />
-    <Resource Include="Resources\Images\Icons\Saki-Snowish-Actions-edit-clear.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Icons\Froyoshark-Enkel-Google-Drive.ico" />
-    <Resource Include="Resources\Images\Icons\Marcus-Roberto-Google-Play-Google-Drive.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Icons\hesse_aufzugberatung_logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Icons\hesse_icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Icons\Cornmanthe3rd-Squareplex-Utilities-google-calendar.ico" />
-    <Resource Include="Resources\Images\Icons\Custom-Icon-Design-Pretty-Office-9-Open-file.ico" />
     <Resource Include="Resources\Images\Icons\Marcus-Roberto-Google-Play-Gmail.ico" />
     <Resource Include="Resources\Images\Icons\Mcdo-Design-Letter-Letter-GMail-pen.ico" />
-    <Resource Include="Resources\Images\Icons\Papirus-Team-Papirus-Apps-Google-agenda.ico" />
-    <Resource Include="Resources\Images\Icons\Wwalczyszyn-Android-Style-Mail.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Icons\Hopstarter-Soft-Scraps-Edit-Document.ico" />
-    <Resource Include="Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" />
-    <Resource Include="Resources\Images\Icons\Turbomilk-Livejournal-10-Pencil.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Icons\Treetog-I-Floppy-Small.ico" />
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Musett-Micro-File-Server.ico" />
+    <Resource Include="Resources\Images\Icons\Office-Customer-Male-Light.ico" />
     <Resource Include="Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-edit-delete.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Icons\Hopstarter-Soft-Scraps-File-Delete.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Icons\Aha-Soft-Large-Seo-Look.ico" />
-    <Resource Include="Resources\Images\Icons\Everaldo-Crystal-Clear-App-xmag-search.ico" />
+    <Resource Include="Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Apps-system-software-update.ico" />
+    <Resource Include="Resources\Images\Icons\Papirus-Team-Papirus-Apps-Google-agenda.ico" />
+    <Resource Include="Resources\Images\Icons\Pixelkit-Flat-Jewels-Location.ico" />
+    <Resource Include="Resources\Images\Icons\Saki-NuoveXT-2-Apps-clock.ico" />
+    <Resource Include="Resources\Images\Icons\Saki-Snowish-Actions-edit-clear.ico" />
+    <Resource Include="Resources\Images\Icons\Treetog-I-Floppy-Small.ico" />
+    <Resource Include="Resources\Images\Icons\Turbomilk-Livejournal-10-Pencil.ico" />
+    <Resource Include="Resources\Images\Icons\Umut-Pulat-Tulliana-2-Desktop.ico" />
+    <Resource Include="Resources\Images\Icons\Umut-Pulat-Tulliana-2-K-cm-system.ico" />
+    <Resource Include="Resources\Images\Icons\Wwalczyszyn-Android-Style-Mail.ico" />
     <Resource Include="Resources\Images\Icons\Zerode-Plump-Search.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\Icons\Aha-Soft-Standard-Portfolio-Inventory.ico" />
-    <Resource Include="Resources\Images\Icons\Ampeross-Qetto-2-Todo.ico" />
-    <Resource Include="Resources\Images\Icons\Dryicons-Aesthetica-2-Process-accept.ico" />
-    <Resource Include="Resources\Images\Icons\Dryicons-Aesthetica-2-Process-add.ico" />
-    <Resource Include="Resources\Images\Icons\Dryicons-Aesthetica-2-Process-remove%281%29.ico" />
-    <Resource Include="Resources\Images\Icons\Dryicons-Aesthetica-2-Process-remove.ico" />
-    <Resource Include="Resources\Images\Icons\Dryicons-Aesthetica-2-Process.ico" />
-    <Resource Include="Resources\Images\Icons\Umut-Pulat-Tulliana-2-Desktop.ico" />
-    <Resource Include="Resources\Images\Icons\Umut-Pulat-Tulliana-2-K-cm-system.ico" />
+    <Resource Include="Resources\Images\Icons\Google-Drive.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Views\Umut-Pulat-Tulliana-2-K-cm-system.ico" />
+    <Resource Include="Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-list-add-user.ico" />
+    <Resource Include="Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-list-remove-user.ico" />
+    <Resource Include="Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-user-properties.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\Icons\Saki-NuoveXT-2-Apps-clock.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\lib\" />
+    <Resource Include="Resources\Images\Icons\Custom-Icon-Design-Flatastic-10-Edit-not-validated.ico" />
+    <Resource Include="Resources\Images\Icons\Custom-Icon-Design-Flatastic-10-Edit-validated.ico" />
+    <Resource Include="Resources\Images\Icons\Graphicloads-Medical-Health-Eye.ico" />
+    <Resource Include="Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-document-edit.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets" Condition="Exists('packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets')" />

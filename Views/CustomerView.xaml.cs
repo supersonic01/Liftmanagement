@@ -1,25 +1,12 @@
-﻿using Liftmanagement.Helper;
-using Liftmanagement.Models;
+﻿using Liftmanagement.Models;
 using Liftmanagement.ViewModels;
 using Liftmanagement.Views;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Runtime.Remoting;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Liftmanagement.View
 {
@@ -31,7 +18,15 @@ namespace Liftmanagement.View
         private CustomersView customersView;
 
         public CustomerViewModel CustomerVM { get; set; } = new CustomerViewModel();
-        
+
+        protected override string ViewModelName => nameof(CustomerVM);
+        protected override string SourceObjectStringName => nameof(CustomerVM.CustomerSelected);
+        private ContactPartner contactPartner = null;
+        private LocationDetailView location;
+
+
+
+
         public CustomerView()
         {
             InitializeComponent();
@@ -42,7 +37,9 @@ namespace Liftmanagement.View
             customersView.dgCustomers.SelectionChanged += DgCustomers_SelectionChanged;
             customersView.spCustomers.Loaded += SpCustomers_Loaded;
             customersView.dgCustomers.SelectedIndex = 0;
-           
+
+            this.Loaded += CustomerView_Loaded;
+
 
             //Binding binding = new Binding("CustomerVM.LocationDetailViews")
             //{
@@ -50,9 +47,49 @@ namespace Liftmanagement.View
             //};
 
             //gridLocation.SetBinding(ListBox.ItemsSourceProperty, binding);
-           
+
+            //TODO tab order from Email to Addtitional info not working
         }
 
+        private void CustomerView_Loaded(object sender, RoutedEventArgs e)
+        {
+            AssigneValuesToControl();
+        }
+
+        protected override void EnableContoles(bool enable)
+        {
+            base.EnableContoles(enable);
+
+            //TODO move this to base clase, bind all to one prop
+            cboxContactByDefect.IsEnabled = enable;
+            btnSave.IsEnabled = enable;
+            btnGoogleDriveTree.IsEnabled = enable;
+        }
+
+        //private void EnableContoles(bool enable)
+        //{
+
+        //    foreach (var textBox in TextBoxes)
+        //    {
+        //        textBox.IsEnabled = enable;
+        //    }
+
+        //    cboxContactByDefect.IsEnabled = enable;
+        //    btnSave.IsEnabled = enable;
+        //    btnGoogleDriveTree.IsEnabled = enable;
+
+        //    Uri iconUri = null;
+        //    if (enable)
+        //    {
+        //        iconUri = new Uri("pack://application:,,,../Resources/Images/Icons/Custom-Icon-Design-Flatastic-10-Edit-validated.ico", UriKind.RelativeOrAbsolute);
+        //    }
+        //    else
+        //    {
+        //        iconUri = new Uri("pack://application:,,,../Resources/Images/Icons/Custom-Icon-Design-Flatastic-10-Edit-not-validated.ico", UriKind.RelativeOrAbsolute);
+        //    }
+
+        //    imageIsEnabled.Source = new BitmapImage(iconUri);
+        //}
 
         private void SpCustomers_Loaded(object sender, RoutedEventArgs e)
         {
@@ -64,7 +101,8 @@ namespace Liftmanagement.View
             Console.WriteLine(string.Format("sp: {0} ", spCustomers.Width));
             spCustomers.Width = 451;
             spCustomers.Width = 450;
-        }
+
+           }
 
         private void DgCustomers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -76,67 +114,87 @@ namespace Liftmanagement.View
 
             }
 
-            Console.WriteLine("Customer :" + customer.Address);
+            EnableContoles(false);
 
-            lblCompanyName.Content = customer.GetDisplayName<Customer>(nameof(customer.CompanyName)) + ":";
-            lblContactPerson.Content = customer.GetDisplayName<ContactPartner>(nameof(customer.ContactPerson.Name)) + ":";
-            lblAddress.Content = customer.GetDisplayName<Customer>(nameof(customer.Address)) + ":";
-            lblPostcode.Content = customer.GetDisplayName<Customer>(nameof(customer.Postcode)) + ":";
-            lblCity.Content = customer.GetDisplayName<Customer>(nameof(customer.City)) + ":";
-            lblPhoneWork.Content = customer.GetDisplayName<ContactPartner>(nameof(customer.ContactPerson.PhoneWork)) + ":";
-            lblMobile.Content = customer.GetDisplayName<ContactPartner>(nameof(customer.ContactPerson.Mobile)) + ":";
-            lblEmail.Content = customer.GetDisplayName<ContactPartner>(nameof(customer.ContactPerson.EMail)) + ":";
-            lblAdditionalInfo.Content = customer.GetDisplayName<Customer>(nameof(customer.AdditionalInfo)) + ":";
-            lblGoogleDriveLink.Content= customer.GetDisplayName<Customer>(nameof(customer.GoogleDriveFolderName)) + ":";
-
-            lblAdministratorCompanyName.Content = customer.GetDisplayName<AdministratorCompany>(nameof(customer.Administrator.Name)) + ":";
-            lblAdministratorContactPerson.Content = customer.GetDisplayName<ContactPartner>(nameof(customer.ContactPerson.Name)) + ":";
-            lblAdministratorPhoneWork.Content = customer.GetDisplayName<ContactPartner>(nameof(customer.ContactPerson.PhoneWork)) + ":";
-            lblAdministratorMobile.Content = customer.GetDisplayName<ContactPartner>(nameof(customer.ContactPerson.Mobile)) + ":";
-            lblAdministratorEmail.Content = customer.GetDisplayName<ContactPartner>(nameof(customer.ContactPerson.EMail)) + ":";
-
-
-            txtCompanyName.Text = customer.CompanyName;
-            txtContactPerson.Text = customer.ContactPerson.Name;
-            txtAddress.Text = customer.Address;
-            txtPostcode.Text = customer.Postcode;
-            txtCity.Text = customer.City;
-            txtPhoneWork.Text = customer.ContactPerson.PhoneWork;
-            txtMobile.Text = customer.ContactPerson.Mobile;
-            txtAdditionalInfo.Text = customer.AdditionalInfo;
-            txtAdministratorCompanyName.Text = customer.Administrator.Name;
+            CustomerVM.CustomerSelected = customer;
+          
 
             dgAdministratorContactPersons.SelectionChanged -= DgAdministratorContactPersons_SelectionChanged;
-            dgAdministratorContactPersons.ItemsSource = customer.Administrator.ContactPersons;            
+            BindingControl(dgAdministratorContactPersons,()=> CustomerVM.CustomerSelected.Administrator.ContactPersons);
+            //dgAdministratorContactPersons.ItemsSource = customer.Administrator.ContactPersons;
             dgAdministratorContactPersons.SelectionChanged += DgAdministratorContactPersons_SelectionChanged;
             dgAdministratorContactPersons.SelectedIndex = 0;
 
+            location = new LocationDetailView(customer);
+            frameLocations.Content = location;
 
-            List<Location> locations = TestData.GetLocations();
+            //var dd = FindVisualChildren<TextBlock>(this.Content);
+            //foreach (TextBlock tb in dd)
+            //{nameof(customer.
+            //    // do something with tb here
+            //    tb.IsEnabled = false;
+            //}
 
-            //  var location = locations.Where(c => c.CustomerId == customer.CustomerId).FirstOrDefault();
 
-            ObservableCollection<LocationDetailView> locationDetailViews = new ObservableCollection<LocationDetailView>();
-            locations.ForEach(c => locationDetailViews.Add(new LocationDetailView(c)));
-            locations.ForEach(c => locationDetailViews.Add(new LocationDetailView(c)));
-            //  CustomerVM.LocationDetailViews = locationDetailViews;
-            //gridLocation.ItemsSource = CustomerVM.LocationDetailViews;
+        }
+
+        private void AssigneValuesToControl()
+        {
+            lblCompanyName.Content = CustomerVM.CustomerSelected.GetDisplayName<Customer>(nameof(CustomerVM.CustomerSelected.CompanyName)) + ":";
+            lblContactPerson.Content = CustomerVM.CustomerSelected.GetDisplayName<ContactPartner>(nameof(CustomerVM.CustomerSelected.ContactPerson.Name)) + ":";
+            lblAddress.Content = CustomerVM.CustomerSelected.GetDisplayName<Customer>(nameof(CustomerVM.CustomerSelected.Address)) + ":";
+            lblPostcode.Content = CustomerVM.CustomerSelected.GetDisplayName<Customer>(nameof(CustomerVM.CustomerSelected.Postcode)) + ":";
+            lblCity.Content = CustomerVM.CustomerSelected.GetDisplayName<Customer>(nameof(CustomerVM.CustomerSelected.City)) + ":";
+            lblPhoneWork.Content = CustomerVM.CustomerSelected.GetDisplayName<ContactPartner>(nameof(CustomerVM.CustomerSelected.ContactPerson.PhoneWork)) + ":";
+            lblMobile.Content = CustomerVM.CustomerSelected.GetDisplayName<ContactPartner>(nameof(CustomerVM.CustomerSelected.ContactPerson.Mobile)) + ":";
+            lblEmail.Content = CustomerVM.CustomerSelected.GetDisplayName<ContactPartner>(nameof(CustomerVM.CustomerSelected.ContactPerson.EMail)) + ":";
+            lblAdditionalInfo.Content = CustomerVM.CustomerSelected.GetDisplayName<Customer>(nameof(CustomerVM.CustomerSelected.AdditionalInfo)) + ":";
+            lblGoogleDriveLink.Content = CustomerVM.CustomerSelected.GetDisplayName<Customer>(nameof(CustomerVM.CustomerSelected.GoogleDriveFolderName)) + ":";
+
+            lblAdministratorCompanyName.Content =
+                CustomerVM.CustomerSelected.GetDisplayName<AdministratorCompany>(nameof(CustomerVM.CustomerSelected.Administrator.Name)) + ":";
+            lblAdministratorContactPerson.Content =
+                CustomerVM.CustomerSelected.GetDisplayName<ContactPartner>(nameof(CustomerVM.CustomerSelected.ContactPerson.Name)) + ":";
+            lblAdministratorPhoneWork.Content =
+                CustomerVM.CustomerSelected.GetDisplayName<ContactPartner>(nameof(CustomerVM.CustomerSelected.ContactPerson.PhoneWork)) + ":";
+            lblAdministratorMobile.Content =
+                CustomerVM.CustomerSelected.GetDisplayName<ContactPartner>(nameof(CustomerVM.CustomerSelected.ContactPerson.Mobile)) + ":";
+            lblAdministratorEmail.Content = CustomerVM.CustomerSelected.GetDisplayName<ContactPartner>(nameof(CustomerVM.CustomerSelected.ContactPerson.EMail)) + ":";
+
+            
+            BindingText(txtCompanyName, nameof(CustomerVM.CustomerSelected.CompanyName));
+            BindingText1(txtContactPerson, GetPropertyPath(() => CustomerVM.CustomerSelected.ContactPerson.Name));
+            BindingText1(txtAddress, GetPropertyPath(() => CustomerVM.CustomerSelected.Address));
+            BindingText1(txtPostcode, GetPropertyPath(() => CustomerVM.CustomerSelected.Postcode));
+            BindingText1(txtCity, GetPropertyPath(() => CustomerVM.CustomerSelected.City));
+            BindingText1(txtPhoneWork, GetPropertyPath(() => CustomerVM.CustomerSelected.ContactPerson.PhoneWork));
+            BindingText1(txtMobile,  GetPropertyPath(() =>  CustomerVM.CustomerSelected.ContactPerson.Mobile));
+            BindingText(txtAdditionalInfo, nameof( CustomerVM.CustomerSelected.AdditionalInfo));
+            // BindingText(txtAdministratorCompanyName, nameof( CustomerVM.CustomerSelected.Administrator.Name));
+            //BindingText1(txtAdministratorCompanyName, GetFullPath(() => CustomerVM.CustomerSelected.Administrator.Name));
+            BindingText1(txtAdministratorCompanyName, GetPropertyPath(() => CustomerVM.CustomerSelected.Administrator.Name));
+            //BindingText1(txtAdministratorCompanyName, "CustomerVM.CustomerSelected.Administrator.Name");
+           // BindingText(txtAdministratorCompanyName, "Administrator.Name");
+           // var fullPath = GetFullPath(() => CustomerVM.CustomerSelected.Administrator.Name);
 
         }
 
 
+      
         private void DgAdministratorContactPersons_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ContactPartner contactPartner = null;
+            //TODO Administrator list do not expand if no elements inside
+          
+            contactPartner = new ContactPartner();
             var dgAdministratorContactPersons = sender as DataGrid;
-            if (dgAdministratorContactPersons != null)
+            if (dgAdministratorContactPersons != null && dgAdministratorContactPersons.SelectedItem != null)
                 contactPartner = dgAdministratorContactPersons.SelectedItem as ContactPartner;
 
-            if (contactPartner == null)
-            {
-                return;
+            //if (contactPartner == null)
+            //{   
+            //    contactPartner= new ContactPartner();
 
-            }
+            //}
 
             txtAdministratorContactPerson.Text = contactPartner.Name;
             txtAdministratorPhoneWork.Text = contactPartner.PhoneWork;
@@ -163,7 +221,7 @@ namespace Liftmanagement.View
             gridResizableCustomers.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
         }
 
-        
+
         protected override void BtnSaveGoogleDrive_Click(object sender, RoutedEventArgs e)
         {
             var node = googlDriveTree.GetSelectedNode();
@@ -182,9 +240,9 @@ namespace Liftmanagement.View
             windowGoogleDriveTree.Hide();
 
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
 
+        private void btnGoogleDriveTree_Click(object sender, RoutedEventArgs e)
+        {
             var customer = customersView.dgCustomers.SelectedItem as Customer;
             if (customer != null)
             {
@@ -193,5 +251,53 @@ namespace Liftmanagement.View
 
             windowGoogleDriveTree.ShowDialog();
         }
+
+        private void btnTakeOverToLocation_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            CustomerVM.CustomerSelected = new Customer();
+            EnableContoles(true);
+        }
+
+        private void btnEdit_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    if (child != null && child is T)
+                    {
+                        yield return (T)child;
+                    }
+
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    {
+                        yield return childOfChild;
+                    }
+                }
+            }
+        }
+
+
     }
 }

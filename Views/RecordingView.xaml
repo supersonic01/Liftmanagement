@@ -145,7 +145,7 @@
                         <Button x:Name="btnProcessCompleted" Grid.Column="0" Content="Vorgang abschließen" Width="120" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Stretch" Click="btnProcessCompleted_Click"/>
                         <Button x:Name="btnRequestForEditing" Grid.Column="1"  Width="150" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Stretch" Click="btnRequestForEditing_Click">
                             <StackPanel Orientation="Horizontal" >
-                                <Image Source="..\Resources\Images\Icons\Marcus-Roberto-Google-Play-Google-Drive.ico" Stretch="Uniform" Width="16" Height="16" HorizontalAlignment="Left"/>
+                                <Image Source="..\Resources\Images\Icons\Google-Drive.ico" Stretch="Uniform" Width="16" Height="16" HorizontalAlignment="Left"/>
                                 <Label Content="Bearbeiten"/>
                             </StackPanel>
                         </Button>

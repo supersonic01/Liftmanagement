@@ -1,22 +1,8 @@
-﻿using Liftmanagement.Models;
-using Liftmanagement.ViewModels;
+﻿using Liftmanagement.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace Liftmanagement.Views
@@ -35,21 +21,7 @@ namespace Liftmanagement.Views
 
         private void GoogleDriveTreeView_Loaded(object sender, RoutedEventArgs e)
         {
-            Task.Factory.StartNew(() =>
-            {
-                var googleDriveTreeViewModel = new GoogleDriveTreeViewModel().Items;
-
-                Application.Current.Dispatcher.BeginInvoke(
-                    DispatcherPriority.Background,
-                    new Action(() =>
-                    {
-                        GoogleDriveFolderHierarchy.ItemsSource = googleDriveTreeViewModel;
-                    }));
-            }).ContinueWith((task) =>
-            {
-                LoadingIndicatorPanel.Visibility = Visibility.Collapsed;
-                MainContent.IsEnabled = true;
-            }, TaskScheduler.FromCurrentSynchronizationContext());
+            LoadTreeBusyIndicator();
         }
 
         public GoogleDriveTreeNodeViewModel GetSelectedNode()
@@ -70,7 +42,29 @@ namespace Liftmanagement.Views
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            GoogleDriveFolderHierarchy.ItemsSource = new GoogleDriveTreeViewModel().Items;
+            LoadTreeBusyIndicator();
+        }
+
+        private void LoadTreeBusyIndicator()
+        {
+
+            LoadingIndicatorPanel.Visibility = Visibility.Visible;
+            MainContent.IsEnabled = false;
+            Task.Factory.StartNew(() =>
+            {
+                var googleDriveTreeViewModel = new GoogleDriveTreeViewModel().Items;
+
+                Application.Current.Dispatcher.BeginInvoke(
+                    DispatcherPriority.Background,
+                    new Action(() =>
+                    {
+                        GoogleDriveFolderHierarchy.ItemsSource = googleDriveTreeViewModel;
+                    }));
+            }).ContinueWith((task) =>
+            {
+                LoadingIndicatorPanel.Visibility = Visibility.Collapsed;
+                MainContent.IsEnabled = true;
+            }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
     }

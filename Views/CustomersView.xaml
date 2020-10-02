@@ -54,5 +54,6 @@
                 </DataGrid>
             </StackPanel>
         </Expander>
+        <ScrollBar HorizontalAlignment="Left" Height="6" Margin="-313,34,0,0" VerticalAlignment="Top" Width="2"/>
     </Grid>
 </UserControl>

@@ -46,7 +46,7 @@ namespace Liftmanagement.Views
                 Content = googlDriveTree
             };
 
-            Uri iconUri = new Uri("pack://application:,,,../Resources/Images/Icons/Marcus-Roberto-Google-Play-Google-Drive.ico", UriKind.RelativeOrAbsolute);
+            Uri iconUri = new Uri("pack://application:,,,../Resources/Images/Icons/Google-Drive.ico", UriKind.RelativeOrAbsolute);
             windowGoogleDriveTree.Icon = BitmapFrame.Create(iconUri);
 
             googlDriveTree.btnSave.Click += BtnSaveGoogleDrive_Click; ;

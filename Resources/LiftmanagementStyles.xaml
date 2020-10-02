@@ -68,13 +68,17 @@
         </Setter>
     </Style>
 
-    <Style x:Key="Body_Content_DataGrid_Centering"
-        TargetType="{x:Type DataGridCell}">
+    <Style x:Key="Body_Content_DataGrid_Centering" TargetType="{x:Type DataGridCell}">
+        <Setter Property="Padding" Value="0,5,5,0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridCell}">
                     <Grid Background="{TemplateBinding Background}">
                         <ContentPresenter VerticalAlignment="Center" />
+
+                        <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Border>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -277,6 +281,26 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Height" Value="25"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="True">
+                <Setter Property="Background" Value="Yellow" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False">
+                <Setter Property="FontWeight" Value="Black" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsReadOnly, RelativeSource={RelativeSource Self}}" Value="True">
+                <Setter Property="Background" Value="Red" />
+            </DataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsReadOnly, RelativeSource={RelativeSource Self}}" Value="True"/>
+                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Background" Value="LightGray"/>
+                <Setter Property="Foreground" Value="White"/>
+            </MultiDataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}">       

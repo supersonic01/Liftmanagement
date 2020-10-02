@@ -22,7 +22,7 @@ namespace Liftmanagement.ViewModels
 
         public CategoryViewModel()
         {
-            categories.Add(new Category("Verwaltung", @"\Resources\Images\Icons\Custom-Icon-Design-Pretty-Office-5-Maintenance.ico",TTypeMangement.Managment));
+            categories.Add(new Category("Verwaltung", @"\Resources\Images\Icons\Maintenance.ico",TTypeMangement.Managment));
             categories.Add(new Category("Kunden", @"\Resources\Images\Icons\Office-Customer-Male-Light.ico", TTypeMangement.Customer));
             categories.Add(new Category("Standorte", @"\Resources\Images\Icons\Pixelkit-Flat-Jewels-Location.ico", TTypeMangement.Location));
             categories.Add(new Category("Anlagen", @"\Resources\Images\Icons\elevator-symbol-1444871.jpg", TTypeMangement.MachineInformation));

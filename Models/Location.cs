@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Liftmanagement.Helper;
 
 namespace Liftmanagement.Models
 {
@@ -11,8 +13,8 @@ namespace Liftmanagement.Models
     {             
         public long CustomerId { get; set; }      
 
-        [DisplayName("Beim Störungsfall kontaktieren")]
-        public bool ContactByDefect { get; set; }
+        //[DisplayName("Beim Störungsfall kontaktieren"),Display(Order = 9)]
+        //public bool ContactByDefect { get; set; }
 
         protected override string GetFullName()
         {

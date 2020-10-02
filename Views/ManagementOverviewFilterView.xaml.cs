@@ -38,8 +38,7 @@ namespace Liftmanagement.Views
         {
             InitializeComponent();
 
-            BindingControll(dgOverviewFilter, nameof(ManagementOverviewFilterVM.ManagementOverviewView));
-            
+            BindingControl(dgOverviewFilter, nameof(ManagementOverviewFilterVM.ManagementOverviewView));
         }
 
         public void SetFilter(string filter)

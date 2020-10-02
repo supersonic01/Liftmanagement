@@ -37,7 +37,7 @@ namespace Liftmanagement.Views
             InitializeComponent();
 
 
-            BindingControll(dgRecordings, nameof(RcordingsVM.Recordings));
+            BindingControl(dgRecordings, nameof(RcordingsVM.Recordings));
 
             dgRecordings.SelectionChanged += DgRecordings_SelectionChanged;
             dgRecordings.SelectedIndex = 0;

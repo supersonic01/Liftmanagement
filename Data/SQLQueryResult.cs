@@ -33,7 +33,13 @@ namespace Liftmanagement.Data
 
         internal void AddSQLSubQueryResult(SQLQueryResult result, SQLQueryResult primaryResult)
         {
-            new SQLSubQueryResult { Records = result.Records , Id= result.Id, PrimaryClassType= primaryResult.ClassType, ForeignClassType= result.ClassType};
+            SQLSubQueryResults.Add(
+                new SQLSubQueryResult
+                {
+                    Records = result.Records, Id = result.Id, PrimaryClassType = primaryResult.ClassType,
+                    ForeignClassType = result.ClassType
+                });
+
         }
     }
 

@@ -186,7 +186,7 @@
 
                         <StackPanel x:Name="spContactPersons" Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <DataGrid  x:Name="dgContactPersons" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"  SelectionUnit="FullRow" 
-                           local:CustomColumnHeadersProperty.ItemType="{x:Type local:LocationView}" IsReadOnly="True" SelectionMode="Single"
+                           local:CustomColumnHeadersProperty.ItemType="{x:Type local:ManagementView}" IsReadOnly="True" SelectionMode="Single"
                        CellStyle="{StaticResource Body_Content_DataGrid_Centering}">
 
                                 <DataGrid.RowStyle >

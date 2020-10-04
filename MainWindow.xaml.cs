@@ -68,11 +68,12 @@ namespace Liftmanagement
 
             //MySQLDataAccess.GetCustomers();
 
-          //Helper.Helper.GenerateInsert( typeof(ContactPartner));
-          //  Helper.Helper.GenerateInsert(typeof(AdministratorCompany));
+          //Helper.Helper.GenerateInsert( typeof(Location));
+            //  Helper.Helper.GenerateInsert(typeof(AdministratorCompany));
 
-           // Helper.Helper.GenerateSelect(typeof(MachineInformation));
-           // Helper.Helper.GenerateSelect(typeof(MaintenanceAgreement));
+            //Helper.Helper.GenerateSelect(typeof(Location));
+            //Helper.Helper.GenerateSelect(typeof(AdministratorCompany));
+            //Helper.Helper.GenerateSelect(typeof(ContactPartner));
 
 
 
@@ -135,9 +136,10 @@ namespace Liftmanagement
                 case Helper.Helper.TTypeMangement.Customer:
                     frameDetail.Content = new CustomerView();
                     break;
-                case Helper.Helper.TTypeMangement.Location:
-                    frameDetail.Content = new LocationView();
-                    break;
+                //TODO location
+                //case Helper.Helper.TTypeMangement.Location:
+                //    frameDetail.Content = new LocationView();
+                //    break;
                 case Helper.Helper.TTypeMangement.MaintenanceAgreement:
                     frameDetail.Content = new MaintenanceAgreementView();
                     break;

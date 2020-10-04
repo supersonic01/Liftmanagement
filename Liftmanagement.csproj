@@ -240,9 +240,6 @@
     <Compile Include="Views\LocationsView.xaml.cs">
       <DependentUpon>LocationsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\LocationView.xaml.cs">
-      <DependentUpon>LocationView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MachineInformationsShortView.xaml.cs">
       <DependentUpon>MachineInformationsShortView.xaml</DependentUpon>
     </Compile>
@@ -321,10 +318,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LocationsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\LocationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -98,6 +98,20 @@ namespace Liftmanagement.Data
             return new SQLQueryResult(records, id, typeof(ContactPartner));
         }
 
+        public static SQLQueryResult AddLocation(Location location)
+        {
+            string query = "INSERT INTO LOCATION(CustomerId,Address,Postcode,City,Selected,AdditionalInfo,GoogleDriveFolderName,GoogleDriveLink,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
+            string values = "VALUE(" + location.CustomerId + ",'" + location.Address + "','" + location.Postcode + "','" + location.City + "'," + location.Selected + ",'" + location.AdditionalInfo + "','" + location.GoogleDriveFolderName + "','" + location.GoogleDriveLink + "','" + location.CreatedPersonName + "','" + location.ModifiedPersonName + "'," + location.ReadOnly + ",'" + location.UsedBy + "')";
+            query = query + values;
+
+
+            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+
+            int records = execQuery.ExecuteNonQuery();
+            long id = execQuery.LastInsertedId;
+            return new SQLQueryResult(records, id, typeof(ContactPartner));
+        }
+
         private static SQLQueryResult AddAdministratorCompany(AdministratorCompany administratorcompany)
         {
             string query = "INSERT INTO ADMINISTRATORCOMPANY(CustomerId,Name,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
@@ -174,13 +188,13 @@ namespace Liftmanagement.Data
             {
                 Customer customer = new Customer();
                 customer.CompanyName = reader.GetString("CompanyName");
-                customer.GoogleDriveFolderName = reader.GetString("GoogleDriveFolderName");
-                customer.GoogleDriveLink = reader.GetString("GoogleDriveLink");
                 customer.Address = reader.GetString("Address");
                 customer.Postcode = reader.GetString("Postcode");
                 customer.City = reader.GetString("City");
                 customer.Selected = reader.GetBoolean("Selected");
                 customer.AdditionalInfo = reader.GetString("AdditionalInfo");
+                customer.GoogleDriveFolderName = reader.GetString("GoogleDriveFolderName");
+                customer.GoogleDriveLink = reader.GetString("GoogleDriveLink");
                 customer.Id = reader.GetInt64("Id");
                 customer.CreatedDate = reader.GetDateTime("CreatedDate");
                 customer.ModifiedDate = reader.GetDateTime("ModifiedDate");
@@ -216,12 +230,14 @@ namespace Liftmanagement.Data
                 SelectItems(query, reader =>
                 {
                     ContactPartner contactpartner = new ContactPartner();
-                    contactpartner.ForeignKey = reader.GetInt32("ForeignKey");
+                    contactpartner.CustomerId = reader.GetInt64("CustomerId");
+                    contactpartner.ForeignKey = reader.GetInt64("ForeignKey");
                     contactpartner.ForeignKeyType = reader.GetInt32("ForeignKeyType");
                     contactpartner.Name = reader.GetString("Name");
                     contactpartner.PhoneWork = reader.GetString("PhoneWork");
                     contactpartner.Mobile = reader.GetString("Mobile");
                     contactpartner.EMail = reader.GetString("EMail");
+                    contactpartner.ContactByDefect = reader.GetBoolean("ContactByDefect");
                     contactpartner.Id = reader.GetInt64("Id");
                     contactpartner.CreatedDate = reader.GetDateTime("CreatedDate");
                     contactpartner.ModifiedDate = reader.GetDateTime("ModifiedDate");
@@ -239,12 +255,14 @@ namespace Liftmanagement.Data
                 SelectItems(query, reader =>
                 {
                     ContactPartner contactpartner = new ContactPartner();
-                    contactpartner.ForeignKey = reader.GetInt32("ForeignKey");
+                    contactpartner.CustomerId = reader.GetInt64("CustomerId");
+                    contactpartner.ForeignKey = reader.GetInt64("ForeignKey");
                     contactpartner.ForeignKeyType = reader.GetInt32("ForeignKeyType");
                     contactpartner.Name = reader.GetString("Name");
                     contactpartner.PhoneWork = reader.GetString("PhoneWork");
                     contactpartner.Mobile = reader.GetString("Mobile");
                     contactpartner.EMail = reader.GetString("EMail");
+                    contactpartner.ContactByDefect = reader.GetBoolean("ContactByDefect");
                     contactpartner.Id = reader.GetInt64("Id");
                     contactpartner.CreatedDate = reader.GetDateTime("CreatedDate");
                     contactpartner.ModifiedDate = reader.GetDateTime("ModifiedDate");
@@ -262,6 +280,34 @@ namespace Liftmanagement.Data
 
         }
 
+        public static List<Location> GetLocations()
+        {
+            List<Location> locations = new List<Location>();
+
+            string query = "SELECT * FROM LOCATION";
+
+            SelectItems(query, reader =>
+            {
+                Location location = new Location();
+                location.CustomerId = reader.GetInt64("CustomerId");
+                location.Address = reader.GetString("Address");
+                location.Postcode = reader.GetString("Postcode");
+                location.City = reader.GetString("City");
+                location.Selected = reader.GetBoolean("Selected");
+                location.AdditionalInfo = reader.GetString("AdditionalInfo");
+                location.GoogleDriveFolderName = reader.GetString("GoogleDriveFolderName");
+                location.GoogleDriveLink = reader.GetString("GoogleDriveLink");
+                location.Id = reader.GetInt64("Id");
+                location.CreatedDate = reader.GetDateTime("CreatedDate");
+                location.ModifiedDate = reader.GetDateTime("ModifiedDate");
+                location.CreatedPersonName = reader.GetString("CreatedPersonName");
+                location.ModifiedPersonName = reader.GetString("ModifiedPersonName");
+                location.ReadOnly = reader.GetBoolean("ReadOnly");
+                location.UsedBy = reader.GetString("UsedBy");
+                locations.Add(location);
+            });
+            return locations;
+        }
 
         public static List<MaintenanceAgreement> GetMaintenanceAgreements()
         {
@@ -293,6 +339,7 @@ namespace Liftmanagement.Data
             });
             return maintenanceagreements;
         }
+
 
 
         public static List<MachineInformation> GetMachineInformations()

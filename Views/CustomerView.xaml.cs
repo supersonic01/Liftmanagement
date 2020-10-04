@@ -3,8 +3,11 @@ using Liftmanagement.ViewModels;
 using Liftmanagement.Views;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -34,12 +37,9 @@ namespace Liftmanagement.View
 
             customersView = new CustomersView();
             frameCustomers.Content = customersView;
-            customersView.expanderCustomers.Collapsed += ExpanderCustomers_Collapsed;
             customersView.dgCustomers.SelectionChanged += DgCustomers_SelectionChanged;
-            customersView.spCustomers.Loaded += SpCustomers_Loaded;
-            customersView.dgCustomers.SelectedIndex = 0;
-
             this.Loaded += CustomerView_Loaded;
+            customersView.dgCustomers.SelectedIndex = 0;
 
 
             //Binding binding = new Binding("CustomerVM.LocationDetailViews")
@@ -57,15 +57,18 @@ namespace Liftmanagement.View
             AssigneValuesToControl();
         }
 
-        protected override void EnableContoles(bool enable)
-        {
-            base.EnableContoles(enable);
+        //protected override void EnableContoles(bool enable)
+        //{
+        //    base.EnableContoles(enable);
 
-            //TODO move this to base clase, bind all to one prop
-            cboxContactByDefect.IsEnabled = enable;
-            btnSave.IsEnabled = enable;
-            btnGoogleDriveTree.IsEnabled = enable;
-        }
+        //    //TODO move this to base clase, bind all to one prop
+        //   // cboxContactByDefect.IsEnabled = enable;
+        //    //btnSave.IsEnabled = enable;
+        //    //btnGoogleDriveTree.IsEnabled = enable;
+
+          
+
+        //}
 
         //private void EnableContoles(bool enable)
         //{
@@ -92,19 +95,7 @@ namespace Liftmanagement.View
         //    imageIsEnabled.Source = new BitmapImage(iconUri);
         //}
 
-        private void SpCustomers_Loaded(object sender, RoutedEventArgs e)
-        {
-            var spCustomers = sender as StackPanel;
-            if (spCustomers == null)
-                return;
-
-            //Work around
-            Console.WriteLine(string.Format("sp: {0} ", spCustomers.Width));
-            spCustomers.Width = 451;
-            spCustomers.Width = 450;
-
-           }
-
+      
         private void DgCustomers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Customer customer = GetSelectedCustomer(sender);
@@ -135,7 +126,6 @@ namespace Liftmanagement.View
             //    // do something with tb here
             //    tb.IsEnabled = false;
             //}
-
 
         }
 
@@ -184,7 +174,6 @@ namespace Liftmanagement.View
         }
 
 
-      
         private void DgAdministratorContactPersons_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //TODO Administrator list do not expand if no elements inside
@@ -218,12 +207,7 @@ namespace Liftmanagement.View
         }
 
 
-        private void ExpanderCustomers_Collapsed(object sender, RoutedEventArgs e)
-        {
-
-            Console.WriteLine("expanderCustomers_Collapsed");
-            gridResizableCustomers.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
-        }
+        
 
 
         protected override void BtnSaveGoogleDrive_Click(object sender, RoutedEventArgs e)
@@ -272,7 +256,18 @@ namespace Liftmanagement.View
                 CustomerVM.CustomerSelected.Administrator.ContactPersons.Add(CustomerVM.ContactPerson);
             }
            
-            var dd =  CustomerVM.Add();
+            var result =  CustomerVM.Add();
+            if (result.Records > 0)
+            {
+                //TODO show Toast msg
+                customersView.CustomersVM.RefreshCustomers();
+                var customer = customersView.dgCustomers.Items.Cast<Customer>().Single(c => c.Id == result.Id);
+                customersView.dgCustomers.SelectedItem = customer;
+            }
+            else
+            {
+                //TODO show Toast msg
+            }
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -311,6 +306,6 @@ namespace Liftmanagement.View
             }
         }
 
-
+       
     }
 }

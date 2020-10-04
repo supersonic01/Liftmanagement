@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,6 +23,7 @@ namespace Liftmanagement.Views
             typeof(Type),
             typeof(CustomColumnHeadersProperty),
             new PropertyMetadata(OnItemTypeChanged));
+        
 
         public static void SetItemType(DependencyObject obj, Type value)
         {
@@ -40,34 +42,15 @@ namespace Liftmanagement.Views
             if (args.NewValue != null)
             {
                 dataGrid.AutoGeneratingColumn += dataGrid_AutoGeneratingColumn;
-                dataGrid.RowDetailsVisibilityChanged += DataGrid_RowDetailsVisibilityChanged;
+             
+
             }
             else
             {
                 dataGrid.AutoGeneratingColumn -= dataGrid_AutoGeneratingColumn;
-                dataGrid.RowDetailsVisibilityChanged -= DataGrid_RowDetailsVisibilityChanged;
             }
         }
-
-        private static void DataGrid_RowDetailsVisibilityChanged(object sender, DataGridRowDetailsEventArgs e)
-        {
-            Console.WriteLine("DataGrid_RowDetailsVisibilityChanged");
-
-            DataGrid MainDataGrid = sender as DataGrid;
-            var cell = MainDataGrid.CurrentCell;
-
-            Location student = (MainDataGrid.CurrentItem as Location);
-            if (student == null)
-            {
-                return;
-            }
-            List<ContactPartner> MarksList = new List<ContactPartner>();
-            DataGrid DetailsDataGrid = e.DetailsElement as DataGrid;
-
-            MarksList.Add(new ContactPartner() { Name = student.ContactPerson.Name });
-            DetailsDataGrid.ItemsSource = MarksList;
-        }
-
+        
         static void dataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
 

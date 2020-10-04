@@ -45,7 +45,7 @@ namespace Liftmanagement.Views
                 DisplayIndex = 8
             });
 
-            dgLocations.Columns.Add(new DataGridCheckBoxColumn() 
+            dgLocations.Columns.Add(new DataGridCheckBoxColumn()
             {
                 Header = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.ContactByDefect)),
                 Binding = new Binding("ContactPerson.ContactByDefect"),
@@ -53,7 +53,7 @@ namespace Liftmanagement.Views
             });
 
             dgLocations.ItemsSource = LocationsVM.GetLocationsByCustomer(customer);
-            dgLocations.ItemsSource = LocationsVM.Locations;
+           // dgLocations.ItemsSource = LocationsVM.Locations;
 
             Loaded += LocationDetailView_Loaded;
             Application.Current.MainWindow.SizeChanged += MainWindow_SizeChanged;
@@ -70,6 +70,8 @@ namespace Liftmanagement.Views
             //gridRdLocations.Height = new GridLength(gridRdLocations.ActualHeight - 65.96);
             dgLocations.SelectionChanged += DgLocations_SelectionChanged;
             dgLocations.SelectedIndex = 0;
+
+            EnableContoles(false);
         }
 
         private void DgLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)

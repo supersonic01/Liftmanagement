@@ -28,7 +28,6 @@
             <DataGrid  x:Name="dgMachineInformations" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"  SelectionUnit="FullRow" 
                            local:CustomColumnHeadersProperty.ItemType="{x:Type local:MachineInformationsView}" IsReadOnly="True"
                        CellStyle="{StaticResource Body_Content_DataGrid_Centering}">
-                
                 <DataGrid.RowStyle >
                     <Style TargetType="DataGridRow">
                         <Setter Property="Height" Value="30"/>

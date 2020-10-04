@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Liftmanagement.Data;
 
 namespace Liftmanagement.ViewModels
 {
@@ -17,13 +19,24 @@ namespace Liftmanagement.ViewModels
         public List<Customer> Customers
         {
             get { return customers; }
-            set { customers = value; }
+            set { SetField(ref customers, value); }
         }
 
 
         public CustomersViewModel()
         {
-            customers = TestData.GetCustomers();
+            RefreshCustomers();
+        }
+
+        public void RefreshCustomers()
+        {
+           // Customers = TestData.GetCustomers();
+           Customers = MySQLDataAccess.GetCustomers();
+
+          var dd = new Customer();
+       
+
+
         }
 
        

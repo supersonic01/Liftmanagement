@@ -78,7 +78,8 @@
                                 <Image Source="..\Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-edit-delete.ico" Height="30"/>
                             </StackPanel>
                         </Button>
-                        <Button  x:Name="btnSave"  Grid.Row="2"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSave_Click" BorderThickness="0" Background="Transparent">
+                        <Button  x:Name="btnSave"  Grid.Row="2"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSave_Click" BorderThickness="0" Background="Transparent"
+                                 IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}">
                             <StackPanel>
                                 <Image Source="..\Resources\Images\Icons\Treetog-I-Floppy-Small.ico" Height="30"/>
                             </StackPanel>
@@ -117,13 +118,15 @@
                         </Hyperlink>
                     </TextBlock>
 
-                <Button  Grid.Row="2" Grid.RowSpan="2" Grid.Column="4" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="Button_Click" BorderThickness="0" Background="Transparent">
+                <Button x:Name="btnGoogleDriveTree" Grid.Row="2" Grid.RowSpan="2" Grid.Column="4" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="Button_Click" BorderThickness="0" Background="Transparent"
+                        IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}">
                     <StackPanel>
                         <Image Source="..\Resources\Images\Icons\Google-Drive.ico" Height="30"/>
                     </StackPanel>
                 </Button>
 
-                <CheckBox x:Name="cboxContactByDefect" Grid.Row="6" Grid.Column="4" IsChecked="{Binding Path=ContactByDefect}"  HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <CheckBox x:Name="cboxContactByDefect" Grid.Row="6" Grid.Column="4" IsChecked="{Binding Path=ContactByDefect}"  HorizontalAlignment="Center" VerticalAlignment="Center" 
+                          IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}">
                     <CheckBox.LayoutTransform>
                         <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
                     </CheckBox.LayoutTransform>

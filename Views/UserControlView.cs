@@ -21,20 +21,24 @@ using Liftmanagement.ViewModels;
 
 namespace Liftmanagement.Views
 {
-   public class UserControlView : UserControl , INotifyPropertyChanged
-   {
-       public event PropertyChangedEventHandler PropertyChanged;
+    public class UserControlView : UserControl, INotifyPropertyChanged
+    {
+        #region NotifyPropertyChanged
 
-       protected void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        public event PropertyChangedEventHandler PropertyChanged;
 
-       protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-       {
-           if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-           field = value;
-           OnPropertyChanged(propertyName);
-           return true;
-       }
-    
+        protected void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
+        #endregion
+
 
         private List<TextBox> textBoxes = null;
 
@@ -44,29 +48,36 @@ namespace Liftmanagement.Views
             {
                 if (textBoxes == null)
                 {
-                    FindTextBoxex(this, textBoxes= new List<TextBox>());
+                    FindTextBoxex(this, textBoxes = new List<TextBox>());
                 }
                 return textBoxes;
             }
         }
 
-        private  BitmapImage enabledBitmapImage = new BitmapImage(new Uri("pack://application:,,,../Resources/Images/Icons/Custom-Icon-Design-Flatastic-10-Edit-validated.ico", UriKind.RelativeOrAbsolute));
+        private BitmapImage enabledBitmapImage = new BitmapImage(new Uri("pack://application:,,,../Resources/Images/Icons/Custom-Icon-Design-Flatastic-10-Edit-validated.ico", UriKind.RelativeOrAbsolute));
         //TODO not working
-        public  BitmapImage EnabledBitmapImage
+        public BitmapImage EnabledBitmapImage
         {
             get { return enabledBitmapImage; }
             set { SetField(ref enabledBitmapImage, value); }
         }
-
 
         public List<string> NotVisibleColumns { get; set; } = new List<string>();
 
         protected virtual string ViewModelName { get; }
         protected virtual string SourceObjectStringName { get; }
 
+        private bool isReadOnly;
+
+        public bool IsReadOnly
+        {
+            get { return isReadOnly; }
+            set { SetField(ref isReadOnly, value); }
+        }
 
 
-        protected virtual void BindingControl (ItemsControl control, string source)
+
+        protected virtual void BindingControl(ItemsControl control, string source)
         {
             Binding binding = new Binding(ViewModelName + "." + source)
             {
@@ -79,8 +90,8 @@ namespace Liftmanagement.Views
         protected virtual void BindingControl<T>(ItemsControl control, Expression<Func<T>> action)
         {
             var temp = GetFullPath<T>(action);
-            var source= temp.Substring(temp.IndexOf(')') + 2);
-            
+            var source = temp.Substring(temp.IndexOf(')') + 2);
+
             Binding binding = new Binding(source)
             {
                 Source = this
@@ -89,7 +100,7 @@ namespace Liftmanagement.Views
             control.SetBinding(ItemsControl.ItemsSourceProperty, binding);
         }
 
-        protected virtual void BindingControl<T>(FrameworkElement control,DependencyProperty dp, Expression<Func<T>> action)
+        protected virtual void BindingControl<T>(FrameworkElement control, DependencyProperty dp, Expression<Func<T>> action)
         {
             var temp = GetFullPath<T>(action);
             var source = temp.Substring(temp.IndexOf(')') + 2);
@@ -98,7 +109,7 @@ namespace Liftmanagement.Views
             {
                 Source = this
             };
-             
+
             control.SetBinding(dp, binding);
         }
 
@@ -117,9 +128,9 @@ namespace Liftmanagement.Views
             return model;
         }
 
-        protected virtual void BindingItem(Control control, DependencyProperty dp, string path, string stringFormat=null)
+        protected virtual void BindingItem(Control control, DependencyProperty dp, string path, string stringFormat = null)
         {
-            var binding = new Binding(ViewModelName + "."+ path)
+            var binding = new Binding(ViewModelName + "." + path)
             {
                 Source = this,
             };
@@ -154,9 +165,9 @@ namespace Liftmanagement.Views
             BindingItem1(control, TextBox.TextProperty, GetPropertyPath(action));
         }
 
-        protected virtual void BindingText(Control control,  string path)
+        protected virtual void BindingText(Control control, string path)
         {
-            BindingItem(control, TextBox.TextProperty, string.Format("{0}.{1}",SourceObjectStringName,path));
+            BindingItem(control, TextBox.TextProperty, string.Format("{0}.{1}", SourceObjectStringName, path));
         }
 
         protected virtual void BindingComboBoxSelectedItem(Control control, string path)
@@ -189,7 +200,7 @@ namespace Liftmanagement.Views
             };
 
             binding.Mode = BindingMode.TwoWay;
-            
+
             hyperlink.SetBinding(Hyperlink.NavigateUriProperty, binding);
         }
 
@@ -252,14 +263,13 @@ namespace Liftmanagement.Views
 
         protected virtual void EnableContoles(bool enable)
         {
+            IsReadOnly = enable;
 
             foreach (var textBox in TextBoxes)
             {
                 textBox.IsEnabled = enable;
             }
-
-           
-
+            
             Uri iconUri = null;
             if (enable)
             {
@@ -278,6 +288,6 @@ namespace Liftmanagement.Views
             //    BitmapSizeOptions.FromWidthAndHeight(width, height));
         }
 
-        
+
     }
 }

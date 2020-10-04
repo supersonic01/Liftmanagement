@@ -1,16 +1,11 @@
 ﻿using Liftmanagement.Models;
 using Liftmanagement.ViewModels;
 using Liftmanagement.Views;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace Liftmanagement.View
 {
@@ -27,10 +22,7 @@ namespace Liftmanagement.View
         protected override string SourceObjectStringName => nameof(CustomerVM.CustomerSelected);
         private ContactPartner contactPartner = null;
         private LocationDetailView location;
-
-
-
-
+        
         public CustomerView()
         {
             InitializeComponent();
@@ -41,14 +33,6 @@ namespace Liftmanagement.View
             this.Loaded += CustomerView_Loaded;
             customersView.dgCustomers.SelectedIndex = 0;
 
-
-            //Binding binding = new Binding("CustomerVM.LocationDetailViews")
-            //{
-            //    Source = this
-            //};
-
-            //gridLocation.SetBinding(ListBox.ItemsSourceProperty, binding);
-
             //TODO tab order from Email to Addtitional info not working
         }
 
@@ -57,45 +41,6 @@ namespace Liftmanagement.View
             AssigneValuesToControl();
         }
 
-        //protected override void EnableContoles(bool enable)
-        //{
-        //    base.EnableContoles(enable);
-
-        //    //TODO move this to base clase, bind all to one prop
-        //   // cboxContactByDefect.IsEnabled = enable;
-        //    //btnSave.IsEnabled = enable;
-        //    //btnGoogleDriveTree.IsEnabled = enable;
-
-          
-
-        //}
-
-        //private void EnableContoles(bool enable)
-        //{
-
-        //    foreach (var textBox in TextBoxes)
-        //    {
-        //        textBox.IsEnabled = enable;
-        //    }
-
-        //    cboxContactByDefect.IsEnabled = enable;
-        //    btnSave.IsEnabled = enable;
-        //    btnGoogleDriveTree.IsEnabled = enable;
-
-        //    Uri iconUri = null;
-        //    if (enable)
-        //    {
-        //        iconUri = new Uri("pack://application:,,,../Resources/Images/Icons/Custom-Icon-Design-Flatastic-10-Edit-validated.ico", UriKind.RelativeOrAbsolute);
-        //    }
-        //    else
-        //    {
-        //        iconUri = new Uri("pack://application:,,,../Resources/Images/Icons/Custom-Icon-Design-Flatastic-10-Edit-not-validated.ico", UriKind.RelativeOrAbsolute);
-        //    }
-
-        //    imageIsEnabled.Source = new BitmapImage(iconUri);
-        //}
-
-      
         private void DgCustomers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Customer customer = GetSelectedCustomer(sender);
@@ -119,13 +64,6 @@ namespace Liftmanagement.View
 
             location = new LocationDetailView(customer);
             frameLocations.Content = location;
-
-            //var dd = FindVisualChildren<TextBlock>(this.Content);
-            //foreach (TextBlock tb in dd)
-            //{nameof(customer.
-            //    // do something with tb here
-            //    tb.IsEnabled = false;
-            //}
 
         }
 
@@ -162,13 +100,7 @@ namespace Liftmanagement.View
             BindingText(txtMobile,  () =>  CustomerVM.CustomerSelected.ContactPerson.Mobile);
             BindingText(txtEmail, () => CustomerVM.CustomerSelected.ContactPerson.EMail);
             BindingText(txtAdditionalInfo, nameof( CustomerVM.CustomerSelected.AdditionalInfo));
-            // BindingText(txtAdministratorCompanyName, nameof( CustomerVM.CustomerSelected.Administrator.Name));
-            //BindingText(txtAdministratorCompanyName, GetFullPath(() => CustomerVM.CustomerSelected.Administrator.Name));
             BindingText(txtAdministratorCompanyName, () => CustomerVM.CustomerSelected.Administrator.Name);
-            //BindingText(txtAdministratorCompanyName, "CustomerVM.CustomerSelected.Administrator.Name");
-            // BindingText(txtAdministratorCompanyName, "Administrator.Name");
-            // var fullPath = GetFullPath(() => CustomerVM.CustomerSelected.Administrator.Name);
-
             BindingHyperlink(hyperlinkGoogleDrive, GetPropertyPath(() => CustomerVM.CustomerSelected.GoogleDriveLink));
             BindingTextBlock(txtGoogleDriveFolderName, GetPropertyPath(() => CustomerVM.CustomerSelected.GoogleDriveFolderName));
         }
@@ -182,18 +114,10 @@ namespace Liftmanagement.View
             if (dgAdministratorContactPersons != null && dgAdministratorContactPersons.SelectedItem != null)
                 contactPartner = dgAdministratorContactPersons.SelectedItem as ContactPartner;
 
-         
-            //txtAdministratorContactPerson.Text = contactPartner.Name;
-            //txtAdministratorPhoneWork.Text = contactPartner.PhoneWork;
-            //txtAdministratorMobile.Text = contactPartner.Mobile;
-            //txtAdministratorEmail.Text = contactPartner.EMail;
-
             BindingText(txtAdministratorContactPerson, () => CustomerVM.ContactPerson.Name);
             BindingText(txtAdministratorPhoneWork, () => CustomerVM.ContactPerson.PhoneWork);
             BindingText(txtAdministratorMobile, () => CustomerVM.ContactPerson.Mobile);
             BindingText(txtAdministratorEmail, () => CustomerVM.ContactPerson.EMail);
-
-
         }
 
         private static Customer GetSelectedCustomer(object sender)
@@ -206,31 +130,15 @@ namespace Liftmanagement.View
             return customer;
         }
 
-
-        
-
-
         protected override void BtnSaveGoogleDrive_Click(object sender, RoutedEventArgs e)
         {
             //TODO Clean if not needed
             var node = googlDriveTree.GetSelectedNode();
-            //hyperlinkGoogleDrive.NavigateUri = new Uri(node.WebLink);
-            //txtGoogleDriveFolderName.Text = node.Name;
-
-
-            //var customer = customersView.dgCustomers.SelectedItem as Customer;
-            //if (customer != null)
-            //{
-            //    customer.GoogleDriveLink = node.WebLink;
-            //    customer.GoogleDriveFolderName = node.Name;
-            //}
-
+          
             CustomerVM.CustomerSelected.GoogleDriveLink = node.WebLink;
             CustomerVM.CustomerSelected.GoogleDriveFolderName = node.Name;
 
-            // windowGoogleDriveTree.Close();
             windowGoogleDriveTree.Hide();
-
         }
 
         private void btnGoogleDriveTree_Click(object sender, RoutedEventArgs e)

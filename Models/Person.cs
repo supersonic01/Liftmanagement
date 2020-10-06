@@ -42,17 +42,8 @@ namespace Liftmanagement.Models
         [DisplayName("Zusätzliche Informationen"), Database(Length = "300"),Display(DataGridColumnWidth = DataGridLengthUnitType.Star)]
         public string AdditionalInfo { get; set; }
 
-        //[DisplayName("Ansprechpartner"), DatabaseAttribute(Updateable = false)]
-        [DatabaseAttribute(Updateable = false)]
+      [DatabaseAttribute(Updateable = false)]
         public ContactPartner ContactPerson { get; set; } = new ContactPartner();
-
-        //[DisplayName("Google Drive")]
-        //public string GoogleDriveFolderName { get; set; }
-
-        // [DisplayName("Google Drive Ordner"), DatabaseAttribute(Length = "200")]
-        //[DatabaseAttribute(Length = "200")]
-        //public string GoogleDriveLink { get; set; }
-
 
         private string googleDriveFolderName;
 
@@ -62,8 +53,7 @@ namespace Liftmanagement.Models
             get { return googleDriveFolderName; }
             set { SetField(ref googleDriveFolderName, value); }
         }
-
-
+        
         private string googleDriveLink;
 
         [DatabaseAttribute(Length = "200")]

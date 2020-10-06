@@ -215,7 +215,7 @@ namespace Liftmanagement.Views
 
             binding.Mode = BindingMode.TwoWay;
 
-            control.SetBinding(TextBlock.NameProperty, binding);
+            control.SetBinding(TextBlock.TextProperty, binding);
         }
 
 

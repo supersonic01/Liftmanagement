@@ -21,8 +21,8 @@ namespace Liftmanagement.ViewModels
 
         public SQLQueryResult Add(Customer customer)
         {
-
-            return null;
+            locationSelected.CustomerId = customer.Id;
+           return MySQLDataAccess.AddLocation(LocationSelected);
         }
 
     }

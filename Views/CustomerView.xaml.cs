@@ -132,7 +132,6 @@ namespace Liftmanagement.View
 
         protected override void BtnSaveGoogleDrive_Click(object sender, RoutedEventArgs e)
         {
-            //TODO Clean if not needed
             var node = googlDriveTree.GetSelectedNode();
           
             CustomerVM.CustomerSelected.GoogleDriveLink = node.WebLink;
@@ -159,6 +158,8 @@ namespace Liftmanagement.View
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            //TODO Validate Textbox
+
             if(!string.IsNullOrWhiteSpace(CustomerVM.ContactPerson.Name))
             {
                 CustomerVM.CustomerSelected.Administrator.ContactPersons.Add(CustomerVM.ContactPerson);

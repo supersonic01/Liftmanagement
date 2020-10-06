@@ -23,11 +23,11 @@ namespace Liftmanagement.ViewModels
 
         public LocationsViewModel()
         {
-            RefreshCustomers();
+            Refresh();
            
         }
 
-        public void RefreshCustomers()
+        public void Refresh()
         {
             Locations = MySQLDataAccess.GetLocations();
         }

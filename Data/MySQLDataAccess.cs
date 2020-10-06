@@ -100,6 +100,11 @@ namespace Liftmanagement.Data
 
         public static SQLQueryResult AddLocation(Location location)
         {
+            if (databaseConnection == null)
+            {
+                CreateConnection();
+            }
+
             string query = "INSERT INTO LOCATION(CustomerId,Address,Postcode,City,Selected,AdditionalInfo,GoogleDriveFolderName,GoogleDriveLink,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
             string values = "VALUE(" + location.CustomerId + ",'" + location.Address + "','" + location.Postcode + "','" + location.City + "'," + location.Selected + ",'" + location.AdditionalInfo + "','" + location.GoogleDriveFolderName + "','" + location.GoogleDriveLink + "','" + location.CreatedPersonName + "','" + location.ModifiedPersonName + "'," + location.ReadOnly + ",'" + location.UsedBy + "')";
             query = query + values;
@@ -109,6 +114,9 @@ namespace Liftmanagement.Data
 
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
+
+            databaseConnection.Close();
+
             return new SQLQueryResult(records, id, typeof(ContactPartner));
         }
 

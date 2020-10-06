@@ -70,6 +70,8 @@ namespace Liftmanagement.Views
             //gridRdLocations.Height = new GridLength(gridRdLocations.ActualHeight - 65.96);
             dgLocations.SelectionChanged += DgLocations_SelectionChanged;
             dgLocations.SelectedIndex = 0;
+            
+            SetLable(LocationDetailVM.LocationSelected);
 
             EnableContoles(false);
         }
@@ -82,7 +84,12 @@ namespace Liftmanagement.Views
             {
                 LocationDetailVM.LocationSelected = location;
             }
+            
+            EnableContoles(false);
+        }
 
+        private void SetLable(Location location)
+        {
             lblAdditionalInfo.Content = location.GetDisplayName<Location>(nameof(location.AdditionalInfo)) + ":";
             lblContactPerson.Content = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.Name)) + ":";
             lblAddress.Content = location.GetDisplayName<Location>(nameof(location.Address)) + ":";
@@ -91,15 +98,14 @@ namespace Liftmanagement.Views
             lblPhoneWork.Content = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.PhoneWork)) + ":";
             lblMobile.Content = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.Mobile)) + ":";
             lblEmail.Content = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.EMail)) + ":";
-            lblContactByDefect.Content = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.ContactByDefect)) + ":";
+            lblContactByDefect.Content =
+                location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.ContactByDefect)) + ":";
             lblGoogleDriveLink.Content = location.GetDisplayName<Location>(nameof(location.GoogleDriveFolderName)) + ":";
 
-            BindingControl(this,ItemsControl.DataContextProperty,()=> LocationDetailVM.LocationSelected);
-            //DataContext = location;
-            EnableContoles(false);
+            BindingControl(this, ItemsControl.DataContextProperty, () => LocationDetailVM.LocationSelected);
         }
 
-        
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //TODO Set Titel
@@ -129,7 +135,29 @@ namespace Liftmanagement.Views
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            LocationDetailVM.Add(_customer);
+            var result =  LocationDetailVM.Add(_customer);
+          
+            if (result.Records > 0)
+            {
+                //TODO show Toast msg
+                LocationsVM.Refresh();
+                var location = dgLocations.Items.Cast<Location>().Single(c => c.Id == result.Id);
+                dgLocations.SelectedItem = location;
+            }
+            else
+            {
+                //TODO show Toast msg
+            }
+        }
+
+        protected override void BtnSaveGoogleDrive_Click(object sender, RoutedEventArgs e)
+        {
+            var node = googlDriveTree.GetSelectedNode();
+
+            LocationDetailVM.LocationSelected.GoogleDriveLink = node.WebLink;
+            LocationDetailVM.LocationSelected.GoogleDriveFolderName = node.Name;
+
+            windowGoogleDriveTree.Hide();
         }
     }
 }

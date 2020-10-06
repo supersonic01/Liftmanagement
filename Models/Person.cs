@@ -5,14 +5,28 @@ using System.ComponentModel;
 
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace Liftmanagement.Models
 {
-    public class Person: BaseDatabaseField 
+    public class Person: BaseDatabaseField, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
+
         [DisplayName("Adresse"), DatabaseAttribute(Length = "50")]
         public string Address { get; set; }
 
@@ -32,12 +46,32 @@ namespace Liftmanagement.Models
         [DatabaseAttribute(Updateable = false)]
         public ContactPartner ContactPerson { get; set; } = new ContactPartner();
 
-        [DisplayName("Google Drive")]
-        public string GoogleDriveFolderName { get; set; }
+        //[DisplayName("Google Drive")]
+        //public string GoogleDriveFolderName { get; set; }
 
         // [DisplayName("Google Drive Ordner"), DatabaseAttribute(Length = "200")]
+        //[DatabaseAttribute(Length = "200")]
+        //public string GoogleDriveLink { get; set; }
+
+
+        private string googleDriveFolderName;
+
+        [DisplayName("Google Drive")]
+        public string GoogleDriveFolderName
+        {
+            get { return googleDriveFolderName; }
+            set { SetField(ref googleDriveFolderName, value); }
+        }
+
+
+        private string googleDriveLink;
+
         [DatabaseAttribute(Length = "200")]
-        public string GoogleDriveLink { get; set; }
+        public string GoogleDriveLink
+        {
+            get { return googleDriveLink; }
+            set { SetField(ref googleDriveLink, value); }
+        }
 
         public string GetPostcodeCity()
         {

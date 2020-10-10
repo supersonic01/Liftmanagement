@@ -40,7 +40,7 @@ namespace Liftmanagement.Data
         //            Records = result.Records, Id = result.Id,
         //        });
 
-        }
+      //  }
 
        }
 

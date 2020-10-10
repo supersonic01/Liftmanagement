@@ -40,8 +40,10 @@ namespace Liftmanagement.Data
             databaseConnection.Close();
         }
 
-        public static SQLQueryResult AddCustomer(Customer customer)
+        public static SQLQueryResult<Customer> AddCustomer(Customer customer)
         {
+            //TOTO do in trasaction
+
             if (databaseConnection == null)
             {
                 CreateConnection();
@@ -57,25 +59,28 @@ namespace Liftmanagement.Data
             databaseConnection.Open();
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
-            var result = new SQLQueryResult(records, id, typeof(Customer));
+            var result = new SQLQueryResult<Customer>(records, id);
 
             customer.ContactPerson.ForeignKey = id;
+            customer.ContactPerson.CustomerId = id;
+            customer.ContactPerson.ForeignKeyType = Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Customer)];
             var contactResult = AddContactPartner(customer.ContactPerson);
-            result.AddSQLSubQueryResult(contactResult, result);
+          //  result.AddSQLSubQueryResult(contactResult, result);
 
             customer.Administrator.CustomerId = id;
             var adminResult = AddAdministratorCompany(customer.Administrator);
-            result.AddSQLSubQueryResult(adminResult, result);
+           // result.AddSQLSubQueryResult(adminResult, result);
 
             foreach (var contactPerson in customer.Administrator.ContactPersons)
             {
                 if (contactPerson.Id < 0)
                 {
                     contactPerson.ForeignKey = adminResult.Id;
+                    contactPerson.ForeignKey = customer.Administrator.CustomerId;
                     contactPerson.ForeignKeyType =
                         Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(AdministratorCompany)];
                     var res = AddContactPartner(contactPerson);
-                    result.AddSQLSubQueryResult(res, adminResult);
+                    //result.AddSQLSubQueryResult(res, adminResult);
                 }
             }
 
@@ -84,7 +89,7 @@ namespace Liftmanagement.Data
             return result;
         }
 
-        private static SQLQueryResult AddContactPartner(ContactPartner contactpartner)
+        private static SQLQueryResult<ContactPartner> AddContactPartner(ContactPartner contactpartner)
         {
             string query = "INSERT INTO CONTACTPARTNER(CustomerId,ForeignKey,ForeignKeyType,Name,PhoneWork,Mobile,EMail,ContactByDefect,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
             string values = "VALUE(" + contactpartner.CustomerId + "," + contactpartner.ForeignKey + "," + contactpartner.ForeignKeyType + ",'" + contactpartner.Name + "','" + contactpartner.PhoneWork + "','" + contactpartner.Mobile + "','" + contactpartner.EMail + "'," + contactpartner.ContactByDefect + ",'" + contactpartner.CreatedPersonName + "','" + contactpartner.ModifiedPersonName + "'," + contactpartner.ReadOnly + ",'" + contactpartner.UsedBy + "')";
@@ -95,10 +100,10 @@ namespace Liftmanagement.Data
 
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
-            return new SQLQueryResult(records, id, typeof(ContactPartner));
+            return new SQLQueryResult<ContactPartner>(records, id);
         }
 
-        public static SQLQueryResult AddLocation(Location location)
+        public static SQLQueryResult<Location> AddLocation(Location location)
         {
             if (databaseConnection == null)
             {
@@ -112,15 +117,24 @@ namespace Liftmanagement.Data
 
             MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
 
+            databaseConnection.Open();
+
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
+            var result = new SQLQueryResult<Location>(records, id);
+
+            location.ContactPerson.ForeignKey = id;
+            location.ContactPerson.CustomerId = location.CustomerId;
+            location.ContactPerson.ForeignKeyType = Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Location)];
+            var contactResult = AddContactPartner(location.ContactPerson);
+           // result.AddSQLSubQueryResult(contactResult, result);
 
             databaseConnection.Close();
 
-            return new SQLQueryResult(records, id, typeof(ContactPartner));
+            return result;
         }
 
-        private static SQLQueryResult AddAdministratorCompany(AdministratorCompany administratorcompany)
+        private static SQLQueryResult<AdministratorCompany> AddAdministratorCompany(AdministratorCompany administratorcompany)
         {
             string query = "INSERT INTO ADMINISTRATORCOMPANY(CustomerId,Name,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
             string values = "VALUE(" + administratorcompany.CustomerId + ",'" + administratorcompany.Name + "','" + administratorcompany.CreatedPersonName + "','" + administratorcompany.ModifiedPersonName + "'," + administratorcompany.ReadOnly + ",'" + administratorcompany.UsedBy + "')";
@@ -132,10 +146,10 @@ namespace Liftmanagement.Data
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
 
-            return new SQLQueryResult(records, id, typeof(AdministratorCompany)); 
+            return new SQLQueryResult<AdministratorCompany>(records, id); 
         }
 
-        public static SQLQueryResult AddMachineInformation(MachineInformation machineinformation)
+        public static SQLQueryResult<MachineInformation> AddMachineInformation(MachineInformation machineinformation)
         {
             if (databaseConnection == null)
             {
@@ -152,18 +166,18 @@ namespace Liftmanagement.Data
             databaseConnection.Open();
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
-            var result=  new SQLQueryResult(records, id, typeof(MachineInformation));
+            var result=  new SQLQueryResult<MachineInformation>(records, id);
             
             machineinformation.ContactPerson.ForeignKey = (int)id;
             var contactResult = AddContactPartner(machineinformation.ContactPerson);           
-            result.AddSQLSubQueryResult(contactResult, result);
+            //result.AddSQLSubQueryResult(contactResult, result);
 
             databaseConnection.Close();
             return result;
         }
 
 
-        public static SQLQueryResult AddMaintenanceAgreement(MaintenanceAgreement maintenanceagreement)
+        public static SQLQueryResult<MaintenanceAgreement> AddMaintenanceAgreement(MaintenanceAgreement maintenanceagreement)
         {
             if (databaseConnection == null)
             {
@@ -183,14 +197,18 @@ namespace Liftmanagement.Data
 
             databaseConnection.Close();
 
-            return new SQLQueryResult(records, id, typeof(AdministratorCompany));
+            return new SQLQueryResult<MaintenanceAgreement>(records, id);
         }
 
         public static List<Customer> GetCustomers()
         {
-            List<Customer> customers = new List<Customer>();
-
             string query = "SELECT * FROM CUSTOMER";
+            return GetCustomers(query);
+        }
+
+        private static List<Customer> GetCustomers(string query)
+        {
+            List<Customer> customers = new List<Customer>();
 
             SelectItems(query, reader =>
             {
@@ -232,60 +250,81 @@ namespace Liftmanagement.Data
                     customer.Administrator = administratorcompany;
                 });
 
+                customer.ContactPerson = GetContactPartners(customer.Id,
+                    Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Customer)]).FirstOrDefault();
 
-                query = "SELECT * FROM CONTACTPARTNER WHERE FOREIGNKEY = " + customer.Id + " AND FOREIGNKEYTYPE = " + Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Customer)];
+                customer.Administrator.ContactPersons = GetContactPartners(customer.Administrator.Id , Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(AdministratorCompany)]);
 
-                SelectItems(query, reader =>
-                {
-                    ContactPartner contactpartner = new ContactPartner();
-                    contactpartner.CustomerId = reader.GetInt64("CustomerId");
-                    contactpartner.ForeignKey = reader.GetInt64("ForeignKey");
-                    contactpartner.ForeignKeyType = reader.GetInt32("ForeignKeyType");
-                    contactpartner.Name = reader.GetString("Name");
-                    contactpartner.PhoneWork = reader.GetString("PhoneWork");
-                    contactpartner.Mobile = reader.GetString("Mobile");
-                    contactpartner.EMail = reader.GetString("EMail");
-                    contactpartner.ContactByDefect = reader.GetBoolean("ContactByDefect");
-                    contactpartner.Id = reader.GetInt64("Id");
-                    contactpartner.CreatedDate = reader.GetDateTime("CreatedDate");
-                    contactpartner.ModifiedDate = reader.GetDateTime("ModifiedDate");
-                    contactpartner.CreatedPersonName = reader.GetString("CreatedPersonName");
-                    contactpartner.ModifiedPersonName = reader.GetString("ModifiedPersonName");
-                    contactpartner.ReadOnly = reader.GetBoolean("ReadOnly");
-                    contactpartner.UsedBy = reader.GetString("UsedBy");
-                    customer.ContactPerson = contactpartner;
-                });
-
-
-                List<ContactPartner> contactpartners = new List<ContactPartner>();
-                query = "SELECT * FROM CONTACTPARTNER WHERE FOREIGNKEY = " + customer.Administrator.Id + " AND FOREIGNKEYTYPE = " + Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(AdministratorCompany)];
-
-                SelectItems(query, reader =>
-                {
-                    ContactPartner contactpartner = new ContactPartner();
-                    contactpartner.CustomerId = reader.GetInt64("CustomerId");
-                    contactpartner.ForeignKey = reader.GetInt64("ForeignKey");
-                    contactpartner.ForeignKeyType = reader.GetInt32("ForeignKeyType");
-                    contactpartner.Name = reader.GetString("Name");
-                    contactpartner.PhoneWork = reader.GetString("PhoneWork");
-                    contactpartner.Mobile = reader.GetString("Mobile");
-                    contactpartner.EMail = reader.GetString("EMail");
-                    contactpartner.ContactByDefect = reader.GetBoolean("ContactByDefect");
-                    contactpartner.Id = reader.GetInt64("Id");
-                    contactpartner.CreatedDate = reader.GetDateTime("CreatedDate");
-                    contactpartner.ModifiedDate = reader.GetDateTime("ModifiedDate");
-                    contactpartner.CreatedPersonName = reader.GetString("CreatedPersonName");
-                    contactpartner.ModifiedPersonName = reader.GetString("ModifiedPersonName");
-                    contactpartner.ReadOnly = reader.GetBoolean("ReadOnly");
-                    contactpartner.UsedBy = reader.GetString("UsedBy");
-                    contactpartners.Add(contactpartner);
-                });
-
-                customer.Administrator.ContactPersons = contactpartners;
             }
 
             return customers;
 
+        }
+        public static SQLQueryResult<Customer> GetCustomerForEdit(long id)
+        {
+
+            string query = "SELECT * FROM CUSTOMER WHERE ID= " + id;
+            var customers = GetCustomers(query);
+
+            var result = new SQLQueryResult<Customer>(0, id);
+            result.DBRecords = customers;
+            var customer = customers.FirstOrDefault();
+
+            if (customer.ReadOnly)
+            {
+
+            }
+            else{
+                var updateQuery = "UPDATE CUSTOMER SET READONLY= 1 ,WHERE ID" + id;
+
+                if (databaseConnection == null)
+                {
+                    CreateConnection();
+                }
+
+                MySqlCommand execQuery = new MySqlCommand(updateQuery, databaseConnection);
+
+                databaseConnection.Open();
+                int records = execQuery.ExecuteNonQuery();
+               
+                var subResult = new SQLQueryResult<Customer>(records, id);
+               // result.AddSQLSubQueryResult(subResult,result);
+                
+                databaseConnection.Close();
+
+                customer = GetCustomers(query).FirstOrDefault();
+            }
+
+            return result;
+        }
+
+        private static List<ContactPartner> GetContactPartners(long foreignkey , int foreignkeytype)
+        {
+            string query;
+            List<ContactPartner> contactpartners = new List<ContactPartner>();
+            query = "SELECT * FROM CONTACTPARTNER WHERE FOREIGNKEY = " + foreignkey + " AND FOREIGNKEYTYPE = " + foreignkeytype;
+
+            SelectItems(query, reader =>
+            {
+                ContactPartner contactpartner = new ContactPartner();
+                contactpartner.CustomerId = reader.GetInt64("CustomerId");
+                contactpartner.ForeignKey = reader.GetInt64("ForeignKey");
+                contactpartner.ForeignKeyType = reader.GetInt32("ForeignKeyType");
+                contactpartner.Name = reader.GetString("Name");
+                contactpartner.PhoneWork = reader.GetString("PhoneWork");
+                contactpartner.Mobile = reader.GetString("Mobile");
+                contactpartner.EMail = reader.GetString("EMail");
+                contactpartner.ContactByDefect = reader.GetBoolean("ContactByDefect");
+                contactpartner.Id = reader.GetInt64("Id");
+                contactpartner.CreatedDate = reader.GetDateTime("CreatedDate");
+                contactpartner.ModifiedDate = reader.GetDateTime("ModifiedDate");
+                contactpartner.CreatedPersonName = reader.GetString("CreatedPersonName");
+                contactpartner.ModifiedPersonName = reader.GetString("ModifiedPersonName");
+                contactpartner.ReadOnly = reader.GetBoolean("ReadOnly");
+                contactpartner.UsedBy = reader.GetString("UsedBy");
+                contactpartners.Add(contactpartner);
+            });
+            return contactpartners;
         }
 
         public static List<Location> GetLocations()
@@ -314,6 +353,13 @@ namespace Liftmanagement.Data
                 location.UsedBy = reader.GetString("UsedBy");
                 locations.Add(location);
             });
+
+            foreach (var location in locations)
+            {
+                location.ContactPerson = GetContactPartners(location.Id,
+                    Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Location)]).FirstOrDefault();
+            }
+
             return locations;
         }
 
@@ -408,12 +454,12 @@ namespace Liftmanagement.Data
 
         private static void SelectItems(string query, Action<MySqlDataReader> getRecords)
         {
+            //TODO check whether its not better to open one time and not for each select....
             if (databaseConnection == null)
             {
                 CreateConnection();
             }
-
-
+            
 
             MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
             commandDatabase.CommandTimeout = 60;

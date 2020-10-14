@@ -7,7 +7,7 @@ using Liftmanagement.Models;
 
 namespace Liftmanagement.Data
 {
-  public class SQLQueryResult<T> where T :class
+  public class SQLQueryResult<T> where T : BaseDatabaseField
     {
         public struct SQLSubQueryResult
         {

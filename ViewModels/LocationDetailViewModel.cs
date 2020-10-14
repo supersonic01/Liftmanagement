@@ -25,5 +25,16 @@ namespace Liftmanagement.ViewModels
            return MySQLDataAccess.AddLocation(LocationSelected);
         }
 
+        public SQLQueryResult<Location> EditLocation()
+        {
+            var result = MySQLDataAccess.GetLocationForEdit(LocationSelected.Id);
+            if (!result.IsReadOnly)
+            {
+                LocationSelected = result.DBRecords.FirstOrDefault() as Location;
+            }
+
+            return result;
+        }
+
     }
 }

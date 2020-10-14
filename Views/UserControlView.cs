@@ -54,9 +54,8 @@ namespace Liftmanagement.Views
             }
         }
 
-        private BitmapImage enabledBitmapImage = new BitmapImage(new Uri("pack://application:,,,../Resources/Images/Icons/Custom-Icon-Design-Flatastic-10-Edit-validated.ico", UriKind.RelativeOrAbsolute));
-        //TODO not working
-        public BitmapImage EnabledBitmapImage
+       private BitmapImage enabledBitmapImage = new BitmapImage(new Uri("pack://application:,,,../Resources/Images/Icons/Custom-Icon-Design-Flatastic-10-Edit-validated.ico", UriKind.RelativeOrAbsolute));
+       public BitmapImage EnabledBitmapImage
         {
             get { return enabledBitmapImage; }
             set { SetField(ref enabledBitmapImage, value); }
@@ -68,6 +67,7 @@ namespace Liftmanagement.Views
         protected virtual string SourceObjectStringName { get; }
 
         private bool isReadOnly;
+
 
         public bool IsReadOnly
         {

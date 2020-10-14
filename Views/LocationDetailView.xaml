@@ -90,6 +90,9 @@
                 <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5"  Content="Standort" FontSize="24"  Padding="10"
                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center"/>
 
+                <Image x:Name="imageIsEnabled" Grid.Row="0" Grid.Column="0"  Height="40" HorizontalAlignment="Left" Margin="10,0,0,0"
+                       Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=EnabledBitmapImage}"/>
+
                 <Label x:Name="lblAddress" Grid.Row="2" Grid.Column="0"  Style="{StaticResource LableStyle}" />
                 <Label x:Name="lblPostcode" Grid.Row="2" Grid.Column="1"  Style="{StaticResource LableStyle}" />
                 <Label x:Name="lblCity" Grid.Row="2" Grid.Column="2"  Style="{StaticResource LableStyle}" />
@@ -140,21 +143,21 @@
         </StackPanel>
 
         <StackPanel  x:Name="spLocations" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  CanVerticallyScroll="True">
-                <DataGrid  x:Name="dgLocations" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"  SelectionUnit="FullRow" 
+            <DataGrid  x:Name="dgLocations" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"  SelectionUnit="FullRow" 
                            local:CustomColumnHeadersProperty.ItemType="{x:Type local:LocationDetailView}" IsReadOnly="True" SelectionMode="Single"
                            CellStyle="{StaticResource Body_Content_DataGrid_Centering}"  Margin="10,0,110,0">
-                    <DataGrid.RowStyle >
-                        <Style TargetType="DataGridRow">
-                            <Setter Property="Height" Value="30"/>
-                            <Style.Triggers>
-                                <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                    <Setter Property="Background" Value="#0078D7" />
-                                    <Setter Property="Foreground" Value="White" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGrid.RowStyle>
-                </DataGrid>
-            </StackPanel>
+                <DataGrid.RowStyle >
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Height" Value="30"/>
+                        <Style.Triggers>
+                            <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                <Setter Property="Background" Value="#0078D7" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+            </DataGrid>
+        </StackPanel>
     </Grid>
 </local:GoogleDriveDialogueView>

@@ -20,18 +20,8 @@ namespace Liftmanagement.Views
         public GoogleDriveDialogueView()
         {
             Loaded += GoogleDriveDialogueView_Loaded;
-            IsVisibleChanged += GoogleDriveDialogueView_IsVisibleChanged;
         }
-
-        private void GoogleDriveDialogueView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (!((bool)e.NewValue))
-            {
-               Console.WriteLine( "Visibility");
-            }
-            Console.WriteLine("Visibility11");
-        }
-
+        
         private void GoogleDriveDialogueView_Loaded(object sender, RoutedEventArgs e)
         {
            InitGoogleDriveDialogue();

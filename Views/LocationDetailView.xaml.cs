@@ -44,7 +44,7 @@ namespace Liftmanagement.Views
                 Binding = new Binding("ContactPerson.Name"),
                 DisplayIndex = 8
             });
-           
+
             dgLocations.Columns.Add(new DataGridCheckBoxColumn()
             {
                 Header = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.ContactByDefect)),
@@ -52,9 +52,7 @@ namespace Liftmanagement.Views
                 DisplayIndex = 9
             });
 
-            //dgLocations.ItemsSource = LocationsVM.GetLocationsByCustomer(customer);
 
-            // dgLocations.ItemsSource = LocationsVM.Locations;
             BindingControl(dgLocations, () => LocationsVM.Locations);
 
             Loaded += LocationDetailView_Loaded;
@@ -69,7 +67,8 @@ namespace Liftmanagement.Views
 
         private void LocationDetailView_Loaded(object sender, RoutedEventArgs e)
         {
-            //gridRdLocations.Height = new GridLength(gridRdLocations.ActualHeight - 65.96);
+            LocationsVM.LocationsByCustomer(_customer);
+
             dgLocations.SelectionChanged += DgLocations_SelectionChanged;
             dgLocations.SelectedIndex = 0;
 
@@ -127,7 +126,15 @@ namespace Liftmanagement.Views
 
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
-
+            var result = LocationDetailVM.EditLocation();
+            if (result.IsReadOnly)
+            {
+                //TODO show message is used by
+            }
+            else
+            {
+                EnableContoles(true);
+            }
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -142,8 +149,7 @@ namespace Liftmanagement.Views
             if (result.Records > 0)
             {
                 //TODO show Toast msg
-                LocationsVM.Refresh();
-                //dgLocations.ItemsSource = LocationsVM.GetLocationsByCustomer(_customer);
+                LocationsVM.LocationsByCustomer(_customer);
                 var location = dgLocations.Items.Cast<Location>().Single(c => c.Id == result.Id);
                 dgLocations.SelectedItem = location;
             }

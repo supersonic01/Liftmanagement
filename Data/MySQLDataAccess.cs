@@ -260,24 +260,98 @@ namespace Liftmanagement.Data
             return customers;
 
         }
+
+        private static List<Location> GetLocations(string query)
+        {
+            List<Location> locations = new List<Location>();
+
+            SelectItems(query, reader =>
+            {
+                Location location = new Location();
+                location.CustomerId = reader.GetInt64("CustomerId");
+                location.Address = reader.GetString("Address");
+                location.Postcode = reader.GetString("Postcode");
+                location.City = reader.GetString("City");
+                location.Selected = reader.GetBoolean("Selected");
+                location.AdditionalInfo = reader.GetString("AdditionalInfo");
+                location.GoogleDriveFolderName = reader.GetString("GoogleDriveFolderName");
+                location.GoogleDriveLink = reader.GetString("GoogleDriveLink");
+                location.Id = reader.GetInt64("Id");
+                location.CreatedDate = reader.GetDateTime("CreatedDate");
+                location.ModifiedDate = reader.GetDateTime("ModifiedDate");
+                location.CreatedPersonName = reader.GetString("CreatedPersonName");
+                location.ModifiedPersonName = reader.GetString("ModifiedPersonName");
+                location.ReadOnly = reader.GetBoolean("ReadOnly");
+                location.UsedBy = reader.GetString("UsedBy");
+                locations.Add(location);
+            });
+
+            foreach (var location in locations)
+            {
+                location.ContactPerson = GetContactPartners(location.Id,
+                    Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Location)]).FirstOrDefault();
+            }
+
+            return locations;
+
+        }
+
         public static SQLQueryResult<Customer> GetCustomerForEdit(long id)
+        {
+            return GetRecordForEdit(id, query => GetCustomers(query));
+
+            //string query = "SELECT * FROM CUSTOMER WHERE ID= " + id;
+            //var customers = GetCustomers(query);
+
+            //var result = new SQLQueryResult<Customer>(0, id);
+            //result.DBRecords = customers;
+            //var customer = customers.FirstOrDefault();
+
+            //if (customer.ReadOnly)
+            //{
+
+            //}
+            //else
+            //{
+            //    var updateQuery = "UPDATE CUSTOMER SET READONLY = 1 WHERE ID = " + id;
+
+            //    if (databaseConnection == null)
+            //    {
+            //        CreateConnection();
+            //    }
+
+            //    MySqlCommand execQuery = new MySqlCommand(updateQuery, databaseConnection);
+
+            //    databaseConnection.Open();
+            //    int records = execQuery.ExecuteNonQuery();
+
+            //    databaseConnection.Close();
+
+            //    result.DBRecords = GetCustomers(query);
+            //}
+
+            //return result;
+        }
+
+        private static SQLQueryResult<T> GetRecordForEdit<T>(long id, Func<string,List<T>> GetRecords) where T : BaseDatabaseField
         {
             // TODO check user, if is the same user, editing is possilbe
 
-            string query = "SELECT * FROM CUSTOMER WHERE ID= " + id;
-            var customers = GetCustomers(query);
+            var classname = typeof(T).Name;
 
-            var result = new SQLQueryResult<Customer>(0, id);
-            result.DBRecords = customers;
-            var customer = customers.FirstOrDefault();
+            string query = "SELECT * FROM "+ classname + " WHERE ID= " + id;
+            var result = new SQLQueryResult<T>(0, id);
+            result.DBRecords = GetRecords(query);
+          
+            var item = result.DBRecords.FirstOrDefault();
 
-            if (customer.ReadOnly)
+            if (item.ReadOnly)
             {
 
             }
             else
             {
-                var updateQuery = "UPDATE CUSTOMER SET READONLY = 1 WHERE ID = " + id;
+                var updateQuery = "UPDATE " + classname + " SET READONLY = 1 WHERE ID = " + id;
 
                 if (databaseConnection == null)
                 {
@@ -289,15 +363,55 @@ namespace Liftmanagement.Data
                 databaseConnection.Open();
                 int records = execQuery.ExecuteNonQuery();
 
-                var subResult = new SQLQueryResult<Customer>(records, id);
-                // result.AddSQLSubQueryResult(subResult,result);
-
                 databaseConnection.Close();
 
-                customer = GetCustomers(query).FirstOrDefault();
+                result.DBRecords = GetRecords(query);
             }
 
             return result;
+        }
+
+
+        public static SQLQueryResult<Location> GetLocationForEdit(long id)
+        {
+            return GetRecordForEdit(id, query => GetLocations(query));
+
+            //// TODO check user, if is the same user, editing is possilbe
+
+            //string query = "SELECT * FROM LOCATION WHERE ID= " + id;
+            //var locations = GetLocations();
+
+            //var result = new SQLQueryResult<Location>(0, id);
+            //result.DBRecords = locations;
+            //var location = locations.FirstOrDefault();
+
+            //if (location.ReadOnly)
+            //{
+
+            //}
+            //else
+            //{
+            //    var updateQuery = "UPDATE CUSTOMER SET READONLY = 1 WHERE ID = " + id;
+
+            //    if (databaseConnection == null)
+            //    {
+            //        CreateConnection();
+            //    }
+
+            //    MySqlCommand execQuery = new MySqlCommand(updateQuery, databaseConnection);
+
+            //    databaseConnection.Open();
+            //    int records = execQuery.ExecuteNonQuery();
+
+            //    var subResult = new SQLQueryResult<Customer>(records, id);
+            //    // result.AddSQLSubQueryResult(subResult,result);
+
+            //    databaseConnection.Close();
+
+            //    location = GetLocations(query);
+            //}
+
+           // return result;
         }
 
         private static List<ContactPartner> GetContactPartners(long foreignkey, int foreignkeytype)
@@ -331,38 +445,41 @@ namespace Liftmanagement.Data
 
         public static List<Location> GetLocations()
         {
-            List<Location> locations = new List<Location>();
-
             string query = "SELECT * FROM LOCATION";
+           return GetLocations(query);
 
-            SelectItems(query, reader =>
-            {
-                Location location = new Location();
-                location.CustomerId = reader.GetInt64("CustomerId");
-                location.Address = reader.GetString("Address");
-                location.Postcode = reader.GetString("Postcode");
-                location.City = reader.GetString("City");
-                location.Selected = reader.GetBoolean("Selected");
-                location.AdditionalInfo = reader.GetString("AdditionalInfo");
-                location.GoogleDriveFolderName = reader.GetString("GoogleDriveFolderName");
-                location.GoogleDriveLink = reader.GetString("GoogleDriveLink");
-                location.Id = reader.GetInt64("Id");
-                location.CreatedDate = reader.GetDateTime("CreatedDate");
-                location.ModifiedDate = reader.GetDateTime("ModifiedDate");
-                location.CreatedPersonName = reader.GetString("CreatedPersonName");
-                location.ModifiedPersonName = reader.GetString("ModifiedPersonName");
-                location.ReadOnly = reader.GetBoolean("ReadOnly");
-                location.UsedBy = reader.GetString("UsedBy");
-                locations.Add(location);
-            });
+            //List<Location> locations = new List<Location>();
 
-            foreach (var location in locations)
-            {
-                location.ContactPerson = GetContactPartners(location.Id,
-                    Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Location)]).FirstOrDefault();
-            }
+            //string query = "SELECT * FROM LOCATION";
 
-            return locations;
+            //SelectItems(query, reader =>
+            //{
+            //    Location location = new Location();
+            //    location.CustomerId = reader.GetInt64("CustomerId");
+            //    location.Address = reader.GetString("Address");
+            //    location.Postcode = reader.GetString("Postcode");
+            //    location.City = reader.GetString("City");
+            //    location.Selected = reader.GetBoolean("Selected");
+            //    location.AdditionalInfo = reader.GetString("AdditionalInfo");
+            //    location.GoogleDriveFolderName = reader.GetString("GoogleDriveFolderName");
+            //    location.GoogleDriveLink = reader.GetString("GoogleDriveLink");
+            //    location.Id = reader.GetInt64("Id");
+            //    location.CreatedDate = reader.GetDateTime("CreatedDate");
+            //    location.ModifiedDate = reader.GetDateTime("ModifiedDate");
+            //    location.CreatedPersonName = reader.GetString("CreatedPersonName");
+            //    location.ModifiedPersonName = reader.GetString("ModifiedPersonName");
+            //    location.ReadOnly = reader.GetBoolean("ReadOnly");
+            //    location.UsedBy = reader.GetString("UsedBy");
+            //    locations.Add(location);
+            //});
+
+            //foreach (var location in locations)
+            //{
+            //    location.ContactPerson = GetContactPartners(location.Id,
+            //        Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Location)]).FirstOrDefault();
+            //}
+
+            //return locations;
         }
 
         public static List<MaintenanceAgreement> GetMaintenanceAgreements()

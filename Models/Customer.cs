@@ -21,8 +21,7 @@ namespace Liftmanagement.Models
             }
             set { administrator = value; }
         }
-
-
+        
         public Customer()
         {
 

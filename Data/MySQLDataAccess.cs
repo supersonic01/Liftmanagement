@@ -65,18 +65,18 @@ namespace Liftmanagement.Data
             customer.ContactPerson.CustomerId = id;
             customer.ContactPerson.ForeignKeyType = Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Customer)];
             var contactResult = AddContactPartner(customer.ContactPerson);
-          //  result.AddSQLSubQueryResult(contactResult, result);
+            //  result.AddSQLSubQueryResult(contactResult, result);
 
             customer.Administrator.CustomerId = id;
             var adminResult = AddAdministratorCompany(customer.Administrator);
-           // result.AddSQLSubQueryResult(adminResult, result);
+            // result.AddSQLSubQueryResult(adminResult, result);
 
             foreach (var contactPerson in customer.Administrator.ContactPersons)
             {
                 if (contactPerson.Id < 0)
                 {
                     contactPerson.ForeignKey = adminResult.Id;
-                    contactPerson.ForeignKey = customer.Administrator.CustomerId;
+                    contactPerson.CustomerId = customer.Administrator.CustomerId;
                     contactPerson.ForeignKeyType =
                         Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(AdministratorCompany)];
                     var res = AddContactPartner(contactPerson);
@@ -127,7 +127,7 @@ namespace Liftmanagement.Data
             location.ContactPerson.CustomerId = location.CustomerId;
             location.ContactPerson.ForeignKeyType = Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Location)];
             var contactResult = AddContactPartner(location.ContactPerson);
-           // result.AddSQLSubQueryResult(contactResult, result);
+            // result.AddSQLSubQueryResult(contactResult, result);
 
             databaseConnection.Close();
 
@@ -146,7 +146,7 @@ namespace Liftmanagement.Data
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
 
-            return new SQLQueryResult<AdministratorCompany>(records, id); 
+            return new SQLQueryResult<AdministratorCompany>(records, id);
         }
 
         public static SQLQueryResult<MachineInformation> AddMachineInformation(MachineInformation machineinformation)
@@ -166,10 +166,10 @@ namespace Liftmanagement.Data
             databaseConnection.Open();
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
-            var result=  new SQLQueryResult<MachineInformation>(records, id);
-            
+            var result = new SQLQueryResult<MachineInformation>(records, id);
+
             machineinformation.ContactPerson.ForeignKey = (int)id;
-            var contactResult = AddContactPartner(machineinformation.ContactPerson);           
+            var contactResult = AddContactPartner(machineinformation.ContactPerson);
             //result.AddSQLSubQueryResult(contactResult, result);
 
             databaseConnection.Close();
@@ -253,7 +253,7 @@ namespace Liftmanagement.Data
                 customer.ContactPerson = GetContactPartners(customer.Id,
                     Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Customer)]).FirstOrDefault();
 
-                customer.Administrator.ContactPersons = GetContactPartners(customer.Administrator.Id , Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(AdministratorCompany)]);
+                customer.Administrator.ContactPersons = GetContactPartners(customer.Administrator.Id, Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(AdministratorCompany)]);
 
             }
 
@@ -262,6 +262,7 @@ namespace Liftmanagement.Data
         }
         public static SQLQueryResult<Customer> GetCustomerForEdit(long id)
         {
+            // TODO check user, if is the same user, editing is possilbe
 
             string query = "SELECT * FROM CUSTOMER WHERE ID= " + id;
             var customers = GetCustomers(query);
@@ -274,8 +275,9 @@ namespace Liftmanagement.Data
             {
 
             }
-            else{
-                var updateQuery = "UPDATE CUSTOMER SET READONLY= 1 ,WHERE ID" + id;
+            else
+            {
+                var updateQuery = "UPDATE CUSTOMER SET READONLY = 1 WHERE ID = " + id;
 
                 if (databaseConnection == null)
                 {
@@ -286,10 +288,10 @@ namespace Liftmanagement.Data
 
                 databaseConnection.Open();
                 int records = execQuery.ExecuteNonQuery();
-               
+
                 var subResult = new SQLQueryResult<Customer>(records, id);
-               // result.AddSQLSubQueryResult(subResult,result);
-                
+                // result.AddSQLSubQueryResult(subResult,result);
+
                 databaseConnection.Close();
 
                 customer = GetCustomers(query).FirstOrDefault();
@@ -298,7 +300,7 @@ namespace Liftmanagement.Data
             return result;
         }
 
-        private static List<ContactPartner> GetContactPartners(long foreignkey , int foreignkeytype)
+        private static List<ContactPartner> GetContactPartners(long foreignkey, int foreignkeytype)
         {
             string query;
             List<ContactPartner> contactpartners = new List<ContactPartner>();
@@ -452,6 +454,109 @@ namespace Liftmanagement.Data
             return machineinformations;
         }
 
+
+        public static SQLQueryResult<Customer> UpdateCustomer(Customer customer)
+        {
+            //TOTO do in trasaction
+            //Check Timestemp if needed
+
+            if (databaseConnection == null)
+            {
+                CreateConnection();
+            }
+
+            string query = "UPDATE CUSTOMER SET CompanyName = '" + customer.CompanyName + "',Address = '" + customer.Address + "',Postcode = '" + customer.Postcode + "',City = '" + customer.City + "',Selected = " + customer.Selected + ",AdditionalInfo = '" + customer.AdditionalInfo + "',GoogleDriveFolderName = '" + customer.GoogleDriveFolderName + "',GoogleDriveLink = '" + customer.GoogleDriveLink + "',CreatedPersonName = '" + customer.CreatedPersonName + "',ModifiedPersonName = '" + customer.ModifiedPersonName + "',ReadOnly = " + customer.ReadOnly + ",UsedBy = '" + customer.UsedBy + "' WHERE ID = " + customer.Id;
+
+            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+
+            databaseConnection.Open();
+            int records = execQuery.ExecuteNonQuery();
+            long id = customer.Id;
+            var result = new SQLQueryResult<Customer>(records, id);
+
+            UpdateContactPartner(customer.ContactPerson);
+
+            UpdateAdministratorCompany(customer.Administrator);
+
+            foreach (var contactPerson in customer.Administrator.ContactPersons)
+            {
+                contactPerson.ForeignKey = customer.Administrator.Id;
+                contactPerson.CustomerId = customer.Administrator.CustomerId;
+                contactPerson.ForeignKeyType =
+                    Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(AdministratorCompany)];
+
+                if (contactPerson.Id < 0)
+                {
+                    AddContactPartner(contactPerson);
+                }
+                else
+                {
+                    UpdateContactPartner(contactPerson);
+                }
+            }
+
+            foreach (var contactPerson in customer.Administrator.DeletedContactPersons)
+            {
+                query = "DELETE FROM CONTACTPARTNER WHERE ID = " + contactPerson.Id;
+                execQuery = new MySqlCommand(query, databaseConnection);
+                execQuery.ExecuteNonQuery();
+            }
+
+            databaseConnection.Close();
+
+            return result;
+        }
+
+
+        private static SQLQueryResult<ContactPartner> UpdateContactPartner(ContactPartner contactpartner)
+        {
+            string query = "UPDATE CONTACTPARTNER SET CustomerId = " + contactpartner.CustomerId + ",ForeignKey = " + contactpartner.ForeignKey + ",ForeignKeyType = " + contactpartner.ForeignKeyType + ",Name = '" + contactpartner.Name + "',PhoneWork = '" + contactpartner.PhoneWork + "',Mobile = '" + contactpartner.Mobile + "',EMail = '" + contactpartner.EMail + "',ContactByDefect = " + contactpartner.ContactByDefect + ",CreatedPersonName = '" + contactpartner.CreatedPersonName + "',ModifiedPersonName = '" + contactpartner.ModifiedPersonName + "',ReadOnly = " + contactpartner.ReadOnly + ",UsedBy = '" + contactpartner.UsedBy + "' WHERE ID = " + contactpartner.Id;
+
+            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+
+            int records = execQuery.ExecuteNonQuery();
+            return new SQLQueryResult<ContactPartner>(records, contactpartner.Id);
+        }
+
+        public static SQLQueryResult<Location> UpdateLocation(Location location)
+        {
+            if (databaseConnection == null)
+            {
+                CreateConnection();
+            }
+
+            string query = "UPDATE LOCATION SET CustomerId = " + location.CustomerId + ",Address = '" + location.Address + "',Postcode = '" + location.Postcode + "',City = '" + location.City + "',Selected = " + location.Selected + ",AdditionalInfo = '" + location.AdditionalInfo + "',GoogleDriveFolderName = '" + location.GoogleDriveFolderName + "',GoogleDriveLink = '" + location.GoogleDriveLink + "',CreatedPersonName = '" + location.CreatedPersonName + "',ModifiedPersonName = '" + location.ModifiedPersonName + "',ReadOnly = " + location.ReadOnly + ",UsedBy = '" + location.UsedBy + "' WHERE ID = " + location.Id;
+
+            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+
+            databaseConnection.Open();
+
+            int records = execQuery.ExecuteNonQuery();
+            var result = new SQLQueryResult<Location>(records, location.Id);
+
+            location.ContactPerson.ForeignKey = location.Id;
+            location.ContactPerson.CustomerId = location.CustomerId;
+            location.ContactPerson.ForeignKeyType = Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Location)];
+            var contactResult = UpdateContactPartner(location.ContactPerson);
+
+            databaseConnection.Close();
+
+            return result;
+        }
+
+        private static SQLQueryResult<AdministratorCompany> UpdateAdministratorCompany(AdministratorCompany administratorcompany)
+        {
+            string query = "UPDATE ADMINISTRATORCOMPANY SET CustomerId = " + administratorcompany.CustomerId + ",Name = '" + administratorcompany.Name + "',CreatedPersonName = '" + administratorcompany.CreatedPersonName + "',ModifiedPersonName = '" + administratorcompany.ModifiedPersonName + "',ReadOnly = " + administratorcompany.ReadOnly + ",UsedBy = '" + administratorcompany.UsedBy + "' WHERE ID = " + administratorcompany.Id;
+
+            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+
+            int records = execQuery.ExecuteNonQuery();
+
+            return new SQLQueryResult<AdministratorCompany>(records, administratorcompany.Id);
+        }
+
+
+
         private static void SelectItems(string query, Action<MySqlDataReader> getRecords)
         {
             //TODO check whether its not better to open one time and not for each select....
@@ -459,7 +564,7 @@ namespace Liftmanagement.Data
             {
                 CreateConnection();
             }
-            
+
 
             MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
             commandDatabase.CommandTimeout = 60;
@@ -487,13 +592,17 @@ namespace Liftmanagement.Data
                 }
 
                 reader.Close();
-                // Finally close the connection
-                databaseConnection.Close();
             }
             catch (Exception ex)
             {
                 // Show any error message.
 
+            }
+            finally
+            {
+
+                // Finally close the connection
+                databaseConnection.Close();
             }
 
         }

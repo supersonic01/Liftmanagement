@@ -113,8 +113,8 @@
                 <TextBox x:Name="txtEmail" Grid.Row="6" Grid.Column="3"  Text="{Binding Path=ContactPerson.EMail}"   Style="{StaticResource TextBoxStyle}"/>
 
                 <TextBlock x:Name="txtGoogleDriveHyperlink" Grid.Row="3" Grid.Column="3" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Hyperlink  x:Name="hyperlinkGoogleDrive" NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate">                             
-                            <TextBlock x:Name="txtGoogleDriveFolderName"/>
+                        <Hyperlink  x:Name="hyperlinkGoogleDrive" NavigateUri="{Binding Path=GoogleDriveLink}" RequestNavigate="Hyperlink_RequestNavigate">                             
+                            <TextBlock x:Name="txtGoogleDriveFolderName" Text="{Binding Path=GoogleDriveFolderName}"/>
                         </Hyperlink>
                     </TextBlock>
 
@@ -125,7 +125,7 @@
                     </StackPanel>
                 </Button>
 
-                <CheckBox x:Name="cboxContactByDefect" Grid.Row="6" Grid.Column="4" IsChecked="{Binding Path=ContactByDefect}"  HorizontalAlignment="Center" VerticalAlignment="Center" 
+                <CheckBox x:Name="cboxContactByDefect" Grid.Row="6" Grid.Column="4" IsChecked="{Binding Path=ContactPerson.ContactByDefect}"  HorizontalAlignment="Center" VerticalAlignment="Center" 
                           IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}">
                     <CheckBox.LayoutTransform>
                         <ScaleTransform ScaleX="1.5" ScaleY="1.5" />

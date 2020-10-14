@@ -57,25 +57,28 @@ namespace Liftmanagement
             //  dgCategory.ItemsSource = CategoryVM.Categories;
 
             //MySQLDataAccess.CreateConnection();
-            
+
             //MySQLDataAccess.CreateTables();
 
 
 
             //MySQLDataAccess.AddCustomer(TestData.GetCustomers().FirstOrDefault());
-         //  MySQLDataAccess.AddMachineInformation(TestData.GetMachineInformations().FirstOrDefault());
+            //  MySQLDataAccess.AddMachineInformation(TestData.GetMachineInformations().FirstOrDefault());
             //MySQLDataAccess.AddMaintenanceAgreement(TestData.GetMaintenanceAgreements().FirstOrDefault());
 
             //MySQLDataAccess.GetCustomers();
 
-          //Helper.Helper.GenerateInsert( typeof(Location));
+            //Helper.Helper.GenerateInsert( typeof(Location));
             //  Helper.Helper.GenerateInsert(typeof(AdministratorCompany));
 
             //Helper.Helper.GenerateSelect(typeof(Location));
             //Helper.Helper.GenerateSelect(typeof(AdministratorCompany));
             //Helper.Helper.GenerateSelect(typeof(ContactPartner));
 
-
+            //Helper.Helper.GenerateUpdate(typeof(ContactPartner));
+            //Helper.Helper.GenerateUpdate(typeof(AdministratorCompany));
+            //Helper.Helper.GenerateUpdate(typeof(Location));
+        
 
             //Helper.Helper.GetTabelValueHeaders(16);
             // new CalendarQuickstart();

@@ -102,7 +102,7 @@ namespace Liftmanagement.Views
 
                     }
 
-                    e.Column.Width = new DataGridLength(1, display.DataGridColumnWidth);
+                    e.Column.Width = new DataGridLength(display.LengthValue, display.DataGridColumnWidth);
                 }
             }
 

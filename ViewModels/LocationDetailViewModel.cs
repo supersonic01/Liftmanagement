@@ -19,7 +19,7 @@ namespace Liftmanagement.ViewModels
             set { SetField(ref locationSelected, value); }
         }
 
-        public SQLQueryResult Add(Customer customer)
+        public SQLQueryResult<Location> Add(Customer customer)
         {
             locationSelected.CustomerId = customer.Id;
            return MySQLDataAccess.AddLocation(LocationSelected);

@@ -180,6 +180,11 @@ namespace Liftmanagement.Views
             BindingItem(control, CheckBox.IsCheckedProperty, string.Format("{0}.{1}", SourceObjectStringName, path));
         }
 
+        protected virtual void BindingCheckBox<T>(Control control, Expression<Func<T>> action)
+        {
+            BindingItem1(control, CheckBox.IsCheckedProperty, GetPropertyPath(action));
+        }
+
         protected virtual void BindingDatePicker(Control control, string path)
         {
             BindingItem(control, DatePicker.SelectedDateProperty, string.Format("{0}.{1}", SourceObjectStringName, path), "dd.MM.yyyy");

@@ -18,8 +18,21 @@ namespace Liftmanagement.Models
         [DisplayName("Ansprechpartner"), DatabaseAttribute(Updateable = false)]
         public List<ContactPartner> ContactPersons { get; set; } = new List<ContactPartner>();
 
-        [ DatabaseAttribute(Updateable = false)]
+        //private List<ContactPartner> contactPersons;
+
+        //[DisplayName("Ansprechpartner"), DatabaseAttribute(Updateable = false)]
+        //public List<ContactPartner> ContactPersons
+        //{
+        //    get { return contactPersons; }
+        //    set { SetField(ref contactPersons, value); }
+        //}
+
+
+        [DatabaseAttribute(Updateable = false)]
         public GetFullNameDelegate GetParentFullName { get; set; }
+
+        [ DatabaseAttribute(Updateable = false)]
+        public List<ContactPartner> DeletedContactPersons { get; set; } = new List<ContactPartner>();
 
         public AdministratorCompany()
         {

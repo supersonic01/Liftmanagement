@@ -1,4 +1,5 @@
-﻿using Liftmanagement.Models;
+﻿using System;
+using Liftmanagement.Models;
 using Liftmanagement.ViewModels;
 using Liftmanagement.Views;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace Liftmanagement.View
         protected override string SourceObjectStringName => nameof(CustomerVM.CustomerSelected);
         private ContactPartner contactPartner = null;
         private LocationDetailView location;
-        
+
         public CustomerView()
         {
             InitializeComponent();
@@ -34,6 +35,8 @@ namespace Liftmanagement.View
             customersView.dgCustomers.SelectedIndex = 0;
 
             //TODO tab order from Email to Addtitional info not working
+            //TODO Add refresh button to refrexh all data
+            //TODO Delete.edit, add admin Contactperson
         }
 
         private void CustomerView_Loaded(object sender, RoutedEventArgs e)
@@ -54,10 +57,10 @@ namespace Liftmanagement.View
             EnableContoles(false);
 
             CustomerVM.CustomerSelected = customer;
-          
+
 
             dgAdministratorContactPersons.SelectionChanged -= DgAdministratorContactPersons_SelectionChanged;
-            BindingControl(dgAdministratorContactPersons,()=> CustomerVM.CustomerSelected.Administrator.ContactPersons);
+            BindingControl(dgAdministratorContactPersons, () => CustomerVM.CustomerSelected.Administrator.ContactPersons);
             //dgAdministratorContactPersons.ItemsSource = customer.Administrator.ContactPersons;
             dgAdministratorContactPersons.SelectionChanged += DgAdministratorContactPersons_SelectionChanged;
             dgAdministratorContactPersons.SelectedIndex = 0;
@@ -90,34 +93,40 @@ namespace Liftmanagement.View
                 CustomerVM.CustomerSelected.GetDisplayName<ContactPartner>(nameof(CustomerVM.CustomerSelected.ContactPerson.Mobile)) + ":";
             lblAdministratorEmail.Content = CustomerVM.CustomerSelected.GetDisplayName<ContactPartner>(nameof(CustomerVM.CustomerSelected.ContactPerson.EMail)) + ":";
 
-            
+
             BindingText(txtCompanyName, nameof(CustomerVM.CustomerSelected.CompanyName));
             BindingText(txtContactPerson, () => CustomerVM.CustomerSelected.ContactPerson.Name);
             BindingText(txtAddress, () => CustomerVM.CustomerSelected.Address);
             BindingText(txtPostcode, () => CustomerVM.CustomerSelected.Postcode);
             BindingText(txtCity, () => CustomerVM.CustomerSelected.City);
             BindingText(txtPhoneWork, () => CustomerVM.CustomerSelected.ContactPerson.PhoneWork);
-            BindingText(txtMobile,  () =>  CustomerVM.CustomerSelected.ContactPerson.Mobile);
+            BindingText(txtMobile, () => CustomerVM.CustomerSelected.ContactPerson.Mobile);
             BindingText(txtEmail, () => CustomerVM.CustomerSelected.ContactPerson.EMail);
-            BindingText(txtAdditionalInfo, nameof( CustomerVM.CustomerSelected.AdditionalInfo));
+            BindingText(txtAdditionalInfo, nameof(CustomerVM.CustomerSelected.AdditionalInfo));
             BindingText(txtAdministratorCompanyName, () => CustomerVM.CustomerSelected.Administrator.Name);
             BindingHyperlink(hyperlinkGoogleDrive, GetPropertyPath(() => CustomerVM.CustomerSelected.GoogleDriveLink));
             BindingTextBlock(txtGoogleDriveFolderName, GetPropertyPath(() => CustomerVM.CustomerSelected.GoogleDriveFolderName));
+
+            BindingText(txtAdministratorContactPerson, () => CustomerVM.AdministratorContactPerson.Name);
+            BindingText(txtAdministratorPhoneWork, () => CustomerVM.AdministratorContactPerson.PhoneWork);
+            BindingText(txtAdministratorMobile, () => CustomerVM.AdministratorContactPerson.Mobile);
+            BindingText(txtAdministratorEmail, () => CustomerVM.AdministratorContactPerson.EMail);
+            BindingCheckBox(cboxAdministratorContactByDefect, () => CustomerVM.AdministratorContactPerson.ContactByDefect);
         }
 
 
         private void DgAdministratorContactPersons_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //TODO Administrator list do not expand if no elements inside
-         
+
             var dgAdministratorContactPersons = sender as DataGrid;
             if (dgAdministratorContactPersons != null && dgAdministratorContactPersons.SelectedItem != null)
-                contactPartner = dgAdministratorContactPersons.SelectedItem as ContactPartner;
+                CustomerVM.AdministratorContactPerson = dgAdministratorContactPersons.SelectedItem as ContactPartner;
 
-            BindingText(txtAdministratorContactPerson, () => CustomerVM.ContactPerson.Name);
-            BindingText(txtAdministratorPhoneWork, () => CustomerVM.ContactPerson.PhoneWork);
-            BindingText(txtAdministratorMobile, () => CustomerVM.ContactPerson.Mobile);
-            BindingText(txtAdministratorEmail, () => CustomerVM.ContactPerson.EMail);
+            //BindingText(txtAdministratorContactPerson, () => CustomerVM.AdministratorContactPerson.Name);
+            //BindingText(txtAdministratorPhoneWork, () => CustomerVM.AdministratorContactPerson.PhoneWork);
+            //BindingText(txtAdministratorMobile, () => CustomerVM.AdministratorContactPerson.Mobile);
+            //BindingText(txtAdministratorEmail, () => CustomerVM.AdministratorContactPerson.EMail);
         }
 
         private static Customer GetSelectedCustomer(object sender)
@@ -133,7 +142,7 @@ namespace Liftmanagement.View
         protected override void BtnSaveGoogleDrive_Click(object sender, RoutedEventArgs e)
         {
             var node = googlDriveTree.GetSelectedNode();
-          
+
             CustomerVM.CustomerSelected.GoogleDriveLink = node.WebLink;
             CustomerVM.CustomerSelected.GoogleDriveFolderName = node.Name;
 
@@ -160,12 +169,13 @@ namespace Liftmanagement.View
         {
             //TODO Validate Textbox
 
-            if(!string.IsNullOrWhiteSpace(CustomerVM.ContactPerson.Name))
+            if (!string.IsNullOrWhiteSpace(CustomerVM.AdministratorContactPerson.Name) && 
+                CustomerVM.AdministratorContactPerson.Id < 0 && CustomerVM.AdministratorContactPerson.Id > -10)
             {
-                CustomerVM.CustomerSelected.Administrator.ContactPersons.Add(CustomerVM.ContactPerson);
+                    CustomerVM.CustomerSelected.Administrator.ContactPersons.Add(CustomerVM.AdministratorContactPerson);
             }
-           
-            var result =  CustomerVM.Add();
+
+            var result = CustomerVM.Add();
             if (result.Records > 0)
             {
                 //TODO show Toast msg
@@ -192,7 +202,15 @@ namespace Liftmanagement.View
 
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
-
+            var result = CustomerVM.EditCustomer();
+            if (result.IsReadOnly)
+            {
+                //TODO show message is used by
+            }
+            else
+            {
+                EnableContoles(true);
+            }
         }
 
         public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
@@ -215,6 +233,58 @@ namespace Liftmanagement.View
             }
         }
 
-       
+        private void btnAddAdminContact_Click(object sender, RoutedEventArgs e)
+        {
+            CustomerVM.AdministratorContactPerson = new ContactPartner();
+        }
+
+        private void btnEditAdminContact_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnSaveAdminContact_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(CustomerVM.AdministratorContactPerson.Name))
+            {
+                //TODO msg, Validate msg
+                return;
+            }
+
+           
+            if (CustomerVM.AdministratorContactPerson.Id < 0 && CustomerVM.AdministratorContactPerson.Id > -10)
+            {
+                CustomerVM.AdministratorContactPerson.Id = new Random().Next(-100, -10);
+
+                CustomerVM.CustomerSelected.Administrator.ContactPersons.Add(CustomerVM.AdministratorContactPerson);
+               
+            }
+            else
+            {
+                CustomerVM.CustomerSelected.Administrator.ContactPersons.Remove(
+                    CustomerVM.AdministratorContactPerson);
+
+                CustomerVM.CustomerSelected.Administrator.ContactPersons.Add(CustomerVM.AdministratorContactPerson);
+            }
+
+            dgAdministratorContactPersons.Items.Refresh();
+
+            CustomerVM.AdministratorContactPerson = new ContactPartner();
+
+
+        }
+
+        private void btnRemoveAdminContact_Click(object sender, RoutedEventArgs e)
+        {
+            CustomerVM.CustomerSelected.Administrator.ContactPersons.Remove(
+                CustomerVM.AdministratorContactPerson);
+
+            CustomerVM.CustomerSelected.Administrator.DeletedContactPersons.Add(
+                CustomerVM.AdministratorContactPerson);
+
+            CustomerVM.AdministratorContactPerson = new ContactPartner();
+
+            dgAdministratorContactPersons.Items.Refresh();
+        }
     }
 }

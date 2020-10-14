@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace Liftmanagement.Models
 {
@@ -16,19 +17,19 @@ namespace Liftmanagement.Models
         public int ForeignKeyType { get; set; }
      
         [DatabaseAttribute(DatabaseAttribute.NOT_NULL)]
-        [DisplayName("Ansprechpartner")]
+        [DisplayName("Ansprechpartner"), Display(DataGridColumnWidth = DataGridLengthUnitType.Star)]
         public string Name { get; set; }
                
-        [DisplayName("Tel. geschäftli.")]
+        [DisplayName("Tel. geschäftli."), Display(DataGridColumnWidth = DataGridLengthUnitType.Star)]
         public string PhoneWork { get; set; }
 
-        [DisplayName("Mobil")]
+        [DisplayName("Mobil"), Display(DataGridColumnWidth = DataGridLengthUnitType.Star)]
         public string Mobile { get; set; }
 
-        [DisplayName("E-Mail")]
+        [DisplayName("E-Mail"), Display(DataGridColumnWidth = DataGridLengthUnitType.Star)]
         public string EMail { get; set; }
 
-        [DisplayName("Beim Störungsfall kontaktieren"), Display(Order = 9)]
+        [DisplayName("Beim Störungsfall kontaktieren"), Display(Order = 9,DataGridColumnWidth = DataGridLengthUnitType.Star,LengthValue = 1.2)]
         public bool ContactByDefect { get; set; }
 
         public static string GetIndexFields()

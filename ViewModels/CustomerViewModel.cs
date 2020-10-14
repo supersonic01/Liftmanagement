@@ -37,21 +37,38 @@ namespace Liftmanagement.ViewModels
             set { SetField(ref customerSelected, value); }
         }
 
-        private ContactPartner contactPerson = new ContactPartner();
+        private ContactPartner administratorContactPerson = new ContactPartner();
 
-        public ContactPartner ContactPerson 
+        public ContactPartner AdministratorContactPerson
         {
-            get { return contactPerson; }
-            set { SetField(ref contactPerson, value); }
+            get { return administratorContactPerson; }
+            set { SetField(ref administratorContactPerson, value); }
         }
 
-        public SQLQueryResult Add()
+        public SQLQueryResult<Customer> Add()
         {
-
-         return  MySQLDataAccess.AddCustomer(CustomerSelected);
+            if (CustomerSelected.Id > 0)
+            {
+                return MySQLDataAccess.UpdateCustomer(CustomerSelected);
+            }
+            else
+            {
+                return MySQLDataAccess.AddCustomer(CustomerSelected);
+            }
 
         }
 
+        public SQLQueryResult<Customer> EditCustomer()
+        {
+          var result= MySQLDataAccess.GetCustomerForEdit(CustomerSelected.Id);
+          if (!result.IsReadOnly)
+          {
+              CustomerSelected = result.DBRecords.FirstOrDefault() as Customer;
+          }
+
+          return result;
+        }
+            
      
 
 

@@ -35,7 +35,7 @@ namespace Liftmanagement.Views
             _customer = customer;
             InitializeComponent();
 
-            Location location= new Location();
+            Location location = new Location();
 
             //TODO by SelectedIndex = 0  row will not highlighted
             dgLocations.Columns.Add(new DataGridTextColumn
@@ -44,7 +44,7 @@ namespace Liftmanagement.Views
                 Binding = new Binding("ContactPerson.Name"),
                 DisplayIndex = 8
             });
-
+           
             dgLocations.Columns.Add(new DataGridCheckBoxColumn()
             {
                 Header = location.GetDisplayName<ContactPartner>(nameof(location.ContactPerson.ContactByDefect)),
@@ -52,8 +52,10 @@ namespace Liftmanagement.Views
                 DisplayIndex = 9
             });
 
-            dgLocations.ItemsSource = LocationsVM.GetLocationsByCustomer(customer);
-           // dgLocations.ItemsSource = LocationsVM.Locations;
+            //dgLocations.ItemsSource = LocationsVM.GetLocationsByCustomer(customer);
+
+            // dgLocations.ItemsSource = LocationsVM.Locations;
+            BindingControl(dgLocations, () => LocationsVM.Locations);
 
             Loaded += LocationDetailView_Loaded;
             Application.Current.MainWindow.SizeChanged += MainWindow_SizeChanged;
@@ -70,7 +72,7 @@ namespace Liftmanagement.Views
             //gridRdLocations.Height = new GridLength(gridRdLocations.ActualHeight - 65.96);
             dgLocations.SelectionChanged += DgLocations_SelectionChanged;
             dgLocations.SelectedIndex = 0;
-            
+
             SetLable(LocationDetailVM.LocationSelected);
 
             EnableContoles(false);
@@ -84,7 +86,7 @@ namespace Liftmanagement.Views
             {
                 LocationDetailVM.LocationSelected = location;
             }
-            
+
             EnableContoles(false);
         }
 
@@ -119,7 +121,7 @@ namespace Liftmanagement.Views
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
-            LocationDetailVM.LocationSelected= new Location();
+            LocationDetailVM.LocationSelected = new Location();
             EnableContoles(true);
         }
 
@@ -135,12 +137,13 @@ namespace Liftmanagement.Views
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            var result =  LocationDetailVM.Add(_customer);
-          
+            var result = LocationDetailVM.Add(_customer);
+
             if (result.Records > 0)
             {
                 //TODO show Toast msg
                 LocationsVM.Refresh();
+                //dgLocations.ItemsSource = LocationsVM.GetLocationsByCustomer(_customer);
                 var location = dgLocations.Items.Cast<Location>().Single(c => c.Id == result.Id);
                 dgLocations.SelectedItem = location;
             }

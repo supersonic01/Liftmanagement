@@ -121,6 +121,52 @@ namespace Liftmanagement.Helper
             Console.WriteLine(RemoveLastComma(insertScriptValues.ToString()));
         }
 
+       public static void GenerateUpdate(Type databaseObject)
+       {
+           StringBuilder insertScript = new StringBuilder();
+         
+           Type classType = databaseObject;
+           string className = classType.Name.ToLower();
+           string tableName = className.ToUpper();
+
+           insertScript.Append("UPDATE " + tableName+" SET ");
+        
+           foreach (PropertyInfo p in classType.GetProperties())
+           {
+               bool updateableColumne = true;
+
+               var attribute = p.GetCustomAttributes(typeof(DatabaseAttribute), true)
+                   .Cast<DatabaseAttribute>().FirstOrDefault();
+
+               if (attribute != null && attribute.Updateable == false)
+               {
+                   updateableColumne = false;
+               }
+
+               if (!p.DeclaringType.IsAbstract && !p.DeclaringType.IsInterface && updateableColumne)
+               {
+                   insertScript.Append(p.Name);
+                   insertScript.Append(" = ");
+
+                   if (p.PropertyType == typeof(string) || p.PropertyType == typeof(DateTime))
+                   {
+                       insertScript.Append(string.Format("'\"+{0}+\"',", className + "." + p.Name));
+                   }
+                   else
+                   {
+                       insertScript.Append(string.Format("\"+{0}+\",", className + "." + p.Name));
+                   }
+               }
+           }
+
+            //insertScript.Append(")");
+            
+            insertScript.AppendLine();
+
+            Console.WriteLine(string.Format("{0} WHERE ID = \"+{1}.Id", RemoveLastComma(insertScript.ToString()),className));
+            //Console.WriteLine(insertScript.ToString());
+       }
+
         public static void GenerateSelect(Type databaseObject)
         {          
             StringBuilder insertScriptValues = new StringBuilder();
@@ -156,7 +202,7 @@ namespace Liftmanagement.Helper
             }
 
             insertScriptValues.AppendLine(string.Format("{0}s.Add({0});", className));
-
+            
             Console.WriteLine(RemoveLastComma(insertScriptValues.ToString()));
         }
 

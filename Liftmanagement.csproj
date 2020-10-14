@@ -474,6 +474,17 @@
     <Resource Include="Resources\Images\Icons\Graphicloads-Medical-Health-Eye.ico" />
     <Resource Include="Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-document-edit.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-user-group-delete.ico" />
+    <Resource Include="Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-user-group-new.ico" />
+    <Resource Include="Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-user-group-properties.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Everaldo-Crystal-Clear-Action-edit-add.ico" />
+    <Resource Include="Resources\Images\Icons\Everaldo-Crystal-Clear-Action-ok.ico" />
+    <Resource Include="Resources\Images\Icons\Everaldo-Crystal-Clear-Action-remove.ico" />
+    <Resource Include="Resources\Images\Icons\Visualpharm-Must-Have-Edit.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets" Condition="Exists('packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

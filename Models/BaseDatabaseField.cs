@@ -1,17 +1,32 @@
 ﻿using Liftmanagement.Helper;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 
 namespace Liftmanagement.Models
 {
-  public class BaseDatabaseField: DisplayNameRetriever
-  {
-      [DatabaseAttribute(DatabaseAttribute.AUTO_INCREMENT, Updateable = false)]
-      public long Id { get; set; } = -1;
+    public class BaseDatabaseField : DisplayNameRetriever, INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+        
+
+        [DatabaseAttribute(DatabaseAttribute.AUTO_INCREMENT, Updateable = false)]
+        public long Id { get; set; } = -1;
 
         [DatabaseAttribute(DatabaseAttribute.DEFAULT_DATETIME, Updateable = false)]
         public DateTime CreatedDate { get; set; }
@@ -23,8 +38,8 @@ namespace Liftmanagement.Models
         public string CreatedPersonName { get; set; }
         [DatabaseAttribute(DatabaseAttribute.NOT_NULL)]
         public string ModifiedPersonName { get; set; }
-       
-        public bool ReadOnly { get; set; }       
+
+        public bool ReadOnly { get; set; }
         public string UsedBy { get; set; }
 
         public delegate string GetFullNameDelegate();

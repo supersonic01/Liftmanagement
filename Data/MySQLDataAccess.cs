@@ -447,39 +447,11 @@ namespace Liftmanagement.Data
         {
             string query = "SELECT * FROM LOCATION";
            return GetLocations(query);
-
-            //List<Location> locations = new List<Location>();
-
-            //string query = "SELECT * FROM LOCATION";
-
-            //SelectItems(query, reader =>
-            //{
-            //    Location location = new Location();
-            //    location.CustomerId = reader.GetInt64("CustomerId");
-            //    location.Address = reader.GetString("Address");
-            //    location.Postcode = reader.GetString("Postcode");
-            //    location.City = reader.GetString("City");
-            //    location.Selected = reader.GetBoolean("Selected");
-            //    location.AdditionalInfo = reader.GetString("AdditionalInfo");
-            //    location.GoogleDriveFolderName = reader.GetString("GoogleDriveFolderName");
-            //    location.GoogleDriveLink = reader.GetString("GoogleDriveLink");
-            //    location.Id = reader.GetInt64("Id");
-            //    location.CreatedDate = reader.GetDateTime("CreatedDate");
-            //    location.ModifiedDate = reader.GetDateTime("ModifiedDate");
-            //    location.CreatedPersonName = reader.GetString("CreatedPersonName");
-            //    location.ModifiedPersonName = reader.GetString("ModifiedPersonName");
-            //    location.ReadOnly = reader.GetBoolean("ReadOnly");
-            //    location.UsedBy = reader.GetString("UsedBy");
-            //    locations.Add(location);
-            //});
-
-            //foreach (var location in locations)
-            //{
-            //    location.ContactPerson = GetContactPartners(location.Id,
-            //        Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Location)]).FirstOrDefault();
-            //}
-
-            //return locations;
+        }
+        public static List<Location> GetLocations(Customer customer)
+        {
+            string query = "SELECT * FROM LOCATION WHERE CUSTOMERID = " + customer.Id;
+            return GetLocations(query);
         }
 
         public static List<MaintenanceAgreement> GetMaintenanceAgreements()

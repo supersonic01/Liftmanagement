@@ -23,7 +23,7 @@ namespace Liftmanagement.ViewModels
 
         public LocationsViewModel()
         {
-            Refresh();
+           // Refresh();
            
         }
 
@@ -36,7 +36,7 @@ namespace Liftmanagement.ViewModels
         {
             // Locations= TestData.GetLocations().Where(c=>c.CustomerId == customer.Id).ToList();
 
-            Locations = MySQLDataAccess.GetLocations().Where(c => c.CustomerId == customer.Id).ToList();
+            Locations = MySQLDataAccess.GetLocations(customer);
         }
 
         public List<Location> GetLocationsByCustomer(Customer customer)

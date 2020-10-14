@@ -337,7 +337,7 @@ namespace Liftmanagement.Data
         {
             // TODO check user, if is the same user, editing is possilbe
 
-            var classname = typeof(T).Name;
+            var classname = typeof(T).Name.ToUpper();
 
             string query = "SELECT * FROM "+ classname + " WHERE ID= " + id;
             var result = new SQLQueryResult<T>(0, id);

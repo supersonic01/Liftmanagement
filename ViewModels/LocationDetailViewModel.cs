@@ -9,7 +9,7 @@ using Liftmanagement.Models;
 
 namespace Liftmanagement.ViewModels
 {
-  public class LocationDetailViewModel: ViewModel
+    public class LocationDetailViewModel : ViewModel
     {
         private Location locationSelected = new Location();
 
@@ -21,8 +21,15 @@ namespace Liftmanagement.ViewModels
 
         public SQLQueryResult<Location> Add(Customer customer)
         {
-            locationSelected.CustomerId = customer.Id;
-           return MySQLDataAccess.AddLocation(LocationSelected);
+            if (locationSelected.Id > 0)
+            {
+                return MySQLDataAccess.UpdateLocation(locationSelected);
+            }
+            else
+            {
+                locationSelected.CustomerId = customer.Id;
+                return MySQLDataAccess.AddLocation(locationSelected);
+            }
         }
 
         public SQLQueryResult<Location> EditLocation()

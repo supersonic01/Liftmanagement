@@ -32,6 +32,8 @@ namespace Liftmanagement.Models
       [DatabaseAttribute(Updateable = false)]
         public ContactPartner ContactPerson { get; set; } = new ContactPartner();
 
+
+
         private string googleDriveFolderName;
 
         [DisplayName("Google Drive")]

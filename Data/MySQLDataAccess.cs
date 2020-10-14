@@ -299,38 +299,6 @@ namespace Liftmanagement.Data
         public static SQLQueryResult<Customer> GetCustomerForEdit(long id)
         {
             return GetRecordForEdit(id, query => GetCustomers(query));
-
-            //string query = "SELECT * FROM CUSTOMER WHERE ID= " + id;
-            //var customers = GetCustomers(query);
-
-            //var result = new SQLQueryResult<Customer>(0, id);
-            //result.DBRecords = customers;
-            //var customer = customers.FirstOrDefault();
-
-            //if (customer.ReadOnly)
-            //{
-
-            //}
-            //else
-            //{
-            //    var updateQuery = "UPDATE CUSTOMER SET READONLY = 1 WHERE ID = " + id;
-
-            //    if (databaseConnection == null)
-            //    {
-            //        CreateConnection();
-            //    }
-
-            //    MySqlCommand execQuery = new MySqlCommand(updateQuery, databaseConnection);
-
-            //    databaseConnection.Open();
-            //    int records = execQuery.ExecuteNonQuery();
-
-            //    databaseConnection.Close();
-
-            //    result.DBRecords = GetCustomers(query);
-            //}
-
-            //return result;
         }
 
         private static SQLQueryResult<T> GetRecordForEdit<T>(long id, Func<string,List<T>> GetRecords) where T : BaseDatabaseField
@@ -377,41 +345,6 @@ namespace Liftmanagement.Data
             return GetRecordForEdit(id, query => GetLocations(query));
 
             //// TODO check user, if is the same user, editing is possilbe
-
-            //string query = "SELECT * FROM LOCATION WHERE ID= " + id;
-            //var locations = GetLocations();
-
-            //var result = new SQLQueryResult<Location>(0, id);
-            //result.DBRecords = locations;
-            //var location = locations.FirstOrDefault();
-
-            //if (location.ReadOnly)
-            //{
-
-            //}
-            //else
-            //{
-            //    var updateQuery = "UPDATE CUSTOMER SET READONLY = 1 WHERE ID = " + id;
-
-            //    if (databaseConnection == null)
-            //    {
-            //        CreateConnection();
-            //    }
-
-            //    MySqlCommand execQuery = new MySqlCommand(updateQuery, databaseConnection);
-
-            //    databaseConnection.Open();
-            //    int records = execQuery.ExecuteNonQuery();
-
-            //    var subResult = new SQLQueryResult<Customer>(records, id);
-            //    // result.AddSQLSubQueryResult(subResult,result);
-
-            //    databaseConnection.Close();
-
-            //    location = GetLocations(query);
-            //}
-
-           // return result;
         }
 
         private static List<ContactPartner> GetContactPartners(long foreignkey, int foreignkeytype)

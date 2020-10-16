@@ -17,7 +17,7 @@ namespace Liftmanagement.Models
 
         }
 
-        protected virtual string GetFullName()
+        public virtual string GetFullName()
         {
             throw new NotImplementedException();
         }

@@ -34,14 +34,21 @@ namespace Liftmanagement.Models
         public DateTime ModifiedDate { get; set; }
         [DatabaseAttribute(DatabaseAttribute.UPDATE_TIMESTAMP, Updateable = false)]
         public Timestamp Timestamp { get; set; }
+
         [DatabaseAttribute(DatabaseAttribute.NOT_NULL)]
-        public string CreatedPersonName { get; set; }
+        public string CreatedPersonName { get; set; } = Helper.Helper.GetPersonName();
         [DatabaseAttribute(DatabaseAttribute.NOT_NULL)]
-        public string ModifiedPersonName { get; set; }
+        public string ModifiedPersonName { get; set; }= Helper.Helper.GetPersonName();
 
         public bool ReadOnly { get; set; }
         public string UsedBy { get; set; }
 
         public delegate string GetFullNameDelegate();
+
+        public void ReleaseRow()
+        {
+            ReadOnly = false;
+            UsedBy = "";
+        }
     }
 }

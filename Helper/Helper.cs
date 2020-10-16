@@ -262,6 +262,16 @@ namespace Liftmanagement.Helper
             return typeMapper;
         }
 
+        public static string GetPersonName()
+        {
+            return System.Environment.MachineName + "," + System.Environment.UserName;
+        }
+        public static string GetUsername()
+        {
+            return System.Environment.UserName;
+        }
+
+
     }
 
 

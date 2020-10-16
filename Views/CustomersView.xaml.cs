@@ -24,11 +24,11 @@ namespace Liftmanagement.Views
     /// </summary>
     public partial class CustomersView : UserControlView
     {
-        private CustomersViewModel  customersVM = new CustomersViewModel() ;
+        private CustomersViewModel customersVM = null;// new CustomersViewModel() ;
 
         public CustomersViewModel CustomersVM { 
             get { return customersVM; }
-            set { customersVM = value; }
+            set { SetField(ref customersVM, value); }
         }
 
         public CustomersView()
@@ -42,12 +42,14 @@ namespace Liftmanagement.Views
 
             dgCustomers.Tag = NotVisibleColumns;
 
-            Binding binding = new Binding("CustomersVM.Customers")
-            {
-                Source = this
-            };
+            //Binding binding = new Binding("CustomersVM.Customers")
+            //{
+            //    Source = this
+            //};
+            
+            //dgCustomers.SetBinding(DataGrid.ItemsSourceProperty, binding);
 
-            dgCustomers.SetBinding(DataGrid.ItemsSourceProperty, binding);
+            BindingControl(dgCustomers, () => CustomersVM.Customers);
 
             txtExpanderHeader.Text = new CategoryViewModel().Categories.Where(c => c.MangementType == Helper.Helper.TTypeMangement.Customer).Select(c => c.Name).FirstOrDefault();
             //expanderCustomers.Expanded += ExpanderCustomers_Expanded;

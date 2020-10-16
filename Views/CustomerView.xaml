@@ -5,6 +5,7 @@
                                xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
                                xmlns:local="clr-namespace:Liftmanagement.Views"
                                xmlns:view="clr-namespace:Liftmanagement.View"
+                               xmlns:li="http://github.com/zeluisping/loadingIndicators/xaml/controls"
                                mc:Ignorable="d" 
                                d:DesignHeight="633.857" d:DesignWidth="1118.857">
 
@@ -16,237 +17,239 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid x:Name="gridResizableCustomers">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid x:Name="MainContent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
 
-        <Frame x:Name="frameCustomers"  Grid.Column="0" Content="Customers"/>
-     
+            <Frame x:Name="frameCustomers"  Grid.Column="0" Content="Customers"/>
+
             <!--<GridSplitter Grid.Column="1" Width="5" Background="DarkGray"  ResizeDirection="Columns" VerticalAlignment="Stretch"/>-->
-       
 
-        <ScrollViewer Grid.Column="2"   VerticalScrollBarVisibility="Visible" >
 
-            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <Grid>
+            <ScrollViewer Grid.Column="2"   VerticalScrollBarVisibility="Visible" >
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Grid>
 
-                    <Grid Background="#FFE5E5E5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="100" x:Name="gridColumnButtons" />
-                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" x:Name="Header" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="30" />
-                            <!--3-->
-                            <RowDefinition Height="10" />
-                            <RowDefinition Height="30" />
-                            <RowDefinition Height="30" />
-                            <!--6-->
-                            <RowDefinition Height="10" />
-                            <RowDefinition Height="30" />
-                            <RowDefinition Height="60" />
-                            <RowDefinition Height="10" x:Name="space" />
-                            <!--10-->
-                            <RowDefinition Height="30" x:Name="AdministratorCompany"/>
-                            <RowDefinition Height="30" />
-                            <RowDefinition Height="10" x:Name="spaceContactPartner" />
-                            <RowDefinition Height="*" x:Name="AdministratorContactPartner"/>
-                            <RowDefinition Height="30" />
-                            <RowDefinition Height="Auto" x:Name="EndSpacer"/>
-                            <!--16-->
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <StackPanel Grid.Row="3" Grid.RowSpan="12" Grid.Column="5" Orientation="Vertical"  HorizontalAlignment="Center">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="50"/>
-                                    <RowDefinition Height="50"/>
-                                    <RowDefinition Height="50"/>
-                                    <RowDefinition Height="50"/>
-                                    <RowDefinition Height="40"/>
-                                    <RowDefinition Height="40" x:Name="grBtnAddAdminContact"/>
-                                    <RowDefinition Height="0"/> 
-                                    <RowDefinition Height="40"/>
-                                    <RowDefinition Height="40"/>
-                                </Grid.RowDefinitions>
+                        <Grid Background="#FFE5E5E5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="100" x:Name="gridColumnButtons" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" x:Name="Header" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="30" />
+                                <!--3-->
+                                <RowDefinition Height="10" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                                <!--6-->
+                                <RowDefinition Height="10" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="60" />
+                                <RowDefinition Height="10" x:Name="space" />
+                                <!--10-->
+                                <RowDefinition Height="30" x:Name="AdministratorCompany"/>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="10" x:Name="spaceContactPartner" />
+                                <RowDefinition Height="*" x:Name="AdministratorContactPartner"/>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="Auto" x:Name="EndSpacer"/>
+                                <!--16-->
+                            </Grid.RowDefinitions>
 
-                                <Button  x:Name="btnAdd" Grid.Row="0" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnAdd_Click" BorderThickness="0" Background="Transparent" >
-                                    <StackPanel>
-                                        <Image Source="..\Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" Height="30"/>
-                                    </StackPanel>
-                                </Button>
-                                <Button x:Name="btnEdit" Grid.Row="1"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnEdit_Click" BorderThickness="0" Background="Transparent">
-                                    <StackPanel>
-                                        <Image Source="..\Resources\Images\Icons\Turbomilk-Livejournal-10-Pencil.ico" Height="30"/>
-                                    </StackPanel>
-                                </Button>
-                                <Button  x:Name="btnDelete" Grid.Row="3" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnDelete_Click" BorderThickness="0" Background="Transparent">
-                                    <StackPanel>
-                                        <Image Source="..\Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-edit-delete.ico" Height="30"/>
-                                    </StackPanel>
-                                </Button>
-                                <Button  x:Name="btnSave"  Grid.Row="2"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSave_Click" BorderThickness="0" Background="Transparent"
+                            <StackPanel Grid.Row="3" Grid.RowSpan="12" Grid.Column="5" Orientation="Vertical"  HorizontalAlignment="Center">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="50"/>
+                                        <RowDefinition Height="50"/>
+                                        <RowDefinition Height="50"/>
+                                        <RowDefinition Height="50"/>
+                                        <RowDefinition Height="40"/>
+                                        <RowDefinition Height="40" x:Name="grBtnAddAdminContact"/>
+                                        <RowDefinition Height="0"/>
+                                        <RowDefinition Height="40"/>
+                                        <RowDefinition Height="40"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Button  x:Name="btnAdd" Grid.Row="0" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnAdd_Click" BorderThickness="0" Background="Transparent" >
+                                        <StackPanel>
+                                            <Image Source="..\Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" Height="30"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="btnEdit" Grid.Row="1"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnEdit_Click" BorderThickness="0" Background="Transparent">
+                                        <StackPanel>
+                                            <Image Source="..\Resources\Images\Icons\Turbomilk-Livejournal-10-Pencil.ico" Height="30"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button  x:Name="btnDelete" Grid.Row="3" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnDelete_Click" BorderThickness="0" Background="Transparent">
+                                        <StackPanel>
+                                            <Image Source="..\Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-edit-delete.ico" Height="30"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button  x:Name="btnSave"  Grid.Row="2"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSave_Click" BorderThickness="0" Background="Transparent"
                                          IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}">
-                                    <StackPanel>
-                                        <Image Source="..\Resources\Images\Icons\Treetog-I-Floppy-Small.ico" Height="30"/>
-                                    </StackPanel>
-                                </Button>
-                                <!--<Button  x:Name="btnTakeOverToLocation"  Grid.Row="4"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnTakeOverToLocation_Click" BorderThickness="0" Background="Transparent"
-                                         IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}">
-                                    <StackPanel>
-                                        <Image Source="..\Resources\Images\Icons\Pixelkit-Flat-Jewels-Location.ico" Height="30"/>
-                                    </StackPanel>
-                                </Button>-->
+                                        <StackPanel>
+                                            <Image Source="..\Resources\Images\Icons\Treetog-I-Floppy-Small.ico" Height="30"/>
+                                        </StackPanel>
+                                    </Button>
 
-                                <Button  x:Name="btnAddAdminContact"  Grid.Row="7"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnAddAdminContact_Click" BorderThickness="0" Background="Transparent"
-                                         IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
-                                         ToolTip="Neuen Ansprechpartner hinzufügen">
-                                    <StackPanel>
-                                        <Image Source="..\Resources\Images\Icons\Everaldo-Crystal-Clear-Action-edit-add.ico" Height="30"/>
-                                    </StackPanel>
-                                </Button>
+                                    <Button  x:Name="btnAddAdminContact"  Grid.Row="7"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnAddAdminContact_Click" BorderThickness="0" Background="Transparent"
+                                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
+                                             ToolTip="Neuen Ansprechpartner hinzufügen">
+                                        <StackPanel>
+                                            <Image Source="..\Resources\Images\Icons\Everaldo-Crystal-Clear-Action-edit-add.ico" Height="30"/>
+                                        </StackPanel>
+                                    </Button>
 
-                                <!--<Button  x:Name="btnEditAdminContact"  Grid.Row="6"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnEditAdminContact_Click" BorderThickness="0" Background="Transparent"
+                                    <!--<Button  x:Name="btnEditAdminContact"  Grid.Row="6"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnEditAdminContact_Click" BorderThickness="0" Background="Transparent"
                                          IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
                                          ToolTip="Selektierten Ansprechpartner bearbeiten">
                                     <StackPanel>
                                         <Image Source="..\Resources\Images\Icons\Visualpharm-Must-Have-Edit.ico" Height="30"/>
                                     </StackPanel>
                                 </Button>-->
-                                <Button  x:Name="btnSaveAdminContact"  Grid.Row="5"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSaveAdminContact_Click" BorderThickness="0" Background="Transparent"
+                                    <Button  x:Name="btnSaveAdminContact"  Grid.Row="5"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSaveAdminContact_Click" BorderThickness="0" Background="Transparent"
                                          IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
                                          ToolTip="Ansprechpartner übernehmen">
-                                    <StackPanel>
-                                        <Image Source="..\Resources\Images\Icons\Everaldo-Crystal-Clear-Action-ok.ico" Height="30"/>
-                                    </StackPanel>
-                                </Button>
-                                <Button  x:Name="btnRemoveAdminContact"  Grid.Row="8"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnRemoveAdminContact_Click" BorderThickness="0" Background="Transparent"
+                                        <StackPanel>
+                                            <Image Source="..\Resources\Images\Icons\Everaldo-Crystal-Clear-Action-ok.ico" Height="30"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button  x:Name="btnRemoveAdminContact"  Grid.Row="8"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnRemoveAdminContact_Click" BorderThickness="0" Background="Transparent"
                                          IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
                                          ToolTip="Selektierten Ansprechpartner entfernen">
-                                    <StackPanel>
-                                        <Image Source="..\Resources\Images\Icons\Everaldo-Crystal-Clear-Action-remove.ico" Height="30"/>
-                                    </StackPanel>
-                                </Button>
-                            </Grid>
-                        </StackPanel>
+                                        <StackPanel>
+                                            <Image Source="..\Resources\Images\Icons\Everaldo-Crystal-Clear-Action-remove.ico" Height="30"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
 
-                        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"  Content="Kunde" FontSize="24" Margin="10" Padding="10"
+                            <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"  Content="Kunde" FontSize="24" Margin="10" Padding="10"
                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center"/>
 
-                        <Image x:Name="imageIsEnabled" Grid.Row="1" Grid.Column="0"  Height="40" HorizontalAlignment="Left" Margin="10,0,0,0"
+                            <Image x:Name="imageIsEnabled" Grid.Row="1" Grid.Column="0"  Height="40" HorizontalAlignment="Left" Margin="10,0,0,0"
                                Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=EnabledBitmapImage}"/>
- 
-                        <Label x:Name="lblCompanyName" Grid.Row="2" Grid.Column="0"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblAddress" Grid.Row="2" Grid.Column="1"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblPostcode" Grid.Row="2" Grid.Column="2"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblCity" Grid.Row="2" Grid.Column="3"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblGoogleDriveLink" Content="link" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center"  Style="{StaticResource LableStyle}" />
 
-                        <Label x:Name="lblContactPerson" Grid.Row="5" Grid.Column="0"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblPhoneWork" Grid.Row="5" Grid.Column="1"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblMobile" Grid.Row="5" Grid.Column="2"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblEmail" Grid.Row="5" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+                            <Label x:Name="lblCompanyName" Grid.Row="2" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                            <Label x:Name="lblAddress" Grid.Row="2" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+                            <Label x:Name="lblPostcode" Grid.Row="2" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+                            <Label x:Name="lblCity" Grid.Row="2" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+                            <Label x:Name="lblGoogleDriveLink" Content="link" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center"  Style="{StaticResource LableStyle}" />
+
+                            <Label x:Name="lblContactPerson" Grid.Row="5" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                            <Label x:Name="lblPhoneWork" Grid.Row="5" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+                            <Label x:Name="lblMobile" Grid.Row="5" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+                            <Label x:Name="lblEmail" Grid.Row="5" Grid.Column="3"  Style="{StaticResource LableStyle}" />
 
 
-                        <Label x:Name="lblAdditionalInfo" Grid.Row="8" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                            <Label x:Name="lblAdditionalInfo" Grid.Row="8" Grid.Column="0"  Style="{StaticResource LableStyle}" />
 
-                        <Label x:Name="lblAdministratorCompanyName" Content="lbl" Grid.Row="11" Grid.Column="0"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblAdministratorContactPerson" Grid.Row="11" Grid.Column="1"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblAdministratorPhoneWork" Grid.Row="11" Grid.Column="2"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblAdministratorMobile" Grid.Row="11" Grid.Column="3"  Style="{StaticResource LableStyle}" />
-                        <Label x:Name="lblAdministratorEmail" Grid.Row="11" Grid.Column="4"  Style="{StaticResource LableStyle}" />
+                            <Label x:Name="lblAdministratorCompanyName" Content="lbl" Grid.Row="11" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                            <Label x:Name="lblAdministratorContactPerson" Grid.Row="11" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+                            <Label x:Name="lblAdministratorPhoneWork" Grid.Row="11" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+                            <Label x:Name="lblAdministratorMobile" Grid.Row="11" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+                            <Label x:Name="lblAdministratorEmail" Grid.Row="11" Grid.Column="4"  Style="{StaticResource LableStyle}" />
 
-                        <TextBox x:Name="txtCompanyName" Grid.Row="3" Text="Halo" Grid.Column="0" Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtAddress" Grid.Row="3" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtPostcode" Grid.Row="3" Grid.Column="2" Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtCity" Grid.Row="3" Grid.Column="3"  Style="{StaticResource TextBoxStyle}"/>
+                            <TextBox x:Name="txtCompanyName" Grid.Row="3" Text="Halo" Grid.Column="0" Style="{StaticResource TextBoxStyle}"/>
+                            <TextBox x:Name="txtAddress" Grid.Row="3" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
+                            <TextBox x:Name="txtPostcode" Grid.Row="3" Grid.Column="2" Style="{StaticResource TextBoxStyle}"/>
+                            <TextBox x:Name="txtCity" Grid.Row="3" Grid.Column="3"  Style="{StaticResource TextBoxStyle}"/>
 
-                        <TextBox x:Name="txtContactPerson" Grid.Row="6" Grid.Column="0"  Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtPhoneWork" Grid.Row="6" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtMobile" Grid.Row="6" Grid.Column="2"  Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtEmail" Grid.Row="6" Grid.Column="3"  Style="{StaticResource TextBoxStyle}"/>
+                            <TextBox x:Name="txtContactPerson" Grid.Row="6" Grid.Column="0"  Style="{StaticResource TextBoxStyle}"/>
+                            <TextBox x:Name="txtPhoneWork" Grid.Row="6" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
+                            <TextBox x:Name="txtMobile" Grid.Row="6" Grid.Column="2"  Style="{StaticResource TextBoxStyle}"/>
+                            <TextBox x:Name="txtEmail" Grid.Row="6" Grid.Column="3"  Style="{StaticResource TextBoxStyle}"/>
 
-                        <TextBlock x:Name="txtGoogleDriveHyperlink" Grid.Row="3" Grid.Column="4" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Hyperlink  x:Name="hyperlinkGoogleDrive" NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate">                             
-                            <TextBlock x:Name="txtGoogleDriveFolderName"/>
+                            <TextBlock x:Name="txtGoogleDriveHyperlink" Grid.Row="3" Grid.Column="4" Margin="10,0,0,0" VerticalAlignment="Center"
+                                   KeyboardNavigation.IsTabStop="False" HorizontalAlignment="Center">
+                        <Hyperlink  x:Name="hyperlinkGoogleDrive" NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate"  KeyboardNavigation.IsTabStop="False">                             
+                            <TextBlock x:Name="txtGoogleDriveFolderName"  KeyboardNavigation.IsTabStop="False"/>
                         </Hyperlink>
-                    </TextBlock>
+                        </TextBlock>
 
-                        <Button x:Name="btnGoogleDriveTree" Grid.Row="6" Grid.Column="4" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnGoogleDriveTree_Click" BorderThickness="0" Background="Transparent"
-                                IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}">
-                            <StackPanel>
-                                <Image Source="..\Resources\Images\Icons\Google-Drive.ico" Height="30"/>
-                            </StackPanel>
-                        </Button>
+                            <Button x:Name="btnGoogleDriveTree" Grid.Row="6" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" Click="btnGoogleDriveTree_Click" BorderThickness="0" Background="Transparent"
+                                IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
+                                IsTabStop="False">
+                                <StackPanel>
+                                    <Image Source="..\Resources\Images\Icons\Google-Drive.ico" Height="30"/>
+                                </StackPanel>
+                            </Button>
 
-                        <TextBox x:Name="txtAdditionalInfo" Grid.Row="9"  Grid.Column="0" Grid.ColumnSpan="5" Margin="10,0,10,0"
+                            <TextBox x:Name="txtAdditionalInfo" Grid.Row="9"  Grid.Column="0" Grid.ColumnSpan="5" Margin="10,0,10,0"
                                  TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True"/>
 
-                        <TextBox x:Name="txtAdministratorCompanyName" Grid.Row="12" Grid.Column="0" Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtAdministratorContactPerson" Grid.Row="12" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtAdministratorPhoneWork" Grid.Row="12" Grid.Column="2"  Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtAdministratorMobile" Grid.Row="12" Grid.Column="3"  Style="{StaticResource TextBoxStyle}"/>
-                        <TextBox x:Name="txtAdministratorEmail" Grid.Row="12" Grid.Column="4"  Style="{StaticResource TextBoxStyle}"/>
-                      
+                            <TextBox x:Name="txtAdministratorCompanyName" Grid.Row="12" Grid.Column="0" Style="{StaticResource TextBoxStyle}"/>
+                            <TextBox x:Name="txtAdministratorContactPerson" Grid.Row="12" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
+                            <TextBox x:Name="txtAdministratorPhoneWork" Grid.Row="12" Grid.Column="2"  Style="{StaticResource TextBoxStyle}"/>
+                            <TextBox x:Name="txtAdministratorMobile" Grid.Row="12" Grid.Column="3"  Style="{StaticResource TextBoxStyle}"/>
+                            <TextBox x:Name="txtAdministratorEmail" Grid.Row="12" Grid.Column="4"  Style="{StaticResource TextBoxStyle}"/>
+
                             <StackPanel x:Name="spAdministratorContactPersons" Orientation="Vertical" Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                                 <DataGrid  x:Name="dgAdministratorContactPersons" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"  SelectionUnit="FullRow" 
                                            local:CustomColumnHeadersProperty.ItemType="{x:Type view:CustomerView}" IsReadOnly="True" SelectionMode="Single"
                                            CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
                                            VerticalScrollBarVisibility="Visible" MaxHeight="120">
                                     <DataGrid.RowStyle >
-                                    <Style TargetType="DataGridRow">
-                                        <Setter Property="Height" Value="30"/>
-                                        <Style.Triggers>
-                                            <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                                <Setter Property="Background" Value="#0078D7" />
-                                                <Setter Property="Foreground" Value="White" />
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </DataGrid.RowStyle>
-                            </DataGrid>
+                                        <Style TargetType="DataGridRow">
+                                            <Setter Property="Height" Value="30"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                                    <Setter Property="Background" Value="#0078D7" />
+                                                    <Setter Property="Foreground" Value="White" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGrid.RowStyle>
+                                </DataGrid>
                             </StackPanel>
-                        <Rectangle Grid.Row="15" Grid.Column="0" Grid.ColumnSpan="6"  HorizontalAlignment="Stretch" Margin="5,0,0,0" VerticalAlignment="Bottom"  Fill="Black" Height="1"/>
+                            <Rectangle Grid.Row="15" Grid.Column="0" Grid.ColumnSpan="6"  HorizontalAlignment="Stretch" Margin="5,0,0,0" VerticalAlignment="Bottom"  Fill="Black" Height="1"/>
 
-                        <StackPanel Grid.Row="14"  Grid.Column="4" Orientation="Vertical" Margin="0,10,0,0">
-                            <Label x:Name="lblContactByDefect" Content="Beim Störungsfall kontaktieren" Style="{StaticResource LableStyle}"  />
+                            <StackPanel Grid.Row="14"  Grid.Column="4" Orientation="Vertical" Margin="0,10,0,0">
+                                <Label x:Name="lblContactByDefect" Content="Beim Störungsfall kontaktieren" Style="{StaticResource LableStyle}"  />
 
-                            <CheckBox x:Name="cboxAdministratorContactByDefect" IsChecked="{Binding Path=ContactByDefect}"  HorizontalAlignment="Center" 
+                                <CheckBox x:Name="cboxAdministratorContactByDefect" IsChecked="{Binding Path=ContactByDefect}"  HorizontalAlignment="Center" 
                                       IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}">
-                                <CheckBox.LayoutTransform>
-                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                                </CheckBox.LayoutTransform>
-                            </CheckBox>
+                                    <CheckBox.LayoutTransform>
+                                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                    </CheckBox.LayoutTransform>
+                                </CheckBox>
 
-                        </StackPanel>
-                        
+                            </StackPanel>
 
-                        <Frame x:Name="frameLocations" Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="6" Content="Customers"/>
 
+                            <Frame x:Name="frameLocations" Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="6" Content="Customers"/>
+
+                        </Grid>
                     </Grid>
-                </Grid>
-            </StackPanel>
-        </ScrollViewer>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <Grid x:Name="LoadingIndicatorPanel" Background="White">
+            <li:LoadingIndicator x:Name="LoadingIndicatorx" SpeedRatio="1" IsActive="{Binding IsArcsActive}" Mode="Arcs" Foreground="DeepSkyBlue"/>
+        </Grid>
     </Grid>
 </local:GoogleDriveDialogueView>

@@ -63,6 +63,13 @@
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
 
+                        <Button  x:Name="btnTakeOverLocationFromCustomer"  Grid.Row="4"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnTakeOverToLocation_Click" BorderThickness="0" Background="Transparent"
+                                         IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}">
+                            <StackPanel>
+                                <Image Source="..\Resources\Images\Icons\Pixelkit-Flat-Jewels-Location.ico" Height="30"/>
+                            </StackPanel>
+                        </Button>
+
                         <Button  x:Name="btnAdd" Grid.Row="0" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnAdd_Click" BorderThickness="0" Background="Transparent">
                             <StackPanel>
                                 <Image Source="..\Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" Height="30"/>
@@ -73,7 +80,8 @@
                                 <Image Source="..\Resources\Images\Icons\Turbomilk-Livejournal-10-Pencil.ico" Height="30"/>
                             </StackPanel>
                         </Button>
-                        <Button  x:Name="btnDelete" Grid.Row="3" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnDelete_Click" BorderThickness="0" Background="Transparent">
+                        <Button  x:Name="btnCancel" Grid.Row="3" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnDelete_Click" BorderThickness="0" Background="Transparent"
+                                 IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}">
                             <StackPanel>
                                 <Image Source="..\Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-edit-delete.ico" Height="30"/>
                             </StackPanel>
@@ -82,6 +90,12 @@
                                  IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}">
                             <StackPanel>
                                 <Image Source="..\Resources\Images\Icons\Treetog-I-Floppy-Small.ico" Height="30"/>
+                            </StackPanel>
+                        </Button>
+                        <Button  x:Name="btnDelete"  Grid.Row="2"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSave_Click" BorderThickness="0" Background="Transparent"
+                                 IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=CanDeleted}">
+                            <StackPanel>
+                                <Image Source="..\Resources\Images\Icons\Tatice-Just-Bins-Bin-red-full.ico" Height="30"/>
                             </StackPanel>
                         </Button>
                     </Grid>

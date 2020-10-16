@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Liftmanagement.ViewModels;
 
 namespace Liftmanagement.Views
@@ -55,7 +56,28 @@ namespace Liftmanagement.Views
 
             BindingControl(dgLocations, () => LocationsVM.Locations);
 
-            Loaded += LocationDetailView_Loaded;
+            EnableContoles(false);
+            
+            SetLable(LocationDetailVM.LocationSelected);
+
+            Task.Factory.StartNew(() =>
+            {
+                LocationsVM.LocationsByCustomer(_customer);
+
+                Application.Current.Dispatcher.BeginInvoke(
+                    DispatcherPriority.Background,
+                    new Action(() =>
+                    {
+                        dgLocations.SelectionChanged += DgLocations_SelectionChanged;
+
+                    }));
+            }).ContinueWith((task) =>
+            {
+                dgLocations.SelectedIndex = 0;
+            }, TaskScheduler.FromCurrentSynchronizationContext());
+
+            //TODO check if its faster when put in new Task
+           
             Application.Current.MainWindow.SizeChanged += MainWindow_SizeChanged;
         }
 
@@ -67,15 +89,22 @@ namespace Liftmanagement.Views
 
         private void LocationDetailView_Loaded(object sender, RoutedEventArgs e)
         {
+            //LoadData();
+            dgLocations.SelectedIndex = 0;
+        }
+
+        private void LoadData()
+        {
             LocationsVM.LocationsByCustomer(_customer);
 
             dgLocations.SelectionChanged += DgLocations_SelectionChanged;
-            dgLocations.SelectedIndex = 0;
+           // dgLocations.SelectedIndex = 0;
 
             SetLable(LocationDetailVM.LocationSelected);
 
             EnableContoles(false);
         }
+
 
         private void DgLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -109,12 +138,11 @@ namespace Liftmanagement.Views
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //TODO Set Titel
-            //var customer = customersView.dgCustomers.SelectedItem as Customer;
-            //if (customer != null)
-            //{
-            //    windowGoogleDriveTree.Title = windowGoogleDriveTree.Title + "  " + customer.CompanyName;
-            //}
+            if (_customer != null)
+            {
+                windowGoogleDriveTree.Title = windowGoogleDriveTree.Title + "  " + _customer.CompanyName +
+                                              ", " + LocationDetailVM.LocationSelected.GetFullName();
+            }
             windowGoogleDriveTree.ShowDialog();
         }
 
@@ -129,7 +157,11 @@ namespace Liftmanagement.Views
             var result = LocationDetailVM.EditLocation();
             if (result.IsReadOnly)
             {
-                //TODO show message is used by
+                AskForceToEdit(result.CurrentlyUsedBy,() =>
+                {
+                    LocationDetailVM.ForceEditing();
+                    EnableContoles(true);
+                });
             }
             else
             {
@@ -148,14 +180,18 @@ namespace Liftmanagement.Views
 
             if (result.Records > 0)
             {
-                //TODO show Toast msg
                 LocationsVM.LocationsByCustomer(_customer);
                 var location = dgLocations.Items.Cast<Location>().Single(c => c.Id == result.Id);
                 dgLocations.SelectedItem = location;
+
+                var titel = string.Format("Standort : {0}", location.GetFullName());
+                var msg = "Standortdaten wurden gespeichert.";
+                new NotificationWindow(titel, msg).Show();
             }
             else
             {
-                //TODO show Toast msg
+                var msg = "Standortdaten konnten nicht gespeichert werden.";
+                new NotificationWindow("Fehler!", msg).Show();
             }
         }
 

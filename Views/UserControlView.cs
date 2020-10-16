@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
@@ -16,8 +18,11 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using Liftmanagement.Common;
+using Liftmanagement.Data;
 using Liftmanagement.Models;
 using Liftmanagement.ViewModels;
+using ValidationError = Liftmanagement.Common.ValidationError;
 
 namespace Liftmanagement.Views
 {
@@ -141,6 +146,7 @@ namespace Liftmanagement.Views
             {
                 binding.StringFormat = stringFormat;
             }
+
             control.SetBinding(dp, binding);
         }
 
@@ -160,11 +166,19 @@ namespace Liftmanagement.Views
             control.SetBinding(dp, binding);
         }
 
-        protected virtual void BindingText<T>(Control control, Expression<Func<T>> action)
+        protected virtual void BindingText<T>(Control control, Expression<Func<T>> action, bool validate = false, Func<ValidationRule> validationRule = null)
         {
             BindingItem1(control, TextBox.TextProperty, GetPropertyPath(action));
-        }
 
+            if (validate && validationRule != null)
+            {
+                Binding binding = BindingOperations.GetBinding(control, TextBox.TextProperty);
+                binding.ValidationRules.Clear();
+                binding.ValidationRules.Add(validationRule());
+                control.LostFocus += TextBoxValidationOnLostFocus;
+            }
+        }
+        
         protected virtual void BindingText(Control control, string path)
         {
             BindingItem(control, TextBox.TextProperty, string.Format("{0}.{1}", SourceObjectStringName, path));
@@ -293,6 +307,90 @@ namespace Liftmanagement.Views
             //    BitmapSizeOptions.FromWidthAndHeight(width, height));
         }
 
+        protected void AskForceToEdit(string currentlyUsedBy, Action forToEditing)
+        {
+            var msg = "Daten sind gerade von \"" + currentlyUsedBy + "\" in Benutzung.\n Möchten Sie trotzdem die Daten bearbeiten?";
+            var titel = "Daten sind in Bearbeitung";
+            MessageBoxResult msgBoxResult = MessageBox.Show(msg, titel, MessageBoxButton.YesNo, MessageBoxImage.Exclamation,
+                MessageBoxResult.No);
 
+            if (msgBoxResult == MessageBoxResult.Yes)
+            {
+                forToEditing();
+            }
+        }
+
+        public void TextBoxValidationOnLostFocus(object sender, RoutedEventArgs e)
+        {
+            ((Control)sender).GetBindingExpression(TextBox.TextProperty).UpdateSource();
+        }
+
+        #region Validation
+
+        public virtual void OnLoad(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ErrorContainer = (IValidationErrorContainer)DataContext;
+            AddHandler(System.Windows.Controls.Validation.ErrorEvent, new RoutedEventHandler(Handler), true);
+        }
+
+        public virtual void OnUnload(object sender, System.Windows.RoutedEventArgs e)
+        {
+            RemoveHandler(System.Windows.Controls.Validation.ErrorEvent, new RoutedEventHandler(Handler));
+        }
+
+        internal IValidationErrorContainer ErrorContainer = null;
+
+        // Based on exception handler from Josh Smith blog.
+        public void Handler(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.ValidationErrorEventArgs args = e as System.Windows.Controls.ValidationErrorEventArgs;
+
+            if (args.Error.RuleInError is System.Windows.Controls.ValidationRule)
+            {
+                if (ErrorContainer != null)
+                {
+                   // Tracer.LogValidation("ViewBase.Handler called for ValidationRule exception.");
+
+                    // Only want to work with validation errors that are Exceptions because the business object has already recorded the business rule violations using IDataErrorInfo.
+                    BindingExpression bindingExpression = args.Error.BindingInError as System.Windows.Data.BindingExpression;
+                    Debug.Assert(bindingExpression != null);
+
+                    string propertyName = bindingExpression.ParentBinding.Path.Path;
+                    DependencyObject OriginalSource = args.OriginalSource as DependencyObject;
+
+                    // Construct the error message.
+                    string errorMessage = "";
+                    ReadOnlyObservableCollection<System.Windows.Controls.ValidationError> errors = System.Windows.Controls.Validation.GetErrors(OriginalSource);
+                    if (errors.Count > 0)
+                    {
+                        StringBuilder builder = new StringBuilder();
+                        builder.Append(propertyName).Append(":");
+                        System.Windows.Controls.ValidationError error = errors[errors.Count - 1];
+                        {
+                            if (error.Exception == null || error.Exception.InnerException == null)
+                                builder.Append(error.ErrorContent.ToString());
+                            else
+                                builder.Append(error.Exception.InnerException.Message);
+                        }
+                        errorMessage = builder.ToString();
+                    }
+
+                    // Add or remove the validation error to the validation error collection.
+                    Debug.Assert(args.Action == ValidationErrorEventAction.Added || args.Action == ValidationErrorEventAction.Removed);
+                    StringBuilder errorID = new StringBuilder();
+                    errorID.Append(args.Error.RuleInError.ToString());
+                    if (args.Action == ValidationErrorEventAction.Added)
+                    {
+                        ErrorContainer.AddError(new ValidationError(propertyName, errorID.ToString(), errorMessage));
+                    }
+                    else if (args.Action == ValidationErrorEventAction.Removed)
+                    {
+                        ErrorContainer.RemoveError(propertyName, errorID.ToString());
+                    }
+                }
+            }
+        }
+
+        #endregion
     }
 }

@@ -38,7 +38,7 @@ namespace Liftmanagement.Models
         [DisplayName("Zusätzliche Informationen"), DatabaseAttribute(Length = "200")]
         public string AdditionalInfo { get; set; }
 
-        protected override string GetFullName()
+        public override string GetFullName()
         {
             return string.Format("{0}, {1}, {2}",Name, SerialNumber,YearOfConstruction.ToString("dd.MM.yyyy"));
         }

@@ -34,7 +34,7 @@ namespace Liftmanagement.Models
       
 
 
-        protected override string GetFullName()
+        public override string GetFullName()
         {
             return (Administrator + CompanyName + Location + Manufacturer + SerialNumber + YearOfConstruction).Trim().ToLower();
         }

@@ -16,7 +16,7 @@ namespace Liftmanagement.Models
         //[DisplayName("Beim Störungsfall kontaktieren"),Display(Order = 9)]
         //public bool ContactByDefect { get; set; }
 
-        protected override string GetFullName()
+        public override string GetFullName()
         {
             return string.Format("{0}, {1} {2}", Address, Postcode, City);
         }

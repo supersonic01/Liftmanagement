@@ -315,11 +315,12 @@ namespace Liftmanagement.Data
 
             if (item.ReadOnly)
             {
-
+                result.IsReadOnly = true;
+                result.CurrentlyUsedBy = item.UsedBy;
             }
             else
             {
-                var updateQuery = "UPDATE " + classname + " SET READONLY = 1 WHERE ID = " + id;
+                var updateQuery = "UPDATE " + classname + " SET READONLY = 1, USEDBY = " + Helper.Helper.GetUsername()+ "WHERE ID = " + id;
 
                 if (databaseConnection == null)
                 {
@@ -345,6 +346,35 @@ namespace Liftmanagement.Data
             return GetRecordForEdit(id, query => GetLocations(query));
 
             //// TODO check user, if is the same user, editing is possilbe
+        }
+
+        public static SQLQueryResult<Location> ForceToEditLocation(long id)
+        {
+            return ForceToEdit<Location>(id);
+        }
+        public static SQLQueryResult<Customer> ForceToEditCustomer(long id)
+        {
+            return ForceToEdit<Customer>(id);
+        }
+
+        private static SQLQueryResult<T> ForceToEdit<T>(long id)
+            where T : BaseDatabaseField
+        {
+            var classname = typeof(T).Name.ToUpper();
+            var updateQuery = "UPDATE " + classname + " SET READONLY = 1, USEDBY = '" + Helper.Helper.GetUsername() + "' WHERE ID = " + id;
+
+            if (databaseConnection == null)
+            {
+                CreateConnection();
+            }
+
+            MySqlCommand execQuery = new MySqlCommand(updateQuery, databaseConnection);
+
+            databaseConnection.Open();
+            int records = execQuery.ExecuteNonQuery();
+            databaseConnection.Close();
+
+            return new SQLQueryResult<T>(records, id);
         }
 
         private static List<ContactPartner> GetContactPartners(long foreignkey, int foreignkeytype)
@@ -487,8 +517,9 @@ namespace Liftmanagement.Data
                 CreateConnection();
             }
 
+            customer.ModifiedPersonName = Helper.Helper.GetPersonName();
             string query = "UPDATE CUSTOMER SET CompanyName = '" + customer.CompanyName + "',Address = '" + customer.Address + "',Postcode = '" + customer.Postcode + "',City = '" + customer.City + "',Selected = " + customer.Selected + ",AdditionalInfo = '" + customer.AdditionalInfo + "',GoogleDriveFolderName = '" + customer.GoogleDriveFolderName + "',GoogleDriveLink = '" + customer.GoogleDriveLink + "',CreatedPersonName = '" + customer.CreatedPersonName + "',ModifiedPersonName = '" + customer.ModifiedPersonName + "',ReadOnly = " + customer.ReadOnly + ",UsedBy = '" + customer.UsedBy + "' WHERE ID = " + customer.Id;
-
+    
             MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
 
             databaseConnection.Open();
@@ -532,6 +563,7 @@ namespace Liftmanagement.Data
 
         private static SQLQueryResult<ContactPartner> UpdateContactPartner(ContactPartner contactpartner)
         {
+            contactpartner.ModifiedPersonName = Helper.Helper.GetPersonName();
             string query = "UPDATE CONTACTPARTNER SET CustomerId = " + contactpartner.CustomerId + ",ForeignKey = " + contactpartner.ForeignKey + ",ForeignKeyType = " + contactpartner.ForeignKeyType + ",Name = '" + contactpartner.Name + "',PhoneWork = '" + contactpartner.PhoneWork + "',Mobile = '" + contactpartner.Mobile + "',EMail = '" + contactpartner.EMail + "',ContactByDefect = " + contactpartner.ContactByDefect + ",CreatedPersonName = '" + contactpartner.CreatedPersonName + "',ModifiedPersonName = '" + contactpartner.ModifiedPersonName + "',ReadOnly = " + contactpartner.ReadOnly + ",UsedBy = '" + contactpartner.UsedBy + "' WHERE ID = " + contactpartner.Id;
 
             MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
@@ -547,6 +579,7 @@ namespace Liftmanagement.Data
                 CreateConnection();
             }
 
+            location.ModifiedPersonName = Helper.Helper.GetPersonName();
             string query = "UPDATE LOCATION SET CustomerId = " + location.CustomerId + ",Address = '" + location.Address + "',Postcode = '" + location.Postcode + "',City = '" + location.City + "',Selected = " + location.Selected + ",AdditionalInfo = '" + location.AdditionalInfo + "',GoogleDriveFolderName = '" + location.GoogleDriveFolderName + "',GoogleDriveLink = '" + location.GoogleDriveLink + "',CreatedPersonName = '" + location.CreatedPersonName + "',ModifiedPersonName = '" + location.ModifiedPersonName + "',ReadOnly = " + location.ReadOnly + ",UsedBy = '" + location.UsedBy + "' WHERE ID = " + location.Id;
 
             MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
@@ -568,6 +601,7 @@ namespace Liftmanagement.Data
 
         private static SQLQueryResult<AdministratorCompany> UpdateAdministratorCompany(AdministratorCompany administratorcompany)
         {
+            administratorcompany.ModifiedPersonName = Helper.Helper.GetPersonName();
             string query = "UPDATE ADMINISTRATORCOMPANY SET CustomerId = " + administratorcompany.CustomerId + ",Name = '" + administratorcompany.Name + "',CreatedPersonName = '" + administratorcompany.CreatedPersonName + "',ModifiedPersonName = '" + administratorcompany.ModifiedPersonName + "',ReadOnly = " + administratorcompany.ReadOnly + ",UsedBy = '" + administratorcompany.UsedBy + "' WHERE ID = " + administratorcompany.Id;
 
             MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);

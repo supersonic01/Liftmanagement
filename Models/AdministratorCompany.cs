@@ -58,7 +58,7 @@ namespace Liftmanagement.Models
             return Name;
         }
 
-        protected override string GetFullName()
+        public override string GetFullName()
         {
             return string.Format("{0}, {1}", Name, GetParentFullName());
         }

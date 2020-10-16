@@ -144,6 +144,7 @@
       <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.6.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -169,6 +170,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BusinessLogic\GoogleManagement\DriveLiftmanagement.cs" />
+    <Compile Include="Common\MandatoryRule.cs" />
+    <Compile Include="Common\NumberRangeRule.cs" />
+    <Compile Include="Common\RelayCommand.cs" />
+    <Compile Include="Common\Tracer.cs" />
+    <Compile Include="Common\TraceValidationRule.cs" />
+    <Compile Include="Common\ValidationError.cs" />
+    <Compile Include="Common\ValidationErrorContainer.cs" />
+    <Compile Include="Converter\InverseBooleanConverter.cs" />
     <Compile Include="Data\DataAccess.cs" />
     <Compile Include="Data\MySQLDataAccess.cs" />
     <Compile Include="Data\SQLQueryResult.cs" />
@@ -264,6 +273,9 @@
     <Compile Include="Views\MasterDataInfoView.xaml.cs">
       <DependentUpon>MasterDataInfoView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\NotificationWindow.xaml.cs">
+      <DependentUpon>NotificationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RecordingsView.xaml.cs">
       <DependentUpon>RecordingsView.xaml</DependentUpon>
     </Compile>
@@ -350,6 +362,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MasterDataInfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NotificationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -484,6 +500,10 @@
     <Resource Include="Resources\Images\Icons\Everaldo-Crystal-Clear-Action-ok.ico" />
     <Resource Include="Resources\Images\Icons\Everaldo-Crystal-Clear-Action-remove.ico" />
     <Resource Include="Resources\Images\Icons\Visualpharm-Must-Have-Edit.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Tatice-Just-Bins-Bin-red-full.ico" />
+    <Resource Include="Resources\Images\Icons\Tatice-Just-Bins-Bin-red.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets" Condition="Exists('packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets')" />

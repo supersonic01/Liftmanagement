@@ -21,6 +21,7 @@ namespace Liftmanagement.ViewModels
 
         public SQLQueryResult<Location> Add(Customer customer)
         {
+            locationSelected.ReleaseRow();
             if (locationSelected.Id > 0)
             {
                 return MySQLDataAccess.UpdateLocation(locationSelected);
@@ -41,6 +42,11 @@ namespace Liftmanagement.ViewModels
             }
 
             return result;
+        }
+
+        public SQLQueryResult<Location> ForceEditing()
+        {
+            return MySQLDataAccess.ForceToEditLocation(LocationSelected.Id);
         }
 
     }

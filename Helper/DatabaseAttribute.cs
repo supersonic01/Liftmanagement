@@ -10,7 +10,7 @@ namespace Liftmanagement.Helper
     public class DatabaseAttribute : Attribute
     {
         public string Length { get; set; }
-        public string Attribute { get; }
+        public string Attribute { get; set; }
         public bool Updateable { get; set; } = true;
 
         public const string AUTO_INCREMENT = "NOT NULL AUTO_INCREMENT";

@@ -1,12 +1,13 @@
 ﻿using Liftmanagement.Helper;
 using System;
 using System.ComponentModel;
+using Attribute = Org.BouncyCastle.Asn1.Cms.Attribute;
 
 namespace Liftmanagement.Models
 {
     public class Customer : Person, IDatabaseObject
     {
-        [DisplayName("Kundenname"), DatabaseAttribute(Length ="100")]
+        [DisplayName("Kundenname"), DatabaseAttribute(Length ="100", Attribute = DatabaseAttribute.NOT_NULL)]
         public string CompanyName { get; set; }
 
         private AdministratorCompany administrator = new AdministratorCompany();
@@ -31,7 +32,7 @@ namespace Liftmanagement.Models
             return CompanyName;
         }
 
-        protected override string GetFullName()
+        public override string GetFullName()
         {
             return string.Format("{0},{3} {1} {2}", CompanyName, Postcode, City, Address);
         }

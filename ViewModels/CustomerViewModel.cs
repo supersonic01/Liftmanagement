@@ -34,7 +34,10 @@ namespace Liftmanagement.ViewModels
         public Customer CustomerSelected
         {
             get { return customerSelected; }
-            set { SetField(ref customerSelected, value); }
+            set
+            {
+                SetField(ref customerSelected, value);
+            }
         }
 
         private ContactPartner administratorContactPerson = new ContactPartner();
@@ -47,6 +50,7 @@ namespace Liftmanagement.ViewModels
 
         public SQLQueryResult<Customer> Add()
         {
+            customerSelected.ReadOnly = false;
             if (CustomerSelected.Id > 0)
             {
                 return MySQLDataAccess.UpdateCustomer(CustomerSelected);
@@ -68,9 +72,11 @@ namespace Liftmanagement.ViewModels
 
           return result;
         }
-            
-     
 
 
+        public SQLQueryResult<Customer> ForceEditing()
+        {
+            return MySQLDataAccess.ForceToEditCustomer(CustomerSelected.Id);
+        }
     }
 }

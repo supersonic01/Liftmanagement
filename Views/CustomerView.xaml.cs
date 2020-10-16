@@ -4,9 +4,13 @@ using Liftmanagement.ViewModels;
 using Liftmanagement.Views;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Threading;
+using Liftmanagement.Common;
 
 namespace Liftmanagement.View
 {
@@ -28,16 +32,36 @@ namespace Liftmanagement.View
         {
             InitializeComponent();
 
-            customersView = new CustomersView();
-            frameCustomers.Content = customersView;
-            customersView.dgCustomers.SelectionChanged += DgCustomers_SelectionChanged;
-            this.Loaded += CustomerView_Loaded;
-            customersView.dgCustomers.SelectedIndex = 0;
+            LoadingIndicatorPanel.Visibility = Visibility.Visible;
+            MainContent.IsEnabled = false;
+            Task.Factory.StartNew(() =>
+            {
+                var customersVM = new CustomersViewModel();
+               
+                Application.Current.Dispatcher.BeginInvoke(
+                    DispatcherPriority.Background,
+                    new Action(() =>
+                    {
+                        customersView = new CustomersView();
+                        customersView.CustomersVM = customersVM;
+                        frameCustomers.Content = customersView;
+                        customersView.dgCustomers.SelectionChanged += DgCustomers_SelectionChanged;
+                        AssigneValuesToControl();
+                        customersView.dgCustomers.SelectedIndex = 0;
+                    }));
 
-            //TODO tab order from Email to Addtitional info not working
+
+
+            }).ContinueWith((task) =>
+            {
+                LoadingIndicatorPanel.Visibility = Visibility.Collapsed;
+                MainContent.IsEnabled = true;
+            }, TaskScheduler.FromCurrentSynchronizationContext());
+
             //TODO Add refresh button to refrexh all data
-            //TODO Delete.edit, add admin Contactperson
         }
+
+        
 
         private void CustomerView_Loaded(object sender, RoutedEventArgs e)
         {
@@ -64,7 +88,7 @@ namespace Liftmanagement.View
             //dgAdministratorContactPersons.ItemsSource = customer.Administrator.ContactPersons;
             dgAdministratorContactPersons.SelectionChanged += DgAdministratorContactPersons_SelectionChanged;
             dgAdministratorContactPersons.SelectedIndex = 0;
-
+            
             location = new LocationDetailView(customer);
             frameLocations.Content = location;
 
@@ -94,7 +118,7 @@ namespace Liftmanagement.View
             lblAdministratorEmail.Content = CustomerVM.CustomerSelected.GetDisplayName<ContactPartner>(nameof(CustomerVM.CustomerSelected.ContactPerson.EMail)) + ":";
 
 
-            BindingText(txtCompanyName, nameof(CustomerVM.CustomerSelected.CompanyName));
+            BindingText(txtCompanyName, ()=>CustomerVM.CustomerSelected.CompanyName,true,()=>new MandatoryRule());
             BindingText(txtContactPerson, () => CustomerVM.CustomerSelected.ContactPerson.Name);
             BindingText(txtAddress, () => CustomerVM.CustomerSelected.Address);
             BindingText(txtPostcode, () => CustomerVM.CustomerSelected.Postcode);
@@ -117,16 +141,9 @@ namespace Liftmanagement.View
 
         private void DgAdministratorContactPersons_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //TODO Administrator list do not expand if no elements inside
-
             var dgAdministratorContactPersons = sender as DataGrid;
             if (dgAdministratorContactPersons != null && dgAdministratorContactPersons.SelectedItem != null)
                 CustomerVM.AdministratorContactPerson = dgAdministratorContactPersons.SelectedItem as ContactPartner;
-
-            //BindingText(txtAdministratorContactPerson, () => CustomerVM.AdministratorContactPerson.Name);
-            //BindingText(txtAdministratorPhoneWork, () => CustomerVM.AdministratorContactPerson.PhoneWork);
-            //BindingText(txtAdministratorMobile, () => CustomerVM.AdministratorContactPerson.Mobile);
-            //BindingText(txtAdministratorEmail, () => CustomerVM.AdministratorContactPerson.EMail);
         }
 
         private static Customer GetSelectedCustomer(object sender)
@@ -165,9 +182,21 @@ namespace Liftmanagement.View
 
         }
 
+        private void ForceValidation()
+        {
+            txtCompanyName.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+        }
+
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            //TODO Validate Textbox
+            ForceValidation();
+
+            if (string.IsNullOrWhiteSpace(CustomerVM.CustomerSelected.CompanyName))
+            {
+                var msg = "Kundenname darf nicht leer sein.";
+                new NotificationWindow("Fehler!", msg).Show();
+                return;
+            }
 
             if (!string.IsNullOrWhiteSpace(CustomerVM.AdministratorContactPerson.Name) && 
                 CustomerVM.AdministratorContactPerson.Id < 0 && CustomerVM.AdministratorContactPerson.Id > -10)
@@ -178,14 +207,18 @@ namespace Liftmanagement.View
             var result = CustomerVM.Add();
             if (result.Records > 0)
             {
-                //TODO show Toast msg
                 customersView.CustomersVM.RefreshCustomers();
                 var customer = customersView.dgCustomers.Items.Cast<Customer>().Single(c => c.Id == result.Id);
                 customersView.dgCustomers.SelectedItem = customer;
+
+                var titel = string.Format("Kunde : {0}", customer.GetFullName());
+                var msg = "Kundendaten wurden gespeichert.";
+                new NotificationWindow(titel, msg).Show();
             }
             else
             {
-                //TODO show Toast msg
+                var msg = "Kundendaten konnten nicht gespeichert werden.";
+                new NotificationWindow("Fehler!", msg).Show();
             }
         }
 
@@ -197,6 +230,8 @@ namespace Liftmanagement.View
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
             CustomerVM.CustomerSelected = new Customer();
+            CustomerVM.AdministratorContactPerson = new ContactPartner();
+
             EnableContoles(true);
         }
 
@@ -205,7 +240,11 @@ namespace Liftmanagement.View
             var result = CustomerVM.EditCustomer();
             if (result.IsReadOnly)
             {
-                //TODO show message is used by
+                AskForceToEdit(result.CurrentlyUsedBy, () =>
+                {
+                    CustomerVM.ForceEditing();
+                    EnableContoles(true);
+                });
             }
             else
             {
@@ -247,8 +286,10 @@ namespace Liftmanagement.View
         {
             if (string.IsNullOrWhiteSpace(CustomerVM.AdministratorContactPerson.Name))
             {
-                //TODO msg, Validate msg
+                var msg = "Ansprechpartner darf nicht leer sein.";
+                new NotificationWindow("Fehler!", msg).Show();
                 return;
+              
             }
 
            
@@ -286,5 +327,7 @@ namespace Liftmanagement.View
 
             dgAdministratorContactPersons.Items.Refresh();
         }
+
+        
     }
 }

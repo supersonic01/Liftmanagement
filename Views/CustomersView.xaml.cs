@@ -52,20 +52,19 @@ namespace Liftmanagement.Views
             BindingControl(dgCustomers, () => CustomersVM.Customers);
 
             txtExpanderHeader.Text = new CategoryViewModel().Categories.Where(c => c.MangementType == Helper.Helper.TTypeMangement.Customer).Select(c => c.Name).FirstOrDefault();
-            //expanderCustomers.Expanded += ExpanderCustomers_Expanded;
+            expanderCustomers.Expanded += ExpanderCustomers_Expanded;
             expanderCustomers.Collapsed += ExpanderCustomers_Collapsed;
 
         }
 
         public void ExpanderCustomers_Expanded(object sender, RoutedEventArgs e)
-        {
-            spCustomers.Width = spCustomers .ActualWidth;       
+        {         
+            dgCustomers.Width = dgCustomers.ActualWidth;
         }
 
         private void GspCustomer_OnDragStarted(object sender, DragStartedEventArgs e)
         {
-            Console.WriteLine("GspCustomer_OnDragStarted");
-            spCustomers.Width = double.NaN;
+            dgCustomers.Width=double.NaN;
         }
 
         private void ExpanderCustomers_Collapsed(object sender, RoutedEventArgs e)

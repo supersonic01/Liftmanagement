@@ -30,11 +30,9 @@
                     </TextBlock.LayoutTransform>
                 </TextBlock>
             </Expander.Header>
-         <!--<ScrollViewer   VerticalScrollBarVisibility="Visible" >-->
-            <StackPanel  x:Name="spCustomers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CanHorizontallyScroll="False" Background="AntiqueWhite" Width="400">
                 <DataGrid  x:Name="dgCustomers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"  SelectionUnit="FullRow"  Background="Blue"
                            local:CustomColumnHeadersProperty.ItemType="{x:Type local:CustomersView}" IsReadOnly="True" SelectionMode="Single"   ColumnWidth="*" 
-                           CellStyle="{StaticResource Body_Content_DataGrid_Centering}"  Margin="10,0,10,0" MinWidth="400"  >
+                           CellStyle="{StaticResource Body_Content_DataGrid_Centering}"  Margin="10,0,5,0" MinWidth="400" VerticalScrollBarVisibility="Auto">
                     <DataGrid.RowStyle >
                         <Style TargetType="DataGridRow">
                             <Setter Property="Height" Value="30"/>
@@ -46,9 +44,7 @@
                             </Style.Triggers>
                         </Style>
                     </DataGrid.RowStyle>
-                </DataGrid>
-            </StackPanel>
-            <!--</ScrollViewer>-->
+                </DataGrid>          
         </Expander>
 
         <!--<ScrollBar HorizontalAlignment="Left" Height="6" Margin="-313,34,0,0" VerticalAlignment="Top" Width="2"/>-->

@@ -14,16 +14,37 @@ namespace Liftmanagement.Models
 {
     public class Person: BaseDatabaseField
     {
+        //[DisplayName("Adresse"), DatabaseAttribute(Length = "50")]
+        //public string Address { get; set; }
+
+        private string address;
+
         [DisplayName("Adresse"), DatabaseAttribute(Length = "50")]
-        public string Address { get; set; }
+        public string Address
+        {
+            get { return address; }
+            set { SetField(ref address, value); }
+        }
+
+        private string postcode;
 
         [DisplayName("PLZ"), DatabaseAttribute(Length = "10")]
-        public string Postcode { get; set; }
+        public string Postcode
+        {
+            get { return postcode; }
+            set { SetField(ref postcode, value); }
+        }
+
+        private string city;
 
         [DisplayName("Stadt"), DatabaseAttribute(Length = "50")]
-        public string City { get; set; }
+        public string City
+        {
+            get { return city; }
+            set { SetField(ref city, value); }
+        }
         
-       // [DisplayName("Merken")]
+        // [DisplayName("Merken")]
         public bool Selected { get; set; }
 
         [DisplayName("Zusätzliche Informationen"), Database(Length = "300"),Display(DataGridColumnWidth = DataGridLengthUnitType.Star)]

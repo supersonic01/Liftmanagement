@@ -177,7 +177,7 @@
     <Compile Include="Common\TraceValidationRule.cs" />
     <Compile Include="Common\ValidationError.cs" />
     <Compile Include="Common\ValidationErrorContainer.cs" />
-    <Compile Include="Converter\InverseBooleanConverter.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Data\DataAccess.cs" />
     <Compile Include="Data\MySQLDataAccess.cs" />
     <Compile Include="Data\SQLQueryResult.cs" />
@@ -401,7 +401,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />

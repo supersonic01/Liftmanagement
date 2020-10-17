@@ -40,6 +40,8 @@ namespace Liftmanagement.ViewModels
             }
         }
 
+        public Customer CustomerSelectedLast { get; set; }
+
         private ContactPartner administratorContactPerson = new ContactPartner();
 
         public ContactPartner AdministratorContactPerson
@@ -77,6 +79,20 @@ namespace Liftmanagement.ViewModels
         public SQLQueryResult<Customer> ForceEditing()
         {
             return MySQLDataAccess.ForceToEditCustomer(CustomerSelected.Id);
+        }
+
+
+        public void ReleaseEditing()
+        {
+            Task.Factory.StartNew(() =>
+            {
+                MySQLDataAccess.ReleaseEditingCustomer(CustomerSelected.Id);
+            });
+        }
+
+        public SQLQueryResult<Customer> MarkForDeleteCustomer()
+        {
+            return MySQLDataAccess.MarkForDeleteCustomer(CustomerSelected);
         }
     }
 }

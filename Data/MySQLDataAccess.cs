@@ -320,7 +320,7 @@ namespace Liftmanagement.Data
             }
             else
             {
-                var updateQuery = "UPDATE " + classname + " SET READONLY = 1, USEDBY = " + Helper.Helper.GetUsername()+ "WHERE ID = " + id;
+                var updateQuery = "UPDATE " + classname + " SET READONLY = 1, USEDBY = '" + Helper.Helper.GetUsername()+ "' WHERE ID = " + id;
 
                 if (databaseConnection == null)
                 {
@@ -357,12 +357,37 @@ namespace Liftmanagement.Data
             return ForceToEdit<Customer>(id);
         }
 
+        public static SQLQueryResult<Customer> ReleaseEditingCustomer(long id)
+        {
+            return ReleaseEditing<Customer>(id);
+        }
+
+        public static SQLQueryResult<Location> ReleaseEditingLocation(long id)
+        {
+            return ReleaseEditing<Location>(id);
+        }
+
         private static SQLQueryResult<T> ForceToEdit<T>(long id)
             where T : BaseDatabaseField
         {
             var classname = typeof(T).Name.ToUpper();
             var updateQuery = "UPDATE " + classname + " SET READONLY = 1, USEDBY = '" + Helper.Helper.GetUsername() + "' WHERE ID = " + id;
 
+            return SetEditing<T>(id, updateQuery);
+        }
+
+        private static SQLQueryResult<T> ReleaseEditing<T>(long id)
+            where T : BaseDatabaseField
+        {
+            var classname = typeof(T).Name.ToUpper();
+            var updateQuery = "UPDATE " + classname + " SET READONLY = 0, USEDBY = '' WHERE ID = " + id;
+            
+            return SetEditing<T>(id, updateQuery);
+        }
+
+        private static SQLQueryResult<T> SetEditing<T>(long id, string updateQuery)
+            where T : BaseDatabaseField
+        {
             if (databaseConnection == null)
             {
                 CreateConnection();
@@ -376,6 +401,7 @@ namespace Liftmanagement.Data
 
             return new SQLQueryResult<T>(records, id);
         }
+
 
         private static List<ContactPartner> GetContactPartners(long foreignkey, int foreignkeytype)
         {
@@ -560,6 +586,90 @@ namespace Liftmanagement.Data
             return result;
         }
 
+        public static SQLQueryResult<Customer> MarkForDeleteCustomer(Customer customer)
+        {
+            //TOTO do in trasaction
+            //Check Timestemp if needed
+
+            if (databaseConnection == null)
+            {
+                CreateConnection();
+            }
+         
+            customer.ModifiedPersonName = Helper.Helper.GetPersonName();
+            string query = "UPDATE CUSTOMER SET Selected = " + customer.Selected + ",ModifiedPersonName = '" + customer.ModifiedPersonName + "' WHERE ID = " + customer.Id;
+
+            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+
+            databaseConnection.Open();
+            int records = execQuery.ExecuteNonQuery();
+            long id = customer.Id;
+            var result = new SQLQueryResult<Customer>(records, id);
+
+            Task.Factory.StartNew(() =>
+            {
+                MarkForDeleteContactPartner(customer.ContactPerson);
+
+                MarkForDeleteAdministratorCompany(customer.Administrator);
+
+                foreach (var contactPerson in customer.Administrator.ContactPersons)
+                {
+                    MarkForDeleteContactPartner(contactPerson);
+                }
+            }).ContinueWith((task) =>
+            {
+                databaseConnection.Close();
+            });
+
+            return result;
+        }
+
+        private static SQLQueryResult<ContactPartner> MarkForDeleteContactPartner(ContactPartner contactpartner)
+        {
+            contactpartner.ModifiedPersonName = Helper.Helper.GetPersonName();
+           string query = "UPDATE CONTACTPARTNER SET DELETED = " + contactpartner.Deleted + ",MODIFIEDPERSONNAME = '" + contactpartner.ModifiedPersonName + "' WHERE CustomerId = " + contactpartner.CustomerId;
+
+            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+
+            int records = execQuery.ExecuteNonQuery();
+            return new SQLQueryResult<ContactPartner>(records, contactpartner.Id);
+        }
+
+        public static SQLQueryResult<Location> MarkForDeleteLocation(Location location)
+        {
+            if (databaseConnection == null)
+            {
+                CreateConnection();
+            }
+
+            location.ModifiedPersonName = Helper.Helper.GetPersonName();
+            string query = "UPDATE LOCATION SET DELETED = " + location.Deleted + ",MODIFIEDPERSONNAME = '" + location.ModifiedPersonName + "' WHERE CustomerId = " + location.CustomerId;
+
+            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+
+            databaseConnection.Open();
+
+            int records = execQuery.ExecuteNonQuery();
+            var result = new SQLQueryResult<Location>(records, location.Id);
+            
+            var contactResult = MarkForDeleteContactPartner(location.ContactPerson);
+
+            databaseConnection.Close();
+
+            return result;
+        }
+
+        private static SQLQueryResult<AdministratorCompany> MarkForDeleteAdministratorCompany(AdministratorCompany administratorcompany)
+        {
+            administratorcompany.ModifiedPersonName = Helper.Helper.GetPersonName();
+            string query = "UPDATE ADMINISTRATORCOMPANY SET DELETED = " + administratorcompany.Deleted + ",MODIFIEDPERSONNAME = '" + administratorcompany.ModifiedPersonName + "' WHERE CustomerId = " + administratorcompany.CustomerId;
+
+            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+
+            int records = execQuery.ExecuteNonQuery();
+
+            return new SQLQueryResult<AdministratorCompany>(records, administratorcompany.Id);
+        }
 
         private static SQLQueryResult<ContactPartner> UpdateContactPartner(ContactPartner contactpartner)
         {

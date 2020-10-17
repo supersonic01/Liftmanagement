@@ -4,6 +4,7 @@
                                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                                xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
                                xmlns:local="clr-namespace:Liftmanagement.Views"
+                               xmlns:r="clr-namespace:Liftmanagement.Properties"
                                mc:Ignorable="d" 
                                d:DesignHeight="450" d:DesignWidth="800">
 
@@ -20,11 +21,14 @@
             <RowDefinition Height="Auto" x:Name="gridRd0"/>
             <RowDefinition Height="Auto" x:Name="gridRd1"/>
             <RowDefinition Height="Auto" x:Name="gridRdLocations"/>
-
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="100" />
+        </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Grid Background="#FFE5E5E5">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200" />
                     <ColumnDefinition Width="200" />
@@ -49,57 +53,6 @@
                     <RowDefinition Height="20" x:Name="space" />
 
                 </Grid.RowDefinitions>
-
-                <StackPanel Grid.Row="2" Grid.RowSpan="8" Grid.Column="5" Orientation="Vertical" >
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="50"/>
-                            <RowDefinition Height="50"/>
-                            <RowDefinition Height="50"/>
-                            <RowDefinition Height="80"/>
-                            <RowDefinition Height="50"/>
-                            <RowDefinition Height="50"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                        </Grid.RowDefinitions>
-
-                        <Button  x:Name="btnTakeOverLocationFromCustomer"  Grid.Row="4"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnTakeOverToLocation_Click" BorderThickness="0" Background="Transparent"
-                                         IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}">
-                            <StackPanel>
-                                <Image Source="..\Resources\Images\Icons\Pixelkit-Flat-Jewels-Location.ico" Height="30"/>
-                            </StackPanel>
-                        </Button>
-
-                        <Button  x:Name="btnAdd" Grid.Row="0" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnAdd_Click" BorderThickness="0" Background="Transparent">
-                            <StackPanel>
-                                <Image Source="..\Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" Height="30"/>
-                            </StackPanel>
-                        </Button>
-                        <Button x:Name="btnEdit" Grid.Row="1"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnEdit_Click" BorderThickness="0" Background="Transparent">
-                            <StackPanel>
-                                <Image Source="..\Resources\Images\Icons\Turbomilk-Livejournal-10-Pencil.ico" Height="30"/>
-                            </StackPanel>
-                        </Button>
-                        <Button  x:Name="btnCancel" Grid.Row="3" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnDelete_Click" BorderThickness="0" Background="Transparent"
-                                 IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}">
-                            <StackPanel>
-                                <Image Source="..\Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-edit-delete.ico" Height="30"/>
-                            </StackPanel>
-                        </Button>
-                        <Button  x:Name="btnSave"  Grid.Row="2"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSave_Click" BorderThickness="0" Background="Transparent"
-                                 IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}">
-                            <StackPanel>
-                                <Image Source="..\Resources\Images\Icons\Treetog-I-Floppy-Small.ico" Height="30"/>
-                            </StackPanel>
-                        </Button>
-                        <Button  x:Name="btnDelete"  Grid.Row="2"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSave_Click" BorderThickness="0" Background="Transparent"
-                                 IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=CanDeleted}">
-                            <StackPanel>
-                                <Image Source="..\Resources\Images\Icons\Tatice-Just-Bins-Bin-red-full.ico" Height="30"/>
-                            </StackPanel>
-                        </Button>
-                    </Grid>
-                </StackPanel>
 
                 <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5"  Content="Standort" FontSize="24"  Padding="10"
                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center"/>
@@ -156,10 +109,10 @@
             </Grid>
         </StackPanel>
 
-        <StackPanel  x:Name="spLocations" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  CanVerticallyScroll="True">
+        <StackPanel  x:Name="spLocations" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  CanVerticallyScroll="True" >
             <DataGrid  x:Name="dgLocations" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"  SelectionUnit="FullRow" 
                            local:CustomColumnHeadersProperty.ItemType="{x:Type local:LocationDetailView}" IsReadOnly="True" SelectionMode="Single"
-                           CellStyle="{StaticResource Body_Content_DataGrid_Centering}"  Margin="10,0,110,0">
+                           CellStyle="{StaticResource Body_Content_DataGrid_Centering}"  Margin="10,0,10,0"  >
                 <DataGrid.RowStyle >
                     <Style TargetType="DataGridRow">
                         <Setter Property="Height" Value="30"/>
@@ -172,6 +125,140 @@
                     </Style>
                 </DataGrid.RowStyle>
             </DataGrid>
+        </StackPanel >
+
+        <StackPanel Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Orientation="Vertical">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+
+                <Button  x:Name="btnTakeOverLocationFromCustomer"  Grid.Row="2"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnTakeOverLocationFromCustomer_Click" BorderThickness="0" Background="Transparent"
+                                         IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
+                                         ToolTipService.ShowOnDisabled="True">
+                    <StackPanel>
+                        <Image Source="..\Resources\Images\Icons\Pixelkit-Flat-Jewels-Location.ico" Height="30"/>
+                    </StackPanel>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInEditMode}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Standortdaten vom Kunden übernehmen" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button  x:Name="btnAdd" Grid.Row="3" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnAdd_Click" BorderThickness="0" Background="Transparent"
+                         IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, 
+                                           Path=IsReadOnly,Converter={StaticResource InverseBooleanConverter}}"
+                         ToolTipService.ShowOnDisabled="True">
+                    <StackPanel>
+                        <Image Source="..\Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" Height="30"/>
+                    </StackPanel>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInViewMode}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Neuen Standort hinzufügen" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button x:Name="btnEdit" Grid.Row="4"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnEdit_Click" BorderThickness="0" Background="Transparent"
+                        IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, 
+                                           Path=IsReadOnly,Converter={StaticResource InverseBooleanConverter}}"
+                        ToolTipService.ShowOnDisabled="True">
+                    <StackPanel>
+                        <Image Source="..\Resources\Images\Icons\Turbomilk-Livejournal-10-Pencil.ico" Height="30"/>
+                    </StackPanel>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInViewMode}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Standort bearbeiten" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button  x:Name="btnCancel" Grid.Row="5" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnCancel_Click" BorderThickness="0" Background="Transparent"
+                                 IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, 
+                            Path=IsReadOnly}"  ToolTipService.ShowOnDisabled="True">
+                    <StackPanel>
+                        <Image Source="..\Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-edit-delete.ico" Height="30"/>
+                    </StackPanel>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInEditMode}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.cancelEditing}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button  x:Name="btnSave"  Grid.Row="7"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSave_Click" BorderThickness="0" Background="Transparent"
+                                 IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
+                                 ToolTipService.ShowOnDisabled="True">
+                    <StackPanel>
+                        <Image Source="..\Resources\Images\Icons\Treetog-I-Floppy-Small.ico" Height="30"/>
+                    </StackPanel>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInEditMode}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Standort speichern" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button  x:Name="btnDelete"  Grid.Row="8"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnDelete_Click" BorderThickness="0" 
+                                 IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, 
+                            Path=IsReadOnly,Converter={StaticResource InverseBooleanConverter}}"  ToolTipService.ShowOnDisabled="True">
+                    <StackPanel>
+                        <Image Source="..\Resources\Images\Icons\Tatice-Just-Bins-Bin-red-full.ico" Height="30"/>
+                    </StackPanel>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInViewMode}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Standort löschen" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
         </StackPanel>
     </Grid>
 </local:GoogleDriveDialogueView>

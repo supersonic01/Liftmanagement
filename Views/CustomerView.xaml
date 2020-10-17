@@ -5,6 +5,7 @@
                                xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
                                xmlns:local="clr-namespace:Liftmanagement.Views"
                                xmlns:view="clr-namespace:Liftmanagement.View"
+                               xmlns:r="clr-namespace:Liftmanagement.Properties"
                                xmlns:li="http://github.com/zeluisping/loadingIndicators/xaml/controls"
                                mc:Ignorable="d" 
                                d:DesignHeight="633.857" d:DesignWidth="1118.857">
@@ -21,16 +22,12 @@
         <Grid x:Name="MainContent">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="0"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
 
             <Frame x:Name="frameCustomers"  Grid.Column="0" Content="Customers"/>
-
-            <!--<GridSplitter Grid.Column="1" Width="5" Background="DarkGray"  ResizeDirection="Columns" VerticalAlignment="Stretch"/>-->
-
-
             <ScrollViewer Grid.Column="2"   VerticalScrollBarVisibility="Visible" >
 
                 <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -79,73 +76,182 @@
                                 <!--16-->
                             </Grid.RowDefinitions>
 
-                            <StackPanel Grid.Row="3" Grid.RowSpan="12" Grid.Column="5" Orientation="Vertical"  HorizontalAlignment="Center">
+                            <StackPanel Grid.Row="2" Grid.RowSpan="15" Grid.Column="5" Orientation="Vertical"  HorizontalAlignment="Center">
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="50"/>
-                                        <RowDefinition Height="50"/>
-                                        <RowDefinition Height="50"/>
-                                        <RowDefinition Height="50"/>
                                         <RowDefinition Height="40"/>
-                                        <RowDefinition Height="40" x:Name="grBtnAddAdminContact"/>
-                                        <RowDefinition Height="0"/>
+                                        <RowDefinition Height="40"/>
+                                        <RowDefinition Height="40"/>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="50"/>
+                                        <RowDefinition Height="40" x:Name="grBtnDelete"/>
+                                        <RowDefinition Height="30" x:Name="spaceAdmin"/>
+                                        <RowDefinition Height="40"/>
                                         <RowDefinition Height="40"/>
                                         <RowDefinition Height="40"/>
                                     </Grid.RowDefinitions>
 
-                                    <Button  x:Name="btnAdd" Grid.Row="0" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnAdd_Click" BorderThickness="0" Background="Transparent" >
+                                    <Button  x:Name="btnAdd" Grid.Row="0" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnAdd_Click" BorderThickness="0" Background="Transparent" 
+                                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, 
+                                           Path=IsReadOnly,Converter={StaticResource InverseBooleanConverter}}"
+                                             ToolTipService.ShowOnDisabled="True">
                                         <StackPanel>
                                             <Image Source="..\Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" Height="30"/>
                                         </StackPanel>
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInViewMode}"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="True">
+                                                        <Setter Property="ToolTip" Value="Neuen Kunden hinzufügen" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
                                     </Button>
-                                    <Button x:Name="btnEdit" Grid.Row="1"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnEdit_Click" BorderThickness="0" Background="Transparent">
+                                    <Button x:Name="btnEdit" Grid.Row="1"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnEdit_Click" BorderThickness="0" Background="Transparent"
+                                            IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, 
+                                        Path=IsReadOnly,Converter={StaticResource InverseBooleanConverter}}"
+                                        ToolTipService.ShowOnDisabled="True">
                                         <StackPanel>
                                             <Image Source="..\Resources\Images\Icons\Turbomilk-Livejournal-10-Pencil.ico" Height="30"/>
                                         </StackPanel>
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInViewMode}"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="True">
+                                                        <Setter Property="ToolTip" Value="Kunden bearbeiten" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
                                     </Button>
-                                    <Button  x:Name="btnDelete" Grid.Row="3" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnDelete_Click" BorderThickness="0" Background="Transparent">
+                                    <Button  x:Name="btnCancel" Grid.Row="2" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnCancel_Click" BorderThickness="0" Background="Transparent"
+                                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
+                                             ToolTipService.ShowOnDisabled="True">
                                         <StackPanel>
                                             <Image Source="..\Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-edit-delete.ico" Height="30"/>
                                         </StackPanel>
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInEditMode}"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="True">
+                                                        <Setter Property="ToolTip" Value="Bearbeitung abbrechen" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
                                     </Button>
-                                    <Button  x:Name="btnSave"  Grid.Row="2"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSave_Click" BorderThickness="0" Background="Transparent"
-                                         IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}">
+                                    <Button  x:Name="btnSave"  Grid.Row="4"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSave_Click" BorderThickness="0" Background="Transparent"
+                                         IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
+                                         ToolTipService.ShowOnDisabled="True">
                                         <StackPanel>
                                             <Image Source="..\Resources\Images\Icons\Treetog-I-Floppy-Small.ico" Height="30"/>
                                         </StackPanel>
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInEditMode}"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="True">
+                                                        <Setter Property="ToolTip" Value="Kundendaten speichern" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Button  x:Name="btnDelete"  Grid.Row="5"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnDelete_Click" BorderThickness="0" 
+                                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, 
+                                           Path=IsReadOnly,Converter={StaticResource InverseBooleanConverter}}"
+                                             ToolTipService.ShowOnDisabled="True">
+                                        <StackPanel>
+                                            <Image Source="..\Resources\Images\Icons\Tatice-Just-Bins-Bin-red-full.ico" Height="30"/>
+                                        </StackPanel>
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInViewMode}"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="True">
+                                                        <Setter Property="ToolTip" Value="Kundendaten löschen" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
                                     </Button>
 
-                                    <Button  x:Name="btnAddAdminContact"  Grid.Row="7"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnAddAdminContact_Click" BorderThickness="0" Background="Transparent"
+                                    <Button  x:Name="btnAddAdminContact"  Grid.Row="8"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnAddAdminContact_Click" BorderThickness="0" Background="Transparent"
                                              IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
-                                             ToolTip="Neuen Ansprechpartner hinzufügen">
+                                             ToolTipService.ShowOnDisabled="True">
                                         <StackPanel>
                                             <Image Source="..\Resources\Images\Icons\Everaldo-Crystal-Clear-Action-edit-add.ico" Height="30"/>
                                         </StackPanel>
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInEditMode}"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="True">
+                                                        <Setter Property="ToolTip" Value="Neuen Ansprechpartner hinzufügen" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
                                     </Button>
 
-                                    <!--<Button  x:Name="btnEditAdminContact"  Grid.Row="6"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnEditAdminContact_Click" BorderThickness="0" Background="Transparent"
+                                    <Button  x:Name="btnSaveAdminContact"  Grid.Row="7"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSaveAdminContact_Click" BorderThickness="0" Background="Transparent"
                                          IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
-                                         ToolTip="Selektierten Ansprechpartner bearbeiten">
-                                    <StackPanel>
-                                        <Image Source="..\Resources\Images\Icons\Visualpharm-Must-Have-Edit.ico" Height="30"/>
-                                    </StackPanel>
-                                </Button>-->
-                                    <Button  x:Name="btnSaveAdminContact"  Grid.Row="5"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSaveAdminContact_Click" BorderThickness="0" Background="Transparent"
-                                         IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
-                                         ToolTip="Ansprechpartner übernehmen">
+                                         ToolTipService.ShowOnDisabled="True">
                                         <StackPanel>
                                             <Image Source="..\Resources\Images\Icons\Everaldo-Crystal-Clear-Action-ok.ico" Height="30"/>
                                         </StackPanel>
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInEditMode}"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="True">
+                                                        <Setter Property="ToolTip" Value="Ansprechpartner übernehmen"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
                                     </Button>
-                                    <Button  x:Name="btnRemoveAdminContact"  Grid.Row="8"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnRemoveAdminContact_Click" BorderThickness="0" Background="Transparent"
+
+                                    <Button  x:Name="btnRemoveAdminContact"  Grid.Row="9"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnRemoveAdminContact_Click" BorderThickness="0" Background="Transparent"
                                          IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
-                                         ToolTip="Selektierten Ansprechpartner entfernen">
+                                         ToolTipService.ShowOnDisabled="True">
                                         <StackPanel>
                                             <Image Source="..\Resources\Images\Icons\Everaldo-Crystal-Clear-Action-remove.ico" Height="30"/>
                                         </StackPanel>
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInEditMode}"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="True">
+                                                        <Setter Property="ToolTip" Value="Selektierten Ansprechpartner entfernen" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
                                     </Button>
                                 </Grid>
                             </StackPanel>
+
 
                             <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"  Content="Kunde" FontSize="24" Margin="10" Padding="10"
                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center"/>

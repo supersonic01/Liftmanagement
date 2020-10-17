@@ -176,12 +176,7 @@ namespace Liftmanagement.View
 
             windowGoogleDriveTree.ShowDialog();
         }
-
-        private void btnTakeOverToLocation_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
+        
         private void ForceValidation()
         {
             txtCompanyName.GetBindingExpression(TextBox.TextProperty).UpdateSource();
@@ -229,6 +224,7 @@ namespace Liftmanagement.View
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
+            CustomerVM.CustomerSelectedLast = CustomerVM.CustomerSelected;
             CustomerVM.CustomerSelected = new Customer();
             CustomerVM.AdministratorContactPerson = new ContactPartner();
 
@@ -237,6 +233,7 @@ namespace Liftmanagement.View
 
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
+            CustomerVM.CustomerSelectedLast = CustomerVM.CustomerSelected;
             var result = CustomerVM.EditCustomer();
             if (result.IsReadOnly)
             {
@@ -328,6 +325,16 @@ namespace Liftmanagement.View
             dgAdministratorContactPersons.Items.Refresh();
         }
 
-        
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            if (CustomerVM.CustomerSelected.ReadOnly)
+            {
+                CustomerVM.ReleaseEditing();
+            }
+
+            CustomerVM.CustomerSelected =(Customer) customersView.dgCustomers.SelectedItem;
+            EnableContoles(false);
+
+        }
     }
 }

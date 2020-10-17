@@ -49,5 +49,17 @@ namespace Liftmanagement.ViewModels
             return MySQLDataAccess.ForceToEditLocation(LocationSelected.Id);
         }
 
+        public void ReleaseEditing()
+        {
+            Task.Factory.StartNew(() =>
+            {
+                MySQLDataAccess.ReleaseEditingLocation(LocationSelected.Id);
+            });
+        }
+
+        public SQLQueryResult<Location> MarkForDeleteCustomer()
+        {
+            return MySQLDataAccess.MarkForDeleteLocation(LocationSelected);
+        }
     }
 }

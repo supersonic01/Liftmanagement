@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -203,6 +204,24 @@ namespace Liftmanagement.Views
             LocationDetailVM.LocationSelected.GoogleDriveFolderName = node.Name;
 
             windowGoogleDriveTree.Hide();
+        }
+
+        private void btnTakeOverLocationFromCustomer_Click(object sender, RoutedEventArgs e)
+        {
+            LocationDetailVM.LocationSelected.Address = _customer.Address;
+            LocationDetailVM.LocationSelected.Postcode = _customer.Postcode;
+            LocationDetailVM.LocationSelected.City = _customer.City;
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            if (LocationDetailVM.LocationSelected.ReadOnly)
+            {
+                LocationDetailVM.ReleaseEditing();
+            }
+
+            LocationDetailVM.LocationSelected = (Location) dgLocations.SelectedItem;
+            EnableContoles(false);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Liftmanagement.Data;
 
 namespace Liftmanagement.ViewModels
 {
@@ -16,13 +17,18 @@ namespace Liftmanagement.ViewModels
         public List<MachineInformation> MachineInformations
         {
             get { return machineInformations; }
-            set { machineInformations = value; }
+            set { SetField(ref machineInformations, value); }
         }
 
 
         public MachineInformationsViewModel()
         {
-            machineInformations = TestData.GetMachineInformations();
-        }   
+           
+        }
+
+        public void RefreshByLocation(long id)
+        {
+            MachineInformations = MySQLDataAccess.GetMachineInformationsByLocation(id);
+        }
     }
 }

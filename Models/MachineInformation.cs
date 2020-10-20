@@ -5,18 +5,34 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 
 namespace Liftmanagement.Models
 {
-    public class MachineInformation : BaseDatabaseField,IDatabaseObject
+    public class MachineInformation : GoogleDrive ,IDatabaseObject
     {
         public long LocationId { get; set; } = -1;
         public long CustomerId { get; set; } = -1;
 
         [DisplayName("Hersteller")]
         public string Name { get; set; }
+
+       
+        private DateTime yearOfConstruction = Helper.Helper.DefaultDate;
         [DisplayName("Baujahr")]
-        public DateTime YearOfConstruction { get; set; }
+        public DateTime YearOfConstruction
+        {
+            get { return yearOfConstruction; }
+            set
+            {
+                if (value.Date < Helper.Helper.DefaultDate.Date)
+                {
+                    value = Helper.Helper.DefaultDate.Date;
+                }
+                yearOfConstruction = value;
+            }
+        }
+        
         [DisplayName("Fabriknummer")]
         public string SerialNumber { get; set; }
         [DisplayName("Haltestellen")]
@@ -30,13 +46,7 @@ namespace Liftmanagement.Models
         public string Description { get; set; }
 
         [DisplayName("Ansprechpartner"), DatabaseAttribute(Updateable = false)]
-        public ContactPartner ContactPerson { get; set; }
-
-        [DisplayName("Beim Störungsfall kontaktieren")]
-        public bool ContactByDefect { get; set; }
-
-        [DisplayName("Zusätzliche Informationen"), DatabaseAttribute(Length = "200")]
-        public string AdditionalInfo { get; set; }
+        public ContactPartner ContactPerson { get; set; } = new ContactPartner();
 
         public override string GetFullName()
         {

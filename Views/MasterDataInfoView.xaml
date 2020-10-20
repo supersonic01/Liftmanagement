@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="Liftmanagement.Views.MasterDataInfoView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Liftmanagement.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="350" d:DesignWidth="1000">
+﻿<local:UserControlView x:Class="Liftmanagement.Views.MasterDataInfoView"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                 xmlns:local="clr-namespace:Liftmanagement.Views"
+                 mc:Ignorable="d" 
+                 d:DesignHeight="350" d:DesignWidth="1000">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -47,8 +47,7 @@
         <Label Grid.Row="3" Grid.Column="0" Content="Kunde:" Style="{StaticResource LableHeaderStyle}" />
         <StackPanel Grid.Row="4" Grid.Column="0" >
             <Label x:Name="lblCompanyName"   Style="{StaticResource LableStyle}" />
-            <Label x:Name="lblAdditionalInfo" Style="{StaticResource LableStyle}" />
-            <Label x:Name="lblContactPerson" Style="{StaticResource LableStyle}" />
+            <Label x:Name="lblAdministratorCompanyName" Style="{StaticResource LableStyle}" />
             <Label x:Name="lblAddress" Style="{StaticResource LableStyle}" />
             <Label x:Name="lblPostcodeCity"  Style="{StaticResource LableStyle}" />
         </StackPanel>
@@ -57,7 +56,6 @@
         <StackPanel Grid.Row="4" Grid.Column="1" >
             <Label x:Name="lblAddressLocation" Style="{StaticResource LableStyle}" />
             <Label x:Name="lblPostcodeCityLocation"  Style="{StaticResource LableStyle}" />
-            <Label x:Name="lblAdditionalInfoLocation" Style="{StaticResource LableStyle}" />
             <Label x:Name="lblContactPersonLocation" Style="{StaticResource LableStyle}" />
         </StackPanel>
        
@@ -80,4 +78,4 @@
         </StackPanel>
        
     </Grid>
-</UserControl>
+</local:UserControlView>

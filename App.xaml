@@ -6,5 +6,6 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"></converters:InverseBooleanConverter>
+        <converters:DateTimeConverter x:Key="DateTimeConverter"></converters:DateTimeConverter>
     </Application.Resources>
 </Application>

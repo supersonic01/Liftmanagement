@@ -49,7 +49,7 @@ namespace Liftmanagement.Views
             frameMaintenanceAgreements.Content = maintenanceAgreementsView;
             maintenanceAgreementsView.dgMaintenanceAgreements.SelectionChanged += DgMaintenanceAgreements_SelectionChanged;
 
-            masterDataInfo = new MasterDataInfoView();
+            masterDataInfo = new MasterDataInfoView( Helper.Helper.TTypeMangement.MaintenanceAgreement);
             frameMasterDataInfo.Content = masterDataInfo;
 
 
@@ -64,11 +64,11 @@ namespace Liftmanagement.Views
 
             customersView.expanderCustomers.Collapsed += ExpanderCustomers_Collapsed;
             customersView.dgCustomers.SelectionChanged += DgCustomers_SelectionChanged;
-            customersView.spCustomers.Loaded += Stackpanel_Loaded;
+           // customersView.spCustomers.Loaded += Stackpanel_Loaded;
 
             locationsView.expanderLocations.Collapsed += ExpanderLocations_Collapsed;
             locationsView.dgLocations.SelectionChanged += DgLocations_SelectionChanged;
-            locationsView.spLocations.Loaded += Stackpanel_Loaded;
+            //locationsView.spLocations.Loaded += Stackpanel_Loaded;
 
             expanderMachineInformations.Collapsed += ExpanderMachineInformations_Collapsed;
             machineInfosView.dgMachineInformations.SelectionChanged += DgMachineInformations_SelectionChanged;

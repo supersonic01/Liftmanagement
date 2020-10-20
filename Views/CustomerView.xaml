@@ -317,7 +317,7 @@
                                 <DataGrid  x:Name="dgAdministratorContactPersons" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"  SelectionUnit="FullRow" 
                                            local:CustomColumnHeadersProperty.ItemType="{x:Type view:CustomerView}" IsReadOnly="True" SelectionMode="Single"
                                            CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
-                                           VerticalScrollBarVisibility="Visible" MaxHeight="120">
+                                           VerticalScrollBarVisibility="Auto" MaxHeight="120">
                                     <DataGrid.RowStyle >
                                         <Style TargetType="DataGridRow">
                                             <Setter Property="Height" Value="30"/>

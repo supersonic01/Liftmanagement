@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Liftmanagement.Views.LocationsView"
+﻿<local:UserControlView x:Class="Liftmanagement.Views.LocationsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -16,7 +16,13 @@
     </UserControl.Resources>
     
     <Grid x:Name="gridLocations">
-        <Expander x:Name="expanderLocations"  ExpandDirection="Right" HorizontalAlignment="Left" VerticalAlignment="Stretch" IsExpanded="False">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Expander x:Name="expanderLocations" Grid.Column="0" ExpandDirection="Right" HorizontalAlignment="Left" VerticalAlignment="Stretch" IsExpanded="False">
             <Expander.Header>
                 <TextBlock x:Name="txtExpanderHeader"  Style="{StaticResource TextBlockStyle }">
                     <TextBlock.LayoutTransform>
@@ -24,35 +30,36 @@
                     </TextBlock.LayoutTransform>
                 </TextBlock>
             </Expander.Header>
-            <StackPanel x:Name="spLocations" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="450" Background="LightBlue">
-                <DataGrid  x:Name="dgLocations" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False"  SelectionUnit="FullRow"   >
-                    <DataGrid.Columns >
-                        <DataGridTemplateColumn x:Name="Address" Width="Auto">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding Path=Address}" FontSize="12" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-
-                        <DataGridTemplateColumn x:Name="Postcode" Width="Auto">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding Path=Postcode}" FontSize="12" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-
-                        <DataGridTemplateColumn x:Name="City" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding Path=City}" FontSize="12" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </StackPanel>
+            <DataGrid  x:Name="dgLocations" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"  SelectionUnit="FullRow"  Background="Blue"
+                           local:CustomColumnHeadersProperty.ItemType="{x:Type local:LocationsView}" IsReadOnly="True" SelectionMode="Single"   ColumnWidth="*" 
+                           CellStyle="{StaticResource Body_Content_DataGrid_Centering}"  Margin="10,0,5,0" MinWidth="400" VerticalScrollBarVisibility="Auto">
+                <DataGrid.RowStyle >
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Height" Value="30"/>
+                        <Style.Triggers>
+                            <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                <Setter Property="Background" Value="#0078D7" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+            </DataGrid>
         </Expander>
+
+        <GridSplitter x:Name="gspLocations" Grid.Column="1" Width="15"
+                      HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                      BorderBrush="White" BorderThickness="1"
+                      Style="{StaticResource GridSplitterStyle1}" DragStarted="gspLocatios_OnDragStarted">
+            <GridSplitter.Background>
+                <LinearGradientBrush EndPoint="0.5,0" StartPoint="0.5,1">
+                    <GradientStop Color="#A0A0A0" Offset="0"/>
+                    <GradientStop Color="#E5E5E5" Offset="0.15"/>
+                    <GradientStop Color="#ECECEC" Offset="0.8"/>
+                    <GradientStop Color="#E5E5E5" Offset="1"/>
+                </LinearGradientBrush>
+            </GridSplitter.Background>
+        </GridSplitter>
+
     </Grid>
-</UserControl>
+    </local:UserControlView>

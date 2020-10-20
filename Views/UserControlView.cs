@@ -12,13 +12,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Liftmanagement.Common;
+using Liftmanagement.Converters;
 using Liftmanagement.Data;
 using Liftmanagement.Models;
 using Liftmanagement.ViewModels;
@@ -121,17 +124,45 @@ namespace Liftmanagement.Views
         protected T GetSelectedObject<T>(object sender)
         {
             T model = default(T);
-            var dg = sender as DataGrid;
-            if (dg != null)
+            Selector selector = null;
+
+
+            if (sender is DataGrid)
             {
-                if (dg.SelectedItem is T)
+                selector = sender as DataGrid;
+            }
+            else if (sender is ComboBox)
+            {
+                selector = sender as ComboBox;
+            }
+
+            if (selector != null)
+            {
+                if (selector.SelectedItem is T)
                 {
-                    model = (T)dg.SelectedItem;
+                    model = (T)selector.SelectedItem;
                 }
             }
 
             return model;
         }
+
+        //protected T GetSelectedObject<T>(object sender)
+        //{
+        //    T model = default(T);
+        //    var dg = sender as DataGrid;
+        //    if (dg != null)
+        //    {
+        //        if (dg.SelectedItem is T)
+        //        {
+        //            model = (T)dg.SelectedItem;
+        //        }
+        //    }
+
+        //    return model;
+        //}
+
+
 
         protected virtual void BindingItem(Control control, DependencyProperty dp, string path, string stringFormat = null)
         {
@@ -163,12 +194,13 @@ namespace Liftmanagement.Views
             {
                 binding.StringFormat = stringFormat;
             }
+            
             control.SetBinding(dp, binding);
         }
 
-        protected virtual void BindingText<T>(Control control, Expression<Func<T>> action, bool validate = false, Func<ValidationRule> validationRule = null)
+        protected virtual void BindingText<T>(Control control, Expression<Func<T>> action, string stringFormat = null,bool validate = false, Func<ValidationRule> validationRule = null)
         {
-            BindingItem1(control, TextBox.TextProperty, GetPropertyPath(action));
+            BindingItem1(control, TextBox.TextProperty, GetPropertyPath(action),stringFormat);
 
             if (validate && validationRule != null)
             {
@@ -178,7 +210,47 @@ namespace Liftmanagement.Views
                 control.LostFocus += TextBoxValidationOnLostFocus;
             }
         }
-        
+
+
+        protected virtual void BindingLabel<T>(Control control, Expression<Func<T>> action)
+        {
+            BindingItem1(control, Label.ContentProperty, GetPropertyPath(action));
+        }
+
+        protected virtual void MultiBindingLabel<T>(Control control,  Expression<Func<T>> action1, Expression<Func<T>> action2)
+        {
+            Binding binding1 = new Binding(GetPropertyPath(action1))
+            {
+                Source = this
+            };
+
+            Binding binding2 = new Binding(GetPropertyPath(action2))
+            {
+                Source = this
+            };
+
+            MultiBinding mb = new MultiBinding();
+            mb.Bindings.Add(binding1);
+            mb.Bindings.Add(binding2);
+            mb.Converter = new LabelMultiValueConverter();
+
+            control.SetBinding(Label.ContentProperty, mb);
+        }
+
+        protected virtual void BindingDatetime(Control control, string path)
+        {
+
+            var binding = new Binding(path)
+            {
+                Source = this,
+            };
+            var dd = new Liftmanagement.Converters.DateTimeConverter();
+            binding.Converter =dd;
+
+            control.SetBinding(TextBox.TextProperty, binding);
+           
+        }
+
         protected virtual void BindingText(Control control, string path)
         {
             BindingItem(control, TextBox.TextProperty, string.Format("{0}.{1}", SourceObjectStringName, path));
@@ -325,6 +397,34 @@ namespace Liftmanagement.Views
             ((Control)sender).GetBindingExpression(TextBox.TextProperty).UpdateSource();
         }
 
+        public void Txt_OnGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            TxtSelectAll(sender);
+        }
+
+        private static void TxtSelectAll(object sender)
+        {
+            var txtBox = sender as TextBox;
+            if (txtBox != null)
+            {
+                txtBox.SelectAll();
+            }
+        }
+
+        public void Txt_OnGotMouseCapture(object sender, MouseEventArgs e)
+        {
+            TxtSelectAll(sender);
+        }
+
+        public void AssignSelectAllForTextBoxes()
+        {
+            foreach (var txtBox in TextBoxes)
+            {
+                txtBox.GotKeyboardFocus += Txt_OnGotKeyboardFocus;
+                txtBox.GotMouseCapture += Txt_OnGotMouseCapture;
+            }
+        }
+        
         #region Validation
 
         public virtual void OnLoad(object sender, System.Windows.RoutedEventArgs e)

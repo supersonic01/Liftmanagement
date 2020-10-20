@@ -14,123 +14,110 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Liftmanagement.Converters;
+using LocalDataStoreSlot = System.LocalDataStoreSlot;
 
 namespace Liftmanagement.Views
 {
     /// <summary>
     /// Interaction logic for MasterDataInfoView.xaml
     /// </summary>
-    public partial class MasterDataInfoView : UserControl
+    public partial class MasterDataInfoView : UserControlView
     {
-        MasterDataInfoViewModel masterDataInfoViewModel = new MasterDataInfoViewModel();
-        public MasterDataInfoView()
+        public MasterDataInfoViewModel MasterDataInfoVM { get; set; } = new MasterDataInfoViewModel();
+
+        public MasterDataInfoView(Helper.Helper.TTypeMangement mangementType)
         {
             InitializeComponent();
+            MasterDataInfoVM.MangementType = mangementType;
+            AssigneValuesToControl();
 
-            cbCustomers.ItemsSource = masterDataInfoViewModel.Customers;
-            cbLocations.ItemsSource = masterDataInfoViewModel.Locations;
-            cbMachineInformations.ItemsSource = masterDataInfoViewModel.MachineInformations;
-                      
             cbCustomers.SelectionChanged += CbCustomers_SelectionChanged;
             cbLocations.SelectionChanged += CbLocations_SelectionChanged;
+
+            if (mangementType == Helper.Helper.TTypeMangement.MachineInformation)
+                CollapsedMachineInformations();
+
+           
+        }
+
+        public void RefreshCustomers()
+        {
+            MasterDataInfoVM.RefreshCustomer();
+            cbCustomers.SelectedIndex = 1;
+        }
+
+        public MasterDataInfoView()
+        {
+        }
+
+        private void CollapsedMachineInformations()
+        {
+            lblMachineInformation.Visibility = Visibility.Collapsed;
+            cbMachineInformations.Visibility = Visibility.Collapsed;
+            lblMachineInformationDetail.Visibility = Visibility.Collapsed;
+            spMachineInformationDetailLbl.Visibility = Visibility.Collapsed;
+            spMachineInformationDetail.Visibility = Visibility.Collapsed;
+
             cbMachineInformations.SelectionChanged += CbMachineInformations_SelectionChanged;
-
-            cbCustomers.SelectedIndex = 0;
-            cbLocations.SelectedIndex = 0;
             cbMachineInformations.SelectedIndex = 0;
+        }
 
+        private void AssigneValuesToControl()
+        {
+
+            BindingLabel(lblCompanyName, () => MasterDataInfoVM.CustomerSelected.CompanyName);
+            BindingLabel(lblAdministratorCompanyName, () => MasterDataInfoVM.CustomerSelected.Administrator.Name);
+            BindingLabel(lblAddress, () => MasterDataInfoVM.CustomerSelected.Address);
+            MultiBindingLabel(lblPostcodeCity, () => MasterDataInfoVM.CustomerSelected.Postcode, () => MasterDataInfoVM.CustomerSelected.City);
+
+            BindingLabel(lblAddressLocation, () => MasterDataInfoVM.LocationSelected.Address);
+            MultiBindingLabel(lblPostcodeCityLocation, () => MasterDataInfoVM.LocationSelected.Postcode, () => MasterDataInfoVM.LocationSelected.City);
+            BindingLabel(lblContactPersonLocation, () => MasterDataInfoVM.LocationSelected.ContactPerson.Name);
+
+            lblMachineNameHeader.Content = MasterDataInfoVM.MachineInformationSelected.GetDisplayName<MachineInformation>(nameof(MasterDataInfoVM.MachineInformationSelected.Name));
+            lblSerialNumberHeader.Content = MasterDataInfoVM.MachineInformationSelected.GetDisplayName<MachineInformation>(nameof(MasterDataInfoVM.MachineInformationSelected.SerialNumber));
+            lblYearOfConstructionHeader.Content = MasterDataInfoVM.MachineInformationSelected.GetDisplayName<MachineInformation>(nameof(MasterDataInfoVM.MachineInformationSelected.YearOfConstruction));
+            lblHoldingPositionsHeader.Content = MasterDataInfoVM.MachineInformationSelected.GetDisplayName<MachineInformation>(nameof(MasterDataInfoVM.MachineInformationSelected.HoldingPositions));
+            lblEntrancesHeader.Content = MasterDataInfoVM.MachineInformationSelected.GetDisplayName<MachineInformation>(nameof(MasterDataInfoVM.MachineInformationSelected.Entrances));
+            lblPayloadHeader.Content = MasterDataInfoVM.MachineInformationSelected.GetDisplayName<MachineInformation>(nameof(MasterDataInfoVM.MachineInformationSelected.Payload));
+
+            BindingLabel(lblMachineName, () => MasterDataInfoVM.MachineInformationSelected.Name);
+            BindingLabel(lblSerialNumber, () => MasterDataInfoVM.MachineInformationSelected.SerialNumber);
+            BindingLabel(lblYearOfConstruction, () => MasterDataInfoVM.MachineInformationSelected.YearOfConstruction);
+            BindingLabel(lblHoldingPositions, () => MasterDataInfoVM.MachineInformationSelected.HoldingPositions);
+            BindingLabel(lblEntrances, () => MasterDataInfoVM.MachineInformationSelected.Entrances);
+            BindingLabel(lblPayload, () => MasterDataInfoVM.MachineInformationSelected.Payload);
+
+            BindingControl(cbCustomers, () => MasterDataInfoVM.Customers);
+            BindingControl(cbLocations, () => MasterDataInfoVM.Locations);
+            BindingControl(cbMachineInformations, () => MasterDataInfoVM.MachineInformations);
 
         }
 
         private void CbMachineInformations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MachineInformation machineInformation = (sender as ComboBox).SelectedItem as MachineInformation;
-
-            if (machineInformation == null)
-            {
-                return;
-            }
-
-            lblMachineNameHeader.Content = machineInformation.GetDisplayName<MachineInformation>(nameof(machineInformation.Name));
-            lblSerialNumberHeader.Content = machineInformation.GetDisplayName<MachineInformation>(nameof(machineInformation.SerialNumber));
-            lblYearOfConstructionHeader.Content = machineInformation.GetDisplayName<MachineInformation>(nameof(machineInformation.YearOfConstruction));
-            lblHoldingPositionsHeader.Content = machineInformation.GetDisplayName<MachineInformation>(nameof(machineInformation.HoldingPositions));
-            lblEntrancesHeader.Content = machineInformation.GetDisplayName<MachineInformation>(nameof(machineInformation.Entrances));
-            lblPayloadHeader.Content = machineInformation.GetDisplayName<MachineInformation>(nameof(machineInformation.Payload));
-
-            lblMachineName.Content = machineInformation.Name;
-            lblSerialNumber.Content = machineInformation.SerialNumber;
-            lblYearOfConstruction.Content = machineInformation.YearOfConstruction;
-            lblHoldingPositions.Content = machineInformation.HoldingPositions;
-            lblEntrances.Content = machineInformation.Entrances;
-            lblPayload.Content = machineInformation.Payload;
+            MasterDataInfoVM.MachineInformationSelected = GetSelectedObject<MachineInformation>(sender);
         }
 
         private void CbLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Location location = (sender as ComboBox).SelectedItem as Location;
-
-            if (location == null)
-            {
-                return;
-            }
-            //TODO
-            cbMachineInformations.ItemsSource = masterDataInfoViewModel.MachineInformations;
-            //masterDataInfoViewModel.MachineInformations.Where(c => c.LocationId == location.Id).ToList();
-
-            lblAddressLocation.Content = location.Address;
-            lblPostcodeCityLocation.Content = location.GetPostcodeCity();
-            lblAdditionalInfoLocation.Content = location.AdditionalInfo;
-            lblContactPersonLocation.Content = location.ContactPerson;
-
-            if (string.IsNullOrWhiteSpace(location.AdditionalInfo))
-            {
-                lblAdditionalInfoLocation.Visibility = Visibility.Collapsed;
-            }
-
-            if (string.IsNullOrWhiteSpace(location.ContactPerson.Name))
-            {
-                lblContactPersonLocation.Visibility = Visibility.Collapsed;
-            }
-
-            cbMachineInformations.SelectedIndex = 0;
-
-
+            MasterDataInfoVM.LocationSelected = GetSelectedObject<Location>(sender);
         }
 
         private void CbCustomers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Customer customer = (sender as ComboBox).SelectedItem as Customer;
+            MasterDataInfoVM.CustomerSelected = GetSelectedObject<Customer>(sender);
 
-            if (customer == null)
+            var location = cbLocations.SelectedItem as Location;
+          
+            if (location == null || MasterDataInfoVM.CustomerSelected.Id != location.CustomerId)
             {
-                return;
+                cbLocations.SelectedIndex = MasterDataInfoVM.MangementType == Helper.Helper.TTypeMangement.MachineInformation ? 0 : 1;
             }
-            //TODO
-            cbLocations.ItemsSource = masterDataInfoViewModel.Locations;
-            //masterDataInfoViewModel.Locations.Where(c => c.CustomerId == customer.Id).ToList();
-
-            lblCompanyName.Content = customer.CompanyName;
-
-            if (string.IsNullOrWhiteSpace(customer.AdditionalInfo))
-            {
-                lblAdditionalInfo.Visibility = Visibility.Collapsed;
-
-            }
-
-            if (string.IsNullOrWhiteSpace(customer.ContactPerson.Name))
-            {
-
-                lblContactPerson.Visibility = Visibility.Collapsed;
-            }
-            lblAdditionalInfo.Content = customer.AdditionalInfo;
-            lblContactPerson.Content = customer.ContactPerson;
-            lblAddress.Content = customer.Address;
-            lblPostcodeCity.Content = customer.Postcode + ", " + customer.City;
-
-            cbLocations.SelectedIndex = 0;
-            cbMachineInformations.SelectedIndex = 0;
 
         }
+
+       
     }
 }

@@ -34,12 +34,17 @@ namespace Liftmanagement.Models
 
         public override string GetFullName()
         {
-            return string.Format("{0},{3} {1} {2}", CompanyName, Postcode, City, Address);
+            return string.Format("{0}, {3}, {1} {2}", CompanyName, Postcode, City, Address);
         }
 
         public static string GetIndexFields()
         {
             return nameof(CompanyName) + "," + nameof(Address) + "," + nameof(Postcode) + "," + nameof(City);
+        }
+
+        public static Customer GetDummy(string name = "** Alle **")
+        {
+            return new Customer { CompanyName = name };
         }
 
     }

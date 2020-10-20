@@ -42,13 +42,6 @@ namespace Liftmanagement.Views
 
             dgCustomers.Tag = NotVisibleColumns;
 
-            //Binding binding = new Binding("CustomersVM.Customers")
-            //{
-            //    Source = this
-            //};
-            
-            //dgCustomers.SetBinding(DataGrid.ItemsSourceProperty, binding);
-
             BindingControl(dgCustomers, () => CustomersVM.Customers);
 
             txtExpanderHeader.Text = new CategoryViewModel().Categories.Where(c => c.MangementType == Helper.Helper.TTypeMangement.Customer).Select(c => c.Name).FirstOrDefault();

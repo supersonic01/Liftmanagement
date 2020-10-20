@@ -170,6 +170,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BusinessLogic\GoogleManagement\DriveLiftmanagement.cs" />
+    <Compile Include="CollectionExtensions\ObservableCollectionExtension.cs" />
     <Compile Include="Common\MandatoryRule.cs" />
     <Compile Include="Common\NumberRangeRule.cs" />
     <Compile Include="Common\RelayCommand.cs" />
@@ -177,7 +178,9 @@
     <Compile Include="Common\TraceValidationRule.cs" />
     <Compile Include="Common\ValidationError.cs" />
     <Compile Include="Common\ValidationErrorContainer.cs" />
+    <Compile Include="Converters\DateTimeConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
+    <Compile Include="Converters\LabelMultiValueConverter.cs" />
     <Compile Include="Data\DataAccess.cs" />
     <Compile Include="Data\MySQLDataAccess.cs" />
     <Compile Include="Data\SQLQueryResult.cs" />
@@ -188,6 +191,7 @@
     <Compile Include="Helper\DisplayAttribute.cs" />
     <Compile Include="Helper\DriveQuickstart.cs" />
     <Compile Include="Helper\Helper.cs" />
+    <Compile Include="Helper\ObservableRangeCollection.cs" />
     <Compile Include="Helper\TableGenerator.cs" />
     <Compile Include="Helper\TestData.cs" />
     <Compile Include="Helper\Types.cs" />
@@ -196,6 +200,7 @@
     <Compile Include="Models\ContactPartner.cs" />
     <Compile Include="Models\BaseDatabaseField.cs" />
     <Compile Include="Models\DisplayNameRetriever.cs" />
+    <Compile Include="Models\GoogleDrive.cs" />
     <Compile Include="Models\GoogleDriveFolder.cs" />
     <Compile Include="Interface\IDatabaseObject.cs" />
     <Compile Include="Models\Location.cs" />

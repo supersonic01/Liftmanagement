@@ -60,7 +60,7 @@ namespace Liftmanagement
 
             //MySQLDataAccess.CreateConnection();
 
-            //MySQLDataAccess.CreateTables();
+           // MySQLDataAccess.CreateTables();
 
 
 
@@ -70,14 +70,14 @@ namespace Liftmanagement
 
             //MySQLDataAccess.GetCustomers();
 
-            //Helper.Helper.GenerateInsert( typeof(Location));
+            //Helper.Helper.GenerateInsert( typeof(MachineInformation));
             //  Helper.Helper.GenerateInsert(typeof(AdministratorCompany));
-
-            //Helper.Helper.GenerateSelect(typeof(Location));
+            
+           // Helper.Helper.GenerateSelect(typeof(MachineInformation));
             //Helper.Helper.GenerateSelect(typeof(AdministratorCompany));
             //Helper.Helper.GenerateSelect(typeof(ContactPartner));
 
-            //Helper.Helper.GenerateUpdate(typeof(ContactPartner));
+           // Helper.Helper.GenerateUpdate(typeof(MachineInformation));
             //Helper.Helper.GenerateUpdate(typeof(AdministratorCompany));
             //Helper.Helper.GenerateUpdate(typeof(Location));
 

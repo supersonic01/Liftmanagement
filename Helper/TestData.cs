@@ -161,8 +161,7 @@ namespace Liftmanagement.Helper
                 HoldingPositions = 6,
                 Entrances = 6,
                 Description = "Gütern bis zu 3.000 kg. Mit freistehenden Schachtkonstruktionen und Regalsysteme",
-                Payload = 400,
-                AdditionalInfo = "Keine Info vorhanden, bitte was schreiben",
+                Payload = 400
 
             };
 
@@ -180,8 +179,7 @@ namespace Liftmanagement.Helper
                 HoldingPositions = 10,
                 Entrances = 10,
                 Description = "Gütern bis zu 3.000 kg, bis zu 18 Meter Höhe. Mit freistehenden Schachtkonstruktionen, Regalsysteme und Doppelkreisbremssystem",
-                Payload = 400,
-                AdditionalInfo = "Keine Info vorhanden, bitte was schreiben",
+                Payload = 400
 
             };
 
@@ -200,7 +198,7 @@ namespace Liftmanagement.Helper
                 Entrances = 12,
                 Description = "Geräuscharm (konform zur VDI 2566-2),Energieklasse A, Max. Personen 8, Max. Förderhöhe 	45 m,Nutzlast 1.000 kg, Max. Anzahl Haltestellen 21",
                 Payload = 400,
-                AdditionalInfo = "Keine Info vorhanden, bitte was schreiben",
+               
 
             };
 
@@ -219,7 +217,7 @@ namespace Liftmanagement.Helper
                 Entrances = 12,
                 Description = "Geräuscharm (konform zur VDI 2566-2),Energieklasse A, Max. Personen 8, Max. Förderhöhe 	45 m,Nutzlast 1.000 kg, Max. Anzahl Haltestellen 21",
                 Payload = 400,
-                AdditionalInfo = "Keine Info vorhanden, bitte was schreiben",
+              
 
             };
 
@@ -238,8 +236,7 @@ namespace Liftmanagement.Helper
                 Entrances = 4,
                 Description = "Max. Tragfähigkeit 500kg, Plattformmaße(B x L) 1000 x1500mm, Schachtmaße(B x L) 1360x1520, 	Einbaumaße (B x L) 1400 x 1630, Türbreite 900 m",
                 Payload = 400,
-                AdditionalInfo = "Keine Info vorhanden, bitte was schreiben",
-
+              
             };
 
             machine.ContactPerson = new ContactPartner(machine) { Name = "Steffan20 Winterhut2", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
@@ -257,7 +254,7 @@ namespace Liftmanagement.Helper
                 Entrances = 4,
                 Description = "Tragfähigkeit 225/300 kg,Nenngeschwindigkeit 0,11 m/s,Neigungswinkel 0 - 47 Grad,Anzahl Haltestellen mehrere Geschosse möglich,Plattformbreite 800 mm, Plattformtiefe 	800 / 900 / 1000 mm,Platzbedarf (eingeklappt) 	250 mm,Anschlußspannung 	230 V (16 A),Akkubetrieb DC 24 Volts (4 wartungsfreie Akkus),Schallpegel 63 db ",
                 Payload = 400,
-                AdditionalInfo = "Keine Info vorhanden, bitte was schreiben"
+               
             };
 
             machine.ContactPerson = new ContactPartner(machine) { Name = "Steffan20 Winterhut2", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };
@@ -275,7 +272,7 @@ namespace Liftmanagement.Helper
                 Entrances = 8,
                 Description = "Auto Lift,Förderhöhe max. 80 m, Nenngeschwindigkeit 0,15 m/s,Grubentiefe 150 mm,Nennlast 2.700 – 3.100 kg, Kabinenbreite 2.500 – 3.000 mm,Kabinentiefe 5.500 – 6.000 mm,Kabinenhöhe 2.100 mm ",
                 Payload = 400,
-                AdditionalInfo = "Keine Info vorhanden, bitte was schreiben"
+               
             };
 
             machine.ContactPerson = new ContactPartner(machine) { Name = "Steffan20 Winterhut2", PhoneWork = "072435148252", Mobile = "0172435148252", EMail = "halo@web.de" };

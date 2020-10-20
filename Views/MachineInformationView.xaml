@@ -1,9 +1,12 @@
-﻿<UserControl x:Class="Liftmanagement.Views.MachineInformationView"
+﻿<local:GoogleDriveDialogueView x:Class="Liftmanagement.Views.MachineInformationView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Liftmanagement.Views"
+             xmlns:r="clr-namespace:Liftmanagement.Properties"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:li="http://github.com/zeluisping/loadingIndicators/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="1000">
 
@@ -14,116 +17,250 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    
-    <Grid x:Name="gridResizableMachineInformation">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="gdframCustomers" Width="Auto"/>
-            <ColumnDefinition x:Name="gridSplitterCustomers" Width="Auto"/>
-            <ColumnDefinition x:Name="gdframLocations" Width="Auto"/>
-            <ColumnDefinition x:Name="gridSplitterLocations" Width="Auto"/>           
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
 
-        <Frame x:Name="frameCustomers" Grid.Column="0" Content="Customers"/>
+    <Grid>
+        <Grid x:Name="gridResizableMachineInformation">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="gdframCustomers" Width="Auto"/>
+                <ColumnDefinition x:Name="gdframLocations" Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-        <GridSplitter x:Name="gspCustomer" Grid.Column="1" Width="15"
-                  HorizontalAlignment="Center" VerticalAlignment="Stretch"
-                  BorderBrush="White" BorderThickness="1"
-                  Style="{StaticResource GridSplitterStyle1}">
-            <GridSplitter.Background>
-                <LinearGradientBrush EndPoint="0.5,0" StartPoint="0.5,1">
-                    <GradientStop Color="#A0A0A0" Offset="0"/>
-                    <GradientStop Color="#E5E5E5" Offset="0.15"/>
-                    <GradientStop Color="#ECECEC" Offset="0.8"/>
-                    <GradientStop Color="#E5E5E5" Offset="1"/>
-                </LinearGradientBrush>
-            </GridSplitter.Background>
-        </GridSplitter>
+            <Frame x:Name="frameCustomers" Grid.Column="0" Content="Customers"/>
+            <Frame x:Name="frameLocations" Grid.Column="1" Content="Locations"/>
 
-        <Frame x:Name="frameLocations" Grid.Column="2" Content="Locations"/>
-
-        <GridSplitter x:Name="gspLocation" Grid.Column="3" Width="15"
-                  HorizontalAlignment="Center" VerticalAlignment="Stretch"
-                  BorderBrush="White" BorderThickness="1"
-                  Style="{StaticResource GridSplitterStyle1}">
-            <GridSplitter.Background>
-                <LinearGradientBrush EndPoint="0.5,0" StartPoint="0.5,1">
-                    <GradientStop Color="#A0A0A0" Offset="0"/>
-                    <GradientStop Color="#E5E5E5" Offset="0.15"/>
-                    <GradientStop Color="#ECECEC" Offset="0.8"/>
-                    <GradientStop Color="#E5E5E5" Offset="1"/>
-                </LinearGradientBrush>
-            </GridSplitter.Background>
-        </GridSplitter>
-    <Grid Grid.Column="4">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <Frame x:Name="frameMachineInformations" Grid.Row="1"/>
-
-        <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Grid Background="#FFE5E5E5" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+            <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" x:Name="MasterDatatInfo"/>
-                        <RowDefinition Height="10" />
-                        <RowDefinition Height="Auto" x:Name="Header" />
-                        <RowDefinition Height="30" /> <!--0-->
-                    <RowDefinition Height="30" /> <!--1-->
-                    <RowDefinition Height="10" /> <!--2-->
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="10" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition x:Name="Contact" Height="30" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                    <Frame x:Name="frameMasterDataInfo" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-                    <Line  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="45" X1="0" Y1="0" X2="1"  Y2="0" 
-              Stroke="Black" StrokeThickness="2" Stretch="Uniform"/>
-                    <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5"  Content="Anlage" FontSize="24" Margin="10" Padding="10"
+                <StackPanel Grid.Row="0" >
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" x:Name="MasterDatatInfo"/>
+                            <RowDefinition Height="10" />
+                        </Grid.RowDefinitions>
+                        <Frame x:Name="frameMasterDataInfo" Grid.Row="0"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                        <Line  Grid.Row="1"  X1="0" Y1="0" X2="1"  Y2="0" Stroke="Black" StrokeThickness="2" Stretch="Uniform"/>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                    <Grid Background="#FFE5E5E5" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0" />
+                            <RowDefinition Height="0" />
+                            <RowDefinition Height="Auto" x:Name="Header" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                        </Grid.RowDefinitions>
+
+
+                        <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5"  Content="Anlage" FontSize="24" Margin="10" Padding="10"
                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center"/>
 
-                    <Label x:Name="lblName" Grid.Row="3" Grid.Column="0"  Style="{StaticResource LableStyle}" />
-                <Label x:Name="lblYearOfConstruction" Grid.Row="3" Grid.Column="1"  Style="{StaticResource LableStyle}" />
-                <Label x:Name="lblSerialNumber" Grid.Row="3" Grid.Column="2"  Style="{StaticResource LableStyle}" />
-                <Label x:Name="lblHoldingPositions" Grid.Row="3" Grid.Column="3"  Style="{StaticResource LableStyle}" />
-                <Label x:Name="lblEntrances" Grid.Row="3" Grid.Column="4"  Style="{StaticResource LableStyle}" />
-                <Label x:Name="lblDescription" Grid.Row="6" Grid.Column="0"  Style="{StaticResource LableStyle}" />
-                <Label x:Name="lblContactPerson" Grid.Row="10" Grid.Column="0"  Style="{StaticResource LableStyle}" />
-                <Label x:Name="lblPhoneWork" Grid.Row="10" Grid.Column="1"  Style="{StaticResource LableStyle}" />
-                <Label x:Name="lblMobile" Grid.Row="10" Grid.Column="2"  Style="{StaticResource LableStyle}" />
-                <Label x:Name="lblContactByDefect" Grid.Row="10" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblName" Grid.Row="3" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblYearOfConstruction" Grid.Row="3" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblSerialNumber" Grid.Row="3" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblHoldingPositions" Grid.Row="3" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblEntrances" Grid.Row="3" Grid.Column="4"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblDescription" Grid.Row="6" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblContactPerson" Grid.Row="10" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblPhoneWork" Grid.Row="10" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblMobile" Grid.Row="10" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblContactByDefect" Grid.Row="10" Grid.Column="3"  Style="{StaticResource LableStyle}" />
 
 
-                <TextBox x:Name="txtName" Grid.Row="4" Grid.Column="0" Style="{StaticResource TextBoxStyle}"/>
-                <TextBox x:Name="txtYearOfConstruction" Grid.Row="4" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
-                <TextBox x:Name="txtSerialNumber" Grid.Row="4" Grid.Column="2"  Style="{StaticResource TextBoxStyle}"/>
-                <TextBox x:Name="txtHoldingPositions" Grid.Row="4" Grid.Column="3" Style="{StaticResource TextBoxStyle}"/>
-                <TextBox x:Name="txtEntrances" Grid.Row="4" Grid.Column="4"  Style="{StaticResource TextBoxStyle}"/>
-                <TextBox x:Name="txtDescription" Grid.Row="7" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="5" Margin="10,0,10,0" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-AcceptsReturn="True"/>
-                <TextBox x:Name="txtContactPerson" Grid.Row="11" Grid.Column="0"  Style="{StaticResource TextBoxStyle}"/>
-                <TextBox x:Name="txtPhoneWork" Grid.Row="11" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
-                <TextBox x:Name="txtMobile" Grid.Row="11" Grid.Column="2"  Style="{StaticResource TextBoxStyle}"/>
-                <CheckBox x:Name="cbContactByDefect"  Grid.Row="11" Grid.Column="3"  HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                        <TextBox x:Name="txtName" Grid.Row="4" Grid.Column="0" Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtYearOfConstruction" Grid.Row="4" Grid.Column="1"  Style="{StaticResource TextBoxStyle}" />
+                        <TextBox x:Name="txtSerialNumber" Grid.Row="4" Grid.Column="2"  Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtHoldingPositions" Grid.Row="4" Grid.Column="3" Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtEntrances" Grid.Row="4" Grid.Column="4"  Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtDescription" Grid.Row="7" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="4" 
+                             Margin="10,0,10,0" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True"/>
 
-                    <Line  Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="6" X1="0" Y1="0" X2="1"  Y2="0" 
-              Stroke="Black" StrokeThickness="2" Stretch="Uniform"/>
-                </Grid>
-        </StackPanel>
+                        <StackPanel Grid.Row="7" Grid.RowSpan="5" Grid.Column="4">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30" />
+                                    <RowDefinition Height="30" />
+                                    <RowDefinition Height="30" />
+                                    <RowDefinition Height="30" />
+
+                                </Grid.RowDefinitions>
+                                <Label x:Name="lblGoogleDriveLink" Content="link" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center"  Style="{StaticResource LableStyle}" />
+
+                                <TextBlock x:Name="txtGoogleDriveHyperlink" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" VerticalAlignment="Center"
+                                   KeyboardNavigation.IsTabStop="False" HorizontalAlignment="Center">
+                        <Hyperlink  x:Name="hyperlinkGoogleDrive" NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate"  KeyboardNavigation.IsTabStop="False">                             
+                            <TextBlock x:Name="txtGoogleDriveFolderName"  KeyboardNavigation.IsTabStop="False"/>
+                        </Hyperlink>
+                        </TextBlock>
+
+                                <Button x:Name="btnGoogleDriveTree" Grid.Row="3" Grid.Column="0"  HorizontalAlignment="Center" VerticalAlignment="Center" Click="btnGoogleDriveTree_Click" BorderThickness="0" Background="Transparent"
+                                IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
+                                IsTabStop="False">
+                                    <StackPanel>
+                                        <Image Source="..\Resources\Images\Icons\Google-Drive.ico" Height="30"/>
+                                    </StackPanel>
+                                </Button>
+
+                            </Grid>
+                        </StackPanel>
+
+                        <TextBox x:Name="txtContactPerson" Grid.Row="11" Grid.Column="0"  Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtPhoneWork" Grid.Row="11" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
+                        <TextBox x:Name="txtMobile" Grid.Row="11" Grid.Column="2"  Style="{StaticResource TextBoxStyle}"/>
+                        <CheckBox x:Name="cbContactByDefect"  Grid.Row="11" Grid.Column="3"  HorizontalAlignment="Center"  VerticalAlignment="Center" />
+
+                        <Line  Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="7" X1="0" Y1="0" X2="1"  Y2="0" Stroke="Black" StrokeThickness="2" Stretch="Uniform"/>
+
+                        <StackPanel Grid.Row="3"  Grid.RowSpan="9" Grid.Column="5" Orientation="Vertical"  HorizontalAlignment="Center">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="40" x:Name="grBtnDelete"/>
+                                    <RowDefinition Height="30" x:Name="spaceAdmin"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                </Grid.RowDefinitions>
+
+                                <Button  x:Name="btnAdd" Grid.Row="0" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnAdd_Click" BorderThickness="0" Background="Transparent" 
+                                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, 
+                                           Path=IsReadOnly,Converter={StaticResource InverseBooleanConverter}}"
+                                             ToolTipService.ShowOnDisabled="True">
+                                    <StackPanel>
+                                        <Image Source="..\Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" Height="30"/>
+                                    </StackPanel>
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInViewMode}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ToolTip" Value="Neuen Kunden hinzufügen" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <Button x:Name="btnEdit" Grid.Row="1"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnEdit_Click" BorderThickness="0" Background="Transparent"
+                                            IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, 
+                                        Path=IsReadOnly,Converter={StaticResource InverseBooleanConverter}}"
+                                        ToolTipService.ShowOnDisabled="True">
+                                    <StackPanel>
+                                        <Image Source="..\Resources\Images\Icons\Turbomilk-Livejournal-10-Pencil.ico" Height="30"/>
+                                    </StackPanel>
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInViewMode}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ToolTip" Value="Kunden bearbeiten" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <Button  x:Name="btnCancel" Grid.Row="2" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnCancel_Click" BorderThickness="0" Background="Transparent"
+                                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
+                                             ToolTipService.ShowOnDisabled="True">
+                                    <StackPanel>
+                                        <Image Source="..\Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-edit-delete.ico" Height="30"/>
+                                    </StackPanel>
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInEditMode}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ToolTip" Value="Bearbeitung abbrechen" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <Button  x:Name="btnSave"  Grid.Row="4"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSave_Click" BorderThickness="0" Background="Transparent"
+                                         IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
+                                         ToolTipService.ShowOnDisabled="True">
+                                    <StackPanel>
+                                        <Image Source="..\Resources\Images\Icons\Treetog-I-Floppy-Small.ico" Height="30"/>
+                                    </StackPanel>
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInEditMode}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ToolTip" Value="Kundendaten speichern" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <Button  x:Name="btnDelete"  Grid.Row="5"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnDelete_Click" BorderThickness="0" 
+                                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, 
+                                           Path=IsReadOnly,Converter={StaticResource InverseBooleanConverter}}"
+                                             ToolTipService.ShowOnDisabled="True">
+                                    <StackPanel>
+                                        <Image Source="..\Resources\Images\Icons\Tatice-Just-Bins-Bin-red-full.ico" Height="30"/>
+                                    </StackPanel>
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInViewMode}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ToolTip" Value="Kundendaten löschen" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <Frame x:Name="frameMachineInformations" Grid.Row="2"/>
+            </Grid>
+        </Grid>
+        <Grid x:Name="LoadingIndicatorPanel" Background="White">
+            <li:LoadingIndicator x:Name="LoadingIndicatorx" SpeedRatio="1" IsActive="{Binding IsArcsActive}" Mode="Arcs" Foreground="DeepSkyBlue"/>
         </Grid>
     </Grid>
-</UserControl>
+</local:GoogleDriveDialogueView>

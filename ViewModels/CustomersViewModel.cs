@@ -25,21 +25,21 @@ namespace Liftmanagement.ViewModels
 
         public CustomersViewModel()
         {
-            RefreshCustomers();
+           // RefreshCustomers();
         }
 
         public void RefreshCustomers()
         {
-           // Customers = TestData.GetCustomers();
            Customers = MySQLDataAccess.GetCustomers();
-
-          var dd = new Customer();
-       
-
-
         }
 
-       
+        public void RefreshOnlyCustomers()
+        {
+            Customers = MySQLDataAccess.GetCustomersOnly();
+        }
+
+
+
 
     }
 }

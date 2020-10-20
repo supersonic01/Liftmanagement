@@ -22,7 +22,7 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <Expander x:Name="expanderCustomers" Grid.Column="0" ExpandDirection="Right" HorizontalAlignment="Left" VerticalAlignment="Stretch" IsExpanded="False" Background="Aqua">
+        <Expander x:Name="expanderCustomers" Grid.Column="0" ExpandDirection="Right" HorizontalAlignment="Left" VerticalAlignment="Stretch" IsExpanded="False">
             <Expander.Header>
                 <TextBlock x:Name="txtExpanderHeader"  Style="{StaticResource TextBlockStyle }">
                     <TextBlock.LayoutTransform>
@@ -46,8 +46,6 @@
                     </DataGrid.RowStyle>
                 </DataGrid>          
         </Expander>
-
-        <!--<ScrollBar HorizontalAlignment="Left" Height="6" Margin="-313,34,0,0" VerticalAlignment="Top" Width="2"/>-->
 
         <GridSplitter x:Name="gspCustomer" Grid.Column="1" Width="15"
                       HorizontalAlignment="Center" VerticalAlignment="Stretch"

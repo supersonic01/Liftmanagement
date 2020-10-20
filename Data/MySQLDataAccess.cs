@@ -156,8 +156,8 @@ namespace Liftmanagement.Data
                 CreateConnection();
             }
 
-            string query = "INSERT INTO MACHINEINFORMATION(LocationId,CustomerId,Name,YearOfConstruction,SerialNumber,HoldingPositions,Entrances,Payload,Description,ContactByDefect,AdditionalInfo,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
-            string values = "VALUE(" + machineinformation.LocationId + "," + machineinformation.CustomerId + ",'" + machineinformation.Name + "','" + machineinformation.YearOfConstruction + "','" + machineinformation.SerialNumber + "'," + machineinformation.HoldingPositions + "," + machineinformation.Entrances + "," + machineinformation.Payload + ",'" + machineinformation.Description + "'," + machineinformation.ContactByDefect + ",'" + machineinformation.AdditionalInfo + "','" + machineinformation.CreatedPersonName + "','" + machineinformation.ModifiedPersonName + "'," + machineinformation.ReadOnly + ",'" + machineinformation.UsedBy + "')";
+            string query = "INSERT INTO MACHINEINFORMATION (LocationId,CustomerId,Name,YearOfConstruction,SerialNumber,HoldingPositions,Entrances,Payload,Description,GoogleDriveFolderName,GoogleDriveLink,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy,Deleted)";
+            string values = "VALUE(" + machineinformation.LocationId + "," + machineinformation.CustomerId + ",'" + machineinformation.Name + "','" + machineinformation.YearOfConstruction.ToString("yyyy-MM-dd") + "','" + machineinformation.SerialNumber + "'," + machineinformation.HoldingPositions + "," + machineinformation.Entrances + "," + machineinformation.Payload + ",'" + machineinformation.Description + "','" + machineinformation.GoogleDriveFolderName + "','" + machineinformation.GoogleDriveLink + "','" + machineinformation.CreatedPersonName + "','" + machineinformation.ModifiedPersonName + "'," + machineinformation.ReadOnly + ",'" + machineinformation.UsedBy + "'," + machineinformation.Deleted + ")";
             query = query + values;
 
 
@@ -168,9 +168,9 @@ namespace Liftmanagement.Data
             long id = execQuery.LastInsertedId;
             var result = new SQLQueryResult<MachineInformation>(records, id);
 
-            machineinformation.ContactPerson.ForeignKey = (int)id;
+            machineinformation.ContactPerson.ForeignKey = id;
+            machineinformation.ContactPerson.ForeignKeyType = Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(MachineInformation)];
             var contactResult = AddContactPartner(machineinformation.ContactPerson);
-            //result.AddSQLSubQueryResult(contactResult, result);
 
             databaseConnection.Close();
             return result;
@@ -301,16 +301,16 @@ namespace Liftmanagement.Data
             return GetRecordForEdit(id, query => GetCustomers(query));
         }
 
-        private static SQLQueryResult<T> GetRecordForEdit<T>(long id, Func<string,List<T>> GetRecords) where T : BaseDatabaseField
+        private static SQLQueryResult<T> GetRecordForEdit<T>(long id, Func<string, List<T>> GetRecords) where T : BaseDatabaseField
         {
             // TODO check user, if is the same user, editing is possilbe
 
             var classname = typeof(T).Name.ToUpper();
 
-            string query = "SELECT * FROM "+ classname + " WHERE ID= " + id;
+            string query = "SELECT * FROM " + classname + " WHERE ID= " + id;
             var result = new SQLQueryResult<T>(0, id);
             result.DBRecords = GetRecords(query);
-          
+
             var item = result.DBRecords.FirstOrDefault();
 
             if (item.ReadOnly)
@@ -320,7 +320,7 @@ namespace Liftmanagement.Data
             }
             else
             {
-                var updateQuery = "UPDATE " + classname + " SET READONLY = 1, USEDBY = '" + Helper.Helper.GetUsername()+ "' WHERE ID = " + id;
+                var updateQuery = "UPDATE " + classname + " SET READONLY = 1, USEDBY = '" + Helper.Helper.GetUsername() + "' WHERE ID = " + id;
 
                 if (databaseConnection == null)
                 {
@@ -381,7 +381,7 @@ namespace Liftmanagement.Data
         {
             var classname = typeof(T).Name.ToUpper();
             var updateQuery = "UPDATE " + classname + " SET READONLY = 0, USEDBY = '' WHERE ID = " + id;
-            
+
             return SetEditing<T>(id, updateQuery);
         }
 
@@ -435,11 +435,23 @@ namespace Liftmanagement.Data
         public static List<Location> GetLocations()
         {
             string query = "SELECT * FROM LOCATION";
-           return GetLocations(query);
+            return GetLocations(query);
         }
         public static List<Location> GetLocations(Customer customer)
         {
             string query = "SELECT * FROM LOCATION WHERE CUSTOMERID = " + customer.Id;
+            return GetLocations(query);
+        }
+
+        public static List<Location> GetLocationsByCustomer(long id)
+        {
+            string query = "SELECT * FROM LOCATION WHERE CUSTOMERID = " + id;
+            return GetLocations(query);
+        }
+
+        public static List<Location> GetLocations(long id)
+        {
+            string query = "SELECT * FROM LOCATION WHERE ID = " + id;
             return GetLocations(query);
         }
 
@@ -476,61 +488,7 @@ namespace Liftmanagement.Data
 
 
 
-        public static List<MachineInformation> GetMachineInformations()
-        {
-            List<MachineInformation> machineinformations = new List<MachineInformation>();
 
-            string query = "SELECT * FROM MACHINEINFORMATION";
-
-            SelectItems(query, reader =>
-            {
-                MachineInformation machineinformation = new MachineInformation();
-                machineinformation.LocationId = reader.GetInt64("LocationId");
-                machineinformation.CustomerId = reader.GetInt64("CustomerId");
-                machineinformation.Name = reader.GetString("Name");
-                machineinformation.YearOfConstruction = reader.GetDateTime("YearOfConstruction");
-                machineinformation.SerialNumber = reader.GetString("SerialNumber");
-                machineinformation.HoldingPositions = reader.GetInt32("HoldingPositions");
-                machineinformation.Entrances = reader.GetInt32("Entrances");
-                machineinformation.Payload = reader.GetInt32("Payload");
-                machineinformation.Description = reader.GetString("Description");
-                machineinformation.ContactByDefect = reader.GetBoolean("ContactByDefect");
-                machineinformation.AdditionalInfo = reader.GetString("AdditionalInfo");
-                machineinformation.Id = reader.GetInt64("Id");
-                machineinformation.CreatedDate = reader.GetDateTime("CreatedDate");
-                machineinformation.ModifiedDate = reader.GetDateTime("ModifiedDate");
-                machineinformation.CreatedPersonName = reader.GetString("CreatedPersonName");
-                machineinformation.ModifiedPersonName = reader.GetString("ModifiedPersonName");
-                machineinformation.ReadOnly = reader.GetBoolean("ReadOnly");
-                machineinformation.UsedBy = reader.GetString("UsedBy");
-                machineinformations.Add(machineinformation);
-            });
-
-            foreach (var machineinformation in machineinformations)
-            {
-                query = "SELECT * FROM CONTACTPARTNER WHERE FOREIGNKEY = " + machineinformation.Id + " AND FOREIGNKEYTYPE = " + Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(MachineInformation)];
-
-                SelectItems(query, reader =>
-                {
-                    ContactPartner contactpartner = new ContactPartner();
-                    contactpartner.ForeignKey = reader.GetInt32("ForeignKey");
-                    contactpartner.ForeignKeyType = reader.GetInt32("ForeignKeyType");
-                    contactpartner.Name = reader.GetString("Name");
-                    contactpartner.PhoneWork = reader.GetString("PhoneWork");
-                    contactpartner.Mobile = reader.GetString("Mobile");
-                    contactpartner.EMail = reader.GetString("EMail");
-                    contactpartner.Id = reader.GetInt64("Id");
-                    contactpartner.CreatedDate = reader.GetDateTime("CreatedDate");
-                    contactpartner.ModifiedDate = reader.GetDateTime("ModifiedDate");
-                    contactpartner.CreatedPersonName = reader.GetString("CreatedPersonName");
-                    contactpartner.ModifiedPersonName = reader.GetString("ModifiedPersonName");
-                    contactpartner.ReadOnly = reader.GetBoolean("ReadOnly");
-                    contactpartner.UsedBy = reader.GetString("UsedBy");
-                    machineinformation.ContactPerson = contactpartner;
-                });
-            }
-            return machineinformations;
-        }
 
 
         public static SQLQueryResult<Customer> UpdateCustomer(Customer customer)
@@ -545,7 +503,7 @@ namespace Liftmanagement.Data
 
             customer.ModifiedPersonName = Helper.Helper.GetPersonName();
             string query = "UPDATE CUSTOMER SET CompanyName = '" + customer.CompanyName + "',Address = '" + customer.Address + "',Postcode = '" + customer.Postcode + "',City = '" + customer.City + "',Selected = " + customer.Selected + ",AdditionalInfo = '" + customer.AdditionalInfo + "',GoogleDriveFolderName = '" + customer.GoogleDriveFolderName + "',GoogleDriveLink = '" + customer.GoogleDriveLink + "',CreatedPersonName = '" + customer.CreatedPersonName + "',ModifiedPersonName = '" + customer.ModifiedPersonName + "',ReadOnly = " + customer.ReadOnly + ",UsedBy = '" + customer.UsedBy + "' WHERE ID = " + customer.Id;
-    
+
             MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
 
             databaseConnection.Open();
@@ -595,7 +553,7 @@ namespace Liftmanagement.Data
             {
                 CreateConnection();
             }
-         
+
             customer.ModifiedPersonName = Helper.Helper.GetPersonName();
             string query = "UPDATE CUSTOMER SET Selected = " + customer.Selected + ",ModifiedPersonName = '" + customer.ModifiedPersonName + "' WHERE ID = " + customer.Id;
 
@@ -627,7 +585,7 @@ namespace Liftmanagement.Data
         private static SQLQueryResult<ContactPartner> MarkForDeleteContactPartner(ContactPartner contactpartner)
         {
             contactpartner.ModifiedPersonName = Helper.Helper.GetPersonName();
-           string query = "UPDATE CONTACTPARTNER SET DELETED = " + contactpartner.Deleted + ",MODIFIEDPERSONNAME = '" + contactpartner.ModifiedPersonName + "' WHERE CustomerId = " + contactpartner.CustomerId;
+            string query = "UPDATE CONTACTPARTNER SET DELETED = " + contactpartner.Deleted + ",MODIFIEDPERSONNAME = '" + contactpartner.ModifiedPersonName + "' WHERE CustomerId = " + contactpartner.CustomerId;
 
             MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
 
@@ -651,7 +609,7 @@ namespace Liftmanagement.Data
 
             int records = execQuery.ExecuteNonQuery();
             var result = new SQLQueryResult<Location>(records, location.Id);
-            
+
             var contactResult = MarkForDeleteContactPartner(location.ContactPerson);
 
             databaseConnection.Close();
@@ -762,7 +720,8 @@ namespace Liftmanagement.Data
             catch (Exception ex)
             {
                 // Show any error message.
-
+                Console.WriteLine(ex);
+                throw;
             }
             finally
             {
@@ -862,10 +821,182 @@ namespace Liftmanagement.Data
             var uid = "db1096358-lift";
             var password = "Elfe100Lift:01#";
             string connectionString;
+            //        connectionString = "SERVER=" + server + ";" + "DATABASE=" +
+            //database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
+
             connectionString = "SERVER=" + server + ";" + "DATABASE=" +
-    database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
+                               database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + "; MultipleActiveResultSets=True ;";
             return connectionString;
         }
 
+        public static SQLQueryResult<MachineInformation> UpdateMachineInformation(MachineInformation machineinformation)
+        {
+            if (databaseConnection == null)
+            {
+                CreateConnection();
+            }
+
+            machineinformation.ModifiedPersonName = Helper.Helper.GetPersonName();
+            string query = "UPDATE MACHINEINFORMATION SET LocationId = " + machineinformation.LocationId + ",CustomerId = " + machineinformation.CustomerId + ",Name = '" + machineinformation.Name + "',YearOfConstruction = '" + machineinformation.YearOfConstruction + "',SerialNumber = '" + machineinformation.SerialNumber + "',HoldingPositions = " + machineinformation.HoldingPositions + ",Entrances = " + machineinformation.Entrances + ",Payload = " + machineinformation.Payload + ",Description = '" + machineinformation.Description + "',GoogleDriveFolderName = '" + machineinformation.GoogleDriveFolderName + "',GoogleDriveLink = '" + machineinformation.GoogleDriveLink + "',CreatedPersonName = '" + machineinformation.CreatedPersonName + "',ModifiedPersonName = '" + machineinformation.ModifiedPersonName + "',ReadOnly = " + machineinformation.ReadOnly + ",UsedBy = '" + machineinformation.UsedBy + "',Deleted = " + machineinformation.Deleted + " WHERE ID = "+machineinformation.Id;
+            
+            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+
+            databaseConnection.Open();
+            int records = execQuery.ExecuteNonQuery();
+            var result = new SQLQueryResult<MachineInformation>(records, machineinformation.Id);
+
+            UpdateContactPartner(machineinformation.ContactPerson);
+
+            databaseConnection.Close();
+
+            return result;
+        }
+
+        public static SQLQueryResult<MachineInformation> GetMachineInformationForEdit(long id)
+        {
+            return GetRecordForEdit(id, query => GetMachineInformations(query));
+        }
+
+        public static SQLQueryResult<MachineInformation> ForceToEditMachineInformation(long id)
+        {
+            return ForceToEdit<MachineInformation>(id);
+        }
+
+        public static void ReleaseEditingMachineInformation(long id)
+        {
+            ReleaseEditing<MachineInformation>(id);
+        }
+
+        public static SQLQueryResult<MachineInformation> MarkForDeleteMachineInformation(MachineInformation machineInformation)
+        {
+            return MarkForDeletion<MachineInformation>(machineInformation);
+        }
+
+
+        private static SQLQueryResult<T> MarkForDeletion<T>(BaseDatabaseField dbObject, Action postWork = null) where T : BaseDatabaseField
+        {
+            if (databaseConnection == null)
+            {
+                CreateConnection();
+            }
+
+            var classname = typeof(T).Name.ToUpper();
+
+            dbObject.ModifiedPersonName = Helper.Helper.GetPersonName();
+            string query = "UPDATE " + classname + " SET Deleted = " + dbObject.Deleted + ",ModifiedPersonName = '" + dbObject.ModifiedPersonName + "' WHERE ID = " + dbObject.Id;
+
+            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+
+            databaseConnection.Open();
+            int records = execQuery.ExecuteNonQuery();
+            var result = new SQLQueryResult<T>(records, dbObject.Id);
+
+            Task.Factory.StartNew(() =>
+            {
+                if (postWork != null)
+                {
+                    postWork();
+                }
+            }).ContinueWith((task) =>
+            {
+                databaseConnection.Close();
+            });
+
+            return result;
+        }
+
+        public static List<MachineInformation> GetMachineInformations(Location location)
+        {
+            string query = "SELECT * FROM MACHINEINFORMATION WHERE LOCATIONID = " + location.Id;
+            return GetMachineInformations(query);
+        }
+
+        public static List<MachineInformation> GetMachineInformationsByLocation(long id)
+        {
+            string query = "SELECT * FROM MACHINEINFORMATION WHERE LOCATIONID = " + id;
+            return GetMachineInformations(query);
+        }
+
+        public static List<MachineInformation> GetMachineInformations(long id)
+        {
+            string query = "SELECT * FROM MACHINEINFORMATION WHERE ID = " + id;
+            return GetMachineInformations(query);
+        }
+
+        public static List<MachineInformation> GetMachineInformations()
+        {
+            string query = "SELECT * FROM MACHINEINFORMATION";
+            return GetMachineInformations(query);
+        }
+
+        private static List<MachineInformation> GetMachineInformations(string query)
+        {
+            List<MachineInformation> machineinformations = new List<MachineInformation>();
+
+            SelectItems(query, reader =>
+            {
+                MachineInformation machineinformation = new MachineInformation();
+                machineinformation.LocationId = reader.GetInt64("LocationId");
+                machineinformation.CustomerId = reader.GetInt64("CustomerId");
+                machineinformation.Name = reader.GetString("Name");
+                machineinformation.YearOfConstruction = reader.GetDateTime("YearOfConstruction");
+                machineinformation.SerialNumber = reader.GetString("SerialNumber");
+                machineinformation.HoldingPositions = reader.GetInt32("HoldingPositions");
+                machineinformation.Entrances = reader.GetInt32("Entrances");
+                machineinformation.Payload = reader.GetInt32("Payload");
+                machineinformation.Description = reader.GetString("Description");
+                machineinformation.GoogleDriveFolderName = reader.GetString("GoogleDriveFolderName");
+                machineinformation.GoogleDriveLink = reader.GetString("GoogleDriveLink");
+                machineinformation.Id = reader.GetInt64("Id");
+                machineinformation.CreatedDate = reader.GetDateTime("CreatedDate");
+                machineinformation.ModifiedDate = reader.GetDateTime("ModifiedDate");
+                machineinformation.CreatedPersonName = reader.GetString("CreatedPersonName");
+                machineinformation.ModifiedPersonName = reader.GetString("ModifiedPersonName");
+                machineinformation.ReadOnly = reader.GetBoolean("ReadOnly");
+                machineinformation.UsedBy = reader.GetString("UsedBy");
+                machineinformation.Deleted = reader.GetBoolean("Deleted");
+                machineinformations.Add(machineinformation);
+            });
+
+
+
+            foreach (var machineinformation in machineinformations)
+            {
+                machineinformation.ContactPerson = GetContactPartners(machineinformation.Id,
+                    Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(MachineInformation)]).FirstOrDefault();
+            }
+
+            return machineinformations;
+        }
+
+        public static List<Customer> GetCustomersOnly()
+        {
+            string query = "SELECT * FROM CUSTOMER";
+
+            List<Customer> customers = new List<Customer>();
+
+            SelectItems(query, reader =>
+            {
+                Customer customer = new Customer();
+                customer.CompanyName = reader.GetString("CompanyName");
+                customer.Address = reader.GetString("Address");
+                customer.Postcode = reader.GetString("Postcode");
+                customer.City = reader.GetString("City");
+                customer.Selected = reader.GetBoolean("Selected");
+                customer.AdditionalInfo = reader.GetString("AdditionalInfo");
+                customer.GoogleDriveFolderName = reader.GetString("GoogleDriveFolderName");
+                customer.GoogleDriveLink = reader.GetString("GoogleDriveLink");
+                customer.Id = reader.GetInt64("Id");
+                customer.CreatedDate = reader.GetDateTime("CreatedDate");
+                customer.ModifiedDate = reader.GetDateTime("ModifiedDate");
+                customer.CreatedPersonName = reader.GetString("CreatedPersonName");
+                customer.ModifiedPersonName = reader.GetString("ModifiedPersonName");
+                customer.ReadOnly = reader.GetBoolean("ReadOnly");
+                customer.UsedBy = reader.GetString("UsedBy");
+                customers.Add(customer);
+            });
+
+            return customers;
+        }
     }
 }

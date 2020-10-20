@@ -30,6 +30,7 @@ namespace Liftmanagement.Helper
             MAType=2 //Vollwartung, Systemwartung
 
         }
+        public  static DateTime DefaultDate = new DateTime(1900, 01, 01);
 
         private static Dictionary<Type, int> classTypeForeignKeyTypeMapper;
 

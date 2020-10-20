@@ -118,7 +118,7 @@ namespace Liftmanagement.View
             lblAdministratorEmail.Content = CustomerVM.CustomerSelected.GetDisplayName<ContactPartner>(nameof(CustomerVM.CustomerSelected.ContactPerson.EMail)) + ":";
 
 
-            BindingText(txtCompanyName, ()=>CustomerVM.CustomerSelected.CompanyName,true,()=>new MandatoryRule());
+            BindingText(txtCompanyName, ()=>CustomerVM.CustomerSelected.CompanyName,null,true,()=>new MandatoryRule());
             BindingText(txtContactPerson, () => CustomerVM.CustomerSelected.ContactPerson.Name);
             BindingText(txtAddress, () => CustomerVM.CustomerSelected.Address);
             BindingText(txtPostcode, () => CustomerVM.CustomerSelected.Postcode);

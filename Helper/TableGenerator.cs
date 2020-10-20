@@ -141,7 +141,7 @@ namespace Liftmanagement.Helper
         {
             System.Text.StringBuilder script = new StringBuilder();
 
-            script.AppendLine("CREATE TABLE " + this.ClassName);
+            script.AppendLine("CREATE TABLE IF NOT EXISTS " + this.ClassName);
             script.AppendLine("(");
             // script.AppendLine("\t ID BIGINT,");
             for (int i = 0; i < this.Fields.Count; i++)

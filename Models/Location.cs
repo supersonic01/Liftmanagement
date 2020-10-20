@@ -30,5 +30,10 @@ namespace Liftmanagement.Models
         {
             return GetFullName();
         }
+
+        public static Location GetDummyLocation(string name = "** Alle **")
+        {
+            return new Location{Address = name};
+        }
     }
 }

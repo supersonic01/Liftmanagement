@@ -22,23 +22,37 @@ namespace Liftmanagement.Views
     /// </summary>
     public partial class MachineInformationsView : UserControlView
     {
-        private MachineInformationsViewModel machineInformationsVM = new MachineInformationsViewModel();
-
-        public MachineInformationsViewModel MachineInformationsVM
-        {
-            get { return machineInformationsVM; }
-            set { SetField(ref machineInformationsVM, value); }
-        }
-
+        public MachineInformationsViewModel MachineInformationsVM { get; set; } = new MachineInformationsViewModel();
         public MachineInformationsView()
         {
             InitializeComponent();
+            
+            MachineInformationsVM.Refresh();
+            NotVisibleColumns.Add(nameof(Location.GoogleDriveFolderName));
+
             dgMachineInformations.Tag = NotVisibleColumns;
 
             BindingControl(dgMachineInformations, () => MachineInformationsVM.MachineInformations);
 
+            txtExpanderHeader.Text = new CategoryViewModel().Categories.Where(c => c.MangementType == Helper.Helper.TTypeMangement.Location).Select(c => c.Name).FirstOrDefault();
+            expanderMachineInformations.Expanded += ExpanderMachineInformations_Expanded;
+            expanderMachineInformations.Collapsed += ExpanderMachineInformations_Collapsed;
         }
 
 
+        public void ExpanderMachineInformations_Expanded(object sender, RoutedEventArgs e)
+        {
+            dgMachineInformations.Width = dgMachineInformations.ActualWidth;
+        }
+
+        private void ExpanderMachineInformations_Collapsed(object sender, RoutedEventArgs e)
+        {
+            gridMachineInformations.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
+        }
+
+        private void gspLocatios_OnDragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
+        {
+            dgMachineInformations.Width = double.NaN;
+        }
     }
 }

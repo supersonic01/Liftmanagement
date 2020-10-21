@@ -30,5 +30,10 @@ namespace Liftmanagement.ViewModels
         {
             MachineInformations = MySQLDataAccess.GetMachineInformationsByLocation(id);
         }
+
+        public void Refresh()
+        {
+            MachineInformations = MySQLDataAccess.GetMachineInformations();
+        }
     }
 }

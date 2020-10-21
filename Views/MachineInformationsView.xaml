@@ -16,9 +16,23 @@
     </UserControl.Resources>
 
     <Grid x:Name="gridMachineInformations">
-        <StackPanel x:Name="spMachineInformations" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Background="LightBlue">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Expander x:Name="expanderMachineInformations" Grid.Column="0" ExpandDirection="Right" HorizontalAlignment="Left" VerticalAlignment="Stretch" IsExpanded="False">
+            <Expander.Header>
+                <TextBlock x:Name="txtExpanderHeader"  Style="{StaticResource TextBlockStyle }">
+                    <TextBlock.LayoutTransform>
+                        <RotateTransform Angle="270"/>
+                    </TextBlock.LayoutTransform>
+                </TextBlock>
+            </Expander.Header>
+
             <DataGrid  x:Name="dgMachineInformations" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"  SelectionUnit="FullRow" 
-                           local:CustomColumnHeadersProperty.ItemType="{x:Type local:MachineInformationsView}" IsReadOnly="True"
+                       local:CustomColumnHeadersProperty.ItemType="{x:Type local:MachineInformationsView}" IsReadOnly="True"
                        CellStyle="{StaticResource Body_Content_DataGrid_Centering}">
                 <DataGrid.RowStyle >
                     <Style TargetType="DataGridRow">
@@ -32,6 +46,21 @@
                     </Style>
                 </DataGrid.RowStyle>
             </DataGrid>
-        </StackPanel>
+        </Expander>
+
+        <GridSplitter x:Name="gspMachineInformations" Grid.Column="1" Width="15"
+                      HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                      BorderBrush="White" BorderThickness="1"
+                      Style="{StaticResource GridSplitterStyle1}" DragStarted="gspLocatios_OnDragStarted">
+            <GridSplitter.Background>
+                <LinearGradientBrush EndPoint="0.5,0" StartPoint="0.5,1">
+                    <GradientStop Color="#A0A0A0" Offset="0"/>
+                    <GradientStop Color="#E5E5E5" Offset="0.15"/>
+                    <GradientStop Color="#ECECEC" Offset="0.8"/>
+                    <GradientStop Color="#E5E5E5" Offset="1"/>
+                </LinearGradientBrush>
+            </GridSplitter.Background>
+        </GridSplitter>
+
     </Grid>
 </local:UserControlView>

@@ -86,5 +86,32 @@ namespace Liftmanagement.Properties {
                 return ResourceManager.GetString("cancelEditing", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tage.
+        /// </summary>
+        public static string days {
+            get {
+                return ResourceManager.GetString("days", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monate.
+        /// </summary>
+        public static string months {
+            get {
+                return ResourceManager.GetString("months", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wochen.
+        /// </summary>
+        public static string weeks {
+            get {
+                return ResourceManager.GetString("weeks", resourceCulture);
+            }
+        }
     }
 }

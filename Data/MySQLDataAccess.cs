@@ -684,13 +684,16 @@ namespace Liftmanagement.Data
         private static void SelectItems(string query, Action<MySqlDataReader> getRecords)
         {
             //TODO check whether its not better to open one time and not for each select....
-            if (databaseConnection == null)
-            {
-                CreateConnection();
-            }
+            //if (databaseConnection == null)
+            //{
+            //    CreateConnection();
+            //}
+
+            string connectionString = GetConnectionString();
+           var dbConnection = new MySqlConnection(connectionString);
 
 
-            MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
+            MySqlCommand commandDatabase = new MySqlCommand(query, dbConnection);
             commandDatabase.CommandTimeout = 60;
 
             MySqlDataReader reader;
@@ -698,7 +701,7 @@ namespace Liftmanagement.Data
             try
             {
                 // Open the database
-                databaseConnection.Open();
+                dbConnection.Open();
 
                 // Execute the query
                 reader = commandDatabase.ExecuteReader();
@@ -727,7 +730,7 @@ namespace Liftmanagement.Data
             {
 
                 // Finally close the connection
-                databaseConnection.Close();
+                dbConnection.Close();
             }
 
         }
@@ -825,7 +828,7 @@ namespace Liftmanagement.Data
             //database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
 
             connectionString = "SERVER=" + server + ";" + "DATABASE=" +
-                               database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + "; MultipleActiveResultSets=True ;";
+                               database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
             return connectionString;
         }
 

@@ -129,4 +129,13 @@
     <value>Bearbeitung abbrechen</value>
     <comment>Tooltip</comment>
   </data>
+  <data name="days" xml:space="preserve">
+    <value>Tage</value>
+  </data>
+  <data name="months" xml:space="preserve">
+    <value>Monate</value>
+  </data>
+  <data name="weeks" xml:space="preserve">
+    <value>Wochen</value>
+  </data>
 </root>

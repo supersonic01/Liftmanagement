@@ -37,6 +37,7 @@ namespace Liftmanagement.View
             Task.Factory.StartNew(() =>
             {
                 var customersVM = new CustomersViewModel();
+                customersVM.RefreshCustomers();
                
                 Application.Current.Dispatcher.BeginInvoke(
                     DispatcherPriority.Background,

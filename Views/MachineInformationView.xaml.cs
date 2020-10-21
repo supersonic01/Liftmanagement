@@ -41,6 +41,34 @@ namespace Liftmanagement.Views
             LoadingIndicatorPanel.Visibility = Visibility.Visible;
             gridResizableMachineInformation.IsEnabled = false;
 
+            //Task.Factory.StartNew(() =>
+            //{
+            //    var customersVM = new CustomersViewModel();
+            //    customersVM.RefreshOnlyCustomers();
+
+            //    Application.Current.Dispatcher.BeginInvoke(
+            //        DispatcherPriority.Background,
+            //        new Action(() =>
+            //        {
+            //            customersView = new CustomersView();
+            //            customersView.CustomersVM = customersVM;
+
+            //            frameCustomers.Content = customersView;
+
+            //            var locationsView = new LocationsView();
+            //            frameLocations.Content = locationsView;
+
+            //            customersView.expanderCustomers.Collapsed += ExpanderCustomers_Collapsed;
+            //            customersView.dgCustomers.SelectionChanged += DgCustomers_SelectionChanged;
+
+            //            locationsView.expanderLocations.Collapsed += ExpanderLocations_Collapsed;
+            //            locationsView.dgLocations.SelectionChanged += DgLocations_SelectionChanged;
+
+            //        }));
+
+            //});
+
+
             Task.Factory.StartNew(() =>
             {
                 var customersVM = new CustomersViewModel();
@@ -58,34 +86,6 @@ namespace Liftmanagement.Views
                         var locationsView = new LocationsView();
                         frameLocations.Content = locationsView;
 
-                        customersView.expanderCustomers.Collapsed += ExpanderCustomers_Collapsed;
-                        customersView.dgCustomers.SelectionChanged += DgCustomers_SelectionChanged;
-
-                        locationsView.expanderLocations.Collapsed += ExpanderLocations_Collapsed;
-                        locationsView.dgLocations.SelectionChanged += DgLocations_SelectionChanged;
-
-                    }));
-
-            });
-
-
-            Task.Factory.StartNew(() =>
-            {
-                //var customersVM = new CustomersViewModel();
-                //customersVM.RefreshOnlyCustomers();
-
-                Application.Current.Dispatcher.BeginInvoke(
-                    DispatcherPriority.Background,
-                    new Action(() =>
-                    {
-                        //customersView = new CustomersView();
-                        //customersView.CustomersVM = customersVM;
-
-                        //frameCustomers.Content = customersView;
-
-                        //var locationsView = new LocationsView();
-                        //frameLocations.Content = locationsView;
-
                         machineInformationsView = new MachineInformationsView();
 
                         machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.ContactPerson));
@@ -96,11 +96,11 @@ namespace Liftmanagement.Views
 
                         AssigneValuesToControl();
 
-                        //customersView.expanderCustomers.Collapsed += ExpanderCustomers_Collapsed;
-                        //customersView.dgCustomers.SelectionChanged += DgCustomers_SelectionChanged;
+                        customersView.expanderCustomers.Collapsed += ExpanderCustomers_Collapsed;
+                        customersView.dgCustomers.SelectionChanged += DgCustomers_SelectionChanged;
 
-                        //locationsView.expanderLocations.Collapsed += ExpanderLocations_Collapsed;
-                        //locationsView.dgLocations.SelectionChanged += DgLocations_SelectionChanged;
+                        locationsView.expanderLocations.Collapsed += ExpanderLocations_Collapsed;
+                        locationsView.dgLocations.SelectionChanged += DgLocations_SelectionChanged;
 
                         masterDataInfo = new MasterDataInfoView(Helper.Helper.TTypeMangement.MachineInformation);
                         masterDataInfo.cbLocations.SelectionChanged += CbLocations_SelectionChanged;

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Liftmanagement.Models
 {
-    public class MaintenanceAgreement : BaseDatabaseField,IDatabaseObject
+    public class MaintenanceAgreement : GoogleDrive ,IDatabaseObject
     {
         public long LocationId { get; set; }
         public long CustomerId { get; set; }
@@ -53,6 +53,17 @@ namespace Liftmanagement.Models
         [DisplayName("Zusätzliche Informationen"), DatabaseAttribute(Length = "200")]
         public string AdditionalInfo { get; set; }
         //notice  agreement date
+
+        /// <summary>
+        /// 10, 14 Tage, Wochen
+        /// </summary>
+        [DisplayName("Vertragsdatum")]
+        public int NotificationTime { get; set; }
+
+        /// <summary>
+        /// Tage, Wochen, Monte
+        /// </summary>
+        public Helper.Helper.NotificationUnitType NotificationUnit { get; set; }
 
         public static string GetIndexFields()
         {

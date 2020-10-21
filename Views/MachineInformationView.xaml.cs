@@ -24,7 +24,6 @@ namespace Liftmanagement.Views
     /// </summary>
     public partial class MachineInformationView : GoogleDriveDialogueView
     {
-        private MachineInformationsView machineInformationsView;
         private MasterDataInfoView masterDataInfo;
         private CustomersView customersView;
         public MachineInformationViewModel MachineInformationVM { get; set; } = new MachineInformationViewModel();
@@ -85,14 +84,11 @@ namespace Liftmanagement.Views
 
                         var locationsView = new LocationsView();
                         frameLocations.Content = locationsView;
+                        
+                     NotVisibleColumns.Add(nameof(MachineInformation.ContactPerson));
 
-                        machineInformationsView = new MachineInformationsView();
-
-                        machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.ContactPerson));
-
-                        frameMachineInformations.Content = machineInformationsView;
-                        machineInformationsView.dgMachineInformations.SelectionChanged += DgMachineInformations_SelectionChanged;
-                        machineInformationsView.dgMachineInformations.SelectedIndex = 0;
+                     dgMachineInformations.SelectionChanged += DgMachineInformations_SelectionChanged;
+                        dgMachineInformations.SelectedIndex = 0;
 
                         AssigneValuesToControl();
 
@@ -122,7 +118,7 @@ namespace Liftmanagement.Views
             var location = GetSelectedObject<Location>(sender);
 
             if (location != null)
-                machineInformationsView.MachineInformationsVM.RefreshByLocation(location.Id);
+                MachineInformationVM.RefreshByLocation(location.Id);
         }
 
 

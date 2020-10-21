@@ -31,7 +31,6 @@
                         </Style.Triggers>
                     </Style>
                 </DataGrid.RowStyle>
-
             </DataGrid>
         </StackPanel>
     </Grid>

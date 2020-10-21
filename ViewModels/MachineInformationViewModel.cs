@@ -10,25 +10,13 @@ namespace Liftmanagement.ViewModels
 {
 public  class MachineInformationViewModel : ViewModel
     {
+        private List<MachineInformation> machineInformations = new List<MachineInformation>();
 
-        //private Customer customerSelected = new Customer();
-
-        //public Customer CustomerSelected
-        //{
-        //    get { return customerSelected; }
-        //    set
-        //    {
-        //        SetField(ref customerSelected, value);
-        //    }
-        //}
-
-        //private Location locationSelected = new Location();
-
-        //public Location LocationSelected
-        //{
-        //    get { return locationSelected; }
-        //    set { SetField(ref locationSelected, value); }
-        //}
+        public List<MachineInformation> MachineInformations
+        {
+            get { return machineInformations; }
+            set { SetField(ref machineInformations, value); }
+        }
 
         private MachineInformation machineInformationSelected = new MachineInformation();
 
@@ -71,13 +59,11 @@ public  class MachineInformationViewModel : ViewModel
             return result;
         }
 
-
         public SQLQueryResult<MachineInformation> ForceEditing()
         {
             return MySQLDataAccess.ForceToEditMachineInformation(MachineInformationSelected.Id);
         }
-
-
+        
         public void ReleaseEditing()
         {
             Task.Factory.StartNew(() =>
@@ -89,6 +75,11 @@ public  class MachineInformationViewModel : ViewModel
         public SQLQueryResult<MachineInformation> MarkForDeleteMachineInformation()
         {
             return MySQLDataAccess.MarkForDeleteMachineInformation(MachineInformationSelected);
+        }
+
+        public void RefreshByLocation(long id)
+        {
+            MachineInformations = MySQLDataAccess.GetMachineInformationsByLocation(id);
         }
     }
 }

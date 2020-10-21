@@ -255,8 +255,25 @@
                         </StackPanel>
                     </Grid>
                 </StackPanel>
+              
+                <StackPanel x:Name="spMachineInformations" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Background="LightBlue">
+                    <DataGrid  x:Name="dgMachineInformations" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"  SelectionUnit="FullRow" 
+                               local:CustomColumnHeadersProperty.ItemType="{x:Type local:MachineInformationView}" IsReadOnly="True"
+                               CellStyle="{StaticResource Body_Content_DataGrid_Centering}">
+                        <DataGrid.RowStyle >
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="Height" Value="30"/>
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#0078D7" />
+                                        <Setter Property="Foreground" Value="White" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                    </DataGrid>
+                </StackPanel>
 
-                <Frame x:Name="frameMachineInformations" Grid.Row="2"/>
             </Grid>
         </Grid>
         <Grid x:Name="LoadingIndicatorPanel" Background="White">

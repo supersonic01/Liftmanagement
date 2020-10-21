@@ -1,19 +1,7 @@
-﻿using Liftmanagement.ViewModels;
-using System;
-using System.Collections.Generic;
+﻿using Liftmanagement.Models;
+using Liftmanagement.ViewModels;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Liftmanagement.Models;
 
 namespace Liftmanagement.Views
 {
@@ -39,7 +27,6 @@ namespace Liftmanagement.Views
             BindingControl(dgLocations, () => LocationsVM.Locations);
 
             txtExpanderHeader.Text = new CategoryViewModel().Categories.Where(c => c.MangementType == Helper.Helper.TTypeMangement.Location).Select(c => c.Name).FirstOrDefault();
-            expanderLocations.Expanded += ExpanderLocations_Expanded;
             expanderLocations.Expanded += ExpanderLocations_Expanded;
             expanderLocations.Collapsed += ExpanderLocations_Collapsed;
         }

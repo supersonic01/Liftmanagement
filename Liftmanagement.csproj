@@ -171,6 +171,7 @@
     </ApplicationDefinition>
     <Compile Include="BusinessLogic\GoogleManagement\DriveLiftmanagement.cs" />
     <Compile Include="CollectionExtensions\ObservableCollectionExtension.cs" />
+    <Compile Include="Common\DatetimeRule.cs" />
     <Compile Include="Common\MandatoryRule.cs" />
     <Compile Include="Common\NumberRangeRule.cs" />
     <Compile Include="Common\RelayCommand.cs" />
@@ -178,6 +179,8 @@
     <Compile Include="Common\TraceValidationRule.cs" />
     <Compile Include="Common\ValidationError.cs" />
     <Compile Include="Common\ValidationErrorContainer.cs" />
+    <Compile Include="Converters\DateFixerConverter.cs" />
+    <Compile Include="Converters\DateDateConverter.cs" />
     <Compile Include="Converters\DateTimeConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\LabelMultiValueConverter.cs" />
@@ -243,6 +246,9 @@
       <DependentUpon>CustomerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DataGridBehavior.cs" />
+    <Compile Include="Views\DateTimePicker.xaml.cs">
+      <DependentUpon>DateTimePicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\FilterableComboBox.cs" />
     <Compile Include="Views\GoogleDriveDialogueView.cs" />
     <Compile Include="Views\GoogleDriveTreeView.xaml.cs">
@@ -323,6 +329,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CustomerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DateTimePicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

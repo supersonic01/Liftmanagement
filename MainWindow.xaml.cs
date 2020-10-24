@@ -70,14 +70,14 @@ namespace Liftmanagement
 
             //MySQLDataAccess.GetCustomers();
 
-            //Helper.Helper.GenerateInsert( typeof(MachineInformation));
+            //Helper.Helper.GenerateInsert( typeof(MaintenanceAgreement));
             //  Helper.Helper.GenerateInsert(typeof(AdministratorCompany));
             
-           // Helper.Helper.GenerateSelect(typeof(MachineInformation));
+            //Helper.Helper.GenerateSelect(typeof(MaintenanceAgreement));
             //Helper.Helper.GenerateSelect(typeof(AdministratorCompany));
             //Helper.Helper.GenerateSelect(typeof(ContactPartner));
 
-           // Helper.Helper.GenerateUpdate(typeof(MachineInformation));
+          //  Helper.Helper.GenerateUpdate(typeof(MaintenanceAgreement));
             //Helper.Helper.GenerateUpdate(typeof(AdministratorCompany));
             //Helper.Helper.GenerateUpdate(typeof(Location));
 

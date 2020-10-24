@@ -16,21 +16,14 @@ namespace Liftmanagement.ViewModels
     {
 
         private ObservableCollection<Customer> customers = new ObservableCollection<Customer>();
-        private List<Location> locations = new List<Location>();
-        private List<MachineInformation> machineInformations = new List<MachineInformation>();
+        private ObservableCollection<Location> locations = new ObservableCollection<Location>();
+        private ObservableCollection<MachineInformation> machineInformations = new ObservableCollection<MachineInformation>();
 
-        public List<Location> Locations
+        public ObservableCollection<Location> Locations
         {
             get { return locations; }
             set { SetField(ref locations, value); }
         }
-
-
-        //public List<Customer> Customers
-        //{
-        //    get { return customers; }
-        //    set { SetField(ref customers, value); }
-        //}
 
         public ObservableCollection<Customer> Customers
         {
@@ -38,26 +31,23 @@ namespace Liftmanagement.ViewModels
             set { SetField(ref customers, value); }
         }
 
-
-
-        public List<MachineInformation> MachineInformations
+        public ObservableCollection<MachineInformation> MachineInformations
         {
             get { return machineInformations; }
             set { SetField(ref machineInformations, value); }
         }
 
-        private List<AdministratorCompany> administrators;
+        private ObservableCollection<AdministratorCompany> administrators;
 
-        public List<AdministratorCompany> Administrators
+        public ObservableCollection<AdministratorCompany> Administrators
         {
             get
             {
-                administrators = new List<AdministratorCompany>(customers.Select(c => c.Administrator));
+                administrators = new ObservableCollection<AdministratorCompany>(customers.Select(c => c.Administrator));
 
                 return administrators;
             }
         }
-
 
         private Customer customerSelected = new Customer();
 
@@ -76,7 +66,11 @@ namespace Liftmanagement.ViewModels
         public Location LocationSelected
         {
             get { return locationSelected; }
-            set { SetField(ref locationSelected, value); }
+            set
+            {
+                SetField(ref locationSelected, value);
+                RefreshMachineInformation();
+            }
         }
 
         private MachineInformation machineInformationSelected = new MachineInformation();
@@ -90,40 +84,58 @@ namespace Liftmanagement.ViewModels
             }
         }
 
-
         public Helper.Helper.TTypeMangement MangementType { get; set; }
 
         public void RefreshCustomer()
         {
+            customers.Clear();
             customers.Add(Customer.GetDummy());
-            Customers= customers.AddRange(MySQLDataAccess.GetCustomers());
+            Customers = customers.AddRange(MySQLDataAccess.GetCustomers());
         }
-
-     
 
         public void RefreshLocation()
         {
-            if(customerSelected.Id == locationSelected.CustomerId)
+            if (customerSelected== null || customerSelected.Id == locationSelected.CustomerId)
                 return;
 
-            if (CustomerSelected.Id < 0)
+            locations.Clear();
+            if (MangementType != Helper.Helper.TTypeMangement.MachineInformation)
+                locations.Add(Location.GetDummy());
+
+            if (customerSelected.Id < -1)
             {
-                Locations = MySQLDataAccess.GetLocations();
+                Locations = locations.AddRange(MySQLDataAccess.GetLocations());
             }
             else
             {
-                Locations = MySQLDataAccess.GetLocations(CustomerSelected);
+                Locations = locations.AddRange(MySQLDataAccess.GetLocations(CustomerSelected));
+            }
+        }
+
+        private void RefreshMachineInformation()
+        {
+            if (locationSelected==null || locationSelected.Id == machineInformationSelected.LocationId)
+                return;
+
+            machineInformations.Clear();
+            if (locationSelected.Id < -1)
+            {
+                MachineInformations = machineInformations.AddRange(MySQLDataAccess.GetMachineInformations());
+            }
+            else
+            {
+                MachineInformations = machineInformations.AddRange(MySQLDataAccess.GetMachineInformations(locationSelected));
             }
         }
 
         public void RefreshLocation(Customer customer)
         {
-            Locations = MySQLDataAccess.GetLocations(customer);
+            Locations = new ObservableCollection<Location>(MySQLDataAccess.GetLocations(customer));
         }
 
         public void RefreshLocationByCustomer(long id)
         {
-            Locations = MySQLDataAccess.GetLocations(id);
+            Locations = new ObservableCollection<Location>(MySQLDataAccess.GetLocations(id));
         }
 
     }

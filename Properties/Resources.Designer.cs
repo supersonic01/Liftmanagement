@@ -97,6 +97,15 @@ namespace Liftmanagement.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vollwartung.
+        /// </summary>
+        public static string fullService {
+            get {
+                return ResourceManager.GetString("fullService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Monate.
         /// </summary>
         public static string months {
@@ -106,11 +115,29 @@ namespace Liftmanagement.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Systemwartung.
+        /// </summary>
+        public static string systemService {
+            get {
+                return ResourceManager.GetString("systemService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wochen.
         /// </summary>
         public static string weeks {
             get {
                 return ResourceManager.GetString("weeks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to jährlich.
+        /// </summary>
+        public static string yearly {
+            get {
+                return ResourceManager.GetString("yearly", resourceCulture);
             }
         }
     }

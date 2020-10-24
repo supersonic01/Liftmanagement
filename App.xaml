@@ -7,5 +7,6 @@
     <Application.Resources>
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"></converters:InverseBooleanConverter>
         <converters:DateTimeConverter x:Key="DateTimeConverter"></converters:DateTimeConverter>
+        <converters:DateFixerConverter x:Key="DateFixerConverter"></converters:DateFixerConverter>
     </Application.Resources>
 </Application>

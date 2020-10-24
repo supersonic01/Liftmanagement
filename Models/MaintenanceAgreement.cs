@@ -14,11 +14,25 @@ namespace Liftmanagement.Models
         public long CustomerId { get; set; }
         public long MachineInformationId { get; set; }
 
+
+
+        private DateTime duration = DateTime.Now;
         /// <summary>
         /// Laufzeit Vertrag bis 31.12.2019
         /// </summary>
         [DisplayName("Laufzeit Vertrag")]
-        public DateTime Duration { get; set; }
+        public DateTime Duration
+        {
+            get { return duration; }
+            set
+            {
+                if (value.Date < Helper.Helper.DefaultDate.Date)
+                {
+                    value = DateTime.Now;
+                }
+                SetField(ref duration, value);
+            }
+        }
 
         /// <summary>
         /// jährlich Kündbar
@@ -30,19 +44,31 @@ namespace Liftmanagement.Models
         /// durch Kunde
         /// </summary>
         [DisplayName("Vertrag gekündigt durch")]
-        public string ArreementCancelledBy { get; set; }
+        public string AgreementCancelledBy { get; set; }
 
         /// <summary>
         /// Frist 3 Monate vorher
         /// </summary>
         [DisplayName("Kündigungsfrist")]
-        public int NoticeOfPeriod { get; set; }
+        public int NoticeOfPeriod { get; set; } = 3;
 
+        private DateTime agreementDate = DateTime.Now;
         /// <summary>
         /// abgeschlossen: 01/01/2011
         /// </summary>
         [DisplayName("Vertragsdatum")]
-        public DateTime AgreementDate { get; set; }
+        public DateTime AgreementDate
+        {
+            get { return agreementDate; }
+            set
+            {
+                if (value.Date < Helper.Helper.DefaultDate.Date)
+                {
+                    value = DateTime.Now;
+                }
+                agreementDate = value;
+            }
+        }
 
         /// <summary>
         /// Vollwartung, Systemwartung
@@ -57,36 +83,29 @@ namespace Liftmanagement.Models
         /// <summary>
         /// 10, 14 Tage, Wochen
         /// </summary>
-        [DisplayName("Vertragsdatum")]
+        [DisplayName("Benachrichtigung")]
         public int NotificationTime { get; set; }
 
         /// <summary>
         /// Tage, Wochen, Monte
         /// </summary>
+        [DisplayName("Benachrichtigung")]
         public Helper.Helper.NotificationUnitType NotificationUnit { get; set; }
 
         public static string GetIndexFields()
         {
             return nameof(AgreementDate) + "," + nameof(NoticeOfPeriod) + "," + nameof(CanBeCancelled );
         }
+
+        public override string GetFullName()
+        {
+            return string.Format("{0}, {1}, {2}", AgreementDate, NoticeOfPeriod, CanBeCancelled);
+        }
+
+        public override string ToString()
+        {
+            return GetFullName();
+        }
+
     }
 }
-
-/*
- 
-            lblLocationAdditionalInfo.Content = location.GetDisplayName<Location>(nameof(location.AdditionalInfo)) + ":";
-            lblLocationContactPerson.Content = location.GetDisplayName<Location>(nameof(location.ContactPerson)) + ":";
-            lblLocationAddress.Content = location.GetDisplayName<Location>(nameof(location.Address)) + ":";
-            lblLocationPostcode.Content = location.GetDisplayName<Location>(nameof(location.Postcode)) + ":";
-            lblLocationCity.Content = location.GetDisplayName<Location>(nameof(location.City)) + ":";
-            lblLocationPhoneWork.Content = location.GetDisplayName<Location>(nameof(location.PhoneWork)) + ":";
-            lblLocationMobile.Content = location.GetDisplayName<Location>(nameof(location.Mobile)) + ":";
-
-            txtLocationAdditionalInfo.Text = location.AdditionalInfo;
-            txtLocationContactPerson.Text = location.ContactPerson;
-            txtLocationAddress.Text = location.Address;
-            txtLocationPostcode.Text = location.Postcode;
-            txtLocationCity.Text = location.City;
-            txtLocationPhoneWork.Text = location.PhoneWork;
-            txtLocationMobile.Text = location.Mobile;
- */

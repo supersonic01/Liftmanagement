@@ -36,12 +36,12 @@
         <Label x:Name="lblMachineInformation" Grid.Row="0" Grid.Column="2"  Content="Anlage:" Style="{StaticResource LableHeaderStyle}" />
 
         <ComboBox x:Name="cbCustomers" Grid.Row="1" Grid.Column="0"  Style="{StaticResource ComboBoxStyle}"
-                    DisplayMemberPath="FullName" SelectedValuePath="CustomerId"   />
+                    DisplayMemberPath="FullName" SelectedValuePath="Id"   />
         
         <ComboBox x:Name="cbLocations" Grid.Row="1" Grid.Column="1"  Style="{StaticResource ComboBoxStyle}"
-                  DisplayMemberPath="FullName" SelectedValuePath="LocationId"/>
+                  DisplayMemberPath="FullName" SelectedValuePath="Id"/>
         <ComboBox x:Name="cbMachineInformations" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Style="{StaticResource ComboBoxStyle}"
-                  DisplayMemberPath="FullName" SelectedValuePath="MachineInformationId"/>
+                  DisplayMemberPath="FullName" SelectedValuePath="Id"/>
 
 
         <Label Grid.Row="3" Grid.Column="0" Content="Kunde:" Style="{StaticResource LableHeaderStyle}" />

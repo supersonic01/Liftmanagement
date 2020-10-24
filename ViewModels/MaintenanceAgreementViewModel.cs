@@ -2,61 +2,182 @@
 using Liftmanagement.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
+using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
+using Liftmanagement.CollectionExtensions;
+using Liftmanagement.Data;
 
 namespace Liftmanagement.ViewModels
 {
-  public  class MaintenanceAgreementViewModel : ViewModel
+    public class MaintenanceAgreementViewModel : ViewModel
     {
-        //private int myVar;
-
-        //public int MyProperty
-        //{
-        //    get { return myVar; }
-        //    set { SetField(ref myVar, value); }
-        //}
-
-        //private List<Customer> customers = new List<Customer>();
-        //private List<Location> locations = new List<Location>();
-        //private List<MachineInformation> machineInformations = new List<MachineInformation>();
-
-        //public List<Location> Locations
-        //{
-        //    get { return locations; }
-        //    set { SetField(ref locations, value); }
-        //}
-        
-
-        //public List<Customer> Customers
-        //{
-        //    get { return customers; }
-        //    set { customers = value; }
-        //}
-              
-
-        //public List<MachineInformation> MachineInformations
-        //{
-        //    get { return machineInformations; }
-        //    set { machineInformations = value; }
-        //}
 
 
-        //public MaintenanceAgreementViewModel()
-        //{
-        //    customers = TestData.GetCustomers();
-        //    locations = TestData.GetLocations();
-        //    machineInformations = TestData.GetMachineInformations();
-        //}
-       
+        private List<MaintenanceAgreement> maintenanceAgreements = new List<MaintenanceAgreement>();
 
-        //public void LocationsByCustomer(Customer customer)
-        //{
-        //    Locations = TestData.GetLocations().Where(c => c.CustomerId == customer.CustomerId).ToList();
-        //}
-       
+        public List<MaintenanceAgreement> MaintenanceAgreements
+        {
+            get { return maintenanceAgreements; }
+            set { SetField(ref maintenanceAgreements, value); }
+        }
+
+        private ObservableCollection<string> terminationUnits = new ObservableCollection<string>();
+
+        public ObservableCollection<string> TerminationUnits
+        {
+            get { return terminationUnits; }
+            set { SetField(ref terminationUnits, value); }
+        }
+
+        private ObservableCollection<string> maintenanceTypes = new ObservableCollection<string>();
+
+        public ObservableCollection<string> MaintenanceTypes
+        {
+            get { return maintenanceTypes; }
+            set { SetField(ref maintenanceTypes, value); }
+        }
+
+        private Dictionary<Helper.Helper.NotificationUnitType, string> notificationUnits = null;
+
+        public Dictionary<Helper.Helper.NotificationUnitType, string> NotificationUnits
+        {
+            get
+            {
+                if (notificationUnits == null)
+                {
+                    notificationUnits = GetNotificationUnits();
+                }
+                return notificationUnits;
+            }
+        }
+
+        private ObservableCollection<string> arreementCancelledBy = new ObservableCollection<string>();
+
+        public ObservableCollection<string> ArreementCancelledBy
+        {
+            get { return arreementCancelledBy; }
+            set { SetField(ref arreementCancelledBy, value); }
+        }
+
+        private MaintenanceAgreement maintenanceAgreementSelected = new MaintenanceAgreement();
+
+        public MaintenanceAgreement MaintenanceAgreementSelected
+        {
+            get { return maintenanceAgreementSelected; }
+            set
+            {
+                SetField(ref maintenanceAgreementSelected, value);
+            }
+        }
+
+        public MaintenanceAgreement MaintenanceAgreementSelectedLast { get; set; }
+
+        public SQLQueryResult<MaintenanceAgreement> Add(MachineInformation machineInformation)
+        {
+            maintenanceAgreementSelected.ReadOnly = false;
+            SQLQueryResult<MaintenanceAgreement> result = null;
+            if (MaintenanceAgreementSelected.Id > 0)
+            {
+                result = MySQLDataAccess.UpdateMaintenanceAgreement(MaintenanceAgreementSelected);
+            }
+            else
+            {
+                MaintenanceAgreementSelected.CustomerId = machineInformation.CustomerId;
+                MaintenanceAgreementSelected.LocationId = machineInformation.Id;
+                MaintenanceAgreementSelected.MachineInformationId = machineInformation.Id;
+                result = MySQLDataAccess.AddMaintenanceAgreement(MaintenanceAgreementSelected);
+            }
+
+            LoadComboboxes();
+
+            return result;
+        }
+
+        public SQLQueryResult<MaintenanceAgreement> EditMaintenanceAgreement()
+        {
+            var result = MySQLDataAccess.GetMaintenanceAgreementForEdit(MaintenanceAgreementSelected.Id);
+            if (!result.IsReadOnly)
+            {
+                MaintenanceAgreementSelected = result.DBRecords.FirstOrDefault() as MaintenanceAgreement;
+            }
+
+            return result;
+        }
+
+        public SQLQueryResult<MaintenanceAgreement> ForceEditing()
+        {
+            return MySQLDataAccess.ForceToEditMaintenanceAgreement(MaintenanceAgreementSelected.Id);
+        }
+
+        public void ReleaseEditing()
+        {
+            Task.Factory.StartNew(() =>
+            {
+                MySQLDataAccess.ReleaseEditingMaintenanceAgreement(MaintenanceAgreementSelected.Id);
+            });
+        }
+
+        public SQLQueryResult<MaintenanceAgreement> MarkForDeleteMaintenanceAgreement()
+        {
+            return MySQLDataAccess.MarkForDeleteMaintenanceAgreement(MaintenanceAgreementSelected);
+        }
+
+        public void RefreshByMachineInformatio(long id)
+        {
+            MaintenanceAgreements = MySQLDataAccess.GetMaintenanceAgreementsByMachineInformation(id);
+        }
+        public void Refresh(long id)
+        {
+            MaintenanceAgreements = MySQLDataAccess.GetMaintenanceAgreements();
+        }
+
+        public void LoadComboboxes()
+        {
+            SetTerminationUnits();
+            SetArreementCancelledBy();
+            SetMaintenanceType();
+        }
+        private void SetTerminationUnits()
+        {
+            var terminations = maintenanceAgreements.Select(c => c.CanBeCancelled).ToList();
+            terminations.Insert(0,Properties.Resources.yearly);
+           
+            TerminationUnits =new ObservableCollection<string>(terminations.Distinct());
+        }
+        private void SetArreementCancelledBy()
+        {
+            var person = maintenanceAgreements.Select(c => c.AgreementCancelledBy).ToList();
+                person.Insert(0,"Kunde");
+
+                ArreementCancelledBy = new ObservableCollection<string>(person.Distinct());
+        }
+
+        private void SetMaintenanceType()
+        {
+            var maintenance = maintenanceAgreements.Select(c => c.MaintenanceType).ToList();
+            maintenance.Insert(0,Properties.Resources.fullService);
+            maintenance.Insert(0,Properties.Resources.systemService);
+
+            MaintenanceTypes = new ObservableCollection<string>(maintenance.Distinct());
+        }
+
+        private Dictionary<Helper.Helper.NotificationUnitType, string> GetNotificationUnits()
+        {
+            Dictionary<Helper.Helper.NotificationUnitType, string> notificationUnits = new Dictionary<Helper.Helper.NotificationUnitType, string>();
+
+            notificationUnits.Add(Helper.Helper.NotificationUnitType.days, Properties.Resources.ResourceManager.GetString(Helper.Helper.NotificationUnitType.days.ToString()));
+            notificationUnits.Add(Helper.Helper.NotificationUnitType.weeks, Properties.Resources.ResourceManager.GetString(Helper.Helper.NotificationUnitType.weeks.ToString()));
+            notificationUnits.Add(Helper.Helper.NotificationUnitType.months, Properties.Resources.ResourceManager.GetString(Helper.Helper.NotificationUnitType.months.ToString()));
+
+           return notificationUnits;
+        }
 
 
     }
+
+
 }

@@ -37,12 +37,12 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0" >
-                    <Grid>
+                    <Grid Background="#FFE5E5E5">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" x:Name="MasterDatatInfo"/>
                             <RowDefinition Height="10" />
                         </Grid.RowDefinitions>
-                        <Frame x:Name="frameMasterDataInfo" Grid.Row="0"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                        <Frame x:Name="frameMasterDataInfo" Grid.Row="0"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  />
                         <Line  Grid.Row="1"  X1="0" Y1="0" X2="1"  Y2="0" Stroke="Black" StrokeThickness="2" Stretch="Uniform"/>
                     </Grid>
                 </StackPanel>
@@ -78,6 +78,9 @@
 
                         <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5"  Content="Anlage" FontSize="24" Margin="10" Padding="10"
                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center"/>
+                        <Image x:Name="imageIsEnabled" Grid.Row="2" Grid.Column="0"  Height="40" HorizontalAlignment="Left" Margin="10,0,0,0"
+                               Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=EnabledBitmapImage}"/>
+
 
                         <Label x:Name="lblName" Grid.Row="3" Grid.Column="0"  Style="{StaticResource LableStyle}" />
                         <Label x:Name="lblYearOfConstruction" Grid.Row="3" Grid.Column="1"  Style="{StaticResource LableStyle}" />

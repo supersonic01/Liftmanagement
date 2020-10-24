@@ -132,10 +132,19 @@
   <data name="days" xml:space="preserve">
     <value>Tage</value>
   </data>
+  <data name="fullService" xml:space="preserve">
+    <value>Vollwartung</value>
+  </data>
   <data name="months" xml:space="preserve">
     <value>Monate</value>
   </data>
+  <data name="systemService" xml:space="preserve">
+    <value>Systemwartung</value>
+  </data>
   <data name="weeks" xml:space="preserve">
     <value>Wochen</value>
+  </data>
+  <data name="yearly" xml:space="preserve">
+    <value>jährlich</value>
   </data>
 </root>

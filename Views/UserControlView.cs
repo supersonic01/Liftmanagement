@@ -48,22 +48,22 @@ namespace Liftmanagement.Views
         #endregion
 
 
-        private List<TextBox> textBoxes = null;
+        private List<Control> textBoxes = null;
 
-        public List<TextBox> TextBoxes
+        public List<Control> TextBoxes
         {
             get
             {
                 if (textBoxes == null)
                 {
-                    FindTextBoxex(this, textBoxes = new List<TextBox>());
+                    FindTextBoxex(this, textBoxes = new List<Control>());
                 }
                 return textBoxes;
             }
         }
 
-       private BitmapImage enabledBitmapImage = new BitmapImage(new Uri("pack://application:,,,../Resources/Images/Icons/Custom-Icon-Design-Flatastic-10-Edit-validated.ico", UriKind.RelativeOrAbsolute));
-       public BitmapImage EnabledBitmapImage
+        private BitmapImage enabledBitmapImage = new BitmapImage(new Uri("pack://application:,,,../Resources/Images/Icons/Custom-Icon-Design-Flatastic-10-Edit-validated.ico", UriKind.RelativeOrAbsolute));
+        public BitmapImage EnabledBitmapImage
         {
             get { return enabledBitmapImage; }
             set { SetField(ref enabledBitmapImage, value); }
@@ -194,13 +194,13 @@ namespace Liftmanagement.Views
             {
                 binding.StringFormat = stringFormat;
             }
-            
+
             control.SetBinding(dp, binding);
         }
 
-        protected virtual void BindingText<T>(Control control, Expression<Func<T>> action, string stringFormat = null,bool validate = false, Func<ValidationRule> validationRule = null)
+        protected virtual void BindingText<T>(Control control, Expression<Func<T>> action, string stringFormat = null, bool validate = false, Func<ValidationRule> validationRule = null)
         {
-            BindingItem1(control, TextBox.TextProperty, GetPropertyPath(action),stringFormat);
+            BindingItem1(control, TextBox.TextProperty, GetPropertyPath(action), stringFormat);
 
             if (validate && validationRule != null)
             {
@@ -217,7 +217,7 @@ namespace Liftmanagement.Views
             BindingItem1(control, Label.ContentProperty, GetPropertyPath(action));
         }
 
-        protected virtual void MultiBindingLabel<T>(Control control,  Expression<Func<T>> action1, Expression<Func<T>> action2)
+        protected virtual void MultiBindingLabel<T>(Control control, Expression<Func<T>> action1, Expression<Func<T>> action2)
         {
             Binding binding1 = new Binding(GetPropertyPath(action1))
             {
@@ -245,10 +245,10 @@ namespace Liftmanagement.Views
                 Source = this,
             };
             var dd = new Liftmanagement.Converters.DateTimeConverter();
-            binding.Converter =dd;
+            binding.Converter = dd;
 
             control.SetBinding(TextBox.TextProperty, binding);
-           
+
         }
 
         protected virtual void BindingText(Control control, string path)
@@ -261,6 +261,11 @@ namespace Liftmanagement.Views
             BindingItem(control, ComboBox.SelectedItemProperty, string.Format("{0}.{1}", SourceObjectStringName, path));
         }
 
+        protected virtual void BindingComboBoxSelectedItem<T>(Control control, Expression<Func<T>> action)
+        {
+            BindingItem(control, ComboBox.SelectedItemProperty, GetPropertyPath(action));
+        }
+
         protected virtual void BindingCheckBox(Control control, string path)
         {
             BindingItem(control, CheckBox.IsCheckedProperty, string.Format("{0}.{1}", SourceObjectStringName, path));
@@ -271,9 +276,62 @@ namespace Liftmanagement.Views
             BindingItem1(control, CheckBox.IsCheckedProperty, GetPropertyPath(action));
         }
 
+        protected virtual void BindingComboBoxText<T>(Control control, Expression<Func<T>> action)
+        {
+            var binding = new Binding(GetPropertyPath(action))
+            {
+                Source = this,
+            };
+
+            binding.Mode = BindingMode.TwoWay;
+
+            control.SetBinding(ComboBox.TextProperty, binding);
+        }
+
         protected virtual void BindingDatePicker(Control control, string path)
         {
             BindingItem(control, DatePicker.SelectedDateProperty, string.Format("{0}.{1}", SourceObjectStringName, path), "dd.MM.yyyy");
+        }
+
+        protected virtual void BindingDatePicker<T>(Control control, Expression<Func<T>> action, bool validate = false, Func<ValidationRule> validationRule = null)
+        {
+            // BindingItem1(control, DatePicker.SelectedDateProperty,  GetPropertyPath(action), "dd.MM.yyyy");
+
+            string stringFormat = "dd.MM.yyyy";
+            var binding = new Binding(GetPropertyPath(action))
+            {
+                Source = this,
+            };
+
+            binding.Mode = BindingMode.TwoWay;
+            //binding.StringFormat = stringFormat;
+            binding.Converter = new Liftmanagement.Converters.DateDateConverter();
+
+            control.SetBinding(DatePicker.SelectedDateProperty, binding);
+            control.SetBinding(DatePicker.TextProperty, binding);
+
+            //if (validate && validationRule != null)
+            //{
+            //    Binding bindingtxt = BindingOperations.GetBinding(control, DatePicker.TextProperty);
+            //    bindingtxt.ValidationRules.Clear();
+            //    bindingtxt.ValidationRules.Add(validationRule());
+            //    control.LostFocus += DatePicker_LostFocus; ;
+            //}
+        }
+
+     
+        private void DatePicker_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var db = (Control)sender;
+            //Validation.ClearInvalid(db.GetBindingExpression(DatePicker.SelectedDateProperty));
+            //Validation.ClearInvalid(db.GetBindingExpression(DatePicker.TextProperty));
+            ((Control)sender).GetBindingExpression(DatePicker.TextProperty).UpdateSource();
+           // ((Control)sender).GetBindingExpression(DatePicker.SelectedDateProperty).UpdateSource();
+        }
+
+        private void Dd_LostFocus(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         protected virtual void BindingComboBox(Control control, string path)
@@ -281,6 +339,29 @@ namespace Liftmanagement.Views
             BindingItem(control, ComboBox.ItemsSourceProperty, path);
         }
 
+        protected virtual void BindingComboBoxBindingModeOneWay<T>(Control control, Expression<Func<T>> action)
+        {
+            var binding = new Binding(ViewModelName + "." + GetPropertyPath(action))
+            {
+                Source = this,
+            };
+
+            binding.Mode = BindingMode.OneWay;
+
+            control.SetBinding(ComboBox.ItemsSourceProperty, binding);
+        }
+
+        protected virtual void BindingComboBoxSelectedValue<T>(Control control, Expression<Func<T>> action)
+        {
+            var binding = new Binding(ViewModelName + "." + GetPropertyPath(action))
+            {
+                Source = this,
+            };
+
+            binding.Mode = BindingMode.TwoWay;
+
+            control.SetBinding(ComboBox.SelectedValueProperty, binding);
+        }
         protected virtual void BindingHyperlink(Hyperlink hyperlink, string path)
         {
             //TODO Rework
@@ -321,12 +402,21 @@ namespace Liftmanagement.Views
             return temp.Substring(temp.IndexOf(')') + 2);
         }
 
-        private void FindTextBoxex(object uiElement, IList<TextBox> foundOnes)
+        private void FindTextBoxex(object uiElement, IList<Control> foundOnes)
         {
             if (uiElement is TextBox)
             {
                 foundOnes.Add((TextBox)uiElement);
             }
+            else if (uiElement is ComboBox)
+            {
+                foundOnes.Add((ComboBox)uiElement);
+            }
+            else if (uiElement is DatePicker)
+            {
+                foundOnes.Add((DatePicker)uiElement);
+            }
+
             else if (uiElement is Panel)
             {
                 var uiElementAsCollection = (Panel)uiElement;
@@ -352,6 +442,8 @@ namespace Liftmanagement.Views
             }
         }
 
+
+
         protected virtual void EnableContoles(bool enable)
         {
             IsReadOnly = enable;
@@ -360,7 +452,7 @@ namespace Liftmanagement.Views
             {
                 textBox.IsEnabled = enable;
             }
-            
+
             Uri iconUri = null;
             if (enable)
             {
@@ -424,7 +516,7 @@ namespace Liftmanagement.Views
                 txtBox.GotMouseCapture += Txt_OnGotMouseCapture;
             }
         }
-        
+
         #region Validation
 
         public virtual void OnLoad(object sender, System.Windows.RoutedEventArgs e)
@@ -449,7 +541,7 @@ namespace Liftmanagement.Views
             {
                 if (ErrorContainer != null)
                 {
-                   // Tracer.LogValidation("ViewBase.Handler called for ValidationRule exception.");
+                    // Tracer.LogValidation("ViewBase.Handler called for ValidationRule exception.");
 
                     // Only want to work with validation errors that are Exceptions because the business object has already recorded the business rule violations using IDataErrorInfo.
                     BindingExpression bindingExpression = args.Error.BindingInError as System.Windows.Data.BindingExpression;

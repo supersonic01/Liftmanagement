@@ -26,6 +26,12 @@ namespace Liftmanagement.Data
             databaseConnection = new MySqlConnection(connectionString);
         }
 
+        public static MySqlConnection GetConnection()
+        {
+            string connectionString = GetConnectionString();
+            return  new MySqlConnection(connectionString);
+        }
+
         public static void CreateTables()
         {
             if (databaseConnection == null)
@@ -179,23 +185,19 @@ namespace Liftmanagement.Data
 
         public static SQLQueryResult<MaintenanceAgreement> AddMaintenanceAgreement(MaintenanceAgreement maintenanceagreement)
         {
-            if (databaseConnection == null)
-            {
-                CreateConnection();
-            }
+            var dbConnection = GetConnection();
 
-            string query = "INSERT INTO MAINTENANCEAGREEMENT(LocationId,CustomerId,MachineInformationId,Duration,CanBeCancelled,ArreementCancelledBy,NoticeOfPeriod,AgreementDate,MaintenanceType,AdditionalInfo,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
-            string values = "VALUE(" + maintenanceagreement.LocationId + "," + maintenanceagreement.CustomerId + "," + maintenanceagreement.MachineInformationId + ",'" + maintenanceagreement.Duration + "','" + maintenanceagreement.CanBeCancelled + "','" + maintenanceagreement.ArreementCancelledBy + "'," + maintenanceagreement.NoticeOfPeriod + ",'" + maintenanceagreement.AgreementDate + "','" + maintenanceagreement.MaintenanceType + "','" + maintenanceagreement.AdditionalInfo + "','" + maintenanceagreement.CreatedPersonName + "','" + maintenanceagreement.ModifiedPersonName + "'," + maintenanceagreement.ReadOnly + ",'" + maintenanceagreement.UsedBy + "')";
+            string query = "INSERT INTO MAINTENANCEAGREEMENT(LocationId,CustomerId,MachineInformationId,Duration,CanBeCancelled,AgreementCancelledBy,NoticeOfPeriod,AgreementDate,MaintenanceType,AdditionalInfo,NotificationTime,NotificationUnit,GoogleDriveFolderName,GoogleDriveLink,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy,Deleted)";
+            string values = "VALUE(" + maintenanceagreement.LocationId + "," + maintenanceagreement.CustomerId + "," + maintenanceagreement.MachineInformationId + ",'" + maintenanceagreement.Duration.ToString("yyyy-MM-dd") + "','" + maintenanceagreement.CanBeCancelled + "','" + maintenanceagreement.AgreementCancelledBy + "'," + maintenanceagreement.NoticeOfPeriod + ",'" + maintenanceagreement.AgreementDate.ToString("yyyy-MM-dd") + "','" + maintenanceagreement.MaintenanceType + "','" + maintenanceagreement.AdditionalInfo + "'," + maintenanceagreement.NotificationTime + "," + (int) maintenanceagreement.NotificationUnit + ",'" + maintenanceagreement.GoogleDriveFolderName + "','" + maintenanceagreement.GoogleDriveLink + "','" + maintenanceagreement.CreatedPersonName + "','" + maintenanceagreement.ModifiedPersonName + "'," + maintenanceagreement.ReadOnly + ",'" + maintenanceagreement.UsedBy + "'," + maintenanceagreement.Deleted + ")";
             query = query + values;
+            
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
-
-            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
-
-            databaseConnection.Open();
+            dbConnection.Open();
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
 
-            databaseConnection.Close();
+            dbConnection.Close();
 
             return new SQLQueryResult<MaintenanceAgreement>(records, id);
         }
@@ -457,9 +459,13 @@ namespace Liftmanagement.Data
 
         public static List<MaintenanceAgreement> GetMaintenanceAgreements()
         {
-            List<MaintenanceAgreement> maintenanceagreements = new List<MaintenanceAgreement>();
-
             string query = "SELECT * FROM MAINTENANCEAGREEMENT";
+            return GetMaintenanceAgreements(query);
+        }
+
+        private static List<MaintenanceAgreement> GetMaintenanceAgreements( string query)
+        {
+            List<MaintenanceAgreement> maintenanceAgreements = new List<MaintenanceAgreement>();
 
             SelectItems(query, reader =>
             {
@@ -469,11 +475,15 @@ namespace Liftmanagement.Data
                 maintenanceagreement.MachineInformationId = reader.GetInt64("MachineInformationId");
                 maintenanceagreement.Duration = reader.GetDateTime("Duration");
                 maintenanceagreement.CanBeCancelled = reader.GetString("CanBeCancelled");
-                maintenanceagreement.ArreementCancelledBy = reader.GetString("ArreementCancelledBy");
+                maintenanceagreement.AgreementCancelledBy = reader.GetString("AgreementCancelledBy");
                 maintenanceagreement.NoticeOfPeriod = reader.GetInt32("NoticeOfPeriod");
                 maintenanceagreement.AgreementDate = reader.GetDateTime("AgreementDate");
                 maintenanceagreement.MaintenanceType = reader.GetString("MaintenanceType");
                 maintenanceagreement.AdditionalInfo = reader.GetString("AdditionalInfo");
+                maintenanceagreement.NotificationTime = reader.GetInt32("NotificationTime");
+                maintenanceagreement.NotificationUnit = (Helper.Helper.NotificationUnitType) reader.GetInt32("NotificationUnit");
+                maintenanceagreement.GoogleDriveFolderName = reader.GetString("GoogleDriveFolderName");
+                maintenanceagreement.GoogleDriveLink = reader.GetString("GoogleDriveLink");
                 maintenanceagreement.Id = reader.GetInt64("Id");
                 maintenanceagreement.CreatedDate = reader.GetDateTime("CreatedDate");
                 maintenanceagreement.ModifiedDate = reader.GetDateTime("ModifiedDate");
@@ -481,15 +491,12 @@ namespace Liftmanagement.Data
                 maintenanceagreement.ModifiedPersonName = reader.GetString("ModifiedPersonName");
                 maintenanceagreement.ReadOnly = reader.GetBoolean("ReadOnly");
                 maintenanceagreement.UsedBy = reader.GetString("UsedBy");
-                maintenanceagreements.Add(maintenanceagreement);
+                maintenanceagreement.Deleted = reader.GetBoolean("Deleted");
+                maintenanceAgreements.Add(maintenanceagreement);
             });
-            return maintenanceagreements;
+
+            return maintenanceAgreements;
         }
-
-
-
-
-
 
         public static SQLQueryResult<Customer> UpdateCustomer(Customer customer)
         {
@@ -1000,6 +1007,54 @@ namespace Liftmanagement.Data
             });
 
             return customers;
+        }
+
+        public static SQLQueryResult<MaintenanceAgreement> UpdateMaintenanceAgreement(MaintenanceAgreement maintenanceagreement)
+        {
+            var dbConnection = GetConnection();
+
+            maintenanceagreement.ModifiedPersonName = Helper.Helper.GetPersonName();
+            string query = "UPDATE MAINTENANCEAGREEMENT SET LocationId = " + maintenanceagreement.LocationId + ",CustomerId = " + maintenanceagreement.CustomerId + ",MachineInformationId = " + maintenanceagreement.MachineInformationId + ",Duration = '" + maintenanceagreement.Duration.ToString("yyyy-MM-dd") + "',CanBeCancelled = '" + maintenanceagreement.CanBeCancelled + "',AgreementCancelledBy = '" + maintenanceagreement.AgreementCancelledBy + "',NoticeOfPeriod = " + maintenanceagreement.NoticeOfPeriod + ",AgreementDate = '" + maintenanceagreement.AgreementDate.ToString("yyyy-MM-dd") + "',MaintenanceType = '" + maintenanceagreement.MaintenanceType + "',AdditionalInfo = '" + maintenanceagreement.AdditionalInfo + "',NotificationTime = " + maintenanceagreement.NotificationTime + ",NotificationUnit = " + (int) maintenanceagreement.NotificationUnit + ",GoogleDriveFolderName = '" + maintenanceagreement.GoogleDriveFolderName + "',GoogleDriveLink = '" + maintenanceagreement.GoogleDriveLink + "',CreatedPersonName = '" + maintenanceagreement.CreatedPersonName + "',ModifiedPersonName = '" + maintenanceagreement.ModifiedPersonName + "',ReadOnly = " + maintenanceagreement.ReadOnly + ",UsedBy = '" + maintenanceagreement.UsedBy + "',Deleted = " + maintenanceagreement.Deleted + " WHERE ID = " + maintenanceagreement.Id;
+
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
+
+            dbConnection.Open();
+            int records = execQuery.ExecuteNonQuery();
+            var result = new SQLQueryResult<MaintenanceAgreement>(records, maintenanceagreement.Id);
+            dbConnection.Close();
+
+            return result;
+        }
+
+        public static SQLQueryResult<MaintenanceAgreement> GetMaintenanceAgreementForEdit(long id)
+        {
+            return GetRecordForEdit(id, query => GetMaintenanceAgreements(query));
+        }
+
+        public static SQLQueryResult<MaintenanceAgreement> ForceToEditMaintenanceAgreement(long id)
+        {
+            return ForceToEdit<MaintenanceAgreement>(id);
+        }
+
+        public static void ReleaseEditingMaintenanceAgreement(long id)
+        {
+            ReleaseEditing<MaintenanceAgreement>(id);
+        }
+
+        public static SQLQueryResult<MaintenanceAgreement> MarkForDeleteMaintenanceAgreement(MaintenanceAgreement maintenanceAgreement)
+        {
+            return MarkForDeletion<MaintenanceAgreement>(maintenanceAgreement);
+        }
+
+        public static List<MaintenanceAgreement> GetMaintenanceAgreementsByMachineInformation(long id)
+        {
+            string query = "SELECT * FROM MAINTENANCEAGREEMENT WHERE MACHINEINFORMATIONID = " + id;
+            return GetMaintenanceAgreements(query);
+        }
+
+        public static List<string> GetMaintenanceAgreementTerminationUnits()
+        {
+            throw new NotImplementedException();
         }
     }
 }

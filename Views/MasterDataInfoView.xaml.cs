@@ -34,6 +34,7 @@ namespace Liftmanagement.Views
 
             cbCustomers.SelectionChanged += CbCustomers_SelectionChanged;
             cbLocations.SelectionChanged += CbLocations_SelectionChanged;
+            cbMachineInformations.SelectionChanged += CbMachineInformations_SelectionChanged;
 
             if (mangementType == Helper.Helper.TTypeMangement.MachineInformation)
                 CollapsedMachineInformations();
@@ -60,7 +61,7 @@ namespace Liftmanagement.Views
             spMachineInformationDetail.Visibility = Visibility.Collapsed;
 
             cbMachineInformations.SelectionChanged += CbMachineInformations_SelectionChanged;
-            cbMachineInformations.SelectedIndex = 0;
+            //cbMachineInformations.SelectedIndex = 0;
         }
 
         private void AssigneValuesToControl()
@@ -103,6 +104,7 @@ namespace Liftmanagement.Views
         private void CbLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             MasterDataInfoVM.LocationSelected = GetSelectedObject<Location>(sender);
+            cbMachineInformations.SelectedIndex = 0;
         }
 
         private void CbCustomers_SelectionChanged(object sender, SelectionChangedEventArgs e)

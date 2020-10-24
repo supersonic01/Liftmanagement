@@ -111,6 +111,7 @@ namespace Liftmanagement.Views
                 gridResizableMachineInformation.IsEnabled = true;
             }, TaskScheduler.FromCurrentSynchronizationContext());
 
+            EnableContoles(false);
         }
 
         private void CbLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -272,9 +273,9 @@ namespace Liftmanagement.Views
                 var result = MachineInformationVM.Add(masterDataInfo.MasterDataInfoVM.LocationSelected);
                 if (result.Records > 0)
                 {
-                    machineInformationsView.MachineInformationsVM.RefreshByLocation(masterDataInfo.MasterDataInfoVM.LocationSelected.Id);
-                    var machineInformation = machineInformationsView.dgMachineInformations.Items.Cast<MachineInformation>().Single(c => c.Id == result.Id);
-                    machineInformationsView.dgMachineInformations.SelectedItem = machineInformation;
+                    MachineInformationVM.RefreshByLocation(masterDataInfo.MasterDataInfoVM.LocationSelected.Id);
+                    var machineInformation = dgMachineInformations.Items.Cast<MachineInformation>().Single(c => c.Id == result.Id);
+                    dgMachineInformations.SelectedItem = machineInformation;
 
                     var titel = string.Format("Anlage : {0}", machineInformation.GetFullName());
                     var msg = "Anlagedaten wurden gespeichert.";
@@ -332,7 +333,7 @@ namespace Liftmanagement.Views
                 MachineInformationVM.ReleaseEditing();
             }
 
-            MachineInformationVM.MachineInformationSelected = (MachineInformation)machineInformationsView.dgMachineInformations.SelectedItem;
+            MachineInformationVM.MachineInformationSelected = (MachineInformation) dgMachineInformations.SelectedItem;
             EnableContoles(false);
 
         }

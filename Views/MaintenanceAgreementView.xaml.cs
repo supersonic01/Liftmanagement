@@ -17,66 +17,87 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Liftmanagement.Common;
 
 namespace Liftmanagement.Views
 {
     /// <summary>
     /// Interaction logic for MaintenanceAgreementView.xaml
     /// </summary>
-    public partial class MaintenanceAgreementView : UserControl
+    public partial class MaintenanceAgreementView : GoogleDriveDialogueView
     {
-        private CustomersView customersView;
+        private CustomersView customersView ;
+        private LocationsView locationsView ;
         private MachineInformationsView machineInfosView;
         private MasterDataInfoView masterDataInfo;
+
+        public MaintenanceAgreementViewModel MaintenanceAgreementVM { get; set; } = new MaintenanceAgreementViewModel();
 
         public MaintenanceAgreementView()
         {
             InitializeComponent();
+            AssignSelectAllForTextBoxes();
 
+            var customersVM = new CustomersViewModel();
+            customersVM.RefreshOnlyCustomers();
             customersView = new CustomersView();
-            //customersView.spCustomers.MinWidth = 50;
+            customersView.CustomersVM = customersVM;
             frameCustomers.Content = customersView;
 
-           var locationsView = new LocationsView();
-            //locationsView.spLocations.MinWidth = 50;
+            locationsView = new LocationsView();
             frameLocations.Content = locationsView;
 
-            machineInfosView = new MachineInformationsView();
-            machineInfosView.NotVisibleColumns.AddRange ( MachineInformation.GetPropertiesStringNames<MachineInformation>(new List<string> { "Name", "SerialNumber", "YearOfConstruction" }));
-            frameMachineInformations.Content = machineInfosView;
+            var machineInformationsView = new MachineInformationsView();
+            machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.GoogleDriveFolderName));
+            machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.ContactPerson));
+            machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.Description));
+            machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.Payload));
+            machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.Entrances));
+            machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.HoldingPositions));
+            frameMachineInformations.Content = machineInformationsView;
 
-            var maintenanceAgreementsView = new MaintenanceAgreementsView();
-            frameMaintenanceAgreements.Content = maintenanceAgreementsView;
-            maintenanceAgreementsView.dgMaintenanceAgreements.SelectionChanged += DgMaintenanceAgreements_SelectionChanged;
+            masterDataInfo = new MasterDataInfoView(Helper.Helper.TTypeMangement.MaintenanceAgreement);
+            masterDataInfo.cbMachineInformations.SelectionChanged += CbMachineInformations_SelectionChanged;
 
-            masterDataInfo = new MasterDataInfoView( Helper.Helper.TTypeMangement.MaintenanceAgreement);
+            masterDataInfo.RefreshCustomers();
             frameMasterDataInfo.Content = masterDataInfo;
 
+            //customersView.expanderCustomers.Collapsed += ExpanderCustomers_Collapsed;
+            customersView.dgCustomers.SelectionChanged += DgCustomers_SelectionChanged;
 
-            //TODO
-           // cbTerminated.ItemsSource = Enum.GetValues(typeof(Helper.Helper.TTypeTermination)).Cast<Helper.Helper.TTypeTermination>();
-           // cbTerminated.SelectedIndex = 0;
+            //locationsView.expanderLocations.Collapsed += ExpanderLocations_Collapsed;
+            locationsView.dgLocations.SelectionChanged += DgLocations_SelectionChanged;
+
+           // machineInformationsView.expanderMachineInformations.Collapsed += ExpanderMachineInformations_Collapsed;
+            machineInformationsView.dgMachineInformations.SelectionChanged += DgMachineInformations_SelectionChanged;
+
+            dgMaintenanceAgreements.SelectionChanged += DgMaintenanceAgreements_SelectionChanged;
+            dgMaintenanceAgreements.SelectedIndex = 0;
+
+            MaintenanceAgreementVM.LoadComboboxes();
+            AssigneValuesToControl();
 
             cbNoticeOfPeriodMonth.ItemsSource = GetMonths();
             cbNoticeOfPeriodMonth.SelectedIndex = 2;
 
             txtNoticeOfPeriod.Text = "Monate";
 
-            customersView.expanderCustomers.Collapsed += ExpanderCustomers_Collapsed;
-            customersView.dgCustomers.SelectionChanged += DgCustomers_SelectionChanged;
-           // customersView.spCustomers.Loaded += Stackpanel_Loaded;
+            EnableContoles(false);
 
-            locationsView.expanderLocations.Collapsed += ExpanderLocations_Collapsed;
-            locationsView.dgLocations.SelectionChanged += DgLocations_SelectionChanged;
-            //locationsView.spLocations.Loaded += Stackpanel_Loaded;
+        }
 
-            expanderMachineInformations.Collapsed += ExpanderMachineInformations_Collapsed;
-            machineInfosView.dgMachineInformations.SelectionChanged += DgMachineInformations_SelectionChanged;
-            machineInfosView.spMachineInformations.Loaded += Stackpanel_Loaded;
-            txtExpanderHeader.Text = new CategoryViewModel().Categories.Where(c => c.MangementType == Helper.Helper.TTypeMangement.MachineInformation).Select(c => c.Name).FirstOrDefault();
+        private void CbMachineInformations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var machineInformation = GetSelectedObject<MachineInformation>(sender);
 
-            maintenanceAgreementsView.dgMaintenanceAgreements.SelectedIndex = 0;
-            
+            if (machineInformation != null)
+                MaintenanceAgreementVM.RefreshByMachineInformatio(machineInformation.Id);
+        }
+
+
+        private void ExpanderMachineInformations_Collapsed(object sender, RoutedEventArgs e)
+        {
+            gridResizableMaintenanceAgreements.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Auto);
         }
 
         private IEnumerable GetMonths()
@@ -89,113 +110,267 @@ namespace Liftmanagement.Views
             return months;
         }
 
+        private void AssigneValuesToControl()
+        {
+            lblDuration.Content = MaintenanceAgreementVM.MaintenanceAgreementSelected.GetDisplayName<MaintenanceAgreement>(nameof(MaintenanceAgreementVM.MaintenanceAgreementSelected.Duration)) + ":";
+            lblTerminated.Content =
+                MaintenanceAgreementVM.MaintenanceAgreementSelected.GetDisplayName<MaintenanceAgreement>(nameof(MaintenanceAgreementVM.MaintenanceAgreementSelected.CanBeCancelled)) + ":";
+            lblNoticeOfPeriod.Content =
+                MaintenanceAgreementVM.MaintenanceAgreementSelected.GetDisplayName<MaintenanceAgreement>(nameof(MaintenanceAgreementVM.MaintenanceAgreementSelected.NoticeOfPeriod)) + ":";
+            lblAgreementDate.Content =
+                MaintenanceAgreementVM.MaintenanceAgreementSelected.GetDisplayName<MaintenanceAgreement>(nameof(MaintenanceAgreementVM.MaintenanceAgreementSelected.AgreementDate)) + ":";
+            lblMaintenanceType.Content = MaintenanceAgreementVM.MaintenanceAgreementSelected.GetDisplayName<MaintenanceAgreement>(nameof(MaintenanceAgreementVM.MaintenanceAgreementSelected.MaintenanceType)) +
+                                         ":";
+            lblAdditionalInfo.Content =
+                MaintenanceAgreementVM.MaintenanceAgreementSelected.GetDisplayName<MaintenanceAgreement>(nameof(MaintenanceAgreementVM.MaintenanceAgreementSelected.AdditionalInfo)) + ":";
+            lblNotificationTime.Content =
+                MaintenanceAgreementVM.MaintenanceAgreementSelected.GetDisplayName<MaintenanceAgreement>(nameof(MaintenanceAgreementVM.MaintenanceAgreementSelected.NotificationTime)) + ":";
+            lblArreementCancelledBy.Content =
+                MaintenanceAgreementVM.MaintenanceAgreementSelected.GetDisplayName<MaintenanceAgreement>(nameof(MaintenanceAgreementVM.MaintenanceAgreementSelected.AgreementCancelledBy)) + ":";
+            lblGoogleDriveLink.Content =
+                MaintenanceAgreementVM.MaintenanceAgreementSelected.GetDisplayName<MaintenanceAgreement>(nameof(MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleDriveFolderName)) + ":";
+           
+            
+            BindingText(txtAdditionalInfo, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.AdditionalInfo);
+
+            //BindingDatePicker(datePickerDuration, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.Duration,true,()=>new MandatoryRule());
+            BindingDatePicker(datePickerDuration, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.Duration, true, () => new DatetimeRule());
+            //datePickerDuration.BlackoutDates.Add(new CalendarDateRange(DateTime.MinValue, DateTime.Now.AddDays(-2)));
+
+            BindingDatePicker(datePickerAgreementDate, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.AgreementDate, true, () => new DatetimeRule());
+            //datePickerAgreementDate.BlackoutDates.Add(new CalendarDateRange(DateTime.MinValue, Helper.Helper.DefaultDate));
+
+            BindingText(txtNotificationTime, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.NotificationTime);
+
+            BindingComboBoxBindingModeOneWay(cbNotificationUnit,()=>MaintenanceAgreementVM.NotificationUnits);
+           BindingComboBoxSelectedValue(cbNotificationUnit,()=> MaintenanceAgreementVM.MaintenanceAgreementSelected.NotificationUnit);
+       
+           BindingComboBoxBindingModeOneWay(cbArreementCancelledBy, () => MaintenanceAgreementVM.ArreementCancelledBy);
+           BindingComboBoxText(cbArreementCancelledBy, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.AgreementCancelledBy);
+
+            BindingComboBoxBindingModeOneWay(cbMaintenanceType, () => MaintenanceAgreementVM.MaintenanceTypes);
+            BindingComboBoxText(cbMaintenanceType, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.MaintenanceType);
+
+            BindingComboBoxBindingModeOneWay(cbTerminated,()=>MaintenanceAgreementVM.TerminationUnits);
+            BindingComboBoxText(cbTerminated, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.CanBeCancelled);
+
+            BindingHyperlink(hyperlinkGoogleDrive, GetPropertyPath(() => MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleDriveLink));
+            BindingTextBlock(txtGoogleDriveFolderName, GetPropertyPath(() => MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleDriveFolderName));
+
+            BindingControl(dgMaintenanceAgreements,()=>MaintenanceAgreementVM.MaintenanceAgreements);
+        }
+        private void CbLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+        //    var location = GetSelectedObject<Location>(sender);
+
+        //    if (location != null)
+        //        MaintenanceAgreementVM.RefreshByLocation(location.Id);
+        }
+
+        protected override void EnableContoles(bool enable)
+        {
+            base.EnableContoles(enable);
+            txtNoticeOfPeriod.IsEnabled = false;
+        }
+
         private void DgMaintenanceAgreements_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MaintenanceAgreement maintenanceAgreement = null;
-            var dgMaintenanceAgreements = sender as DataGrid;
-            if (dgMaintenanceAgreements != null)
-                maintenanceAgreement = dgMaintenanceAgreements.SelectedItem as MaintenanceAgreement;
-
-            if (maintenanceAgreement == null)
-            {
-                return;
-            }
-
-            lblAdditionalInfo.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.AdditionalInfo)) + ":";
-            lblDuration.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.Duration)) + ":";
-            lblTerminated.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.CanBeCancelled )) + ":";
-            lblNoticeOfPeriod.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.NoticeOfPeriod)) + ":";
-            lblAgreementDate.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.AgreementDate)) + ":";         
-
-            txtAdditionalInfo.Text = maintenanceAgreement.AdditionalInfo;
-            //datePickerDuration.SelectedDate = DateTime.ParseExact(maintenanceAgreement.Duration, "dd.MM.yyyy",
-            //                            System.Globalization.CultureInfo.InvariantCulture); 
-            // datePickerAgreementDate.SelectedDate= DateTime.ParseExact(maintenanceAgreement.AgreementDate, "dd.MM.yyyy",
-            //                            System.Globalization.CultureInfo.InvariantCulture);
-            datePickerDuration.SelectedDate = maintenanceAgreement.Duration;
-            datePickerAgreementDate.SelectedDate = maintenanceAgreement.AgreementDate;
-
-            cbTerminated.SelectedIndex = 0;
-            cbNoticeOfPeriodMonth.SelectedIndex = 2;
-            
-           
-            //txtNoticeOfPeriod.Text = maintenanceAgreement.NoticeOfPeriod;
-            //txtAgreementDate.Text = maintenanceAgreement.AgreementDate;
+            MaintenanceAgreementVM.MaintenanceAgreementSelected = GetSelectedObject<MaintenanceAgreement>(sender);
+            EnableContoles(false);
+            // cbTerminated.SelectedIndex = 0;
+            //cbNoticeOfPeriodMonth.SelectedIndex = 2;
         }
 
         private void DgLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Location location = null;
-            var dgLogations = sender as DataGrid;
-            if (dgLogations != null)
-                location = dgLogations.SelectedItem as Location;
+            var location = GetSelectedObject<Location>(sender);
 
-            if (location == null)
+            if (location != null)
             {
-                return;
+
+                masterDataInfo.MasterDataInfoVM.RefreshLocationByCustomer(location.CustomerId);
+
+                masterDataInfo.cbLocations.SelectedItem = masterDataInfo.cbLocations.Items.Cast<Location>()
+                    .Single(c => c.Id == location.Id);
+
+                customersView.dgCustomers.SelectedItem = customersView.dgCustomers.Items.Cast<Customer>()
+                    .Single(c => c.Id == location.CustomerId);
 
             }
-
-            Console.WriteLine("Customer :" + location.Address);
-        }
-
-        private void ExpanderLocations_Collapsed(object sender, RoutedEventArgs e)
-        {
-            gridResizableLocations.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Auto);
         }
 
         private void DgMachineInformations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Location location = null;
-            var dgLogations = sender as DataGrid;
-            if (dgLogations != null)
-                location = dgLogations.SelectedItem as Location;
+            var machineInformation = GetSelectedObject<MachineInformation>(sender);
 
-            if (location == null)
+            if (machineInformation != null)
             {
-                return;
-
+                masterDataInfo.cbMachineInformations.SelectedItem = masterDataInfo.cbMachineInformations.Items
+                    .Cast<MachineInformation>()
+                    .Single(c => c.Id == machineInformation.Id);
             }
-
-            Console.WriteLine("Customer :" + location.Address);
         }
-
-        private void ExpanderMachineInformations_Collapsed(object sender, RoutedEventArgs e)
+        private void ExpanderLocations_Collapsed(object sender, RoutedEventArgs e)
         {
-            gridResizableLocations.ColumnDefinitions[4].Width = new GridLength(1, GridUnitType.Auto);
-        }
-
-        private void Stackpanel_Loaded(object sender, RoutedEventArgs e)
-        {
-            var stackpanel = sender as StackPanel;
-            if (stackpanel == null)
-                return;
-
-            //Work around           
-            stackpanel.Width = stackpanel.Width+1;
-           // stackpanel.Width = 450;
+            gridResizableMaintenanceAgreements.ColumnDefinitions[1].Width = new GridLength(1, GridUnitType.Auto);
         }
 
         private void DgCustomers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Customer customer = null;
-            var dgCustomers = sender as DataGrid;
-            if (dgCustomers != null)
-                customer = dgCustomers.SelectedItem as Customer;
+            var customer = GetSelectedObject<Customer>(sender);
 
-            if (customer == null)
-            {
-                return;
-
-            }
-
-       
+            if (customer != null)
+                masterDataInfo.cbCustomers.SelectedItem = masterDataInfo.cbCustomers.Items.Cast<Customer>().Single(c => c.Id == customer.Id);
 
         }
         private void ExpanderCustomers_Collapsed(object sender, RoutedEventArgs e)
         {
-            gridResizableLocations.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
+            gridResizableMaintenanceAgreements.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
         }
+
+        protected override void BtnSaveGoogleDrive_Click(object sender, RoutedEventArgs e)
+        {
+            var node = googlDriveTree.GetSelectedNode();
+
+            MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleDriveLink = node.WebLink;
+            MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleDriveFolderName = node.Name;
+
+            windowGoogleDriveTree.Hide();
+        }
+
+        private void btnGoogleDriveTree_Click(object sender, RoutedEventArgs e)
+        {
+            if (MaintenanceAgreementVM.MaintenanceAgreementSelected != null)
+            {
+                windowGoogleDriveTree.Title = windowGoogleDriveTree.Title + "  " + MaintenanceAgreementVM.MaintenanceAgreementSelected.GetFullName();
+            }
+
+            windowGoogleDriveTree.ShowDialog();
+        }
+
+        private void ForceValidation()
+        {
+            //txtName.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            //txtYearOfConstruction.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            //txtSerialNumber.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ForceValidation();
+                bool isValid = true;
+                List<string> validationMsg = new List<string>();
+
+
+                if (MaintenanceAgreementVM.MaintenanceAgreementSelected.Duration<= Helper.Helper.DefaultDate)
+                {
+                    validationMsg.Add("Vertragslaufzeitdatum ist unzulässig.");
+                    isValid = false;
+                }
+                if (string.IsNullOrWhiteSpace(MaintenanceAgreementVM.MaintenanceAgreementSelected.CanBeCancelled))
+                {
+                    validationMsg.Add("Kündigungsmodus darf nicht leer sein.");
+                    isValid = false;
+                }
+                if (MaintenanceAgreementVM.MaintenanceAgreementSelected.AgreementDate <= Helper.Helper.DefaultDate)
+                {
+                    validationMsg.Add("Vertragsdatum ist unzulässig.");
+                    isValid = false;
+                }
+                if (string.IsNullOrWhiteSpace(MaintenanceAgreementVM.MaintenanceAgreementSelected.CanBeCancelled))
+                {
+                    validationMsg.Add("Wartungsart darf nicht leer sein.");
+                    isValid = false;
+                }
+
+                if (!isValid)
+                {
+                    new NotificationWindow("Fehler!", null,validationMsg,NotificationWindow.MessageType.Error).Show();
+                    return;
+                }
+
+                var result = MaintenanceAgreementVM.Add(masterDataInfo.MasterDataInfoVM.MachineInformationSelected);
+                if (result.Records > 0)
+                {
+                    MaintenanceAgreementVM.RefreshByMachineInformatio(masterDataInfo.MasterDataInfoVM.MachineInformationSelected.Id);
+                    var maintenanceAgreement = dgMaintenanceAgreements.Items.Cast<MaintenanceAgreement>().Single(c => c.Id == result.Id);
+                    dgMaintenanceAgreements.SelectedItem = maintenanceAgreement;
+
+                    var titel = string.Format("Anlage : {0}", maintenanceAgreement.GetFullName());
+                    var msg = "Anlagedaten wurden gespeichert.";
+                    new NotificationWindow(titel, msg).Show();
+                }
+                else
+                {
+                    var msg = "Anlagedaten konnten nicht gespeichert werden.";
+                    new NotificationWindow("Fehler!", msg).Show();
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                var msg = "Anlagedaten konnten nicht gespeichert werden.";
+                new NotificationWindow("Fehler!", exception.ToString(),null,NotificationWindow.MessageType.Error).Show();
+            }
+        }
+
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            MaintenanceAgreementVM.MarkForDeleteMaintenanceAgreement();
+        }
+
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            MaintenanceAgreementVM.MaintenanceAgreementSelectedLast = MaintenanceAgreementVM.MaintenanceAgreementSelected;
+            MaintenanceAgreementVM.MaintenanceAgreementSelected = new MaintenanceAgreement();
+            cbNotificationUnit.SelectedIndex = 1;
+            cbArreementCancelledBy.SelectedIndex = 0;
+            cbMaintenanceType.SelectedIndex = 0;
+            cbTerminated.SelectedIndex = 0;
+
+            EnableContoles(true);
+        }
+
+        private void btnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            if (MaintenanceAgreementVM.MaintenanceAgreementSelected == null ||
+                MaintenanceAgreementVM.MaintenanceAgreements.Count == 0)
+            {
+                new NotificationWindow("Fehler!", "Es sind keine Wartungsverträge ausgewählt um zu bearbeiten",null, NotificationWindow.MessageType.Waring).Show();
+                return;
+            }
+
+            MaintenanceAgreementVM.MaintenanceAgreementSelectedLast = MaintenanceAgreementVM.MaintenanceAgreementSelected;
+            var result = MaintenanceAgreementVM.EditMaintenanceAgreement();
+            if (result.IsReadOnly)
+            {
+                AskForceToEdit(result.CurrentlyUsedBy, () =>
+                {
+                    MaintenanceAgreementVM.ForceEditing();
+                    EnableContoles(true);
+                });
+            }
+            else
+            {
+                EnableContoles(true);
+            }
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            if (MaintenanceAgreementVM.MaintenanceAgreementSelected.ReadOnly)
+            {
+                MaintenanceAgreementVM.ReleaseEditing();
+            }
+
+            MaintenanceAgreementVM.MaintenanceAgreementSelected = (MaintenanceAgreement) dgMaintenanceAgreements.SelectedItem;
+            EnableContoles(false);
+
+        }
+
+
 
         private void ColumnDefinition_IsKeyboardFocusWithinChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -209,54 +384,43 @@ namespace Liftmanagement.Views
 
         private bool IsTextAllowed(string text)
         {
-           // Regex regex = new Regex("[^0-9/]+");
+            // Regex regex = new Regex("[^0-9/]+");
             Regex regex = new Regex(@"^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$");
             return !regex.IsMatch(text);
         }
 
-        private void btnEdit_Click(object sender, RoutedEventArgs e)
-        {
-            btnSave.Visibility = Visibility.Visible;
-        }
+       
 
-        private void btnAdd_Click(object sender, RoutedEventArgs e)
-        {
+        //private void btnSave_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var date = datePickerDuration.SelectedDate ?? DateTime.Now;
+        //    int months = (int)cbNoticeOfPeriodMonth.SelectedItem;
+        //    string summary = string.Empty;
+        //    string description = string.Empty;
 
-        }
+        //    var NoticeOfPeriodDate = date.AddMonths((months * (-1)));
 
-        private void btnSave_Click(object sender, RoutedEventArgs e)
-        {
-            var date= datePickerDuration.SelectedDate??DateTime.Now;
-            int months =(int) cbNoticeOfPeriodMonth.SelectedItem;
-            string summary = string.Empty;
-            string description = string.Empty;
+        //    //var customer= customersView.dgCustomers.SelectedItem as Customer;
+        //    //if (customer != null)
+        //    //{
+        //    //    summary = customer.CompanyName + ", " + customer.City;
+        //    //}
 
-          var NoticeOfPeriodDate =date.AddMonths((months *(- 1)));
+        //    //var machineInformation = machineInfosView.dgMachineInformations.SelectedItem as MachineInformation;
+        //    //if (machineInformation != null)
+        //    //{
+        //    //    description = machineInformation.Name + ", " + machineInformation.SerialNumber;
+        //    //}
 
-            //var customer= customersView.dgCustomers.SelectedItem as Customer;
-            //if (customer != null)
-            //{
-            //    summary = customer.CompanyName + ", " + customer.City;
-            //}
-
-            //var machineInformation = machineInfosView.dgMachineInformations.SelectedItem as MachineInformation;
-            //if (machineInformation != null)
-            //{
-            //    description = machineInformation.Name + ", " + machineInformation.SerialNumber;
-            //}
-
-            summary = masterDataInfo.lblCompanyName.Content.ToString() + ", " + masterDataInfo.lblPostcodeCity.Content.ToString();
-            description = masterDataInfo.lblMachineName.Content.ToString() + ", " + masterDataInfo.lblSerialNumber.Content.ToString();
+        //    summary = masterDataInfo.lblCompanyName.Content.ToString() + ", " + masterDataInfo.lblPostcodeCity.Content.ToString();
+        //    description = masterDataInfo.lblMachineName.Content.ToString() + ", " + masterDataInfo.lblSerialNumber.Content.ToString();
 
 
-            new CalendarQuickstart(NoticeOfPeriodDate, NoticeOfPeriodDate.AddMinutes(30), summary, description);
+        //    new CalendarQuickstart(NoticeOfPeriodDate, NoticeOfPeriodDate.AddMinutes(30), summary, description);
 
-           
-        }
 
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
-        {
+        //}
 
-        }
+       
     }
 }

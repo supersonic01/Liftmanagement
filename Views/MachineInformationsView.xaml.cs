@@ -28,13 +28,12 @@ namespace Liftmanagement.Views
             InitializeComponent();
             
             MachineInformationsVM.Refresh();
-            NotVisibleColumns.Add(nameof(Location.GoogleDriveFolderName));
 
             dgMachineInformations.Tag = NotVisibleColumns;
 
             BindingControl(dgMachineInformations, () => MachineInformationsVM.MachineInformations);
 
-            txtExpanderHeader.Text = new CategoryViewModel().Categories.Where(c => c.MangementType == Helper.Helper.TTypeMangement.Location).Select(c => c.Name).FirstOrDefault();
+            txtExpanderHeader.Text = new CategoryViewModel().Categories.Where(c => c.MangementType == Helper.Helper.TTypeMangement.MachineInformation).Select(c => c.Name).FirstOrDefault();
             expanderMachineInformations.Expanded += ExpanderMachineInformations_Expanded;
             expanderMachineInformations.Collapsed += ExpanderMachineInformations_Collapsed;
         }
@@ -50,9 +49,11 @@ namespace Liftmanagement.Views
             gridMachineInformations.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
         }
 
-        private void gspLocatios_OnDragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
+        private void gspMachineInformations_OnDragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
         {
-            dgMachineInformations.Width = double.NaN;
+           dgMachineInformations.Width = double.NaN;
         }
+
+       
     }
 }

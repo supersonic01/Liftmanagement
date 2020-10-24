@@ -114,6 +114,8 @@ namespace Liftmanagement.Helper
 
                     if (p.PropertyType == typeof(string) || p.PropertyType == typeof(DateTime))
                     {
+
+                        //.ToString("yyyy-MM-dd") 
                         insertScriptValues.Append(string.Format("'\"+{0}+\"',", className + "." + p.Name));
                     }
                     else

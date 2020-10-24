@@ -90,6 +90,7 @@ namespace Liftmanagement.Helper
                 dataMapper.Add(typeof(decimal), "DECIMAL(18,0)");
                 dataMapper.Add(typeof(Guid), "UNIQUEIDENTIFIER");
                 dataMapper.Add(typeof(Timestamp), "TIMESTAMP");
+                dataMapper.Add(typeof(Helper.NotificationUnitType), "INT");
 
                 return dataMapper;
             }

@@ -44,7 +44,7 @@ namespace Liftmanagement.Models
 
         public static Customer GetDummy(string name = "** Alle **")
         {
-            return new Customer { CompanyName = name };
+            return new Customer { CompanyName = name, Id = -2};
         }
 
     }

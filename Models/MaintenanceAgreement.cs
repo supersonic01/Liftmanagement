@@ -30,7 +30,7 @@ namespace Liftmanagement.Models
                 {
                     value = DateTime.Now;
                 }
-                SetField(ref duration, value);
+                duration = value;
             }
         }
 

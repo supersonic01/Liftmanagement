@@ -237,15 +237,15 @@ namespace Liftmanagement.Views
             control.SetBinding(Label.ContentProperty, mb);
         }
 
-        protected virtual void BindingDatetime(Control control, string path)
+        protected virtual void BindingDatetime<T>(Control control, Expression<Func<T>> action)
         {
 
-            var binding = new Binding(path)
+            var binding = new Binding(GetPropertyPath(action))
             {
                 Source = this,
             };
-            var dd = new Liftmanagement.Converters.DateTimeConverter();
-            binding.Converter = dd;
+         
+            binding.Converter = new Liftmanagement.Converters.DateTimeConverter(); ;
 
             control.SetBinding(TextBox.TextProperty, binding);
 

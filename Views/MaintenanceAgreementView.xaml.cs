@@ -134,11 +134,16 @@ namespace Liftmanagement.Views
             BindingText(txtAdditionalInfo, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.AdditionalInfo);
 
             //BindingDatePicker(datePickerDuration, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.Duration,true,()=>new MandatoryRule());
-            BindingDatePicker(datePickerDuration, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.Duration, true, () => new DatetimeRule());
+            // BindingDatePicker(datePickerDuration, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.Duration, true, () => new DatetimeRule());
             //datePickerDuration.BlackoutDates.Add(new CalendarDateRange(DateTime.MinValue, DateTime.Now.AddDays(-2)));
 
-            BindingDatePicker(datePickerAgreementDate, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.AgreementDate, true, () => new DatetimeRule());
+            //BindingDatePicker(datePickerAgreementDate, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.AgreementDate, true, () => new DatetimeRule());
             //datePickerAgreementDate.BlackoutDates.Add(new CalendarDateRange(DateTime.MinValue, Helper.Helper.DefaultDate));
+
+            BindingDatetime(txtDuration, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.Duration);
+            BindingDatetime(txtAgreementDate, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.AgreementDate);
+
+            BindingText(txtNotificationTime, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.NotificationTime);
 
             BindingText(txtNotificationTime, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.NotificationTime);
 

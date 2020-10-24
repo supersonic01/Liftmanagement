@@ -156,7 +156,7 @@ namespace Liftmanagement.Views
 
 
             BindingText(txtName, () => MachineInformationVM.MachineInformationSelected.Name, null, true, () => new MandatoryRule());
-            BindingDatetime(txtYearOfConstruction, "MachineInformationVM.MachineInformationSelected.YearOfConstruction");
+            BindingDatetime(txtYearOfConstruction, ()=>MachineInformationVM.MachineInformationSelected.YearOfConstruction);
             BindingText(txtSerialNumber, () => MachineInformationVM.MachineInformationSelected.SerialNumber, null, true, () => new MandatoryRule());
             BindingText(txtHoldingPositions, () => MachineInformationVM.MachineInformationSelected.HoldingPositions);
             BindingText(txtEntrances, () => MachineInformationVM.MachineInformationSelected.Entrances);

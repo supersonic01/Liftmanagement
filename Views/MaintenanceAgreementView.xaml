@@ -93,7 +93,8 @@
                         <Label x:Name="lblArreementCancelledBy" Grid.Row="9" Grid.Column="1"  Style="{StaticResource LableStyle}" />
                         <Label x:Name="lblGoogleDriveLink" Grid.Row="9" Grid.Column="3"  Style="{StaticResource LableStyle}"  HorizontalAlignment="Center"/>
 
-                        <DatePicker x:Name="datePickerDuration" Grid.Row="4" Grid.Column="0" Style="{StaticResource DatePickerStyle}"  PreviewTextInput="datePickerDuration_PreviewTextInput"
+                        <TextBox x:Name="txtDuration" Grid.Row="4" Grid.Column="0" Style="{StaticResource TextBoxStyle}" />
+                        <!--<DatePicker x:Name="datePickerDuration" Grid.Row="4" Grid.Column="0" Style="{StaticResource DatePickerStyle}"  PreviewTextInput="datePickerDuration_PreviewTextInput"
                                 >
                             <DatePicker.Resources>
                                 <Style TargetType="{x:Type DatePickerTextBox}">
@@ -108,7 +109,7 @@
                                     </Setter>
                                 </Style>
                             </DatePicker.Resources>
-                        </DatePicker>
+                        </DatePicker>-->
 
                         <ComboBox x:Name="cbTerminated" Grid.Row="4" Grid.Column="1" IsEditable="True" Style="{StaticResource ComboBoxStyle}"   />
                         <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal"  HorizontalAlignment="Stretch">
@@ -123,8 +124,9 @@
                             </Grid>
 
                         </StackPanel>
-                       
-                        <DatePicker x:Name="datePickerAgreementDate" Grid.Row="4" Grid.Column="3" Style="{StaticResource DatePickerStyle}" PreviewTextInput="datePickerDuration_PreviewTextInput">
+
+                        <TextBox x:Name="txtAgreementDate" Grid.Row="4" Grid.Column="3" Style="{StaticResource TextBoxStyle}" />
+                        <!--<DatePicker x:Name="datePickerAgreementDate" Grid.Row="4" Grid.Column="3" Style="{StaticResource DatePickerStyle}" PreviewTextInput="datePickerDuration_PreviewTextInput">
                             <DatePicker.Resources>
                                 <Style TargetType="{x:Type DatePickerTextBox}">
                                     <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -138,7 +140,7 @@
                                     </Setter>
                                 </Style>
                             </DatePicker.Resources>
-                        </DatePicker>
+                        </DatePicker>-->
                         <ComboBox x:Name="cbMaintenanceType" Grid.Row="4" Grid.Column="4" IsEditable="True" Style="{StaticResource ComboBoxStyle}"  />
 
                         <TextBox x:Name="txtAdditionalInfo" Grid.Row="7"  Grid.Column="0" Grid.ColumnSpan="5"  Margin="10,0,10,0"

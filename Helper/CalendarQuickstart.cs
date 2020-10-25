@@ -37,7 +37,7 @@ namespace Liftmanagement.Helper
                 credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
                     Scopes,
-                    "dominicphilomena@gmail.com",
+                    "admin@aufzugsberatung-karlsruhe.de",
                     CancellationToken.None,
                     new FileDataStore(credPath, true)).Result;
                 Console.WriteLine("Credential file saved to: " + credPath);
@@ -79,26 +79,47 @@ namespace Liftmanagement.Helper
             }
 
 
-            var ev = new Event();
-            EventDateTime start = new EventDateTime();
-            start.DateTime = startDate;// new DateTime(2020,9 , 4, 12, 0, 0);
+            //var ev = new Event();
+            //EventDateTime start = new EventDateTime();
+            //start.DateTime = startDate;// new DateTime(2020,9 , 4, 12, 0, 0);
+            //start.TimeZone = "Europe/Zurich";
 
-            EventDateTime end = new EventDateTime();
-            end.DateTime = endDate; // new DateTime(2020, 9, 4, 13, 30, 0);
+            //EventDateTime end = new EventDateTime();
+            //end.DateTime = endDate; // new DateTime(2020, 9, 4, 13, 30, 0);
 
 
-            ev.Start = start;
-            ev.End = end;
-            ev.Summary = summary; //"New Event2";
-            ev.Description = description;// "Description.2..";
+            //ev.Start = start;
+            //ev.End = end;
+            //ev.Summary = summary; //"New Event2";
+            //ev.Description = description;// "Description.2..";
+            //ev.Location = "zu hause";
 
-            var reminder = new EventReminder();
-            reminder.Method = "popup";
-            reminder.Minutes = 2;
+            Event ev = new Event()
+            {
+                Summary = "Google I/O 2015",
+                Location = "800 Howard St., San Francisco, CA 94103",
+                Description = "A chance to hear more about Google's developer products.",
+                Start = new EventDateTime()
+                {
+                    DateTime = DateTime.Parse("2020-10-27T09:00:00-07:00"),
+                    TimeZone = "America/Los_Angeles",
+                },
+                End = new EventDateTime()
+                {
+                    DateTime = DateTime.Parse("2020-10-27T17:00:00-07:00"),
+                    TimeZone = "America/Los_Angeles",
+                },
 
-            var reminderMail = new EventReminder();
-            reminder.Method = "email";
-            reminder.Minutes = 2;
+            };
+            ev.Transparency = "transparent";
+
+            //var reminder = new EventReminder();
+            //reminder.Method = "popup";
+            //reminder.Minutes = 20;
+
+            //var reminderMail = new EventReminder();
+            //reminder.Method = "email";
+            //reminder.Minutes = 20;
 
 
             /* Dim reminderList As New List(Of EventReminder)
@@ -108,18 +129,28 @@ namespace Liftmanagement.Helper
     remindData.Overrides = reminderList
     anotherNewEvent.Reminders = remindData*/
 
-            var reminderList = new List<EventReminder>();
-            reminderList.Add(reminder);
-            reminderList.Add(reminderMail);
+            //var reminderList = new List<EventReminder>();
+            //reminderList.Add(reminder);
+            //reminderList.Add(reminderMail);
 
 
-            var reminderData = new Event.RemindersData
-            {
-                UseDefault = false,
-                Overrides = reminderList
-            };
-            ev.Reminders = reminderData;
-           
+            //var reminderData = new Event.RemindersData
+            //{
+            //    UseDefault = false,
+            //    Overrides = reminderList
+            //};
+            //ev.Reminders = reminderData;
+
+            EventReminder rem = new EventReminder();
+            rem.Method = "popup";
+            rem.Minutes = 15;
+            Event.RemindersData rd = new Event.RemindersData();
+            rd.UseDefault = false;
+            IList<EventReminder> list = new List<EventReminder>();
+            list.Add(rem);
+            rd.Overrides = list;
+            ev.Reminders = rd;
+
 
 
 

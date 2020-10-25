@@ -97,7 +97,7 @@ namespace Liftmanagement
             // new TableGenerator();
 
 
-            new CalendarQuickstart(DateTime.Now, DateTime.Now, "Hallo", "Hallo2");
+            new CalendarQuickstart().AddEvent(DateTime.Now, DateTime.Now, "Hallo", "Hallo2");
 
             Binding binding = new Binding("CategoryVM.Categories")
             {

@@ -13,21 +13,17 @@ using Google.Apis.Util.Store;
 
 namespace Liftmanagement.Helper
 {
- public   class CalendarQuickstart
+    public class CalendarQuickstart
     {
 
-
-        // If modifying these scopes, delete your previously saved credentials
-        // at ~/.credentials/calendar-dotnet-quickstart.json
-        // static string[] Scopes = { CalendarService.Scope.CalendarReadonly };
-
         static string[] Scopes = { CalendarService.Scope.Calendar };
-        static string ApplicationName = "Google Calendar API .NET Quickstart";
+        static string ApplicationName = "Google Calendar API.NET Liftmanagement";
+        private string gmail = "admin@aufzugsberatung-karlsruhe.de";
+        private UserCredential credential;
+        private string location = "Aufzugsberatung Hesse";
 
-        public  CalendarQuickstart(DateTime startDate,DateTime endDate, string summary, string description)
+        public CalendarQuickstart()
         {
-            UserCredential credential;
-
             using (var stream =
                 new FileStream("credentialsCalendar.json", FileMode.Open, FileAccess.Read))
             {
@@ -37,18 +33,61 @@ namespace Liftmanagement.Helper
                 credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
                     Scopes,
-                    "admin@aufzugsberatung-karlsruhe.de",
+                    gmail,
                     CancellationToken.None,
                     new FileDataStore(credPath, true)).Result;
                 Console.WriteLine("Credential file saved to: " + credPath);
             }
+        }
 
-            // Create Google Calendar API service.
-            var service = new CalendarService(new BaseClientService.Initializer()
+        public void AddEvent(DateTime startDate, DateTime endDate, string summary, string description)
+        {
+            var service = GetCalendarService();
+
+            Event ev = new Event()
             {
-                HttpClientInitializer = credential,
-                ApplicationName = ApplicationName,
-            });
+                Summary = summary,
+                Location = location,
+                Description = description,
+                Start = new EventDateTime()
+                {
+                    DateTime = startDate
+                },
+                End = new EventDateTime()
+                {
+                    DateTime = endDate
+                },
+            };
+
+            ev.Transparency = "transparent";
+
+            EventReminder remPopup = new EventReminder();
+            remPopup.Method = "popup";
+            remPopup.Minutes = 15;
+
+            EventReminder remMail = new EventReminder();
+            remMail.Method = "email";
+            remMail.Minutes = 15;
+
+            Event.RemindersData rd = new Event.RemindersData();
+            rd.UseDefault = false;
+
+            IList<EventReminder> list = new List<EventReminder>();
+            list.Add(remPopup);
+            list.Add(remMail);
+
+            rd.Overrides = list;
+            ev.Reminders = rd;
+
+            var calendarId = "primary";
+            Event recurringEvent = service.Events.Insert(ev, calendarId).Execute();
+            Console.WriteLine("Event created: %s\n", ev.HtmlLink);
+        }
+
+        public void GetCalendarItems()
+        {
+
+            var service = GetCalendarService();
 
             // Define parameters of request.
             EventsResource.ListRequest request = service.Events.List("primary");
@@ -70,6 +109,7 @@ namespace Liftmanagement.Helper
                     {
                         when = eventItem.Start.Date;
                     }
+
                     Console.WriteLine("{0} ({1})", eventItem.Summary, when);
                 }
             }
@@ -77,88 +117,17 @@ namespace Liftmanagement.Helper
             {
                 Console.WriteLine("No upcoming events found.");
             }
+        }
 
-
-            //var ev = new Event();
-            //EventDateTime start = new EventDateTime();
-            //start.DateTime = startDate;// new DateTime(2020,9 , 4, 12, 0, 0);
-            //start.TimeZone = "Europe/Zurich";
-
-            //EventDateTime end = new EventDateTime();
-            //end.DateTime = endDate; // new DateTime(2020, 9, 4, 13, 30, 0);
-
-
-            //ev.Start = start;
-            //ev.End = end;
-            //ev.Summary = summary; //"New Event2";
-            //ev.Description = description;// "Description.2..";
-            //ev.Location = "zu hause";
-
-            Event ev = new Event()
+        private CalendarService GetCalendarService()
+        {
+            // Create Google Calendar API service.
+            var service = new CalendarService(new BaseClientService.Initializer()
             {
-                Summary = "Google I/O 2015",
-                Location = "800 Howard St., San Francisco, CA 94103",
-                Description = "A chance to hear more about Google's developer products.",
-                Start = new EventDateTime()
-                {
-                    DateTime = DateTime.Parse("2020-10-27T09:00:00-07:00"),
-                    TimeZone = "America/Los_Angeles",
-                },
-                End = new EventDateTime()
-                {
-                    DateTime = DateTime.Parse("2020-10-27T17:00:00-07:00"),
-                    TimeZone = "America/Los_Angeles",
-                },
-
-            };
-            ev.Transparency = "transparent";
-
-            //var reminder = new EventReminder();
-            //reminder.Method = "popup";
-            //reminder.Minutes = 20;
-
-            //var reminderMail = new EventReminder();
-            //reminder.Method = "email";
-            //reminder.Minutes = 20;
-
-
-            /* Dim reminderList As New List(Of EventReminder)
-    reminderList.Add(reminder)
-    Dim remindData As New [Event].RemindersData
-    remindData.UseDefault = False
-    remindData.Overrides = reminderList
-    anotherNewEvent.Reminders = remindData*/
-
-            //var reminderList = new List<EventReminder>();
-            //reminderList.Add(reminder);
-            //reminderList.Add(reminderMail);
-
-
-            //var reminderData = new Event.RemindersData
-            //{
-            //    UseDefault = false,
-            //    Overrides = reminderList
-            //};
-            //ev.Reminders = reminderData;
-
-            EventReminder rem = new EventReminder();
-            rem.Method = "popup";
-            rem.Minutes = 15;
-            Event.RemindersData rd = new Event.RemindersData();
-            rd.UseDefault = false;
-            IList<EventReminder> list = new List<EventReminder>();
-            list.Add(rem);
-            rd.Overrides = list;
-            ev.Reminders = rd;
-
-
-
-
-            var calendarId = "primary";
-            Event recurringEvent = service.Events.Insert(ev, calendarId).Execute();
-            Console.WriteLine("Event created: %s\n", ev.HtmlLink);
-
-
+                HttpClientInitializer = credential,
+                ApplicationName = ApplicationName,
+            });
+            return service;
         }
     }
 }

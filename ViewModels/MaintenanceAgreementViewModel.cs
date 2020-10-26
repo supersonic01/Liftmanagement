@@ -76,7 +76,7 @@ namespace Liftmanagement.ViewModels
 
         public MaintenanceAgreement MaintenanceAgreementSelectedLast { get; set; }
 
-        public SQLQueryResult<MaintenanceAgreement> Add(MachineInformation machineInformation)
+        public SQLQueryResult<MaintenanceAgreement> Add(MasterDataInfoViewModel masterDataInfoVM)
         {
             maintenanceAgreementSelected.ReadOnly = false;
             SQLQueryResult<MaintenanceAgreement> result = null;
@@ -86,15 +86,51 @@ namespace Liftmanagement.ViewModels
             }
             else
             {
-                MaintenanceAgreementSelected.CustomerId = machineInformation.CustomerId;
-                MaintenanceAgreementSelected.LocationId = machineInformation.Id;
-                MaintenanceAgreementSelected.MachineInformationId = machineInformation.Id;
+                if (MaintenanceAgreementSelected.NotificationTime > 0)
+                    MaintenanceAgreementSelected.GoogleCalendarEventId = AddGooleEvent(masterDataInfoVM);
+
+                MaintenanceAgreementSelected.CustomerId = masterDataInfoVM.MachineInformationSelected.CustomerId;
+                MaintenanceAgreementSelected.LocationId = masterDataInfoVM.MachineInformationSelected.Id;
+                MaintenanceAgreementSelected.MachineInformationId = masterDataInfoVM.MachineInformationSelected.Id;
                 result = MySQLDataAccess.AddMaintenanceAgreement(MaintenanceAgreementSelected);
             }
 
             LoadComboboxes();
 
             return result;
+        }
+
+        private string AddGooleEvent(MasterDataInfoViewModel masterDataInfoVM)
+        {
+            TimeSpan ts = new TimeSpan(9, 00, 0);
+            DateTime start = DateTime.Now ;
+           
+
+            switch (MaintenanceAgreementSelected.NotificationUnit)
+            {
+                case Helper.Helper.NotificationUnitType.days:
+                    start = MaintenanceAgreementSelected.Duration.AddDays(MaintenanceAgreementSelected.NotificationTime * -1);
+                    break;
+                case Helper.Helper.NotificationUnitType.weeks:
+                    start = MaintenanceAgreementSelected.Duration.AddDays(MaintenanceAgreementSelected.NotificationTime * -7);
+                    break;
+                case Helper.Helper.NotificationUnitType.months:
+                    start = MaintenanceAgreementSelected.Duration.AddMonths(MaintenanceAgreementSelected.NotificationTime * -1);
+                    break;
+            }
+
+            string summary = "Kündigung Wartungsvertrag, " + masterDataInfoVM.CustomerSelected.CompanyName;
+            StringBuilder description = new StringBuilder();
+            description.AppendLine("Kunde: " + masterDataInfoVM.CustomerSelected.GetFullName());
+            description.AppendLine("Standort: " + masterDataInfoVM.LocationSelected.GetFullName());
+            description.AppendLine("Anlage: " + masterDataInfoVM.MachineInformationSelected.GetFullName());
+            description.AppendLine("Wartungsvertrag: " + MaintenanceAgreementSelected.GetFullName());
+
+            start = start.Date + ts;
+
+            string edi = new CalendarQuickstart().AddEvent(start, start.AddMinutes(30), summary, description.ToString());
+
+            return edi;
         }
 
         public SQLQueryResult<MaintenanceAgreement> EditMaintenanceAgreement()
@@ -144,23 +180,23 @@ namespace Liftmanagement.ViewModels
         private void SetTerminationUnits()
         {
             var terminations = maintenanceAgreements.Select(c => c.CanBeCancelled).ToList();
-            terminations.Insert(0,Properties.Resources.yearly);
-           
-            TerminationUnits =new ObservableCollection<string>(terminations.Distinct());
+            terminations.Insert(0, Properties.Resources.yearly);
+
+            TerminationUnits = new ObservableCollection<string>(terminations.Distinct());
         }
         private void SetArreementCancelledBy()
         {
             var person = maintenanceAgreements.Select(c => c.AgreementCancelledBy).ToList();
-                person.Insert(0,"Kunde");
+            person.Insert(0, "Kunde");
 
-                ArreementCancelledBy = new ObservableCollection<string>(person.Distinct());
+            ArreementCancelledBy = new ObservableCollection<string>(person.Distinct());
         }
 
         private void SetMaintenanceType()
         {
             var maintenance = maintenanceAgreements.Select(c => c.MaintenanceType).ToList();
-            maintenance.Insert(0,Properties.Resources.fullService);
-            maintenance.Insert(0,Properties.Resources.systemService);
+            maintenance.Insert(0, Properties.Resources.fullService);
+            maintenance.Insert(0, Properties.Resources.systemService);
 
             MaintenanceTypes = new ObservableCollection<string>(maintenance.Distinct());
         }
@@ -173,7 +209,7 @@ namespace Liftmanagement.ViewModels
             notificationUnits.Add(Helper.Helper.NotificationUnitType.weeks, Properties.Resources.ResourceManager.GetString(Helper.Helper.NotificationUnitType.weeks.ToString()));
             notificationUnits.Add(Helper.Helper.NotificationUnitType.months, Properties.Resources.ResourceManager.GetString(Helper.Helper.NotificationUnitType.months.ToString()));
 
-           return notificationUnits;
+            return notificationUnits;
         }
 
 

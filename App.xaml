@@ -3,10 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Liftmanagement"
              xmlns:converters="clr-namespace:Liftmanagement.Converters"
+             xmlns:common="clr-namespace:Liftmanagement.Common"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"></converters:InverseBooleanConverter>
         <converters:DateTimeConverter x:Key="DateTimeConverter"></converters:DateTimeConverter>
         <converters:DateFixerConverter x:Key="DateFixerConverter"></converters:DateFixerConverter>
+        <converters:DateConverter x:Key="DateConverter"></converters:DateConverter>
+        <common:CustomLanguage x:Key="CustomLanguage"></common:CustomLanguage>
+
     </Application.Resources>
 </Application>

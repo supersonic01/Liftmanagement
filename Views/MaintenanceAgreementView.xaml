@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Liftmanagement.Views"
              xmlns:r="clr-namespace:Liftmanagement.Properties"
-             xmlns:li="http://github.com/zeluisping/loadingIndicators/xaml/controls"
+             xmlns:li="http://github.com/zeluisping/loadingIndicators/xaml/controls"          
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="1200">
 
@@ -92,24 +92,14 @@
                         <Label x:Name="lblNotificationTime" Grid.Row="9" Grid.Column="0"  Style="{StaticResource LableStyle}" />
                         <Label x:Name="lblArreementCancelledBy" Grid.Row="9" Grid.Column="1"  Style="{StaticResource LableStyle}" />
                         <Label x:Name="lblGoogleDriveLink" Grid.Row="9" Grid.Column="3"  Style="{StaticResource LableStyle}"  HorizontalAlignment="Center"/>
+                        <Label x:Name="lblGoogleCalendarLink" Grid.Row="9" Grid.Column="2"  Style="{StaticResource LableStyle}"  HorizontalAlignment="Center"/>
 
-                        <TextBox x:Name="txtDuration" Grid.Row="4" Grid.Column="0" Style="{StaticResource TextBoxStyle}" />
-                        <!--<DatePicker x:Name="datePickerDuration" Grid.Row="4" Grid.Column="0" Style="{StaticResource DatePickerStyle}"  PreviewTextInput="datePickerDuration_PreviewTextInput"
-                                >
-                            <DatePicker.Resources>
-                                <Style TargetType="{x:Type DatePickerTextBox}">
-                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
-                                    <Setter Property="Control.Template">
-                                        <Setter.Value>
-                                            <ControlTemplate>
-                                                <TextBox x:Name="PART_TextBox"  Text="{Binding Path=SelectedDate, StringFormat='dd.MM.yyyy', 
-                                                RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
-                                           </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </DatePicker.Resources>
-                        </DatePicker>-->
+                        <!--<TextBox x:Name="txtDuration" Grid.Row="4" Grid.Column="0" Style="{StaticResource TextBoxStyle}" />-->
+                        <DatePicker x:Name="datePickerDuration" Grid.Row="4" Grid.Column="0" Style="{StaticResource DatePickerStyle}"  PreviewTextInput="datePickerDuration_PreviewTextInput"
+                                    SelectedDate="{Binding RelativeSource={RelativeSource Self},Path=Text, Converter={StaticResource DateConverter}}"
+                                    Language="{Binding Path=Language,Source={StaticResource CustomLanguage}}">
+                            
+                        </DatePicker>
 
                         <ComboBox x:Name="cbTerminated" Grid.Row="4" Grid.Column="1" IsEditable="True" Style="{StaticResource ComboBoxStyle}"   />
                         <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal"  HorizontalAlignment="Stretch">
@@ -161,8 +151,14 @@
                         </StackPanel>
                         <ComboBox x:Name="cbArreementCancelledBy" Grid.Row="10" Grid.Column="1" IsEditable="True" Style="{StaticResource ComboBoxStyle}"   />
 
+                        <TextBlock x:Name="txtGoogleCalendarHyperlink" Grid.Row="10" Grid.Column="2" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Hyperlink  x:Name="hyperlinkGoogleCalendar"  RequestNavigate="Hyperlink_RequestNavigate">                             
+                                <TextBlock x:Name="txtGoogleCalendarName" Text="Erinnerung"/>
+                            </Hyperlink>
+                        </TextBlock>
+
                         <TextBlock x:Name="txtGoogleDriveHyperlink" Grid.Row="10" Grid.Column="3" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <Hyperlink  x:Name="hyperlinkGoogleDrive" NavigateUri="{Binding Path=GoogleDriveLink}" RequestNavigate="Hyperlink_RequestNavigate">                             
+                            <Hyperlink  x:Name="hyperlinkGoogleDrive" RequestNavigate="Hyperlink_RequestNavigate">                             
                                 <TextBlock x:Name="txtGoogleDriveFolderName" Text="{Binding Path=GoogleDriveFolderName}"/>
                             </Hyperlink>
                         </TextBlock>

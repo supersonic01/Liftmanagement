@@ -165,8 +165,8 @@ namespace Liftmanagement.Views
             BindingText(txtPhoneWork, () => MachineInformationVM.MachineInformationSelected.ContactPerson.PhoneWork);
             BindingText(txtMobile, () => MachineInformationVM.MachineInformationSelected.ContactPerson.Mobile);
             BindingCheckBox(cbContactByDefect, () => MachineInformationVM.MachineInformationSelected.ContactPerson.ContactByDefect);
-            BindingHyperlink(hyperlinkGoogleDrive, GetPropertyPath(() => MachineInformationVM.MachineInformationSelected.GoogleDriveLink));
-            BindingTextBlock(txtGoogleDriveFolderName, GetPropertyPath(() => MachineInformationVM.MachineInformationSelected.GoogleDriveFolderName));
+            BindingHyperlink(hyperlinkGoogleDrive, () => MachineInformationVM.MachineInformationSelected.GoogleDriveLink);
+            BindingTextBlock(txtGoogleDriveFolderName, () => MachineInformationVM.MachineInformationSelected.GoogleDriveFolderName);
         }
 
         private void DgLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)

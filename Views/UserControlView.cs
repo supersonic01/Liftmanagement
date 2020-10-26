@@ -304,8 +304,10 @@ namespace Liftmanagement.Views
             };
 
             binding.Mode = BindingMode.TwoWay;
-            //binding.StringFormat = stringFormat;
-            binding.Converter = new Liftmanagement.Converters.DateDateConverter();
+            binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+          
+            binding.StringFormat = stringFormat;
+            //binding.Converter = new Liftmanagement.Converters.DateDateConverter();
 
             control.SetBinding(DatePicker.SelectedDateProperty, binding);
             control.SetBinding(DatePicker.TextProperty, binding);
@@ -362,34 +364,52 @@ namespace Liftmanagement.Views
 
             control.SetBinding(ComboBox.SelectedValueProperty, binding);
         }
-        protected virtual void BindingHyperlink(Hyperlink hyperlink, string path)
+        protected virtual void BindingHyperlink<T>(Hyperlink hyperlink, Expression<Func<T>> action)
         {
             //TODO Rework
 
-            var binding = new Binding(path)
+            var binding = new Binding(GetPropertyPath(action))
             {
                 Source = this,
             };
 
             binding.Mode = BindingMode.TwoWay;
+            binding.Converter= new UriConverter();
 
             hyperlink.SetBinding(Hyperlink.NavigateUriProperty, binding);
         }
 
-        protected virtual void BindingTextBlock(TextBlock control, string path)
+        protected virtual void BindingTextBlock<T>(TextBlock control, Expression<Func<T>> action, Func<IValueConverter> converter = null)
         {
-            //TODO Rework
-
-            var binding = new Binding(path)
+            var binding = new Binding(GetPropertyPath(action))
             {
                 Source = this,
             };
 
             binding.Mode = BindingMode.TwoWay;
+            if (converter != null)
+            {
+                binding.Converter = converter();
+            }
 
             control.SetBinding(TextBlock.TextProperty, binding);
         }
 
+        protected virtual void BindingTextBlockVisibility<T>(TextBlock control, Expression<Func<T>> action, Func<IValueConverter> converter = null)
+        {
+            var binding = new Binding(GetPropertyPath(action))
+            {
+                Source = this,
+            };
+
+            binding.Mode = BindingMode.TwoWay;
+            if (converter != null)
+            {
+                binding.Converter = converter();
+            }
+
+            control.SetBinding(TextBlock.VisibilityProperty, binding);
+        }
 
         public string GetFullPath<T>(Expression<Func<T>> action)
         {
@@ -517,6 +537,8 @@ namespace Liftmanagement.Views
             }
         }
 
+        
+
         #region Validation
 
         public virtual void OnLoad(object sender, System.Windows.RoutedEventArgs e)
@@ -582,6 +604,7 @@ namespace Liftmanagement.Views
                 }
             }
         }
+
 
         #endregion
     }

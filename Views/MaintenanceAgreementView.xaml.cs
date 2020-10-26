@@ -18,6 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Liftmanagement.Common;
+using Liftmanagement.Converters;
 
 namespace Liftmanagement.Views
 {
@@ -129,18 +130,22 @@ namespace Liftmanagement.Views
                 MaintenanceAgreementVM.MaintenanceAgreementSelected.GetDisplayName<MaintenanceAgreement>(nameof(MaintenanceAgreementVM.MaintenanceAgreementSelected.AgreementCancelledBy)) + ":";
             lblGoogleDriveLink.Content =
                 MaintenanceAgreementVM.MaintenanceAgreementSelected.GetDisplayName<MaintenanceAgreement>(nameof(MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleDriveFolderName)) + ":";
-           
-            
+            lblGoogleCalendarLink.Content =
+                MaintenanceAgreementVM.MaintenanceAgreementSelected.GetDisplayName<MaintenanceAgreement>(nameof(MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleCalendarEventId)) + ":";
+
+
             BindingText(txtAdditionalInfo, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.AdditionalInfo);
 
             //BindingDatePicker(datePickerDuration, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.Duration,true,()=>new MandatoryRule());
-            // BindingDatePicker(datePickerDuration, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.Duration, true, () => new DatetimeRule());
+            //
+            //
+            BindingDatePicker(datePickerDuration, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.Duration);
             //datePickerDuration.BlackoutDates.Add(new CalendarDateRange(DateTime.MinValue, DateTime.Now.AddDays(-2)));
 
             //BindingDatePicker(datePickerAgreementDate, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.AgreementDate, true, () => new DatetimeRule());
             //datePickerAgreementDate.BlackoutDates.Add(new CalendarDateRange(DateTime.MinValue, Helper.Helper.DefaultDate));
 
-            BindingDatetime(txtDuration, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.Duration);
+          // BindingDatetime(txtDuration, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.Duration);
             BindingDatetime(txtAgreementDate, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.AgreementDate);
 
             BindingText(txtNotificationTime, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.NotificationTime);
@@ -159,8 +164,11 @@ namespace Liftmanagement.Views
             BindingComboBoxBindingModeOneWay(cbTerminated,()=>MaintenanceAgreementVM.TerminationUnits);
             BindingComboBoxText(cbTerminated, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.CanBeCancelled);
 
-            BindingHyperlink(hyperlinkGoogleDrive, GetPropertyPath(() => MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleDriveLink));
-            BindingTextBlock(txtGoogleDriveFolderName, GetPropertyPath(() => MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleDriveFolderName));
+            BindingHyperlink(hyperlinkGoogleDrive, ()=> MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleDriveLink);
+            BindingTextBlock(txtGoogleDriveFolderName, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleDriveFolderName);
+
+            BindingHyperlink(hyperlinkGoogleCalendar, ()=> MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleCalendarEventId);
+            BindingTextBlockVisibility(txtGoogleCalendarHyperlink, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleCalendarEventId, ()=>new ValueVisibilityConverter());
 
             BindingControl(dgMaintenanceAgreements,()=>MaintenanceAgreementVM.MaintenanceAgreements);
         }
@@ -296,7 +304,7 @@ namespace Liftmanagement.Views
                     return;
                 }
 
-                var result = MaintenanceAgreementVM.Add(masterDataInfo.MasterDataInfoVM.MachineInformationSelected);
+                var result = MaintenanceAgreementVM.Add(masterDataInfo.MasterDataInfoVM);
                 if (result.Records > 0)
                 {
                     MaintenanceAgreementVM.RefreshByMachineInformatio(masterDataInfo.MasterDataInfoVM.MachineInformationSelected.Id);
@@ -330,7 +338,7 @@ namespace Liftmanagement.Views
         {
             MaintenanceAgreementVM.MaintenanceAgreementSelectedLast = MaintenanceAgreementVM.MaintenanceAgreementSelected;
             MaintenanceAgreementVM.MaintenanceAgreementSelected = new MaintenanceAgreement();
-            cbNotificationUnit.SelectedIndex = 1;
+            cbNotificationUnit.SelectedIndex = 2;
             cbArreementCancelledBy.SelectedIndex = 0;
             cbMaintenanceType.SelectedIndex = 0;
             cbTerminated.SelectedIndex = 0;

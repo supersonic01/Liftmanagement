@@ -40,7 +40,7 @@ namespace Liftmanagement.Helper
             }
         }
 
-        public void AddEvent(DateTime startDate, DateTime endDate, string summary, string description)
+        public string AddEvent(DateTime startDate, DateTime endDate, string summary, string description)
         {
             var service = GetCalendarService();
 
@@ -81,7 +81,12 @@ namespace Liftmanagement.Helper
 
             var calendarId = "primary";
             Event recurringEvent = service.Events.Insert(ev, calendarId).Execute();
-            Console.WriteLine("Event created: %s\n", ev.HtmlLink);
+
+            string eidWord = "eid=";
+            var index = recurringEvent.HtmlLink.IndexOf(eidWord, 0);
+            var eid = recurringEvent.HtmlLink.Substring(index + eidWord.Length, recurringEvent.HtmlLink.Length - (index + eidWord.Length));
+            //var calendarEditLink = string.Format(@"https://calendar.google.com/calendar/u/2/r/eventedit/{0}?sf=true", eid);
+            return eid;
         }
 
         public void GetCalendarItems()

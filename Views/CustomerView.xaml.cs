@@ -129,8 +129,8 @@ namespace Liftmanagement.View
             BindingText(txtEmail, () => CustomerVM.CustomerSelected.ContactPerson.EMail);
             BindingText(txtAdditionalInfo, nameof(CustomerVM.CustomerSelected.AdditionalInfo));
             BindingText(txtAdministratorCompanyName, () => CustomerVM.CustomerSelected.Administrator.Name);
-            BindingHyperlink(hyperlinkGoogleDrive, GetPropertyPath(() => CustomerVM.CustomerSelected.GoogleDriveLink));
-            BindingTextBlock(txtGoogleDriveFolderName, GetPropertyPath(() => CustomerVM.CustomerSelected.GoogleDriveFolderName));
+            BindingHyperlink(hyperlinkGoogleDrive, () => CustomerVM.CustomerSelected.GoogleDriveLink);
+            BindingTextBlock(txtGoogleDriveFolderName, () => CustomerVM.CustomerSelected.GoogleDriveFolderName);
 
             BindingText(txtAdministratorContactPerson, () => CustomerVM.AdministratorContactPerson.Name);
             BindingText(txtAdministratorPhoneWork, () => CustomerVM.AdministratorContactPerson.PhoneWork);

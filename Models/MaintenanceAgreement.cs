@@ -84,13 +84,32 @@ namespace Liftmanagement.Models
         /// 10, 14 Tage, Wochen
         /// </summary>
         [DisplayName("Benachrichtigung")]
-        public int NotificationTime { get; set; }
+        public int NotificationTime { get; set; } = 3;
 
         /// <summary>
         /// Tage, Wochen, Monte
         /// </summary>
         [DisplayName("Benachrichtigung")]
         public Helper.Helper.NotificationUnitType NotificationUnit { get; set; }
+
+        private string googleCalendarEventId = null;
+        [DisplayName("Google Kalender"), Database(Length = "300")]
+        public string GoogleCalendarEventId
+        {
+            get { return googleCalendarEventId; }
+            set
+            {
+                SetField(ref googleCalendarEventId, value);
+            }
+        }
+
+        private string googleCalendarLink;
+        
+        public string GoogleCalendarLink
+        {
+            get { return googleCalendarLink; }
+            set { SetField(ref googleCalendarLink, value); }
+        }
 
         public static string GetIndexFields()
         {

@@ -55,6 +55,7 @@ namespace Liftmanagement.Views
             machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.Payload));
             machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.Entrances));
             machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.HoldingPositions));
+             machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.HoldingPositions));
             frameMachineInformations.Content = machineInformationsView;
 
             masterDataInfo = new MasterDataInfoView(Helper.Helper.TTypeMangement.MaintenanceAgreement);
@@ -71,6 +72,9 @@ namespace Liftmanagement.Views
 
            // machineInformationsView.expanderMachineInformations.Collapsed += ExpanderMachineInformations_Collapsed;
             machineInformationsView.dgMachineInformations.SelectionChanged += DgMachineInformations_SelectionChanged;
+
+            NotVisibleColumns.Add(nameof(MaintenanceAgreement.GoogleCalendarEventId));
+            dgMaintenanceAgreements.Tag = NotVisibleColumns;
 
             dgMaintenanceAgreements.SelectionChanged += DgMaintenanceAgreements_SelectionChanged;
             dgMaintenanceAgreements.SelectedIndex = 0;

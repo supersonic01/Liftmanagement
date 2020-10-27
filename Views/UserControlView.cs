@@ -104,7 +104,7 @@ namespace Liftmanagement.Views
             {
                 Source = this
             };
-
+            
             control.SetBinding(ItemsControl.ItemsSourceProperty, binding);
         }
 

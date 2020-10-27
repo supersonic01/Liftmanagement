@@ -5,6 +5,7 @@ using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -691,15 +692,7 @@ namespace Liftmanagement.Data
 
         private static void SelectItems(string query, Action<MySqlDataReader> getRecords)
         {
-            //TODO check whether its not better to open one time and not for each select....
-            //if (databaseConnection == null)
-            //{
-            //    CreateConnection();
-            //}
-
-            string connectionString = GetConnectionString();
-           var dbConnection = new MySqlConnection(connectionString);
-
+            var dbConnection = GetConnection();
 
             MySqlCommand commandDatabase = new MySqlCommand(query, dbConnection);
             commandDatabase.CommandTimeout = 60;
@@ -1056,6 +1049,40 @@ namespace Liftmanagement.Data
         public static List<string> GetMaintenanceAgreementTerminationUnits()
         {
             throw new NotImplementedException();
+        }
+
+        public static ObservableCollection<ManagementOverviewFilter> GetManagementOverviewFilter()
+        {
+            ObservableCollection<ManagementOverviewFilter> overview = new ObservableCollection<ManagementOverviewFilter>();
+
+            var customrs = GetCustomers();
+            var locations = GetLocations();
+            var machine = GetMachineInformations();
+
+
+            foreach (var machineInformation in machine)
+            {
+                var item = new ManagementOverviewFilter();
+
+                item.MachineInformationId = machineInformation.Id;
+                item.Manufacturer = machineInformation.Name;
+                item.SerialNumber = machineInformation.SerialNumber;
+                item.YearOfConstruction = machineInformation.YearOfConstruction.ToString("dd.MM.yyyy");
+                item.CustomerId = machineInformation.CustomerId;
+                item.LocationId = machineInformation.LocationId;
+
+
+                var location = locations.Where(c => c.Id == machineInformation.LocationId).FirstOrDefault();
+                item.Location = string.Format("{0},{1} {2}", location.Address, location.Postcode, location.City);
+
+                var customer = customrs.Where(c => c.Id == machineInformation.CustomerId).FirstOrDefault();
+                item.CompanyName = customer.CompanyName;
+                item.Administrator = customer.Administrator.Name;
+
+                overview.Add(item);
+            }
+
+            return overview;
         }
     }
 }

@@ -31,7 +31,6 @@ public  class MachineInformationViewModel : ViewModel
 
         public MachineInformation MachineInformationSelectedLast { get; set; }
 
-    
         public SQLQueryResult<MachineInformation> Add(Location location)
         {
             machineInformationSelected.ReadOnly = false;

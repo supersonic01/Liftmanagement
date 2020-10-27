@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using Liftmanagement.Data;
 using Liftmanagement.Helper;
 using Liftmanagement.Models;
 
@@ -41,7 +42,7 @@ namespace Liftmanagement.ViewModels
 
         public ManagementOverviewFilterViewModel()
         {
-            managementOverviews = TestData.GetManagementOverviewFilter();
+            managementOverviews = MySQLDataAccess.GetManagementOverviewFilter();
         }
 
     }

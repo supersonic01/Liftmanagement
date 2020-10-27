@@ -23,14 +23,16 @@ namespace Liftmanagement.Views
     /// <summary>
     /// Interaction logic for ManagementView.xaml
     /// </summary>
-    public partial class ManagementView : UserControl
+    public partial class ManagementView : UserControlView
     {
         private ManagementViewModel managementVM = new ManagementViewModel();
         private Window overviewFilterViewWindow;
         private ManagementOverviewFilterView overviewFilterView;
-        private RecordingsView recordingsView;
-        private RecordingView recordingView;
-        private Window recordingViewWindow;
+        private RecordsView recordsView;
+        private RecordView recordView;
+        private Window recordViewWindow;
+
+        private OtherInformation otherInformationSelected;
 
         public ManagementViewModel ManagementVM
         {
@@ -41,37 +43,87 @@ namespace Liftmanagement.Views
         public ManagementView()
         {
             InitializeComponent();
-            recordingsView = new RecordingsView();
-            frameRecordings.Content = recordingsView;
 
-            lblCustomerHeader.Content = "Rechnungsadresse:";
-            lblLocationHeader.Content = "Standort:";
-            lblMaintenanceIntervalHeader.Content = "Wartungsinterval:\n4x / vierteljährlich";
+            recordsView = new RecordsView();
+            frameRecords.Content = recordsView;
 
-            BindingControll(cbAdministrators, nameof(ManagementVM.Administrators));
-            BindingControll(cbCustomers, nameof(ManagementVM.Customers));
-            BindingControll(cbLocations, nameof(ManagementVM.Locations));
-            BindingControll(cbMachineInformations, nameof(ManagementVM.MachineInformations));
-            BindingControll(dgOthers, nameof(ManagementVM.OtherInformations));
+            ManagementVM.Refresh();
 
-
-
-            //cbAdministrators.SelectionEffectivelyChanged += CbAdministrators_SelectionEffectivelyChanged;
-            //cbCustomers.SelectionEffectivelyChanged += CbCustomers_SelectionEffectivelyChanged;
             cbAdministrators.SelectionChanged += CbAdministrators_SelectionChanged;
             cbCustomers.SelectionChanged += CbCustomers_SelectionChanged;
             cbLocations.SelectionChanged += CbLocations_SelectionChanged;
             cbMachineInformations.SelectionChanged += CbMachineInformations_SelectionChanged;
 
+            dgContactPersons.ToolTipOpening += DgContactPersons_ToolTipOpening;
+            dgContactPersons.LoadingRow += DgContactPersons_LoadingRow;
+
+            dgOthers.SelectionChanged += DgOthers_SelectionChanged;
             dgOthers.PreviewKeyDown += DgOthers_PreviewKeyDown;
+
             this.Loaded += ManagementView_Loaded;
+
             btnSearch.Click += BtnSearch_Click;
             txtSearch.KeyUp += TxtSearch_KeyUp;
 
-            //TODO dgOthers cell  make vertical scrollabl
+            //TODO dgOthers cell make vertical scrollabl
             //TODO Keyordnavigation
 
+            AssigneValuesToControl();
+        }
+        
+        private void DgOthers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                var row_list = GetDataGridRows(dgOthers);
+                foreach (DataGridRow single_row in row_list)
+                {
+                    if (single_row.IsSelected == true)
+                    {
+                        otherInformationSelected = single_row.DataContext as OtherInformation;
+                    }
+                }
 
+            }
+            catch { }
+        }
+        public IEnumerable<DataGridRow> GetDataGridRows(DataGrid grid)
+        {
+            var itemsSource = grid.ItemsSource as IEnumerable;
+            if (null == itemsSource) yield return null;
+            foreach (var item in itemsSource)
+            {
+                var row = grid.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
+                if (null != row) yield return row;
+            }
+        }
+
+        private void DgContactPersons_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            if (e.Row != null)
+            {
+                string toolTipText = "Your Tooltip string content";
+                e.Row.ToolTip = toolTipText;
+
+            }
+        }
+
+        private void DgContactPersons_ToolTipOpening(object sender, ToolTipEventArgs e)
+        {
+            
+        }
+
+        private void AssigneValuesToControl()
+        {
+            BindingControl(cbAdministrators,()=>ManagementVM.Administrators);
+            BindingControl(cbCustomers,()=>ManagementVM.Customers);
+            BindingControl(cbLocations,()=>ManagementVM.Locations);
+            BindingControl(cbMachineInformations,()=>ManagementVM.MachineInformations);
+            BindingControl(dgOthers,()=>ManagementVM.OtherInformations);
+
+            lblCustomerHeader.Content = "Rechnungsadresse:";
+            lblLocationHeader.Content = "Standort:";
+            lblMaintenanceIntervalHeader.Content = "Wartungsinterval:\n4x / vierteljährlich";
         }
 
         private void TxtSearch_KeyUp(object sender, KeyEventArgs e)
@@ -97,7 +149,7 @@ namespace Liftmanagement.Views
         }
 
         private void ManagementView_Loaded(object sender, RoutedEventArgs e)
-        {
+        {//TODO in new Task
             InitOverviewFilterView();
             //overviewFilterView.SetDoubleClickEventHandler(Row_DoubleClick, Row_KeyUp);
             overviewFilterView.SetDoubleClickEventHandler(Row_DoubleClick);
@@ -169,32 +221,32 @@ namespace Liftmanagement.Views
 
         private void InitRecordView()
         {
-            recordingView = new RecordingView();
-            recordingViewWindow = new Window
+            recordView = new RecordView();
+            recordViewWindow = new Window
             {
-                Content = recordingView,
-                Name = "ManagementRecordingViewWindow"
+                Content = recordView,
+                Name = "ManagementRecordViewWindow"
             };
-            //recordingViewWindow.Height = 450;
-            //recordingViewWindow.Width = 800;
-           // recordingViewWindow.WindowStyle = WindowStyle.None;
-            recordingViewWindow.Topmost = true;
+            //recordViewWindow.Height = 450;
+            //recordViewWindow.Width = 800;
+           // recordViewWindow.WindowStyle = WindowStyle.None;
+            recordViewWindow.Topmost = true;
             
-           recordingView.btnCancel.Click += BtnCancelRecord_Click;
-           recordingView.btnSave.Click += BtnSaveRecord_Click;
+           recordView.btnCancel.Click += BtnCancelRecord_Click;
+           recordView.btnSave.Click += BtnSaveRecord_Click;
 
-           recordingView.RcordingVM.Recordings= recordingsView.RcordingsVM.Recordings;
+           recordView.RcordingVM.Records= recordsView.RcordingsVM.Records;
 
         }
 
         private void BtnSaveRecord_Click(object sender, RoutedEventArgs e)
         {
-           recordingViewWindow.Hide();
+           recordViewWindow.Hide();
         }
 
         private void BtnCancelRecord_Click(object sender, RoutedEventArgs e)
         {
-            recordingViewWindow.Hide();
+            recordViewWindow.Hide();
         }
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
@@ -235,7 +287,7 @@ namespace Liftmanagement.Views
             var machineInfo = cbMachineInformations.SelectedItem as MachineInformation;
             var maintenanceAgreement = ManagementVM.MaintenanceAgreements
                 .Where(c => c.MachineInformationId == machineInfo.Id).FirstOrDefault();
-
+            
             SetLocationData(location);
             SetCustomerData(customer);
             SetMaintenanceAgreementData(maintenanceAgreement);
@@ -250,7 +302,8 @@ namespace Liftmanagement.Views
             contactPersons.Add(machineInfo.ContactPerson);
 
             dgContactPersons.ItemsSource = contactPersons;
-            dgContactPersons.Tag = ManagementVM.NotVisibleColumns;
+
+            dgContactPersons.Tag = new List<string>{nameof(ContactPartner.EMail)};
         }
 
         private void CbLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -303,7 +356,6 @@ namespace Liftmanagement.Views
             if (location == null)
                 return;
 
-
             var customer = cbCustomers.SelectedItem as Customer;
             if (customer == null || customer.Id != location.CustomerId)
             {
@@ -311,6 +363,7 @@ namespace Liftmanagement.Views
                 {
                     return ManagementVM.Customers.Where(c => c.Id == location.CustomerId);
                 });
+
             }
 
             var machineInformation = cbMachineInformations.SelectedItem as MachineInformation;
@@ -370,33 +423,28 @@ namespace Liftmanagement.Views
                 comboBox.Text = model.ToString();
         }
 
-        private void BindingControll(ItemsControl control, string source)
-        {
-            Binding binding = new Binding("ManagementVM." + source)
-            {
-                Source = this
-            };
-
-            control.SetBinding(ItemsControl.ItemsSourceProperty, binding);
-        }
+       
 
         private void DgOthers_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Tab)
             {
-                if (dgOthers.SelectedIndex == dgOthers.Items.Count - 1)
-                {
-                    ManagementVM.OtherInformations.Add(new OtherInformation(""));
-                    e.Handled = true;
-                    //TODO dgOthers cell Textbox courser is set proper by new cell
-                }
-
-                dgOthers.CurrentCell = new DataGridCellInfo(
-                    dgOthers.Items[dgOthers.SelectedIndex + 1], dgOthers.Columns[0]);
-                dgOthers.BeginEdit();
-
-
+                AddOtherInformation(e);
             }
+        }
+
+        private void AddOtherInformation(RoutedEventArgs  e)
+        {
+            if (dgOthers.SelectedIndex == dgOthers.Items.Count - 1)
+            {
+                ManagementVM.OtherInformations.Add(new OtherInformation(""));
+                e.Handled = true;
+                //TODO dgOthers cell Textbox courser is set proper by new cell
+            }
+
+            dgOthers.CurrentCell = new DataGridCellInfo(
+                dgOthers.Items[dgOthers.SelectedIndex + 1], dgOthers.Columns[0]);
+            dgOthers.BeginEdit();
         }
 
         private void SetMaintenanceAgreementData(MaintenanceAgreement maintenanceAgreement)
@@ -458,28 +506,45 @@ namespace Liftmanagement.Views
 
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
-            var vm= new RecordingViewModel();
-            vm.Record = recordingsView.GetSelectedItem();
-            vm.Recordings = recordingsView.RcordingsVM.Recordings;
+            var vm= new RecordViewModel();
+            vm.RecordSelected = recordsView.GetSelectedItem();
+            vm.RecordSelectedLast = vm.RecordSelected;
+            vm.Records = recordsView.RcordingsVM.Records;
 
-            recordingView.RcordingVM = vm;
-            recordingView.SetData();
-            recordingViewWindow.ShowDialog();
+            recordView.RcordingVM = vm;
+            recordViewWindow.ShowDialog();
 
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
-            var vm = new RecordingViewModel();
-            vm.Recordings = recordingsView.RcordingsVM.Recordings;
-            recordingView.RcordingVM = vm;
+            var vm = new RecordViewModel();
+            vm.Records = recordsView.RcordingsVM.Records;
+            recordView.RcordingVM = vm;
 
-            recordingViewWindow.ShowDialog();
+            recordViewWindow.ShowDialog();
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
             //TODO PW
+        }
+
+      
+
+        private void CxmOpened(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Click_Add_OtherInformation(object sender, RoutedEventArgs e)
+        {
+            AddOtherInformation(e);
+        }
+
+        private void Click_Delete_OtherInformation(object sender, RoutedEventArgs e)
+        {
+            ManagementVM.OtherInformations.Remove(otherInformationSelected);
         }
     }
 

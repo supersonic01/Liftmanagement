@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Mime;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -471,8 +472,8 @@ namespace Liftmanagement.Helper
         {
             ObservableCollection<OtherInformation> oi = new ObservableCollection<OtherInformation>();
 
-            oi.Add(new OtherInformation("Mit Auftragnehmer vereinbart: Aufträge bis 100 EUR netto können"));
-            oi.Add(new OtherInformation("text"));
+            oi.Add(new OtherInformation {Text = "Mit Auftragnehmer vereinbart: Aufträge bis 100 EUR netto können",Id = 1});
+            oi.Add(new OtherInformation {Text="text",Id = 2});
             return oi;
         }
 
@@ -510,12 +511,12 @@ namespace Liftmanagement.Helper
             return overview;
         }
 
-        public static ObservableCollection<Recording> GetRecordings()
+        public static ObservableCollection<Record> GetRecords()
         {
 
-            ObservableCollection<Recording> recordings = new ObservableCollection<Recording>();
+            ObservableCollection<Record> records = new ObservableCollection<Record>();
 
-            var recording = new Recording
+            var record = new Record
             {
                 Date = new DateTime().Date,
                 Process = "TÜV Meldung",
@@ -538,9 +539,9 @@ namespace Liftmanagement.Helper
                 VerifiedOnSpot = "Wartungskontrolle durchgeführt"
             };
 
-            recordings.Add(recording);
+            records.Add(record);
 
-            recording = new Recording
+            record = new Record
             {
                 Date = new DateTime().Date,
                 Process = "Rechnung AN",
@@ -563,9 +564,9 @@ namespace Liftmanagement.Helper
                 VerifiedOnSpot = "Wartungskontrolle durchgeführt"
             };
 
-            recordings.Add(recording);
+            records.Add(record);
 
-            recording = new Recording
+            record = new Record
             {
                 Date = DateTime.Now.Date,
                 Process = "Störungsmeldung AN",
@@ -588,9 +589,9 @@ namespace Liftmanagement.Helper
                 VerifiedOnSpot = "Wartungskontrolle durchgeführt"
             };
 
-            recordings.Add(recording);
+            records.Add(record);
 
-            recording = new Recording
+            record = new Record
             {
                 Date = DateTime.Now.Date,
                 Process = "Störungsmeldung AN",
@@ -613,10 +614,10 @@ namespace Liftmanagement.Helper
                 VerifiedOnSpot = "Wartungskontrolle durchgeführt"
             };
 
-            recordings.Add(recording);
+            records.Add(record);
 
 
-            recording = new Recording
+            record = new Record
             {
                 Date = DateTime.Now.Date,
                 Process = "Störungsmeldung AN",
@@ -639,9 +640,9 @@ namespace Liftmanagement.Helper
                 VerifiedOnSpot = "Wartungskontrolle durchgeführt"
             };
 
-            recordings.Add(recording);
+            records.Add(record);
 
-            recording = new Recording
+            record = new Record
             {
                 Date = new DateTime().Date,
                 Process = "Rechnung AN",
@@ -664,9 +665,9 @@ namespace Liftmanagement.Helper
                 VerifiedOnSpot = "Wartungskontrolle durchgeführt"
             };
 
-            recordings.Add(recording);
+            records.Add(record);
 
-            recording = new Recording
+            record = new Record
             {
                 Date = DateTime.Now.Date,
                 Process = "Störungsmeldung AN",
@@ -689,9 +690,9 @@ namespace Liftmanagement.Helper
                 VerifiedOnSpot = "Wartungskontrolle durchgeführt"
             };
 
-            recordings.Add(recording);
+            records.Add(record);
 
-            recording = new Recording
+            record = new Record
             {
                 Date = DateTime.Now.Date,
                 Process = "Störungsmeldung AN",
@@ -714,10 +715,10 @@ namespace Liftmanagement.Helper
                 VerifiedOnSpot = "Wartungskontrolle durchgeführt"
             };
 
-            recordings.Add(recording);
+            records.Add(record);
 
 
-            return recordings;
+            return records;
 
         }
 

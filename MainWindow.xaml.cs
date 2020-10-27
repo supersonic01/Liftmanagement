@@ -173,7 +173,7 @@ namespace Liftmanagement
                     //var window = new Window
                     //{
                     //    Title = "Suche",
-                    //    Content = new RecordingView()
+                    //    Content = new RecordView()
                     //};
                     //window.Show();
 

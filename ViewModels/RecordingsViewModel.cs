@@ -9,15 +9,15 @@ using Liftmanagement.Models;
 
 namespace Liftmanagement.ViewModels
 {
-    public class RecordingsViewModel : ViewModel
+    public class RecordsViewModel : ViewModel
     {
 
-        private ObservableCollection<Recording> recordings = new ObservableCollection<Recording>();
+        private ObservableCollection<Record> records = new ObservableCollection<Record>();
 
-        public ObservableCollection<Recording> Recordings
+        public ObservableCollection<Record> Records
         {
-            get { return recordings; }
-            set { SetField(ref recordings, value); }
+            get { return records; }
+            set { SetField(ref records, value); }
         }
 
 
@@ -66,9 +66,9 @@ namespace Liftmanagement.ViewModels
 
 
 
-        public RecordingsViewModel()
+        public RecordsViewModel()
         {
-            recordings = TestData.GetRecordings();
+            records = TestData.GetRecords();
 
            
         }

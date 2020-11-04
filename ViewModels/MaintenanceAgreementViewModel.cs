@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Liftmanagement.CollectionExtensions;
 using Liftmanagement.Data;
+using Liftmanagement.Views;
 
 namespace Liftmanagement.ViewModels
 {
@@ -70,19 +71,34 @@ namespace Liftmanagement.ViewModels
             get { return maintenanceAgreementSelected; }
             set
             {
+                if (RefreshMaintenanceAgreementContent != null && value != null &&
+                    EqualityComparer<MaintenanceAgreement>.Default.Equals(maintenanceAgreementSelected, value) == false)
+                {
+                    Task.Factory.StartNew(() => { RefreshMaintenanceAgreementContent(value.Id); });
+                }
+
                 SetField(ref maintenanceAgreementSelected, value);
             }
         }
 
         public MaintenanceAgreement MaintenanceAgreementSelectedLast { get; set; }
 
-        public SQLQueryResult<MaintenanceAgreement> Add(MasterDataInfoViewModel masterDataInfoVM)
+
+        public delegate void RefreshMaintenanceAgreementContentDelegate(long maintenanceAgreementId);
+
+        public RefreshMaintenanceAgreementContentDelegate RefreshMaintenanceAgreementContent { get; set; }
+
+
+
+        public SQLQueryResult<MaintenanceAgreement> Add(MasterDataInfoViewModel masterDataInfoVM,
+            MaintenanceAgreementContentViewModel maintenanceAgreementContentVM)
         {
             maintenanceAgreementSelected.ReadOnly = false;
             SQLQueryResult<MaintenanceAgreement> result = null;
+
             if (MaintenanceAgreementSelected.Id > 0)
             {
-                result = MySQLDataAccess.UpdateMaintenanceAgreement(MaintenanceAgreementSelected);
+                result = MySQLDataAccess.UpdateMaintenanceAgreement(MaintenanceAgreementSelected, maintenanceAgreementContentVM.MaintenanceAgreementContents.ToList());
             }
             else
             {
@@ -92,7 +108,7 @@ namespace Liftmanagement.ViewModels
                 MaintenanceAgreementSelected.CustomerId = masterDataInfoVM.MachineInformationSelected.CustomerId;
                 MaintenanceAgreementSelected.LocationId = masterDataInfoVM.MachineInformationSelected.Id;
                 MaintenanceAgreementSelected.MachineInformationId = masterDataInfoVM.MachineInformationSelected.Id;
-                result = MySQLDataAccess.AddMaintenanceAgreement(MaintenanceAgreementSelected);
+                result = MySQLDataAccess.AddMaintenanceAgreement(MaintenanceAgreementSelected, maintenanceAgreementContentVM.MaintenanceAgreementContents.ToList());
             }
 
             LoadComboboxes();
@@ -103,8 +119,8 @@ namespace Liftmanagement.ViewModels
         private string AddGooleEvent(MasterDataInfoViewModel masterDataInfoVM)
         {
             TimeSpan ts = new TimeSpan(9, 00, 0);
-            DateTime start = DateTime.Now ;
-           
+            DateTime start = DateTime.Now;
+
 
             switch (MaintenanceAgreementSelected.NotificationUnit)
             {

@@ -193,17 +193,17 @@ namespace Liftmanagement.Helper
 
             foreach (PropertyInfo p in classType.GetProperties())
             {
-                bool updateableColumne = true;
+                bool updateableColumn = true;
 
                 var attribute = p.GetCustomAttributes(typeof(DatabaseAttribute), true)
                     .Cast<DatabaseAttribute>().FirstOrDefault();
 
                 if (attribute != null && attribute.Updateable == false)
                 {
-                    updateableColumne = false;
+                    updateableColumn = false;
                 }
 
-                if (!p.DeclaringType.IsAbstract && !p.DeclaringType.IsInterface)
+                if (!p.DeclaringType.IsAbstract && !p.DeclaringType.IsInterface )
                 {
 
                     if (p.PropertyType != typeof(Timestamp) && p.PropertyType != typeof(ContactPartner) && p.PropertyType != typeof(AdministratorCompany))

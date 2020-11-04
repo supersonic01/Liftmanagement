@@ -30,7 +30,8 @@ namespace Liftmanagement.Data
         public static MySqlConnection GetConnection()
         {
             string connectionString = GetConnectionString();
-            return  new MySqlConnection(connectionString);
+            var dd = new MySqlConnection(connectionString);
+            return new MySqlConnection(connectionString);
         }
 
         public static void CreateTables()
@@ -184,23 +185,48 @@ namespace Liftmanagement.Data
         }
 
 
-        public static SQLQueryResult<MaintenanceAgreement> AddMaintenanceAgreement(MaintenanceAgreement maintenanceagreement)
+        public static SQLQueryResult<MaintenanceAgreement> AddMaintenanceAgreement(
+            MaintenanceAgreement maintenanceagreement, List<MaintenanceAgreementContent> maintenanceAgreementContents)
         {
             var dbConnection = GetConnection();
 
             string query = "INSERT INTO MAINTENANCEAGREEMENT(LocationId,CustomerId,MachineInformationId,Duration,CanBeCancelled,AgreementCancelledBy,NoticeOfPeriod,AgreementDate,MaintenanceType,AdditionalInfo,NotificationTime,NotificationUnit,GoogleCalendarEventId,GoogleDriveFolderName,GoogleDriveLink,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy,Deleted)";
             string values = "VALUE(" + maintenanceagreement.LocationId + "," + maintenanceagreement.CustomerId + "," + maintenanceagreement.MachineInformationId + ",'" + maintenanceagreement.Duration.ToString("yyyy-MM-dd") + "','" + maintenanceagreement.CanBeCancelled + "','" + maintenanceagreement.AgreementCancelledBy + "'," + maintenanceagreement.NoticeOfPeriod + ",'" + maintenanceagreement.AgreementDate.ToString("yyyy-MM-dd") + "','" + maintenanceagreement.MaintenanceType + "','" + maintenanceagreement.AdditionalInfo + "'," + maintenanceagreement.NotificationTime + "," + (int)maintenanceagreement.NotificationUnit + ",'" + maintenanceagreement.GoogleCalendarEventId + "','" + maintenanceagreement.GoogleDriveFolderName + "','" + maintenanceagreement.GoogleDriveLink + "','" + maintenanceagreement.CreatedPersonName + "','" + maintenanceagreement.ModifiedPersonName + "'," + maintenanceagreement.ReadOnly + ",'" + maintenanceagreement.UsedBy + "'," + maintenanceagreement.Deleted + ")";
             query = query + values;
-            
+
             MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
             dbConnection.Open();
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
 
-            dbConnection.Close();
+            Task.Factory.StartNew(() =>
+            {
+                foreach (var maintenanceAgreementContent in maintenanceAgreementContents)
+                {
+                    maintenanceAgreementContent.CustomerId = maintenanceagreement.CustomerId;
+                    maintenanceAgreementContent.MachineInformationId = maintenanceagreement.MachineInformationId;
+                    maintenanceAgreementContent.MaintenanceAgreementId = id;
+
+                    AddMaintenanceAgreementContent(dbConnection, maintenanceAgreementContent);
+                }
+            }).ContinueWith(task => dbConnection.Close());
 
             return new SQLQueryResult<MaintenanceAgreement>(records, id);
+        }
+
+        private static SQLQueryResult<MaintenanceAgreementContent> AddMaintenanceAgreementContent(MySqlConnection dbConnection, MaintenanceAgreementContent maintenanceagreementcontent)
+        {
+            string query = "INSERT INTO MAINTENANCEAGREEMENTCONTENT(MaintenanceAgreementId,CustomerId,MachineInformationId,Sequence,Content,Provide,ReuseContent,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy,Deleted)";
+            string values = "VALUE(" + maintenanceagreementcontent.MaintenanceAgreementId + "," + maintenanceagreementcontent.CustomerId + "," + maintenanceagreementcontent.MachineInformationId + "," + maintenanceagreementcontent.Sequence + ",'" + maintenanceagreementcontent.Content + "','" + maintenanceagreementcontent.Provide + "'," + maintenanceagreementcontent.ReuseContent + ",'" + maintenanceagreementcontent.CreatedPersonName + "','" + maintenanceagreementcontent.ModifiedPersonName + "'," + maintenanceagreementcontent.ReadOnly + ",'" + maintenanceagreementcontent.UsedBy + "'," + maintenanceagreementcontent.Deleted + ")";
+            query = query + values;
+
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
+
+            int records = execQuery.ExecuteNonQuery();
+            long id = execQuery.LastInsertedId;
+
+            return new SQLQueryResult<MaintenanceAgreementContent>(records, id);
         }
 
         public static List<Customer> GetCustomers()
@@ -301,10 +327,10 @@ namespace Liftmanagement.Data
 
         public static SQLQueryResult<Customer> GetCustomerForEdit(long id)
         {
-            return GetRecordForEdit(id, query => GetCustomers(query));
+            return GetDbRecordForEdit(id, query => GetCustomers(query));
         }
 
-        private static SQLQueryResult<T> GetRecordForEdit<T>(long id, Func<string, List<T>> GetRecords) where T : BaseDatabaseField
+        private static SQLQueryResult<T> GetDbRecordForEdit<T>(long id, Func<string, List<T>> GetRecords) where T : BaseDatabaseField
         {
             // TODO check user, if is the same user, editing is possilbe
 
@@ -346,7 +372,7 @@ namespace Liftmanagement.Data
 
         public static SQLQueryResult<Location> GetLocationForEdit(long id)
         {
-            return GetRecordForEdit(id, query => GetLocations(query));
+            return GetDbRecordForEdit(id, query => GetLocations(query));
 
             //// TODO check user, if is the same user, editing is possilbe
         }
@@ -464,7 +490,14 @@ namespace Liftmanagement.Data
             return GetMaintenanceAgreements(query);
         }
 
-        private static List<MaintenanceAgreement> GetMaintenanceAgreements( string query)
+
+        public static List<MaintenanceAgreement> GetMaintenanceAgreements(long machineInformationId)
+        {
+            string query = "SELECT * FROM MAINTENANCEAGREEMENT WHERE MACHINEINFORMATIONID = " + machineInformationId;
+            return GetMaintenanceAgreements(query);
+        }
+
+        private static List<MaintenanceAgreement> GetMaintenanceAgreements(string query)
         {
             List<MaintenanceAgreement> maintenanceAgreements = new List<MaintenanceAgreement>();
 
@@ -482,7 +515,7 @@ namespace Liftmanagement.Data
                 maintenanceagreement.MaintenanceType = reader.GetString("MaintenanceType");
                 maintenanceagreement.AdditionalInfo = reader.GetString("AdditionalInfo");
                 maintenanceagreement.NotificationTime = reader.GetInt32("NotificationTime");
-                maintenanceagreement.NotificationUnit = (Helper.Helper.NotificationUnitType) reader.GetInt32("NotificationUnit");
+                maintenanceagreement.NotificationUnit = (Helper.Helper.NotificationUnitType)reader.GetInt32("NotificationUnit");
                 maintenanceagreement.GoogleCalendarEventId = reader.GetString("GoogleCalendarEventId");
                 maintenanceagreement.GoogleDriveFolderName = reader.GetString("GoogleDriveFolderName");
                 maintenanceagreement.GoogleDriveLink = reader.GetString("GoogleDriveLink");
@@ -498,6 +531,46 @@ namespace Liftmanagement.Data
             });
 
             return maintenanceAgreements;
+        }
+
+        public static List<MaintenanceAgreementContent> GetMaintenanceAgreementContents()
+        {
+            string query = "SELECT * FROM MAINTENANCEAGREEMENTCONTENT";
+            return GetMaintenanceAgreementContents(query);
+        }
+
+        public static List<MaintenanceAgreementContent> GetMaintenanceAgreementContents(long maintenanceAgreementId)
+        {
+            string query = "SELECT * FROM MAINTENANCEAGREEMENTCONTENT WHERE MAINTENANCEAGREEMENTID = " + maintenanceAgreementId;
+            return GetMaintenanceAgreementContents(query);
+        }
+
+        private static List<MaintenanceAgreementContent> GetMaintenanceAgreementContents(string query)
+        {
+            List<MaintenanceAgreementContent> maintenanceagreementcontents = new List<MaintenanceAgreementContent>();
+
+            SelectItems(query, reader =>
+            {
+                MaintenanceAgreementContent maintenanceagreementcontent = new MaintenanceAgreementContent();
+                maintenanceagreementcontent.MaintenanceAgreementId = reader.GetInt64("MaintenanceAgreementId");
+                maintenanceagreementcontent.CustomerId = reader.GetInt64("CustomerId");
+                maintenanceagreementcontent.MachineInformationId = reader.GetInt64("MachineInformationId");
+                maintenanceagreementcontent.Sequence = reader.GetInt32("Sequence");
+                maintenanceagreementcontent.Content = reader.GetString("Content");
+                maintenanceagreementcontent.Provide = reader.GetString("Provide");
+                maintenanceagreementcontent.ReuseContent = reader.GetBoolean("ReuseContent");
+                maintenanceagreementcontent.Id = reader.GetInt64("Id");
+                maintenanceagreementcontent.CreatedDate = reader.GetDateTime("CreatedDate");
+                maintenanceagreementcontent.ModifiedDate = reader.GetDateTime("ModifiedDate");
+                maintenanceagreementcontent.CreatedPersonName = reader.GetString("CreatedPersonName");
+                maintenanceagreementcontent.ModifiedPersonName = reader.GetString("ModifiedPersonName");
+                maintenanceagreementcontent.ReadOnly = reader.GetBoolean("ReadOnly");
+                maintenanceagreementcontent.UsedBy = reader.GetString("UsedBy");
+                maintenanceagreementcontent.Deleted = reader.GetBoolean("Deleted");
+                maintenanceagreementcontents.Add(maintenanceagreementcontent);
+            });
+
+            return maintenanceagreementcontents;
         }
 
         public static SQLQueryResult<Customer> UpdateCustomer(Customer customer)
@@ -829,7 +902,7 @@ namespace Liftmanagement.Data
             //database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
 
             connectionString = "SERVER=" + server + ";" + "DATABASE=" +
-                               database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
+                               database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + "; Convert Zero Datetime=True;";
             return connectionString;
         }
 
@@ -841,8 +914,8 @@ namespace Liftmanagement.Data
             }
 
             machineinformation.ModifiedPersonName = Helper.Helper.GetPersonName();
-            string query = "UPDATE MACHINEINFORMATION SET LocationId = " + machineinformation.LocationId + ",CustomerId = " + machineinformation.CustomerId + ",Name = '" + machineinformation.Name + "',YearOfConstruction = '" + machineinformation.YearOfConstruction + "',SerialNumber = '" + machineinformation.SerialNumber + "',HoldingPositions = " + machineinformation.HoldingPositions + ",Entrances = " + machineinformation.Entrances + ",Payload = " + machineinformation.Payload + ",Description = '" + machineinformation.Description + "',GoogleDriveFolderName = '" + machineinformation.GoogleDriveFolderName + "',GoogleDriveLink = '" + machineinformation.GoogleDriveLink + "',CreatedPersonName = '" + machineinformation.CreatedPersonName + "',ModifiedPersonName = '" + machineinformation.ModifiedPersonName + "',ReadOnly = " + machineinformation.ReadOnly + ",UsedBy = '" + machineinformation.UsedBy + "',Deleted = " + machineinformation.Deleted + " WHERE ID = "+machineinformation.Id;
-            
+            string query = "UPDATE MACHINEINFORMATION SET LocationId = " + machineinformation.LocationId + ",CustomerId = " + machineinformation.CustomerId + ",Name = '" + machineinformation.Name + "',YearOfConstruction = '" + machineinformation.YearOfConstruction + "',SerialNumber = '" + machineinformation.SerialNumber + "',HoldingPositions = " + machineinformation.HoldingPositions + ",Entrances = " + machineinformation.Entrances + ",Payload = " + machineinformation.Payload + ",Description = '" + machineinformation.Description + "',GoogleDriveFolderName = '" + machineinformation.GoogleDriveFolderName + "',GoogleDriveLink = '" + machineinformation.GoogleDriveLink + "',CreatedPersonName = '" + machineinformation.CreatedPersonName + "',ModifiedPersonName = '" + machineinformation.ModifiedPersonName + "',ReadOnly = " + machineinformation.ReadOnly + ",UsedBy = '" + machineinformation.UsedBy + "',Deleted = " + machineinformation.Deleted + " WHERE ID = " + machineinformation.Id;
+
             MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
 
             databaseConnection.Open();
@@ -858,7 +931,7 @@ namespace Liftmanagement.Data
 
         public static SQLQueryResult<MachineInformation> GetMachineInformationForEdit(long id)
         {
-            return GetRecordForEdit(id, query => GetMachineInformations(query));
+            return GetDbRecordForEdit(id, query => GetMachineInformations(query));
         }
 
         public static SQLQueryResult<MachineInformation> ForceToEditMachineInformation(long id)
@@ -1003,26 +1076,60 @@ namespace Liftmanagement.Data
             return customers;
         }
 
-        public static SQLQueryResult<MaintenanceAgreement> UpdateMaintenanceAgreement(MaintenanceAgreement maintenanceagreement)
+        public static SQLQueryResult<MaintenanceAgreement> UpdateMaintenanceAgreement(
+            MaintenanceAgreement maintenanceagreement, List<MaintenanceAgreementContent> maintenanceAgreementContents)
         {
             var dbConnection = GetConnection();
 
             maintenanceagreement.ModifiedPersonName = Helper.Helper.GetPersonName();
-            string query = "UPDATE MAINTENANCEAGREEMENT SET LocationId = " + maintenanceagreement.LocationId + ",CustomerId = " + maintenanceagreement.CustomerId + ",MachineInformationId = " + maintenanceagreement.MachineInformationId + ",Duration = '" + maintenanceagreement.Duration.ToString("yyyy-MM-dd") + "',CanBeCancelled = '" + maintenanceagreement.CanBeCancelled + "',AgreementCancelledBy = '" + maintenanceagreement.AgreementCancelledBy + "',NoticeOfPeriod = " + maintenanceagreement.NoticeOfPeriod + ",AgreementDate = '" + maintenanceagreement.AgreementDate.ToString("yyyy-MM-dd") + "',MaintenanceType = '" + maintenanceagreement.MaintenanceType + "',AdditionalInfo = '" + maintenanceagreement.AdditionalInfo + "',NotificationTime = " + maintenanceagreement.NotificationTime + ",NotificationUnit = " + (int) maintenanceagreement.NotificationUnit + ",GoogleCalendarEventId = '" + maintenanceagreement.GoogleCalendarEventId + "',GoogleDriveFolderName = '" + maintenanceagreement.GoogleDriveFolderName + "',GoogleDriveLink = '" + maintenanceagreement.GoogleDriveLink + "',CreatedPersonName = '" + maintenanceagreement.CreatedPersonName + "',ModifiedPersonName = '" + maintenanceagreement.ModifiedPersonName + "',ReadOnly = " + maintenanceagreement.ReadOnly + ",UsedBy = '" + maintenanceagreement.UsedBy + "',Deleted = " + maintenanceagreement.Deleted + " WHERE ID = "+maintenanceagreement.Id;
+            string query = "UPDATE MAINTENANCEAGREEMENT SET LocationId = " + maintenanceagreement.LocationId + ",CustomerId = " + maintenanceagreement.CustomerId + ",MachineInformationId = " + maintenanceagreement.MachineInformationId + ",Duration = '" + maintenanceagreement.Duration.ToString("yyyy-MM-dd") + "',CanBeCancelled = '" + maintenanceagreement.CanBeCancelled + "',AgreementCancelledBy = '" + maintenanceagreement.AgreementCancelledBy + "',NoticeOfPeriod = " + maintenanceagreement.NoticeOfPeriod + ",AgreementDate = '" + maintenanceagreement.AgreementDate.ToString("yyyy-MM-dd") + "',MaintenanceType = '" + maintenanceagreement.MaintenanceType + "',AdditionalInfo = '" + maintenanceagreement.AdditionalInfo + "',NotificationTime = " + maintenanceagreement.NotificationTime + ",NotificationUnit = " + (int)maintenanceagreement.NotificationUnit + ",GoogleCalendarEventId = '" + maintenanceagreement.GoogleCalendarEventId + "',GoogleDriveFolderName = '" + maintenanceagreement.GoogleDriveFolderName + "',GoogleDriveLink = '" + maintenanceagreement.GoogleDriveLink + "',CreatedPersonName = '" + maintenanceagreement.CreatedPersonName + "',ModifiedPersonName = '" + maintenanceagreement.ModifiedPersonName + "',ReadOnly = " + maintenanceagreement.ReadOnly + ",UsedBy = '" + maintenanceagreement.UsedBy + "',Deleted = " + maintenanceagreement.Deleted + " WHERE ID = " + maintenanceagreement.Id;
 
             MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
             dbConnection.Open();
             int records = execQuery.ExecuteNonQuery();
             var result = new SQLQueryResult<MaintenanceAgreement>(records, maintenanceagreement.Id);
-            dbConnection.Close();
+
+            Task.Factory.StartNew(() =>
+            {
+                foreach (var maintenanceAgreementContent in maintenanceAgreementContents)
+                {
+                    if (maintenanceAgreementContent.Id < 0)
+                    {
+                        maintenanceAgreementContent.CustomerId = maintenanceagreement.CustomerId;
+                        maintenanceAgreementContent.MachineInformationId = maintenanceagreement.MachineInformationId;
+                        maintenanceAgreementContent.MaintenanceAgreementId = maintenanceagreement.Id;
+
+                        AddMaintenanceAgreementContent(dbConnection, maintenanceAgreementContent);
+                    }
+                    else
+                    {
+                        UpdateMaintenanceAgreementContent(dbConnection, maintenanceAgreementContent);
+                    }
+
+                }
+            }).ContinueWith(task => dbConnection.Close());
+
+            return result;
+        }
+
+        private static SQLQueryResult<MaintenanceAgreementContent> UpdateMaintenanceAgreementContent(MySqlConnection dbConnection, MaintenanceAgreementContent maintenanceagreementcontent)
+        {
+
+            maintenanceagreementcontent.ModifiedPersonName = Helper.Helper.GetPersonName();
+            string query = "UPDATE MAINTENANCEAGREEMENTCONTENT SET MaintenanceAgreementId = " + maintenanceagreementcontent.MaintenanceAgreementId + ",CustomerId = " + maintenanceagreementcontent.CustomerId + ",MachineInformationId = " + maintenanceagreementcontent.MachineInformationId + ",Sequence = " + maintenanceagreementcontent.Sequence + ",Content = '" + maintenanceagreementcontent.Content + "',Provide = '" + maintenanceagreementcontent.Provide + "',ReuseContent = " + maintenanceagreementcontent.ReuseContent + ",CreatedPersonName = '" + maintenanceagreementcontent.CreatedPersonName + "',ModifiedPersonName = '" + maintenanceagreementcontent.ModifiedPersonName + "',ReadOnly = " + maintenanceagreementcontent.ReadOnly + ",UsedBy = '" + maintenanceagreementcontent.UsedBy + "',Deleted = " + maintenanceagreementcontent.Deleted + " WHERE ID = " + maintenanceagreementcontent.Id;
+
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
+
+            int records = execQuery.ExecuteNonQuery();
+            var result = new SQLQueryResult<MaintenanceAgreementContent>(records, maintenanceagreementcontent.Id);
 
             return result;
         }
 
         public static SQLQueryResult<MaintenanceAgreement> GetMaintenanceAgreementForEdit(long id)
         {
-            return GetRecordForEdit(id, query => GetMaintenanceAgreements(query));
+            return GetDbRecordForEdit(id, query => GetMaintenanceAgreements(query));
         }
 
         public static SQLQueryResult<MaintenanceAgreement> ForceToEditMaintenanceAgreement(long id)
@@ -1083,6 +1190,248 @@ namespace Liftmanagement.Data
             }
 
             return overview;
+        }
+
+        public static SQLQueryResult<Record> UpdateRecord(Record record)
+        {
+            var dbConnection = GetConnection();
+            string timesensitive = record.Timesensitive == null ? null : record.Timesensitive.Value.ToString("yyyy-MM-dd");
+            int agreementType = (int)record.AgreementType;
+
+            record.ModifiedPersonName = Helper.Helper.GetPersonName();
+            string query = "UPDATE RECORD SET LocationId = " + record.LocationId + ",CustomerId = " + record.CustomerId + ",MachineInformationId = " + record.MachineInformationId + ",Date = '" + record.Date + "',ProcessNo = '" + record.ProcessNo + "',Process = '" + record.Process + "',CostType = '" + record.CostType + "',MachineStoped = " + record.MachineStoped + ",Timesensitive = '" + timesensitive + "',InvoiceNumber = '" + record.InvoiceNumber + "',IssueLevel = " + record.IssueLevel + ",ReportedFrom = '" + record.ReportedFrom + "',Reason = '" + record.Reason + "',Storage = " + record.Storage + ",NextStep = '" + record.NextStep + "',PersonResponsible = '" + record.PersonResponsible + "',ReleaseFrom = '" + record.ReleaseFrom + "',CustomerInformed = " + record.CustomerInformed + ",CustomerPrefers = '" + record.CustomerPrefers + "',OfferPrice = " + record.OfferPrice + ",BillingAmountCorrect = " + record.BillingAmountCorrect + ",ExecutionCorrect = " + record.ExecutionCorrect + ",VerifiedOnSpot = '" + record.VerifiedOnSpot + "',ProcessCompleted = " + record.ProcessCompleted + ",ProcessCompletedPerson = '" + record.ProcessCompletedPerson + "',AgreementType = " + agreementType + ",AgreementId = " + record.AgreementId + ",GoogleDriveFolderName = '" + record.GoogleDriveFolderName + "',GoogleDriveLink = '" + record.GoogleDriveLink + "',CreatedPersonName = '" + record.CreatedPersonName + "',ModifiedPersonName = '" + record.ModifiedPersonName + "',ReadOnly = " + record.ReadOnly + ",UsedBy = '" + record.UsedBy + "',Deleted = " + record.Deleted + " WHERE ID = " + record.Id;
+
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
+
+            dbConnection.Open();
+            int records = execQuery.ExecuteNonQuery();
+            var result = new SQLQueryResult<Record>(records, record.Id);
+
+            dbConnection.Close();
+
+            return result;
+        }
+
+        public static SQLQueryResult<Record> AddRecord(Record record)
+        {
+            var dbConnection = GetConnection();
+
+            string timesensitive = record.Timesensitive == null ? null : record.Timesensitive.Value.ToString("yyyy-MM-dd");
+            int agreementType = (int)record.AgreementType;
+            var offerPrice = (string.Format("'{0:#.##}'", record.OfferPrice)).Replace(",",".");
+            var billingAmountCorrect = string.Format("'{0:#.##}'", record.BillingAmountCorrect).Replace(",", "."); 
+           
+
+            string query = "INSERT INTO RECORD(LocationId,CustomerId,MachineInformationId,Date,ProcessNo,Process,CostType,MachineStoped,Timesensitive,InvoiceNumber,IssueLevel,ReportedFrom,Reason,Storage,NextStep,PersonResponsible,ReleaseFrom,CustomerInformed,CustomerPrefers,OfferPrice,BillingAmountCorrect,ExecutionCorrect,VerifiedOnSpot,ProcessCompleted,ProcessCompletedPerson,AgreementType,AgreementId,GoogleDriveFolderName,GoogleDriveLink,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy,Deleted)";
+            string values = "VALUE(" + record.LocationId + "," + record.CustomerId + "," + record.MachineInformationId + ",'" + record.Date.ToString("yyyy-MM-dd") + "','" + record.ProcessNo + "','" + record.Process + "','" + record.CostType + "'," + record.MachineStoped + ",'" + timesensitive + "','" + record.InvoiceNumber + "'," + record.IssueLevel + ",'" + record.ReportedFrom + "','" + record.Reason + "'," + record.Storage + ",'" + record.NextStep + "','" + record.PersonResponsible + "','" + record.ReleaseFrom + "'," + record.CustomerInformed + ",'" + record.CustomerPrefers + "'," + offerPrice + "," + billingAmountCorrect + "," + record.ExecutionCorrect + ",'" + record.VerifiedOnSpot + "'," + record.ProcessCompleted + ",'" + record.ProcessCompletedPerson + "'," + agreementType + "," + record.AgreementId + ",'" + record.GoogleDriveFolderName + "','" + record.GoogleDriveLink + "','" + record.CreatedPersonName + "','" + record.ModifiedPersonName + "'," + record.ReadOnly + ",'" + record.UsedBy + "'," + record.Deleted + ")";
+            query = query + values;
+
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
+
+            dbConnection.Open();
+            int records = execQuery.ExecuteNonQuery();
+            long id = execQuery.LastInsertedId;
+            var result = new SQLQueryResult<Record>(records, id);
+
+            string processNo = string.Format("H{0}_{1}", id, record.Date.ToString("yyyyMMdd"));
+            query = " UPDATE RECORD SET PROCESSNO = '" + processNo + "' WHERE ID = " + id;
+            execQuery = new MySqlCommand(query, dbConnection);
+            records = execQuery.ExecuteNonQuery();
+
+            databaseConnection.Close();
+            return result;
+        }
+
+        public static SQLQueryResult<Record> GetRecordForEdit(long recordId)
+        {
+            return GetDbRecordForEdit(recordId, query => GetRecords(query));
+        }
+
+        public static SQLQueryResult<Record> ForceToEditRecord(long recordId)
+        {
+            return ForceToEdit<Record>(recordId);
+        }
+
+        public static void ReleaseEditingRecord(long recordId)
+        {
+            ReleaseEditing<Record>(recordId);
+        }
+
+        public static SQLQueryResult<Record> MarkForDeleteRecord(Record record)
+        {
+            return MarkForDeletion<Record>(record);
+        }
+
+        public static List<Record> GetRecords()
+        {
+            string query = "SELECT * FROM RECORD";
+            return GetRecords(query);
+        }
+
+        public static List<Record> GetRecords(long machineInformationId)
+        {
+            string query = "SELECT * FROM RECORD WHERE MACHINEINFORMATIONID = " + machineInformationId;
+            return GetRecords(query);
+        }
+
+        private static List<Record> GetRecords(string query)
+        {
+            List<Record> records = new List<Record>();
+
+            SelectItems(query, reader =>
+            {
+                Record record = new Record();
+                record.LocationId = reader.GetInt64("LocationId");
+                record.CustomerId = reader.GetInt64("CustomerId");
+                record.MachineInformationId = reader.GetInt64("MachineInformationId");
+                record.Date = reader.GetDateTime("Date");
+                record.Process = reader.GetString("Process");
+                record.CostType = reader.GetString("CostType");
+                record.MachineStoped = reader.GetBoolean("MachineStoped");
+
+                record.InvoiceNumber = reader.GetString("InvoiceNumber");
+                record.IssueLevel = reader.GetInt32("IssueLevel");
+                record.ReportedFrom = reader.GetString("ReportedFrom");
+                record.Reason = reader.GetString("Reason");
+                record.Storage = reader.GetBoolean("Storage");
+                record.NextStep = reader.GetString("NextStep");
+                record.PersonResponsible = reader.GetString("PersonResponsible");
+                record.ReleaseFrom = reader.GetString("ReleaseFrom");
+                record.CustomerInformed = reader.GetBoolean("CustomerInformed");
+                record.CustomerPrefers = reader.GetString("CustomerPrefers");
+                record.OfferPrice = reader.GetDouble("OfferPrice");
+                record.BillingAmountCorrect = reader.GetDouble("BillingAmountCorrect");
+                record.ExecutionCorrect = reader.GetBoolean("ExecutionCorrect");
+                record.VerifiedOnSpot = reader.GetString("VerifiedOnSpot");
+                record.ProcessCompleted = reader.GetBoolean("ProcessCompleted");
+                record.ProcessCompletedPerson = reader.GetString("ProcessCompletedPerson");
+                record.GoogleDriveFolderName = reader.GetString("GoogleDriveFolderName");
+                record.GoogleDriveLink = reader.GetString("GoogleDriveLink");
+                record.Id = reader.GetInt64("Id");
+                record.CreatedDate = reader.GetDateTime("CreatedDate");
+                record.ModifiedDate = reader.GetDateTime("ModifiedDate");
+                record.CreatedPersonName = reader.GetString("CreatedPersonName");
+                record.ModifiedPersonName = reader.GetString("ModifiedPersonName");
+                record.ReadOnly = reader.GetBoolean("ReadOnly");
+                record.UsedBy = reader.GetString("UsedBy");
+                record.Deleted = reader.GetBoolean("Deleted");
+
+                record.SetProcessNo(reader.GetString("ProcessNo"));
+                record.SetAgreementType(reader.GetInt32("AgreementType"));
+                record.SetAgreementId(reader.GetInt64("AgreementId"));
+
+                int timesensitive = reader.GetOrdinal("Timesensitive");
+                if (!reader.IsDBNull(timesensitive))
+                {
+                    var date = (DateTime?)reader.GetDateTime(timesensitive);
+                    if (date > Helper.Helper.DefaultDate)
+                        record.Timesensitive = date;
+                }
+
+                records.Add(record);
+            });
+
+            return records;
+        }
+
+        public static void AddOtherInformations(MachineInformation machineInformation, List<OtherInformation> otherInformations, List<OtherInformation> otherInformationDeleted)
+        {
+            var dbConnection = GetConnection();
+            dbConnection.Open();
+
+            foreach (var otherinformation in otherInformations)
+            {
+                if (otherinformation.Id < 0)
+                {
+                    //ADD
+                    otherinformation.CustomerId = machineInformation.CustomerId;
+                    otherinformation.MachineInformationId = machineInformation.Id;
+
+                    AddOtherInformation(dbConnection, otherinformation);
+                }
+                else
+                {
+                    //Update
+                    UpdateOtherInformation(dbConnection, otherinformation);
+                }
+            }
+
+            foreach (OtherInformation otherInformation in otherInformationDeleted)
+            {
+                var query = "DELETE FROM OTHERINFORMATION WHERE ID =" + otherInformation.Id;
+                var execQuery = new MySqlCommand(query, dbConnection);
+                execQuery.ExecuteNonQuery();
+            }
+
+            //foreach (var del in otherInformationDeleted)
+            //{
+            //   var query = "DELETE FROM OTHERINFORMATION WHERE ID " + del.Id;
+            //   var execQuery = new MySqlCommand(query, dbConnection);
+            //    execQuery.ExecuteNonQuery();
+            //}
+
+            dbConnection.Close();
+        }
+
+        private static SQLQueryResult<OtherInformation> AddOtherInformation(MySqlConnection dbConnection, OtherInformation otherinformation)
+        {
+            string query = "INSERT INTO OTHERINFORMATION(CustomerId,MachineInformationId,Sequence,Text,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy,Deleted)";
+            string values = "VALUE(" + otherinformation.CustomerId + "," + otherinformation.MachineInformationId + "," + otherinformation.Sequence + ",'" + otherinformation.Text + "','" + otherinformation.CreatedPersonName + "','" + otherinformation.ModifiedPersonName + "'," + otherinformation.ReadOnly + ",'" + otherinformation.UsedBy + "'," + otherinformation.Deleted + ")";
+            query = query + values;
+
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
+            int records = execQuery.ExecuteNonQuery();
+
+            return new SQLQueryResult<OtherInformation>(records, otherinformation.Id);
+        }
+
+
+        private static SQLQueryResult<OtherInformation> UpdateOtherInformation(MySqlConnection dbConnection, OtherInformation otherinformation)
+        {
+            otherinformation.ModifiedPersonName = Helper.Helper.GetPersonName();
+            string query = "UPDATE OTHERINFORMATION SET CustomerId = " + otherinformation.CustomerId + ",MachineInformationId = " + otherinformation.MachineInformationId + ",Sequence = " + otherinformation.Sequence + ",Text = '" + otherinformation.Text + "',CreatedPersonName = '" + otherinformation.CreatedPersonName + "',ModifiedPersonName = '" + otherinformation.ModifiedPersonName + "',ReadOnly = " + otherinformation.ReadOnly + ",UsedBy = '" + otherinformation.UsedBy + "',Deleted = " + otherinformation.Deleted + " WHERE ID = " + otherinformation.Id;
+
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
+
+            int records = execQuery.ExecuteNonQuery();
+            return new SQLQueryResult<OtherInformation>(records, otherinformation.Id);
+        }
+
+        private static List<OtherInformation> GetOtherInformations(string query)
+        {
+            List<OtherInformation> otherinformations = new List<OtherInformation>();
+
+            SelectItems(query, reader =>
+            {
+                OtherInformation otherinformation = new OtherInformation();
+                otherinformation.CustomerId = reader.GetInt64("CustomerId");
+                otherinformation.MachineInformationId = reader.GetInt64("MachineInformationId");
+                otherinformation.Sequence = reader.GetInt32("Sequence");
+                otherinformation.Text = reader.GetString("Text");
+                otherinformation.Id = reader.GetInt64("Id");
+                otherinformation.CreatedDate = reader.GetDateTime("CreatedDate");
+                otherinformation.ModifiedDate = reader.GetDateTime("ModifiedDate");
+                otherinformation.CreatedPersonName = reader.GetString("CreatedPersonName");
+                otherinformation.ModifiedPersonName = reader.GetString("ModifiedPersonName");
+                otherinformation.ReadOnly = reader.GetBoolean("ReadOnly");
+                otherinformation.UsedBy = reader.GetString("UsedBy");
+                otherinformation.Deleted = reader.GetBoolean("Deleted");
+                otherinformations.Add(otherinformation);
+            });
+
+            return otherinformations;
+        }
+
+        public static List<OtherInformation> GetOtherInformations()
+        {
+            string query = "SELECT * FROM OTHERINFORMATION";
+            return GetOtherInformations(query);
+        }
+
+        public static List<OtherInformation> GetOtherInformations(long machineInformationId)
+        {
+            string query = "SELECT * FROM OTHERINFORMATION WHERE MACHINEINFORMATIONID = " + machineInformationId;
+            return GetOtherInformations(query);
         }
     }
 }

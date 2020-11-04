@@ -12,6 +12,7 @@ namespace Liftmanagement.Helper
         public string Length { get; set; }
         public string Attribute { get; set; }
         public bool Updateable { get; set; } = true;
+        public bool IsDbColumn { get; set; } = true;
 
         public const string AUTO_INCREMENT = "NOT NULL AUTO_INCREMENT";
         public const string NOT_NULL = "NOT NULL";

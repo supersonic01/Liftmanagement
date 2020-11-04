@@ -198,6 +198,19 @@
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                 </DataGrid.Columns>
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="DataGridRow">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected"
+                                                     Value="True">
+                                                <Setter Property="BorderBrush"
+                                                        Value="Blue" />
+                                                <Setter Property="BorderThickness"
+                                                        Value="2" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.RowStyle>
                             </DataGrid>
                         </StackPanel>
                     </StackPanel>
@@ -230,14 +243,14 @@
 
                     <StackPanel Grid.Row="0" Grid.Column="2">
                         <Label x:Name="lblLocationHeader" Content="Standort:" Style="{StaticResource LableHeaderManagementStyle}" />
-                        <Label x:Name="lblAddressLocation" Content="lblAddressLocation"   Style="{StaticResource LableManagementStyle}"/>
-                        <Label x:Name="lblPostcodeCityLocation"  Content="lblAddressLocation"  Style="{StaticResource LableManagementStyle}"/>
+                        <Label x:Name="lblAddressLocation"   Style="{StaticResource LableManagementStyle}"/>
+                        <Label x:Name="lblPostcodeCityLocation"  Style="{StaticResource LableManagementStyle}"/>
 
                         <Label  x:Name="lblCustomerHeader" Content="Kunde:" Style="{StaticResource LableHeaderManagementStyle}" />
-                        <Label x:Name="lblCompanyName" Content="lblAddressLocation" Style="{StaticResource LableManagementStyle}" />
-                        <Label x:Name="lblAdministratorCompany" Content="lblAddressLocation"  Style="{StaticResource LableManagementStyle}" />
-                        <Label x:Name="lblAddress" Content="lblAddressLocation"  Style="{StaticResource LableManagementStyle}" />
-                        <Label x:Name="lblPostcodeCity"  Content="lblAddressLocation"  Style="{StaticResource LableManagementStyle}" />
+                        <Label x:Name="lblCompanyName"  Style="{StaticResource LableManagementStyle}" />
+                        <Label x:Name="lblAdministratorCompany"   Style="{StaticResource LableManagementStyle}" />
+                        <Label x:Name="lblAddress"   Style="{StaticResource LableManagementStyle}" />
+                        <Label x:Name="lblPostcodeCity"    Style="{StaticResource LableManagementStyle}" />
                     </StackPanel>
 
                     <Rectangle Grid.Row="0" Grid.Column="3"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
@@ -252,17 +265,17 @@
 
 
                             <StackPanel Grid.Column="0">
-                                <Label x:Name="lblMaintenanceDuration" Content="lblAddressLocation"  Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMaintenanceNoticeOfPeriod"  Content="lblAddressLocation" Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMaintenanceCanBeCancelled"  Content="lblAddressLocation" Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMaintenanceDate" Content="lblAddressLocation"  Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMaintenanceDuration" Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMaintenanceNoticeOfPeriod"  Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMaintenanceCanBeCancelled"  Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMaintenanceDate"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="1">
-                                <Label x:Name="lblMaintenanceDurationValue" Content="lblAddressLocation" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMaintenanceNoticeOfPeriodValue"  Content="lblAddressLocation" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMaintenanceCanBeCancelledValue"  Content="lblAddressLocation" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMaintenanceDateValue" Content="lblAddressLocation" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMaintenanceDurationValue" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMaintenanceNoticeOfPeriodValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMaintenanceCanBeCancelledValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMaintenanceDateValue" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
                             </StackPanel>
                         </Grid>
 
@@ -274,17 +287,17 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="0">
-                                <Label x:Name="lblEmergencyDuration" Content="lblAddressLocation"  Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblEmergencyNoticeOfPeriod"  Content="lblAddressLocation" Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblEmergencyCanBeCancelled"  Content="lblAddressLocation" Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblEmergencyDate" Content="lblAddressLocation"  Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblEmergencyDuration" Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblEmergencyNoticeOfPeriod"  Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblEmergencyCanBeCancelled"   Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblEmergencyDate"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="1">
-                                <Label x:Name="lblEmergencyDurationValue" Content="lblAddressLocation" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblEmergencyNoticeOfPeriodValue"  Content="lblAddressLocation" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblEmergencyCanBeCancelledValue"  Content="lblAddressLocation" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblEmergencyDateValue" Content="lblAddressLocation" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblEmergencyDurationValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblEmergencyNoticeOfPeriodValue"   Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblEmergencyCanBeCancelledValue"   Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblEmergencyDateValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
                             </StackPanel>
                         </Grid>
                     </StackPanel>
@@ -301,21 +314,21 @@
 
 
                             <StackPanel Grid.Column="0">
-                                <Label x:Name="lblMachineInfoName" Content="lblAddressLocation"  Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoSerialNumber"  Content="lblAddressLocation" Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoHoldingPositions"  Content="lblAddressLocation" Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoEntrances" Content="lblAddressLocation"  Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoYearOfConstruction" Content="lblAddressLocation"  Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoPayload" Content="lblAddressLocation"  Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMachineInfoName"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMachineInfoSerialNumber"   Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMachineInfoHoldingPositions"   Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMachineInfoEntrances"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMachineInfoYearOfConstruction"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMachineInfoPayload"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="1">
-                                <Label x:Name="lblMachineInfoNameValue" Content="lblAddressLocation" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoSerialNumberValue"  Content="lblAddressLocation" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoHoldingPositionsValue"  Content="lblAddressLocation" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoEntrancesValue" Content="lblAddressLocation" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoYearOfConstructionValue" Content="lblAddressLocation" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoPayloadValue" Content="lblAddressLocation" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMachineInfoNameValue" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMachineInfoSerialNumberValue"   Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMachineInfoHoldingPositionsValue"   Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMachineInfoEntrancesValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMachineInfoYearOfConstructionValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                <Label x:Name="lblMachineInfoPayloadValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
                             </StackPanel>
                         </Grid>
                     </StackPanel>
@@ -344,7 +357,7 @@
             </StackPanel>
         </ScrollViewer>
 
-        <StackPanel Grid.Row="3"   Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel x:Name="spRecordBtns" IsEnabled="False" Grid.Row="3"   Orientation="Horizontal" HorizontalAlignment="Right">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -352,8 +365,8 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <Button x:Name="btnEdit" Grid.Column="1"  HorizontalAlignment="Center"  VerticalAlignment="Center"
-                            Click="btnEdit_Click" BorderThickness="0" Background="Transparent" Margin="10,0,10,0">
+                <Button x:Name="btnView" Grid.Column="1"  HorizontalAlignment="Center"  VerticalAlignment="Center"
+                            Click="btnView_Click" BorderThickness="0" Background="Transparent" Margin="10,0,10,0">
                     <StackPanel>
                         <Image Source="..\Resources\Images\Icons\icons8-view-40.png" Height="30"/>
                     </StackPanel>

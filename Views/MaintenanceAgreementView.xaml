@@ -162,13 +162,21 @@
                                 <TextBlock x:Name="txtGoogleDriveFolderName" Text="{Binding Path=GoogleDriveFolderName}"/>
                             </Hyperlink>
                         </TextBlock>
-
-                        <Button x:Name="btnGoogleDriveTree" Grid.Row="9" Grid.RowSpan="2" Grid.Column="4" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnGoogleDriveTree_Click" BorderThickness="0" Background="Transparent"
-                                IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}">
-                            <StackPanel>
-                                <Image Source="..\Resources\Images\Icons\Google-Drive.ico" Height="30"/>
-                            </StackPanel>
-                        </Button>
+                        <StackPanel Grid.Row="9" Grid.RowSpan="2" Grid.Column="4" Orientation="Horizontal">
+                            <Button x:Name="btnGoogleDriveTree" VerticalAlignment="Center" Click="btnGoogleDriveTree_Click" BorderThickness="0" Background="Transparent"
+                                    IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
+                                    Margin="30,0,70,0">
+                                <StackPanel>
+                                    <Image Source="..\Resources\Images\Icons\Google-Drive.ico" Height="30"/>
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="btnMaintenanceAgreementContent" VerticalAlignment="Center" Click="btnMaintenanceAgreementContent_Click" BorderThickness="0" Background="Transparent">
+                                <StackPanel>
+                                    <Image Source="..\Resources\Images\Icons\Hopstarter-Soft-Scraps-Edit-Document.ico" Height="30"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                        
 
                         <Line  Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="7" X1="0" Y1="0" X2="1"  Y2="0" Stroke="Black" StrokeThickness="2" Stretch="Uniform"/>
 

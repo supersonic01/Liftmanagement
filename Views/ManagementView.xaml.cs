@@ -1,22 +1,17 @@
 ﻿using Liftmanagement.Models;
 using Liftmanagement.ViewModels;
 using System;
-using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Liftmanagement.Converters;
+using MachineInformation = Liftmanagement.Models.MachineInformation;
 
 namespace Liftmanagement.Views
 {
@@ -31,8 +26,12 @@ namespace Liftmanagement.Views
         private RecordsView recordsView;
         private RecordView recordView;
         private Window recordViewWindow;
+        private RecordViewModel recordVM = new RecordViewModel();
 
         private OtherInformation otherInformationSelected;
+
+        private Record recordSelected;
+        //  public delegate RecordUpdated(long recordId);
 
         public ManagementViewModel ManagementVM
         {
@@ -40,12 +39,14 @@ namespace Liftmanagement.Views
             set { managementVM = value; }
         }
 
-        public ManagementView()
+        public ManagementView(DataGrid dgCategory)
         {
             InitializeComponent();
 
             recordsView = new RecordsView();
             frameRecords.Content = recordsView;
+            recordsView.dgRecords.SelectionChanged += DgRecords_SelectionChanged;
+            dgCategory.SelectionChanged += DgCategory_SelectionChanged;
 
             ManagementVM.Refresh();
 
@@ -59,6 +60,12 @@ namespace Liftmanagement.Views
 
             dgOthers.SelectionChanged += DgOthers_SelectionChanged;
             dgOthers.PreviewKeyDown += DgOthers_PreviewKeyDown;
+            NotVisibleColumns.Add(nameof(ContactPartner.PhoneWork));
+            NotVisibleColumns.Add(nameof(ContactPartner.Mobile));
+            NotVisibleColumns.Add(nameof(ContactPartner.EMail));
+            NotVisibleColumns.Add(nameof(ContactPartner.ContactByDefect));
+            dgContactPersons.Tag = NotVisibleColumns;
+
 
             this.Loaded += ManagementView_Loaded;
 
@@ -69,8 +76,49 @@ namespace Liftmanagement.Views
             //TODO Keyordnavigation
 
             AssigneValuesToControl();
+            this.Dispatcher.ShutdownStarted += Dispatcher_ShutdownStarted;
+
+            spRecordBtns.IsEnabled = false;
+            dgOthers.IsEnabled = false;
+
         }
-        
+
+        private void DgCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.RemovedItems.Count <= 0)
+                return;
+
+            Category category = e.RemovedItems[0] as Category;
+
+            if (category != null)
+            {
+                if (category.MangementType == Helper.Helper.TTypeMangement.Managment)
+                {
+                    ManagementVM.AddOtherInformations(ManagementVM.MachineInformationSelected);
+                }
+            }
+
+        }
+
+        protected override void EnableContoles(bool enable)
+        {
+            base.EnableContoles(enable);
+
+            //spRecordBtns.IsEnabled = enable;
+            //dgOthers.IsEnabled = enable;
+        }
+
+        private void Dispatcher_ShutdownStarted(object sender, EventArgs e)
+        {
+            Task.Factory.StartNew(() => ManagementVM.AddOtherInformations(ManagementVM.MachineInformationSelected));
+        }
+
+        private void DgRecords_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            recordSelected = GetSelectedObject<Record>(sender);
+            // recordVM.RecordSelected = record;
+        }
+
         private void DgOthers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
@@ -87,39 +135,65 @@ namespace Liftmanagement.Views
             }
             catch { }
         }
-        public IEnumerable<DataGridRow> GetDataGridRows(DataGrid grid)
-        {
-            var itemsSource = grid.ItemsSource as IEnumerable;
-            if (null == itemsSource) yield return null;
-            foreach (var item in itemsSource)
-            {
-                var row = grid.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
-                if (null != row) yield return row;
-            }
-        }
+
 
         private void DgContactPersons_LoadingRow(object sender, DataGridRowEventArgs e)
         {
             if (e.Row != null)
             {
-                string toolTipText = "Your Tooltip string content";
-                e.Row.ToolTip = toolTipText;
+               ContactPartner contactPartner =  e.Row.Item  as ContactPartner;
+               if(contactPartner == null)
+                   return;
 
+               StringBuilder toolTip= new StringBuilder();
+
+               toolTip.AppendLine(contactPartner.Name);
+               toolTip.Append(contactPartner.GetDisplayName<ContactPartner>(nameof(ContactPartner.PhoneWork)) + ":  ");
+               toolTip.AppendLine(contactPartner.PhoneWork);
+               toolTip.Append(contactPartner.GetDisplayName<ContactPartner>(nameof(ContactPartner.Mobile)) + ":               "); 
+               toolTip.AppendLine(contactPartner.Mobile);
+               toolTip.Append(contactPartner.GetDisplayName<ContactPartner>(nameof(ContactPartner.EMail)) + ":              ");
+               toolTip.AppendLine(contactPartner.EMail);
+               toolTip.Append(contactPartner.GetDisplayName<ContactPartner>(nameof(ContactPartner.ContactByDefect)) + ": ");
+               toolTip.AppendLine(contactPartner.ContactByDefect?"Ja":"Nein");
+             
+                var tt = new ToolTip{Content = toolTip.ToString() };
+                tt.StaysOpen = true;
+              
+                e.Row.ToolTip = tt;
             }
         }
 
         private void DgContactPersons_ToolTipOpening(object sender, ToolTipEventArgs e)
         {
-            
+
         }
 
         private void AssigneValuesToControl()
         {
-            BindingControl(cbAdministrators,()=>ManagementVM.Administrators);
-            BindingControl(cbCustomers,()=>ManagementVM.Customers);
-            BindingControl(cbLocations,()=>ManagementVM.Locations);
-            BindingControl(cbMachineInformations,()=>ManagementVM.MachineInformations);
-            BindingControl(dgOthers,()=>ManagementVM.OtherInformations);
+            BindingControl(cbAdministrators, () => ManagementVM.Administrators);
+            BindingControl(cbCustomers, () => ManagementVM.Customers);
+            BindingControl(cbLocations, () => ManagementVM.Locations);
+            BindingControl(cbMachineInformations, () => ManagementVM.MachineInformations);
+            // BindingControl(dgOthers, () => ManagementVM.OtherInformations);
+
+            Binding binding = new Binding(GetPropertyPath(() => ManagementVM.OtherInformations))
+            {
+                Source = this
+            };
+
+            binding.Converter = new IgnoreNewItemPlaceholderConverter();
+            dgOthers.SetBinding(ItemsControl.ItemsSourceProperty, binding);
+
+
+            //Binding binding = new Binding(GetPropertyPath(()=>ManagementVM.OtherInformationSelected))
+            //{
+            //    Source = this
+            //};
+
+            //binding.TargetNullValue = CollectionView.NewItemPlaceholder;
+
+            // dgOthers.SetBinding(DataGrid.SelectedItemProperty, binding);
 
             lblCustomerHeader.Content = "Rechnungsadresse:";
             lblLocationHeader.Content = "Standort:";
@@ -160,7 +234,7 @@ namespace Liftmanagement.Views
         private void Row_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             DataGridRow row = sender as DataGridRow;
-            ManagementOverviewFilter overviewFilter = row.DataContext as ManagementOverviewFilter; 
+            ManagementOverviewFilter overviewFilter = row.DataContext as ManagementOverviewFilter;
             SetMachineInfoOverviewFilter(overviewFilter);
             e.Handled = true;
             overviewFilterViewWindow.Hide();
@@ -227,25 +301,46 @@ namespace Liftmanagement.Views
                 Content = recordView,
                 Name = "ManagementRecordViewWindow"
             };
-            //recordViewWindow.Height = 450;
-            //recordViewWindow.Width = 800;
-           // recordViewWindow.WindowStyle = WindowStyle.None;
+            recordViewWindow.Height = 580;
+            recordViewWindow.Width = 890;
+            //recordViewWindow.WindowStyle = WindowStyle.None;
             recordViewWindow.Topmost = true;
-            
-           recordView.btnCancel.Click += BtnCancelRecord_Click;
-           recordView.btnSave.Click += BtnSaveRecord_Click;
 
-           recordView.RcordingVM.Records= recordsView.RcordingsVM.Records;
+            recordView.btnClose.Click += BtnCloseRecord_Click;
+            recordViewWindow.Closing += RecordViewWindow_Closing;
+            //recordViewWindow.SizeChanged += RecordViewWindow_SizeChanged;
 
+            recordView.RecordVM.Records = recordsView.RecordsVM.Records;
+
+        }
+
+        private void RecordViewWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            double newWindowHeight = e.NewSize.Height;
+            double newWindowWidth = e.NewSize.Width;
+            double prevWindowHeight = e.PreviousSize.Height;
+            double prevWindowWidth = e.PreviousSize.Width;
+
+            Console.WriteLine("newWindowHeight : " + newWindowHeight);
+            Console.WriteLine("newWindowWidth : " + newWindowWidth);
+            Console.WriteLine("prevWindowHeight : " + prevWindowHeight);
+            Console.WriteLine("prevWindowWidth : " + prevWindowWidth);
+        }
+
+        private void RecordViewWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            recordViewWindow.Hide();
         }
 
         private void BtnSaveRecord_Click(object sender, RoutedEventArgs e)
         {
-           recordViewWindow.Hide();
+            recordViewWindow.Hide();
         }
 
-        private void BtnCancelRecord_Click(object sender, RoutedEventArgs e)
+        private void BtnCloseRecord_Click(object sender, RoutedEventArgs e)
         {
+            //TODO check what happen close without cancel or save
             recordViewWindow.Hide();
         }
 
@@ -278,8 +373,20 @@ namespace Liftmanagement.Views
         private void SetFilterMachineInformation(MachineInformation machineInformation)
         {
             if (machineInformation == null)
+            {
+                spRecordBtns.IsEnabled = false;
+                dgOthers.IsEnabled = false;
                 return;
-            
+            }
+
+            Task.Factory.StartNew(() => ManagementVM.AddOtherInformations(ManagementVM.MachineInformationSelected))
+                .ContinueWith(task => ManagementVM.MachineInformationSelected = machineInformation);
+
+            spRecordBtns.IsEnabled = true;
+            dgOthers.IsEnabled = true;
+
+            // Task.Factory.StartNew (()=>recordsView.RecordsVM.Refresh(machineInformation));
+            recordsView.RecordsVM.Refresh(machineInformation);
             FilterMachineInformationSelected(machineInformation);
 
             var location = cbLocations.SelectedItem as Location;
@@ -287,7 +394,11 @@ namespace Liftmanagement.Views
             var machineInfo = cbMachineInformations.SelectedItem as MachineInformation;
             var maintenanceAgreement = ManagementVM.MaintenanceAgreements
                 .Where(c => c.MachineInformationId == machineInfo.Id).FirstOrDefault();
-            
+           
+            //Task.Factory.StartNew(() => ManagementVM.RefreshOtherInformations(machineInformation));
+
+            ManagementVM.RefreshOtherInformations(machineInformation);
+
             SetLocationData(location);
             SetCustomerData(customer);
             SetMaintenanceAgreementData(maintenanceAgreement);
@@ -300,10 +411,9 @@ namespace Liftmanagement.Views
             contactPersons.Add(customer.ContactPerson);
             contactPersons.Add(location.ContactPerson);
             contactPersons.Add(machineInfo.ContactPerson);
-
-            dgContactPersons.ItemsSource = contactPersons;
-
-            dgContactPersons.Tag = new List<string>{nameof(ContactPartner.EMail)};
+            
+            dgContactPersons.ItemsSource = contactPersons.OrderByDescending(c => c.ContactByDefect).ToList();
+           // dgContactPersons.Tag = new List<string> { nameof(ContactPartner.EMail) };
         }
 
         private void CbLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -423,7 +533,7 @@ namespace Liftmanagement.Views
                 comboBox.Text = model.ToString();
         }
 
-       
+
 
         private void DgOthers_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -433,7 +543,7 @@ namespace Liftmanagement.Views
             }
         }
 
-        private void AddOtherInformation(RoutedEventArgs  e)
+        private void AddOtherInformation(RoutedEventArgs e)
         {
             if (dgOthers.SelectedIndex == dgOthers.Items.Count - 1)
             {
@@ -442,13 +552,34 @@ namespace Liftmanagement.Views
                 //TODO dgOthers cell Textbox courser is set proper by new cell
             }
 
+            //dgOthers.CurrentCell = new DataGridCellInfo(
+            //    dgOthers.Items[dgOthers.SelectedIndex + 1], dgOthers.Columns[0]);
+
             dgOthers.CurrentCell = new DataGridCellInfo(
-                dgOthers.Items[dgOthers.SelectedIndex + 1], dgOthers.Columns[0]);
+                dgOthers.Items[dgOthers.SelectedIndex], dgOthers.Columns[0]);
+
             dgOthers.BeginEdit();
         }
 
         private void SetMaintenanceAgreementData(MaintenanceAgreement maintenanceAgreement)
         {
+            if (maintenanceAgreement == null)
+            {
+
+                lblMaintenanceDuration.Content ="";
+                lblMaintenanceDate.Content = "";
+                lblMaintenanceNoticeOfPeriod.Content = "";
+                lblMaintenanceCanBeCancelled.Content = "";
+
+                lblMaintenanceDurationValue.Content = "";
+                lblMaintenanceDateValue.Content = "";
+                lblMaintenanceNoticeOfPeriodValue.Content = "";
+                lblMaintenanceCanBeCancelledValue.Content = "";
+
+                return;
+            }
+                
+
             lblMaintenanceDuration.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.Duration)) + ":";
             lblMaintenanceDate.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.AgreementDate)) + ":";
             lblMaintenanceNoticeOfPeriod.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.NoticeOfPeriod)) + ":";
@@ -463,6 +594,23 @@ namespace Liftmanagement.Views
         //TODO
         private void SetEmergencyAgreementData(MaintenanceAgreement maintenanceAgreement)
         {
+            if (maintenanceAgreement == null)
+            {
+
+                lblEmergencyDuration.Content = "";
+                lblEmergencyDate.Content = "";
+                lblEmergencyNoticeOfPeriod.Content = "";
+                lblEmergencyCanBeCancelled.Content = "";
+
+                lblEmergencyDurationValue.Content = "";
+                lblEmergencyDateValue.Content = "";
+                lblEmergencyNoticeOfPeriodValue.Content = "";
+                lblEmergencyCanBeCancelledValue.Content = "";
+
+                return;
+            }
+                
+
             lblEmergencyDuration.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.Duration)) + ":";
             lblEmergencyDate.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.AgreementDate)) + ":";
             lblEmergencyNoticeOfPeriod.Content = maintenanceAgreement.GetDisplayName<MaintenanceAgreement>(nameof(maintenanceAgreement.NoticeOfPeriod)) + ":";
@@ -504,24 +652,53 @@ namespace Liftmanagement.Views
             lblPostcodeCity.Content = customer.GetPostcodeCity();
         }
 
-        private void btnEdit_Click(object sender, RoutedEventArgs e)
-        {
-            var vm= new RecordViewModel();
-            vm.RecordSelected = recordsView.GetSelectedItem();
-            vm.RecordSelectedLast = vm.RecordSelected;
-            vm.Records = recordsView.RcordingsVM.Records;
+        //TODO disabel recording buttons if Machine not selected
 
-            recordView.RcordingVM = vm;
+        public Record RecordUpdated(long recordId)
+        {
+            recordsView.RecordsVM.Refresh(cbMachineInformations.SelectedItem as MachineInformation);
+            var record = recordsView.dgRecords.Items.Cast<Record>().Single(c => c.Id == recordId);
+            recordsView.dgRecords.SelectedItem = record;
+
+            recordViewWindow.Title = string.Format("Vorgangsnummer: {0}", record.ProcessNo);
+            return record;
+        }
+
+        private void btnView_Click(object sender, RoutedEventArgs e)
+        {
+            if (recordSelected == null)
+            {
+                var titel = string.Format("Ansicht Vorgang");
+                var msg = "Es wurde kein Vorgang ausgewählt";
+                new NotificationWindow(titel, msg, null, NotificationWindow.MessageType.Info).Show();
+                return;
+            }
+
+            recordViewWindow.Title = string.Format("Vorgangsnummer: {0}", recordSelected.ProcessNo);
+            recordView.AssigneValuesToControl(); //TODO it is a workaround, binding not working propery
+            recordView.RecordVM.RecordSelected = recordSelected;
+            recordView.RecordVM.RecordSelectedLast = recordSelected;
+            recordView.RecordVM.MachineInformationSelected = cbMachineInformations.SelectedItem as MachineInformation;
+            recordView.RecordVM.Records = recordsView.RecordsVM.Records;
+            recordView.RecordUpdated = RecordUpdated;
+            recordView.EnableContoles(false);
             recordViewWindow.ShowDialog();
+
 
         }
 
+
+
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
-            var vm = new RecordViewModel();
-            vm.Records = recordsView.RcordingsVM.Records;
-            recordView.RcordingVM = vm;
-
+            recordView.RecordVM = new RecordViewModel();
+            recordView.RecordVM.RecordSelected= new Record();
+            recordView.RecordVM.RecordSelectedLast = new Record();
+            recordView.RecordVM.Records = recordsView.RecordsVM.Records;
+            recordView.RecordVM.MachineInformationSelected = cbMachineInformations.SelectedItem as MachineInformation;
+            recordView.RecordUpdated = RecordUpdated;
+            recordView.EnableContoles(true);
+            recordView.AssigneValuesToControl(); //TODO it is a workaround, binding not working propery
             recordViewWindow.ShowDialog();
         }
 
@@ -530,7 +707,7 @@ namespace Liftmanagement.Views
             //TODO PW
         }
 
-      
+
 
         private void CxmOpened(object sender, RoutedEventArgs e)
         {
@@ -545,7 +722,9 @@ namespace Liftmanagement.Views
         private void Click_Delete_OtherInformation(object sender, RoutedEventArgs e)
         {
             ManagementVM.OtherInformations.Remove(otherInformationSelected);
+            ManagementVM.DeleteOtherInformation(otherInformationSelected);
         }
+
     }
 
 }

@@ -1,31 +1,17 @@
-﻿using Liftmanagement.Data;
-using Liftmanagement.Helper;
-using Liftmanagement.Models;
+﻿using Liftmanagement.Models;
 using Liftmanagement.View;
 using Liftmanagement.ViewModels;
 using Liftmanagement.Views;
-using Org.BouncyCastle.Asn1.Icao;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Liftmanagement.Data;
 
 namespace Liftmanagement
 {
-        /// <summary>
+    /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     /// 
@@ -59,8 +45,8 @@ namespace Liftmanagement
             //  dgCategory.ItemsSource = CategoryVM.Categories;
 
             //MySQLDataAccess.CreateConnection();
-
-             //MySQLDataAccess.CreateTables();
+            
+            MySQLDataAccess.CreateTables();
 
 
 
@@ -70,16 +56,17 @@ namespace Liftmanagement
 
             //MySQLDataAccess.GetCustomers();
 
-            //Helper.Helper.GenerateInsert( typeof(MaintenanceAgreement));
-            //  Helper.Helper.GenerateInsert(typeof(AdministratorCompany));
+            //Helper.Helper.GenerateInsert(typeof(MaintenanceAgreementContent));
+            //Helper.Helper.GenerateInsert(typeof(OtherInformation));
+           // Helper.Helper.GenerateInsert(typeof(Record));
 
-            //Helper.Helper.GenerateSelect(typeof(MaintenanceAgreement));
-            //Helper.Helper.GenerateSelect(typeof(AdministratorCompany));
-            //Helper.Helper.GenerateSelect(typeof(ContactPartner));
+            //Helper.Helper.GenerateSelect(typeof(MaintenanceAgreementContent));
+            //Helper.Helper.GenerateSelect(typeof(OtherInformation));
+            //Helper.Helper.GenerateSelect(typeof(Record));
 
-              //Helper.Helper.GenerateUpdate(typeof(MaintenanceAgreement));
-            //Helper.Helper.GenerateUpdate(typeof(AdministratorCompany));
-            //Helper.Helper.GenerateUpdate(typeof(Location));
+            //Helper.Helper.GenerateUpdate(typeof(MaintenanceAgreementContent));
+            //Helper.Helper.GenerateUpdate(typeof(OtherInformation));
+            //Helper.Helper.GenerateUpdate(typeof(Record));
 
 
             //Helper.Helper.GetTabelValueHeaders(16);
@@ -97,10 +84,10 @@ namespace Liftmanagement
             // new TableGenerator();
 
 
-          //  new CalendarQuickstart().AddEvent(DateTime.Now, DateTime.Now, "Hallo", "Hallo2");
+            //  new CalendarQuickstart().AddEvent(DateTime.Now, DateTime.Now, "Hallo", "Hallo2");
 
-          
-         ;
+
+            ;
 
             Binding binding = new Binding("CategoryVM.Categories")
             {
@@ -168,7 +155,7 @@ namespace Liftmanagement
                 case Helper.Helper.TTypeMangement.Managment:
                     //frameDetail.Content = new Test();
                     //frameDetail.Content = new MasterDataInfoView();
-                     frameDetail.Content = new ManagementView();
+                     frameDetail.Content = new ManagementView(dgCategory);
 
                     //var window = new Window
                     //{

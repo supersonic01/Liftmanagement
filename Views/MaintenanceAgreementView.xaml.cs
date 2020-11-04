@@ -31,6 +31,8 @@ namespace Liftmanagement.Views
         private LocationsView locationsView ;
         private MachineInformationsView machineInfosView;
         private MasterDataInfoView masterDataInfo;
+        private MaintenanceAgreementContentView maintenanceAgreementContentView;
+        private Window maintenanceAgreementContentViewWindow;
 
         public MaintenanceAgreementViewModel MaintenanceAgreementVM { get; set; } = new MaintenanceAgreementViewModel();
 
@@ -38,6 +40,7 @@ namespace Liftmanagement.Views
         {
             InitializeComponent();
             AssignSelectAllForTextBoxes();
+            InitMaintenanceAgreementContentView();
 
             var customersVM = new CustomersViewModel();
             customersVM.RefreshOnlyCustomers();
@@ -90,6 +93,46 @@ namespace Liftmanagement.Views
             EnableContoles(false);
 
         }
+
+        private void InitMaintenanceAgreementContentView()
+        {
+            maintenanceAgreementContentView = new MaintenanceAgreementContentView();
+           
+            maintenanceAgreementContentViewWindow = new Window
+            {
+                Content = maintenanceAgreementContentView,
+                Name = "ManagementRecordViewWindow"
+            };
+            maintenanceAgreementContentViewWindow.Height = 850;
+            maintenanceAgreementContentViewWindow.Width = 588;
+            //recordViewWindow.WindowStyle = WindowStyle.None;
+            maintenanceAgreementContentViewWindow.Topmost = true;
+
+            maintenanceAgreementContentView.btnClose.Click += BtnMaintenanceAgreementContentViewWindow_Click;
+            maintenanceAgreementContentViewWindow.Closing += MaintenanceAgreementContentViewWindow_Closing;
+            //recordViewWindow.SizeChanged += RecordViewWindow_SizeChanged;
+
+            maintenanceAgreementContentViewWindow.Title = " Inhalt Wartungsvertag";
+
+            MaintenanceAgreementVM.RefreshMaintenanceAgreementContent =
+                maintenanceAgreementContentView.MaintenanceAgreementContentVM.Refresh;
+
+        }
+
+
+        private void MaintenanceAgreementContentViewWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            maintenanceAgreementContentViewWindow.Hide();
+        }
+
+
+        private void BtnMaintenanceAgreementContentViewWindow_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO check what happen close without cancel or save
+            maintenanceAgreementContentViewWindow.Hide();
+        }
+
 
         private void CbMachineInformations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -194,8 +237,6 @@ namespace Liftmanagement.Views
         {
             MaintenanceAgreementVM.MaintenanceAgreementSelected = GetSelectedObject<MaintenanceAgreement>(sender);
             EnableContoles(false);
-            // cbTerminated.SelectedIndex = 0;
-            //cbNoticeOfPeriodMonth.SelectedIndex = 2;
         }
 
         private void DgLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -308,7 +349,7 @@ namespace Liftmanagement.Views
                     return;
                 }
 
-                var result = MaintenanceAgreementVM.Add(masterDataInfo.MasterDataInfoVM);
+                var result = MaintenanceAgreementVM.Add(masterDataInfo.MasterDataInfoVM,maintenanceAgreementContentView.MaintenanceAgreementContentVM );
                 if (result.Records > 0)
                 {
                     MaintenanceAgreementVM.RefreshByMachineInformatio(masterDataInfo.MasterDataInfoVM.MachineInformationSelected.Id);
@@ -406,7 +447,13 @@ namespace Liftmanagement.Views
             return !regex.IsMatch(text);
         }
 
-       
+        private void btnMaintenanceAgreementContent_Click(object sender, RoutedEventArgs e)
+        {
+            maintenanceAgreementContentView.IsReadOnly = this.IsReadOnly;
+            maintenanceAgreementContentViewWindow.ShowDialog();
+        }
+
+
 
         //private void btnSave_Click(object sender, RoutedEventArgs e)
         //{
@@ -438,6 +485,6 @@ namespace Liftmanagement.Views
 
         //}
 
-       
+
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Liftmanagement.CollectionExtensions;
 using Liftmanagement.Data;
@@ -29,9 +30,23 @@ namespace Liftmanagement.ViewModels
 
         public ObservableCollection<OtherInformation> OtherInformations
         {
-            get { return otherInformations; }
+            get
+            {
+               return otherInformations;
+            }
             set { SetField(ref otherInformations, value); }
         }
+
+        private List<OtherInformation> OtherInformationDeleted { get; set; } = new List<OtherInformation>();
+
+        //private List<OtherInformation> otherInformations = new List<OtherInformation>();
+
+        //public List<OtherInformation> OtherInformations
+        //{
+        //    get { return otherInformations; }
+        //    set { SetField(ref otherInformations, value); }
+        //}
+
 
         public ObservableCollection<Location> Locations
         {
@@ -55,6 +70,28 @@ namespace Liftmanagement.ViewModels
             set { SetField(ref machineInformations, value); }
         }
 
+        private MachineInformation machineInformationSelected = new MachineInformation();
+
+        public MachineInformation MachineInformationSelected
+        {
+            get { return machineInformationSelected; }
+            set
+            {
+                SetField(ref machineInformationSelected, value);
+            }
+        }
+
+
+        //private OtherInformation otherInformationSelected = new OtherInformation();
+
+        //public OtherInformation OtherInformationSelected
+        //{
+        //    get { return otherInformationSelected; }
+        //    set
+        //    {
+        //        SetField(ref otherInformationSelected, value);
+        //    }
+        //}
 
         public ObservableCollection<AdministratorCompany> Administrators
         {
@@ -83,12 +120,57 @@ namespace Liftmanagement.ViewModels
                 MachineInformations = new ObservableCollection<MachineInformation>(MySQLDataAccess.GetMachineInformations());
             });
 
-            maintenanceAgreements = TestData.GetMaintenanceAgreements();
-            otherInformations = TestData.GetOtherInformations();
+            // maintenanceAgreements = TestData.GetMaintenanceAgreements();
 
+            // Task.Factory.StartNew(() => RefreshOtherInformations());
+            Task.Factory.StartNew(() => RefreshMaintenanceAgreements());
+        }
+
+        private void AddOtherInformationsDefault()
+        {
+            if (otherInformations.Count == 0)
+            {
+                OtherInformations.Add(new OtherInformation("Infomation 1"));
+                OtherInformations.Add(new OtherInformation("Infomation 2"));
+            }
+        }
+
+        private void RefreshOtherInformations()
+        {
+           // OtherInformations = new ObservableCollection<OtherInformation>(MySQLDataAccess.GetOtherInformations());
+            AddOtherInformationsDefault();
+        }
+
+        private void RefreshMaintenanceAgreements()
+        {
+            MaintenanceAgreements = MySQLDataAccess.GetMaintenanceAgreements();
+        }
+
+        public void RefreshOtherInformations(MachineInformation machineInformation)
+        {
+            OtherInformations = new ObservableCollection<OtherInformation>(MySQLDataAccess.GetOtherInformations(machineInformation.Id));
+            AddOtherInformationsDefault();
+        }
+
+        public void RefreshMaintenanceAgreements(MachineInformation machineInformation)
+        {
+            MaintenanceAgreements = MySQLDataAccess.GetMaintenanceAgreements(machineInformation.Id);
+        }
+
+        public void AddOtherInformations(MachineInformation machineInformation)
+        {
+            if (otherInformations.Count <= 0 || machineInformation== null && machineInformation.Id<0)
+            {
+                return;
+            }
+            MySQLDataAccess.AddOtherInformations(machineInformation, OtherInformations.ToList(), OtherInformationDeleted);
+            OtherInformationDeleted= new List<OtherInformation>();
         }
 
 
-
+        public void DeleteOtherInformation(OtherInformation otherInformationSelected)
+        {
+           OtherInformationDeleted.Add(otherInformationSelected);
+        }
     }
 }

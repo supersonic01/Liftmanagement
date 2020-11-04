@@ -86,11 +86,14 @@ namespace Liftmanagement.Helper
                 dataMapper.Add(typeof(string), "VARCHAR(50)");
                 dataMapper.Add(typeof(bool), "BOOLEAN");
                 dataMapper.Add(typeof(DateTime), "DATETIME");
+                dataMapper.Add(typeof(DateTime?), "DATETIME");
                 dataMapper.Add(typeof(float), "FLOAT");
                 dataMapper.Add(typeof(decimal), "DECIMAL(18,0)");
+                dataMapper.Add(typeof(double), "DOUBLE");
                 dataMapper.Add(typeof(Guid), "UNIQUEIDENTIFIER");
                 dataMapper.Add(typeof(Timestamp), "TIMESTAMP");
                 dataMapper.Add(typeof(Helper.NotificationUnitType), "INT");
+                dataMapper.Add(typeof(Helper.TTypeMangement), "INT");
 
                 return dataMapper;
             }
@@ -117,7 +120,12 @@ namespace Liftmanagement.Helper
 
             foreach (PropertyInfo p in t.GetProperties())
             {
-                if (!p.DeclaringType.IsAbstract && !p.DeclaringType.IsInterface)
+                var attribute = p.GetCustomAttributes(typeof(DatabaseAttribute), true)
+                    .Cast<DatabaseAttribute>().FirstOrDefault();
+
+                bool isDbColumn = !(attribute != null && attribute.IsDbColumn == false);
+
+                if (!p.DeclaringType.IsAbstract && !p.DeclaringType.IsInterface && isDbColumn)
                 {
                     KeyValuePair<String, Type> field = new KeyValuePair<String, Type>(p.Name, p.PropertyType);
 

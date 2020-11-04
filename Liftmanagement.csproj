@@ -180,10 +180,13 @@
     <Compile Include="Common\TraceValidationRule.cs" />
     <Compile Include="Common\ValidationError.cs" />
     <Compile Include="Common\ValidationErrorContainer.cs" />
+    <Compile Include="Converters\BooleanToImageConverter.cs" />
     <Compile Include="Converters\DateConverter.cs" />
     <Compile Include="Converters\DateFixerConverter.cs" />
     <Compile Include="Converters\DateDateConverter.cs" />
     <Compile Include="Converters\DateTimeConverter.cs" />
+    <Compile Include="Converters\DecimalConverter.cs" />
+    <Compile Include="Converters\IgnoreNewItemPlaceholderConverter.cs" />
     <Compile Include="Converters\ValueVisibilityConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\LabelMultiValueConverter.cs" />
@@ -203,6 +206,8 @@
     <Compile Include="Helper\TestData.cs" />
     <Compile Include="Helper\Types.cs" />
     <Compile Include="Models\AdministratorCompany.cs" />
+    <Compile Include="Models\MaintenanceAgreementContent.cs" />
+    <Compile Include="Models\RecordAgreementType.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\ContactPartner.cs" />
     <Compile Include="Models\BaseDatabaseField.cs" />
@@ -227,14 +232,15 @@
     <Compile Include="ViewModels\LocationsViewModel.cs" />
     <Compile Include="ViewModels\MachineInformationsViewModel.cs" />
     <Compile Include="ViewModels\MachineInformationViewModel.cs" />
+    <Compile Include="ViewModels\MaintenanceAgreementContentViewModel.cs" />
     <Compile Include="ViewModels\MaintenanceAgreementsViewModel.cs" />
     <Compile Include="ViewModels\MaintenanceAgreementViewModel.cs" />
     <Compile Include="ViewModels\ManagementOverviewFilterViewModel.cs" />
     <Compile Include="ViewModels\ManagementViewModel.cs" />
     <Compile Include="ViewModels\MasterDataInfoViewModel.cs" />
     <Compile Include="Models\OtherInformation.cs" />
-    <Compile Include="ViewModels\RecordingsViewModel.cs" />
-    <Compile Include="ViewModels\RecordingViewModel.cs" />
+    <Compile Include="ViewModels\RecordsViewModel.cs" />
+    <Compile Include="ViewModels\RecordViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\AppointmentView.xaml.cs">
       <DependentUpon>AppointmentView.xaml</DependentUpon>
@@ -272,6 +278,9 @@
     </Compile>
     <Compile Include="Views\MachineInformationView.xaml.cs">
       <DependentUpon>MachineInformationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MaintenanceAgreementContentView.xaml.cs">
+      <DependentUpon>MaintenanceAgreementContentView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MaintenanceAgreementsView.xaml.cs">
       <DependentUpon>MaintenanceAgreementsView.xaml</DependentUpon>
@@ -361,6 +370,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MachineInformationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MaintenanceAgreementContentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -530,6 +543,12 @@
   <ItemGroup>
     <Resource Include="Resources\Images\Icons\Custom-Icon-Design-Pretty-Office-9-Delete-file.ico" />
     <Resource Include="Resources\Images\Icons\Icojam-Blue-Bits-Document-search.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Yellowicon-Flat-Edit-Text.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Creative-Freedom-Shimmer-Document-Delete.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets" Condition="Exists('packages\SQLitePCLRaw.lib.e_sqlite3.2.0.2\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets')" />

@@ -79,8 +79,9 @@ namespace Liftmanagement.Views
             }
 
 
-            if (e.PropertyType == typeof(System.DateTime))
+            if (e.PropertyType == typeof(System.DateTime) || e.PropertyType == typeof(System.DateTime?))
                 (e.Column as DataGridTextColumn).Binding.StringFormat = "dd.MM.yyyy";
+           
 
             DisplayAttribute display = null;
             var atbDisplay = property.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault();

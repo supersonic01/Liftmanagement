@@ -13,9 +13,7 @@ namespace Liftmanagement.Models
         public long LocationId { get; set; }
         public long CustomerId { get; set; }
         public long MachineInformationId { get; set; }
-
-
-
+        
         private DateTime duration = DateTime.Now;
         /// <summary>
         /// Laufzeit Vertrag bis 31.12.2019

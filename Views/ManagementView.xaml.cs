@@ -379,6 +379,8 @@ namespace Liftmanagement.Views
                 return;
             }
 
+            recordView.RecordVM.MachineInformationSelected = machineInformation;
+
             Task.Factory.StartNew(() => ManagementVM.AddOtherInformations(ManagementVM.MachineInformationSelected))
                 .ContinueWith(task => ManagementVM.MachineInformationSelected = machineInformation);
 

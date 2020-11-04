@@ -21,6 +21,7 @@ namespace Liftmanagement.Helper
             Profil = 9,
             Update = 11,
             Managment = 13,
+            Report = 17,
         }
 
         public enum VarietyType

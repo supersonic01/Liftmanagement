@@ -1197,9 +1197,11 @@ namespace Liftmanagement.Data
             var dbConnection = GetConnection();
             string timesensitive = record.Timesensitive == null ? null : record.Timesensitive.Value.ToString("yyyy-MM-dd");
             int agreementType = (int)record.AgreementType;
+            var offerPrice = (string.Format("'{0:#.##}'", record.OfferPrice)).Replace(",", ".");
+            var billingAmountCorrect = string.Format("'{0:#.##}'", record.BillingAmountCorrect).Replace(",", ".");
 
             record.ModifiedPersonName = Helper.Helper.GetPersonName();
-            string query = "UPDATE RECORD SET LocationId = " + record.LocationId + ",CustomerId = " + record.CustomerId + ",MachineInformationId = " + record.MachineInformationId + ",Date = '" + record.Date + "',ProcessNo = '" + record.ProcessNo + "',Process = '" + record.Process + "',CostType = '" + record.CostType + "',MachineStoped = " + record.MachineStoped + ",Timesensitive = '" + timesensitive + "',InvoiceNumber = '" + record.InvoiceNumber + "',IssueLevel = " + record.IssueLevel + ",ReportedFrom = '" + record.ReportedFrom + "',Reason = '" + record.Reason + "',Storage = " + record.Storage + ",NextStep = '" + record.NextStep + "',PersonResponsible = '" + record.PersonResponsible + "',ReleaseFrom = '" + record.ReleaseFrom + "',CustomerInformed = " + record.CustomerInformed + ",CustomerPrefers = '" + record.CustomerPrefers + "',OfferPrice = " + record.OfferPrice + ",BillingAmountCorrect = " + record.BillingAmountCorrect + ",ExecutionCorrect = " + record.ExecutionCorrect + ",VerifiedOnSpot = '" + record.VerifiedOnSpot + "',ProcessCompleted = " + record.ProcessCompleted + ",ProcessCompletedPerson = '" + record.ProcessCompletedPerson + "',AgreementType = " + agreementType + ",AgreementId = " + record.AgreementId + ",GoogleDriveFolderName = '" + record.GoogleDriveFolderName + "',GoogleDriveLink = '" + record.GoogleDriveLink + "',CreatedPersonName = '" + record.CreatedPersonName + "',ModifiedPersonName = '" + record.ModifiedPersonName + "',ReadOnly = " + record.ReadOnly + ",UsedBy = '" + record.UsedBy + "',Deleted = " + record.Deleted + " WHERE ID = " + record.Id;
+            string query = "UPDATE RECORD SET LocationId = " + record.LocationId + ",CustomerId = " + record.CustomerId + ",MachineInformationId = " + record.MachineInformationId + ",Date = '" + record.Date + "',ProcessNo = '" + record.ProcessNo + "',Process = '" + record.Process + "',CostType = '" + record.CostType + "',MachineStoped = " + record.MachineStoped + ",Timesensitive = '" + timesensitive + "',InvoiceNumber = '" + record.InvoiceNumber + "',IssueLevel = " + record.IssueLevel + ",ReportedFrom = '" + record.ReportedFrom + "',Reason = '" + record.Reason + "',Storage = " + record.Storage + ",NextStep = '" + record.NextStep + "',PersonResponsible = '" + record.PersonResponsible + "',ReleaseFrom = '" + record.ReleaseFrom + "',CustomerInformed = " + record.CustomerInformed + ",CustomerPrefers = '" + record.CustomerPrefers + "',OfferPrice = " + offerPrice + ",BillingAmountCorrect = " + billingAmountCorrect + ",ExecutionCorrect = " + record.ExecutionCorrect + ",VerifiedOnSpot = '" + record.VerifiedOnSpot + "',ProcessCompleted = " + record.ProcessCompleted + ",ProcessCompletedPerson = '" + record.ProcessCompletedPerson + "',AgreementType = " + agreementType + ",AgreementId = " + record.AgreementId + ",GoogleDriveFolderName = '" + record.GoogleDriveFolderName + "',GoogleDriveLink = '" + record.GoogleDriveLink + "',CreatedPersonName = '" + record.CreatedPersonName + "',ModifiedPersonName = '" + record.ModifiedPersonName + "',ReadOnly = " + record.ReadOnly + ",UsedBy = '" + record.UsedBy + "',Deleted = " + record.Deleted + " WHERE ID = " + record.Id;
 
             MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
@@ -1228,7 +1230,6 @@ namespace Liftmanagement.Data
 
             MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
-            dbConnection.Open();
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
             var result = new SQLQueryResult<Record>(records, id);

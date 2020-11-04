@@ -46,7 +46,7 @@ namespace Liftmanagement
 
             //MySQLDataAccess.CreateConnection();
             
-            MySQLDataAccess.CreateTables();
+           // MySQLDataAccess.CreateTables();
 
 
 
@@ -58,7 +58,7 @@ namespace Liftmanagement
 
             //Helper.Helper.GenerateInsert(typeof(MaintenanceAgreementContent));
             //Helper.Helper.GenerateInsert(typeof(OtherInformation));
-           // Helper.Helper.GenerateInsert(typeof(Record));
+            // Helper.Helper.GenerateInsert(typeof(Record));
 
             //Helper.Helper.GenerateSelect(typeof(MaintenanceAgreementContent));
             //Helper.Helper.GenerateSelect(typeof(OtherInformation));
@@ -87,7 +87,6 @@ namespace Liftmanagement
             //  new CalendarQuickstart().AddEvent(DateTime.Now, DateTime.Now, "Hallo", "Hallo2");
 
 
-            ;
 
             Binding binding = new Binding("CategoryVM.Categories")
             {
@@ -169,6 +168,9 @@ namespace Liftmanagement
                     //frameDetail.Content = new LocationDetailView(location);
                    // frameDetail.Content = new BusyIndicatorView();
 
+                    break;
+                case Helper.Helper.TTypeMangement.Report:
+                    frameDetail.Content = new ReportView();
                     break;
                 default:
                     break;

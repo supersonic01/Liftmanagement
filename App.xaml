@@ -11,6 +11,8 @@
         <converters:DateFixerConverter x:Key="DateFixerConverter"></converters:DateFixerConverter>
         <converters:DateConverter x:Key="DateConverter"></converters:DateConverter>
         <converters:BooleanToImageConverter x:Key="BooleanToImageConverter"></converters:BooleanToImageConverter>
+        <converters:MultiConverter x:Key="MultiConverter"></converters:MultiConverter>
+        <converters:ValueToForegroundColorConverter x:Key="valueToForeground"></converters:ValueToForegroundColorConverter>
         <common:CustomLanguage x:Key="CustomLanguage"></common:CustomLanguage>
 
     </Application.Resources>

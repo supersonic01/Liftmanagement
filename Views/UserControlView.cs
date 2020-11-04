@@ -380,7 +380,7 @@ namespace Liftmanagement.Views
             hyperlink.SetBinding(Hyperlink.NavigateUriProperty, binding);
         }
 
-        protected virtual void BindingTextBlock<T>(TextBlock control, Expression<Func<T>> action, Func<IValueConverter> converter = null)
+        protected virtual void BindingTextBlock<T>(TextBlock control, Expression<Func<T>> action, Func<IValueConverter> converter = null, string stringFormat=null)
         {
             var binding = new Binding(GetPropertyPath(action))
             {
@@ -391,6 +391,11 @@ namespace Liftmanagement.Views
             if (converter != null)
             {
                 binding.Converter = converter();
+            }
+
+            if (stringFormat != null)
+            {
+                binding.StringFormat = stringFormat;
             }
 
             control.SetBinding(TextBlock.TextProperty, binding);

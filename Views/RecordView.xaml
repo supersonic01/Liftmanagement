@@ -1,0 +1,308 @@
+﻿<local:GoogleDriveDialogueView x:Class="Liftmanagement.Views.RecordView"
+                               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                               xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                               xmlns:local="clr-namespace:Liftmanagement.Views"
+                               xmlns:r="clr-namespace:Liftmanagement.Properties"
+                               mc:Ignorable="d" 
+                               d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/LiftmanagementStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+
+    <Grid Background="#FFE5E5E5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="100" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="30" />
+            <!--5-->
+            <RowDefinition Height="30" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="30" />
+            <!--8-->
+            <RowDefinition Height="60" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <!--12-->
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="40"/>
+            <!--12-->
+        </Grid.RowDefinitions>
+
+        <Label x:Name="lblDate" Grid.Row="2" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblProcess" Grid.Row="2" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblCostType" Grid.Row="2" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblAgreementType" Content="dd"  Grid.Row="2" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblTimesensitive" Grid.Row="5" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblInvoiceNumber" Grid.Row="5" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblIssueLevel" Grid.Row="5" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblReportedFrom" Grid.Row="5" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblMachineStoped" Grid.Row="8" Grid.Column="0" HorizontalAlignment="Center" Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblReason" Grid.Row="8" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblStorage" Grid.Row="11" Grid.Column="0" HorizontalAlignment="Center"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblNextStep" Grid.Row="11" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblPersonResponsible" Grid.Row="11" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblReleaseFrom" Grid.Row="11" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblCustomerInformed" Grid.Row="14" Grid.Column="0"  HorizontalAlignment="Center"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblCustomerPrefers" Grid.Row="14" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblOfferPrice" Grid.Row="14" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblBillingAmountCorrect" Grid.Row="14" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblExecutionCorrect" Grid.Row="17" Grid.Column="0"  HorizontalAlignment="Center" Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblVerifiedOnSpot" Grid.Row="17" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+        <Label x:Name="lblGoogleDriveLink" Content="link" Grid.Row="17" Grid.Column="2" HorizontalAlignment="Center"  Style="{StaticResource LableStyle}" />
+
+        <DatePicker x:Name="datePickerDate" Grid.Row="3" Grid.Column="0" Style="{StaticResource DatePickerStyle}">
+            <DatePicker.Resources>
+                <Style TargetType="{x:Type DatePickerTextBox}">
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="Control.Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <TextBox x:Name="PART_TextBox"  Text="{Binding Path=SelectedDate, StringFormat='dd.MM.yyyy', 
+                                                RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DatePicker.Resources>
+        </DatePicker>
+
+        <ComboBox x:Name="cbProcess" Grid.Row="3" Grid.Column="1" IsEditable="True" Style="{StaticResource ComboBoxStyle}"/>
+        <ComboBox x:Name="cbCostType" Grid.Row="3" Grid.Column="2" IsEditable="True" Style="{StaticResource ComboBoxStyle}"/>
+        <ComboBox x:Name="cbAgreementType" Grid.Row="3" Grid.Column="3" IsEditable="False" Style="{StaticResource ComboBoxStyle}"/>
+        <CheckBox x:Name="cboxMachineStoped"  Grid.Row="9" Grid.Column="0"  HorizontalAlignment="Center" VerticalAlignment="Center" >
+            <CheckBox.LayoutTransform>
+                <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+            </CheckBox.LayoutTransform>
+        </CheckBox>
+
+        <DatePicker x:Name="datePickerTimesensitive" Grid.Row="6" Grid.Column="0" Style="{StaticResource DatePickerStyle}" >
+            <DatePicker.Resources>
+                <Style TargetType="{x:Type DatePickerTextBox}">
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="Control.Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <TextBox x:Name="PART_TextBox"  Text="{Binding Path=SelectedDate, StringFormat='dd.MM.yyyy', 
+                                                RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DatePicker.Resources>
+        </DatePicker>
+        <TextBox x:Name="txtInvoiceNumber" Grid.Row="6" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
+        <ComboBox x:Name="cbIssueLevel" Grid.Row="6" Grid.Column="2" IsEditable="False" Style="{StaticResource ComboBoxStyle}"/>
+        <ComboBox x:Name="cbReportedFrom" Grid.Row="6" Grid.Column="3" IsEditable="True" Style="{StaticResource ComboBoxStyle}"/>
+        <TextBox x:Name="txtReason" Grid.Row="9"  Grid.Column="1" Grid.ColumnSpan="3" Margin="10,0,10,0"
+                     TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True"/>
+        <CheckBox x:Name="cboxStorage"  Grid.Row="12" Grid.Column="0" Style="{StaticResource CheckBoxStyle}"/>
+        <TextBox x:Name="txtNextStep" Grid.Row="12" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
+        <ComboBox x:Name="cbPersonResponsible" Grid.Row="12" Grid.Column="2" IsEditable="True" Style="{StaticResource ComboBoxStyle}"/>
+        <ComboBox x:Name="cbReleaseFrom" Grid.Row="12" Grid.Column="3" IsEditable="True" Style="{StaticResource ComboBoxStyle}"/>
+        <CheckBox x:Name="cboxCustomerInformed"  Grid.Row="15" Grid.Column="0" Style="{StaticResource CheckBoxStyle}"/>
+        <TextBox x:Name="txtCustomerPrefers" Grid.Row="15" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
+        <TextBox x:Name="txtOfferPrice" Grid.Row="15" Grid.Column="2"  Style="{StaticResource TextBoxStyle}"/>
+        <TextBox x:Name="txtBillingAmountCorrect" Grid.Row="15" Grid.Column="3"  Style="{StaticResource TextBoxStyle}"/>
+        <CheckBox x:Name="cboxExecutionCorrect"  Grid.Row="18" Grid.Column="0" Style="{StaticResource CheckBoxStyle}"/>
+        <TextBox x:Name="txtVerifiedOnSpot" Grid.Row="18" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
+
+        <TextBlock x:Name="txtGoogleDriveHyperlink" Grid.Row="18" Grid.Column="2" Margin="10,0,0,0" VerticalAlignment="Center"
+                   KeyboardNavigation.IsTabStop="False" HorizontalAlignment="Center">
+            <Hyperlink  x:Name="hyperlinkGoogleDrive" NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate"  KeyboardNavigation.IsTabStop="False">                             
+                <TextBlock x:Name="txtGoogleDriveFolderName"  KeyboardNavigation.IsTabStop="False"/>
+            </Hyperlink>
+        </TextBlock>
+
+        <Button x:Name="btnGoogleDriveTree" Grid.Row="18" Grid.Column="3"  HorizontalAlignment="Center" VerticalAlignment="Center" Click="btnGoogleDriveTree_Click" BorderThickness="0" Background="Transparent"
+                IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
+                IsTabStop="False">
+            <StackPanel>
+                <Image Source="..\Resources\Images\Icons\Google-Drive.ico" Height="30"/>
+            </StackPanel>
+        </Button>
+
+        <StackPanel Grid.Row="2" Grid.RowSpan="18" Grid.Column="4" Orientation="Vertical"  HorizontalAlignment="Left" Margin="20,0,0,0" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="40" x:Name="grBtnDelete"/>
+                    <RowDefinition Height="70" x:Name="spaceAdmin"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+
+                <Button  x:Name="btnAdd" Grid.Row="1" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnAdd_Click" BorderThickness="0" Background="Transparent" 
+                                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, 
+                                           Path=IsReadOnly,Converter={StaticResource InverseBooleanConverter}}"
+                                             ToolTipService.ShowOnDisabled="True">
+                    <StackPanel>
+                        <Image Source="..\Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" Height="30"/>
+                    </StackPanel>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInViewMode}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Neuen Kunden hinzufügen" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button x:Name="btnEdit" Grid.Row="2"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnEdit_Click" BorderThickness="0" Background="Transparent"
+                                            IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, 
+                                        Path=IsReadOnly,Converter={StaticResource InverseBooleanConverter}}"
+                                        ToolTipService.ShowOnDisabled="True">
+                    <StackPanel>
+                        <Image Source="..\Resources\Images\Icons\Turbomilk-Livejournal-10-Pencil.ico" Height="30"/>
+                    </StackPanel>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInViewMode}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Kunden bearbeiten" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button  x:Name="btnCancel" Grid.Row="3" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnCancel_Click" BorderThickness="0" Background="Transparent"
+                                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
+                                             ToolTipService.ShowOnDisabled="True">
+                    <StackPanel>
+                        <Image Source="..\Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-edit-delete.ico" Height="30"/>
+                    </StackPanel>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInEditMode}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Bearbeitung abbrechen" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button  x:Name="btnSave"  Grid.Row="5"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSave_Click" BorderThickness="0" Background="Transparent"
+                                         IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
+                                         ToolTipService.ShowOnDisabled="True">
+                    <StackPanel>
+                        <Image Source="..\Resources\Images\Icons\Treetog-I-Floppy-Small.ico" Height="30"/>
+                    </StackPanel>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInEditMode}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Kundendaten speichern" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button  x:Name="btnDelete"  Grid.Row="6"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnDelete_Click" BorderThickness="0" 
+                                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, 
+                                           Path=IsReadOnly,Converter={StaticResource InverseBooleanConverter}}"
+                                             ToolTipService.ShowOnDisabled="True">
+                    <StackPanel>
+                        <Image Source="..\Resources\Images\Icons\Tatice-Just-Bins-Bin-red-full.ico" Height="30"/>
+                    </StackPanel>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInViewMode}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Kundendaten löschen" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button  x:Name="btnProcessCompleted"  Grid.Row="0"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnProcessCompleted_Click" BorderThickness="0" Background="Transparent"
+                                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
+                                             ToolTipService.ShowOnDisabled="True" Margin="0,10,0,0">
+                    <StackPanel>
+                        <Image  x:Name="imageBtnProcessCompleted"  Height="30"/>
+                    </StackPanel>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInEditMode}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Vorgang abschließen" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button  x:Name="btnClose"  Grid.Row="8"  HorizontalAlignment="Center"  VerticalAlignment="Center" BorderThickness="0" Background="Transparent"
+                         ToolTipService.ShowOnDisabled="True">
+                    <StackPanel>
+                        <Image Source="..\Resources\Images\Icons\Custom-Icon-Design-Pretty-Office-9-Delete-file.ico" Height="30"/>
+                    </StackPanel>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInEditMode}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Beenden"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                
+            </Grid>
+        </StackPanel>
+    </Grid>
+</local:GoogleDriveDialogueView>
+

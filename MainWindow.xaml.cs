@@ -56,15 +56,15 @@ namespace Liftmanagement
 
             //MySQLDataAccess.GetCustomers();
 
-            //Helper.Helper.GenerateInsert(typeof(MaintenanceAgreementContent));
+           // Helper.Helper.GenerateInsert(typeof(EmergencyAgreement));
             //Helper.Helper.GenerateInsert(typeof(OtherInformation));
             // Helper.Helper.GenerateInsert(typeof(Record));
 
-            //Helper.Helper.GenerateSelect(typeof(MaintenanceAgreementContent));
+           // Helper.Helper.GenerateSelect(typeof(EmergencyAgreement));
             //Helper.Helper.GenerateSelect(typeof(OtherInformation));
             //Helper.Helper.GenerateSelect(typeof(Record));
 
-            //Helper.Helper.GenerateUpdate(typeof(MaintenanceAgreementContent));
+           // Helper.Helper.GenerateUpdate(typeof(EmergencyAgreement));
             //Helper.Helper.GenerateUpdate(typeof(OtherInformation));
             //Helper.Helper.GenerateUpdate(typeof(Record));
 
@@ -141,6 +141,7 @@ namespace Liftmanagement
                     frameDetail.Content = new MaintenanceAgreementView();
                     break;
                 case Helper.Helper.TTypeMangement.EmergencyAgreement:
+                    frameDetail.Content = new EmergencyAgreementView();
                     break;
                 case Helper.Helper.TTypeMangement.MachineInformation:
                     frameDetail.Content = new MachineInformationView();

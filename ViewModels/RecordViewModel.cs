@@ -235,6 +235,18 @@ namespace Liftmanagement.ViewModels
                 });
             }
 
+            var ergencyAgreements = MySQLDataAccess.GetEmergencyAgreementsByMachineInformation(machineInformationSelected.Id).OrderByDescending(c => c.AgreementDate);
+
+
+            foreach (var ergencyAgreement in ergencyAgreements)
+            {
+                agreements.Add(new RecordAgreementType
+                {
+                    AgreementType = Helper.Helper.TTypeMangement.EmergencyAgreement,
+                    EmergencyAgreement = ergencyAgreement
+                });
+            }
+
             return new ObservableCollection<RecordAgreementType>(agreements);
         }
 

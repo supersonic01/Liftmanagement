@@ -1,0 +1,306 @@
+﻿<local:GoogleDriveDialogueView x:Class="Liftmanagement.Views.EmergencyAgreementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Liftmanagement.Views"
+             xmlns:r="clr-namespace:Liftmanagement.Properties"
+             xmlns:li="http://github.com/zeluisping/loadingIndicators/xaml/controls"          
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="1200">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/LiftmanagementStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid x:Name="gridResizableEmergencyAgreements">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="gdframCustomers" Width="Auto"/>
+                <ColumnDefinition x:Name="gdframLocations" Width="Auto"/>
+                <ColumnDefinition x:Name="gdframMachineInformations" Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Frame x:Name="frameCustomers" Grid.Column="0" Content="Customers"/>
+            <Frame x:Name="frameLocations" Grid.Column="1" Content="Locations"/>
+            <Frame x:Name="frameMachineInformations" Grid.Column="2" Content="Locations"/>
+
+            <Grid  Grid.Column="3" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" >
+                    <Grid Background="#FFE5E5E5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" x:Name="MasterDatatInfo"/>
+                            <RowDefinition Height="10" />
+                        </Grid.RowDefinitions>
+                        <Frame x:Name="frameMasterDataInfo" Grid.Row="0"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                        <Line  Grid.Row="1"  X1="0" Y1="0" X2="1"  Y2="0" Stroke="Black" StrokeThickness="2" Stretch="Uniform"/>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Grid Background="#FFE5E5E5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0" />
+                            <RowDefinition Height="0" />
+                            <RowDefinition Height="Auto" x:Name="Header" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="30" /><!--6-->
+                            <RowDefinition Height="60" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5"  Content="Notrufvertrag" FontSize="24" Margin="10" Padding="10"
+                           HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center"/>
+                        <Image x:Name="imageIsEnabled" Grid.Row="2" Grid.Column="0"  Height="40" HorizontalAlignment="Left" Margin="10,0,0,0"
+                               Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=EnabledBitmapImage}"/>
+
+
+                        <Label x:Name="lblDuration" Grid.Row="3" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblTerminated" Grid.Row="3" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblNoticeOfPeriod" Grid.Row="3" Grid.Column="2"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblAgreementDate" Grid.Row="3" Grid.Column="3"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblMaintenanceType" Grid.Row="3" Grid.Column="4"  Style="{StaticResource LableStyle}" />
+
+                        <Label x:Name="lblAdditionalInfo" Grid.Row="6" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+
+                        <Label x:Name="lblNotificationTime" Grid.Row="9" Grid.Column="0"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblArreementCancelledBy" Grid.Row="9" Grid.Column="1"  Style="{StaticResource LableStyle}" />
+                        <Label x:Name="lblGoogleDriveLink" Grid.Row="9" Grid.Column="3"  Style="{StaticResource LableStyle}"  HorizontalAlignment="Center"/>
+                        <Label x:Name="lblGoogleCalendarLink" Grid.Row="9" Grid.Column="2"  Style="{StaticResource LableStyle}"  HorizontalAlignment="Center"/>
+
+                        <!--<TextBox x:Name="txtDuration" Grid.Row="4" Grid.Column="0" Style="{StaticResource TextBoxStyle}" />-->
+                        <DatePicker x:Name="datePickerDuration" Grid.Row="4" Grid.Column="0" Style="{StaticResource DatePickerStyle}"  PreviewTextInput="datePickerDuration_PreviewTextInput"
+                                    SelectedDate="{Binding RelativeSource={RelativeSource Self},Path=Text, Converter={StaticResource DateConverter}}"
+                                    Language="{Binding Path=Language,Source={StaticResource CustomLanguage}}">
+                            
+                        </DatePicker>
+
+                        <ComboBox x:Name="cbTerminated" Grid.Row="4" Grid.Column="1" IsEditable="True" Style="{StaticResource ComboBoxStyle}"   />
+                        <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal"  HorizontalAlignment="Stretch">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="140"/>
+
+                                </Grid.ColumnDefinitions>
+                                <ComboBox x:Name="cbNoticeOfPeriodMonth" Grid.Column="0" IsEditable="True" Style="{StaticResource ComboBoxStyle}" HorizontalAlignment="Left" Width="40"/>
+                                <TextBox x:Name="txtNoticeOfPeriod"  Grid.Column="1" Style="{StaticResource TextBoxStyle}" Margin="0,0,10,0" HorizontalAlignment="Stretch"  />
+                            </Grid>
+
+                        </StackPanel>
+
+                        <TextBox x:Name="txtAgreementDate" Grid.Row="4" Grid.Column="3" Style="{StaticResource TextBoxStyle}" />
+                       
+                        <ComboBox x:Name="cbEmergencyType" Grid.Row="4" Grid.Column="4" IsEditable="True" Style="{StaticResource ComboBoxStyle}"  />
+
+                        <TextBox x:Name="txtAdditionalInfo" Grid.Row="7"  Grid.Column="0" Grid.ColumnSpan="5"  Margin="10,0,10,0"
+                                 TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True"/>
+
+                        <StackPanel x:Name="spNotificationTime" Grid.Row="10" Grid.Column="0" Orientation="Horizontal"  HorizontalAlignment="Stretch">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="140"/>
+
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="txtNotificationTime" Grid.Column="0" Style="{StaticResource TextBoxStyle}" Width="50" HorizontalAlignment="Left"/>
+                                <ComboBox x:Name="cbNotificationUnit" Grid.Column="1" IsEditable="False" Style="{StaticResource ComboBoxStyle}" HorizontalAlignment="Stretch" 
+                                          SelectedValuePath="Key" DisplayMemberPath="Value"  />
+                            </Grid>
+
+                        </StackPanel>
+                        <ComboBox x:Name="cbArreementCancelledBy" Grid.Row="10" Grid.Column="1" IsEditable="True" Style="{StaticResource ComboBoxStyle}"   />
+
+                        <TextBlock x:Name="txtGoogleCalendarHyperlink" Grid.Row="10" Grid.Column="2" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Hyperlink  x:Name="hyperlinkGoogleCalendar"  RequestNavigate="Hyperlink_RequestNavigate">                             
+                                <TextBlock x:Name="txtGoogleCalendarName" Text="Erinnerung"/>
+                            </Hyperlink>
+                        </TextBlock>
+
+                        <TextBlock x:Name="txtGoogleDriveHyperlink" Grid.Row="10" Grid.Column="3" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Hyperlink  x:Name="hyperlinkGoogleDrive" RequestNavigate="Hyperlink_RequestNavigate">                             
+                                <TextBlock x:Name="txtGoogleDriveFolderName" Text="{Binding Path=GoogleDriveFolderName}"/>
+                            </Hyperlink>
+                        </TextBlock>
+                        <StackPanel Grid.Row="9" Grid.RowSpan="2" Grid.Column="4" Orientation="Horizontal">
+                            <Button x:Name="btnGoogleDriveTree" VerticalAlignment="Center" Click="btnGoogleDriveTree_Click" BorderThickness="0" Background="Transparent"
+                                    IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
+                                    Margin="30,0,70,0">
+                                <StackPanel>
+                                    <Image Source="..\Resources\Images\Icons\Google-Drive.ico" Height="30"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                        
+
+                        <Line  Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="7" X1="0" Y1="0" X2="1"  Y2="0" Stroke="Black" StrokeThickness="2" Stretch="Uniform"/>
+
+                        <StackPanel Grid.Row="3"  Grid.RowSpan="9" Grid.Column="5" Orientation="Vertical"  HorizontalAlignment="Center">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="40" x:Name="grBtnDelete"/>
+                                    <RowDefinition Height="30" x:Name="spaceAdmin"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                </Grid.RowDefinitions>
+
+                                <Button  x:Name="btnAdd" Grid.Row="0" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnAdd_Click" BorderThickness="0" Background="Transparent" 
+                                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, 
+                                           Path=IsReadOnly,Converter={StaticResource InverseBooleanConverter}}"
+                                             ToolTipService.ShowOnDisabled="True">
+                                    <StackPanel>
+                                        <Image Source="..\Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" Height="30"/>
+                                    </StackPanel>
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInViewMode}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ToolTip" Value="Neuen Kunden hinzufügen" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <Button x:Name="btnEdit" Grid.Row="1"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnEdit_Click" BorderThickness="0" Background="Transparent"
+                                            IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, 
+                                        Path=IsReadOnly,Converter={StaticResource InverseBooleanConverter}}"
+                                        ToolTipService.ShowOnDisabled="True">
+                                    <StackPanel>
+                                        <Image Source="..\Resources\Images\Icons\Turbomilk-Livejournal-10-Pencil.ico" Height="30"/>
+                                    </StackPanel>
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInViewMode}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ToolTip" Value="Kunden bearbeiten" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <Button  x:Name="btnCancel" Grid.Row="2" HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnCancel_Click" BorderThickness="0" Background="Transparent"
+                                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
+                                             ToolTipService.ShowOnDisabled="True">
+                                    <StackPanel>
+                                        <Image Source="..\Resources\Images\Icons\Oxygen-Icons.org-Oxygen-Actions-edit-delete.ico" Height="30"/>
+                                    </StackPanel>
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInEditMode}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ToolTip" Value="Bearbeitung abbrechen" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <Button  x:Name="btnSave"  Grid.Row="4"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnSave_Click" BorderThickness="0" Background="Transparent"
+                                         IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, Path=IsReadOnly}"
+                                         ToolTipService.ShowOnDisabled="True">
+                                    <StackPanel>
+                                        <Image Source="..\Resources\Images\Icons\Treetog-I-Floppy-Small.ico" Height="30"/>
+                                    </StackPanel>
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInEditMode}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ToolTip" Value="Kundendaten speichern" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <Button  x:Name="btnDelete"  Grid.Row="5"  HorizontalAlignment="Center"  VerticalAlignment="Center" Click="btnDelete_Click" BorderThickness="0" 
+                                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:UserControlView}}, 
+                                           Path=IsReadOnly,Converter={StaticResource InverseBooleanConverter}}"
+                                             ToolTipService.ShowOnDisabled="True">
+                                    <StackPanel>
+                                        <Image Source="..\Resources\Images\Icons\Tatice-Just-Bins-Bin-red-full.ico" Height="30"/>
+                                    </StackPanel>
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="ToolTip" Value= "{x:Static  r:Resources.activeOnlyInViewMode}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ToolTip" Value="Kundendaten löschen" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </Grid>
+                        </StackPanel>
+
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel x:Name="spEmergencyAgreements" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Background="LightBlue">
+                    <DataGrid  x:Name="dgEmergencyAgreements" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"  SelectionUnit="FullRow"  Background="Blue"
+                           local:CustomColumnHeadersProperty.ItemType="{x:Type local:EmergencyAgreementView}" IsReadOnly="True" SelectionMode="Single"   ColumnWidth="*" 
+                           CellStyle="{StaticResource Body_Content_DataGrid_Centering}"  Margin="10,0,5,0" MinWidth="400" VerticalScrollBarVisibility="Auto">
+                        <DataGrid.RowStyle >
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="Height" Value="30"/>
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#0078D7" />
+                                        <Setter Property="Foreground" Value="White" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                    </DataGrid>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <Grid x:Name="LoadingIndicatorPanel" Background="White">
+            <li:LoadingIndicator x:Name="LoadingIndicatorx" SpeedRatio="1" IsActive="{Binding IsArcsActive}" Mode="Arcs" Foreground="DeepSkyBlue"/>
+        </Grid>
+    </Grid>
+</local:GoogleDriveDialogueView>

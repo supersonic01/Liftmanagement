@@ -133,6 +133,24 @@ namespace Liftmanagement.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ohne Personenbefreiung.
+        /// </summary>
+        public static string withoutPersonsRescue {
+            get {
+                return ResourceManager.GetString("withoutPersonsRescue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mit Personenbefreiung.
+        /// </summary>
+        public static string withPersonsRescue {
+            get {
+                return ResourceManager.GetString("withPersonsRescue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to jährlich.
         /// </summary>
         public static string yearly {

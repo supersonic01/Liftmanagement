@@ -1494,5 +1494,106 @@ namespace Liftmanagement.Data
             return new SQLQueryResult<T>(records, id);
         }
 
+        public static SQLQueryResult<EmergencyAgreement> GetEmergencyAgreementForEdit(long id)
+        {
+            return GetDbRecordForEdit(id, query => GetEmergencyAgreements(query));
+        }
+
+        public static SQLQueryResult<EmergencyAgreement> ForceToEditEmergencyAgreement(long id)
+        {
+            return ForceToEdit<EmergencyAgreement>(id);
+        }
+
+        public static void ReleaseEditingEmergencyAgreement(long id)
+        {
+            ReleaseEditing<EmergencyAgreement>(id);
+        }
+
+        public static SQLQueryResult<EmergencyAgreement> MarkForDeleteEmergencyAgreement(EmergencyAgreement emergencyAgreement)
+        {
+            return MarkForDeletion<EmergencyAgreement>(emergencyAgreement);
+        }
+
+        public static List<EmergencyAgreement> GetEmergencyAgreementsByMachineInformation(long id)
+        {
+            string query = "SELECT * FROM EMERGENCYAGREEMENT WHERE MACHINEINFORMATIONID = " + id + " AND DELETED = FALSE";
+            return GetEmergencyAgreements(query);
+        }
+
+        public static List<EmergencyAgreement> GetEmergencyAgreements()
+        {
+            string query = "SELECT * FROM EMERGENCYAGREEMENT WHERE DELETED = FALSE";
+            return GetEmergencyAgreements(query);
+        }
+
+        public static SQLQueryResult<EmergencyAgreement> UpdateEmergencyAgreement(EmergencyAgreement emergencyagreement)
+        {
+            var dbConnection = GetConnection();
+
+            emergencyagreement.ModifiedPersonName = Helper.Helper.GetPersonName();
+            string query = "UPDATE EMERGENCYAGREEMENT SET LocationId = " + emergencyagreement.LocationId + ",CustomerId = " + emergencyagreement.CustomerId + ",MachineInformationId = " + emergencyagreement.MachineInformationId + ",Duration = '" + emergencyagreement.Duration.ToString("yyyy-MM-dd") + "',CanBeCancelled = '" + emergencyagreement.CanBeCancelled + "',AgreementCancelledBy = '" + emergencyagreement.AgreementCancelledBy + "',NoticeOfPeriod = " + emergencyagreement.NoticeOfPeriod + ",AgreementDate = '" + emergencyagreement.AgreementDate.ToString("yyyy-MM-dd") + "',EmergencyType = '" + emergencyagreement.EmergencyType + "',AdditionalInfo = '" + emergencyagreement.AdditionalInfo + "',NotificationTime = " + emergencyagreement.NotificationTime + ",NotificationUnit = " + (int) emergencyagreement.NotificationUnit + ",GoogleCalendarEventId = '" + emergencyagreement.GoogleCalendarEventId + "',GoogleCalendarLink = '" + emergencyagreement.GoogleCalendarLink + "',GoogleDriveFolderName = '" + emergencyagreement.GoogleDriveFolderName + "',GoogleDriveLink = '" + emergencyagreement.GoogleDriveLink + "',CreatedPersonName = '" + emergencyagreement.CreatedPersonName + "',ModifiedPersonName = '" + emergencyagreement.ModifiedPersonName + "',ReadOnly = " + emergencyagreement.ReadOnly + ",UsedBy = '" + emergencyagreement.UsedBy + "',Deleted = " + emergencyagreement.Deleted + " WHERE ID = " + emergencyagreement.Id;
+
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
+
+            dbConnection.Open();
+            int records = execQuery.ExecuteNonQuery();
+            var result = new SQLQueryResult<EmergencyAgreement>(records, emergencyagreement.Id);
+            return result;
+        }
+
+
+        public static SQLQueryResult<EmergencyAgreement> AddEmergencyAgreement(EmergencyAgreement emergencyagreement)
+        {
+            var dbConnection = GetConnection();
+
+            string query = "INSERT INTO EMERGENCYAGREEMENT(LocationId,CustomerId,MachineInformationId,Duration,CanBeCancelled,AgreementCancelledBy,NoticeOfPeriod,AgreementDate,EmergencyType,AdditionalInfo,NotificationTime,NotificationUnit,GoogleCalendarEventId,GoogleCalendarLink,GoogleDriveFolderName,GoogleDriveLink,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy,Deleted)";
+            string values = "VALUE(" + emergencyagreement.LocationId + "," + emergencyagreement.CustomerId + "," + emergencyagreement.MachineInformationId + ",'" + emergencyagreement.Duration.ToString("yyyy-MM-dd") + "','" + emergencyagreement.CanBeCancelled + "','" + emergencyagreement.AgreementCancelledBy + "'," + emergencyagreement.NoticeOfPeriod + ",'" + emergencyagreement.AgreementDate.ToString("yyyy-MM-dd") + "','" + emergencyagreement.EmergencyType + "','" + emergencyagreement.AdditionalInfo + "'," + emergencyagreement.NotificationTime + "," + (int) emergencyagreement.NotificationUnit + ",'" + emergencyagreement.GoogleCalendarEventId + "','" + emergencyagreement.GoogleCalendarLink + "','" + emergencyagreement.GoogleDriveFolderName + "','" + emergencyagreement.GoogleDriveLink + "','" + emergencyagreement.CreatedPersonName + "','" + emergencyagreement.ModifiedPersonName + "'," + emergencyagreement.ReadOnly + ",'" + emergencyagreement.UsedBy + "'," + emergencyagreement.Deleted + ")";
+            query = query + values;
+
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
+
+            dbConnection.Open();
+            int records = execQuery.ExecuteNonQuery();
+            long id = execQuery.LastInsertedId;
+            
+            return new SQLQueryResult<EmergencyAgreement>(records, id);
+        }
+
+        private static List<EmergencyAgreement> GetEmergencyAgreements(string query)
+        {
+            List<EmergencyAgreement> emergencyagreements = new List<EmergencyAgreement>();
+
+            SelectItems(query, reader =>
+            {
+                EmergencyAgreement emergencyagreement = new EmergencyAgreement();
+                emergencyagreement.LocationId = reader.GetInt64("LocationId");
+                emergencyagreement.CustomerId = reader.GetInt64("CustomerId");
+                emergencyagreement.MachineInformationId = reader.GetInt64("MachineInformationId");
+                emergencyagreement.Duration = reader.GetDateTime("Duration");
+                emergencyagreement.CanBeCancelled = reader.GetString("CanBeCancelled");
+                emergencyagreement.AgreementCancelledBy = reader.GetString("AgreementCancelledBy");
+                emergencyagreement.NoticeOfPeriod = reader.GetInt32("NoticeOfPeriod");
+                emergencyagreement.AgreementDate = reader.GetDateTime("AgreementDate");
+                emergencyagreement.EmergencyType = reader.GetString("EmergencyType");
+                emergencyagreement.AdditionalInfo = reader.GetString("AdditionalInfo");
+                emergencyagreement.NotificationTime = reader.GetInt32("NotificationTime");
+                emergencyagreement.NotificationUnit = (Helper.Helper.NotificationUnitType)reader.GetInt32("NotificationUnit");
+                emergencyagreement.GoogleCalendarEventId = reader.GetString("GoogleCalendarEventId");
+                emergencyagreement.GoogleCalendarLink = reader.GetString("GoogleCalendarLink");
+                emergencyagreement.GoogleDriveFolderName = reader.GetString("GoogleDriveFolderName");
+                emergencyagreement.GoogleDriveLink = reader.GetString("GoogleDriveLink");
+                emergencyagreement.Id = reader.GetInt64("Id");
+                emergencyagreement.CreatedDate = reader.GetDateTime("CreatedDate");
+                emergencyagreement.ModifiedDate = reader.GetDateTime("ModifiedDate");
+                emergencyagreement.CreatedPersonName = reader.GetString("CreatedPersonName");
+                emergencyagreement.ModifiedPersonName = reader.GetString("ModifiedPersonName");
+                emergencyagreement.ReadOnly = reader.GetBoolean("ReadOnly");
+                emergencyagreement.UsedBy = reader.GetString("UsedBy");
+                emergencyagreement.Deleted = reader.GetBoolean("Deleted");
+                emergencyagreements.Add(emergencyagreement);
+            });
+
+            return emergencyagreements;
+        }
     }
 }

@@ -136,6 +136,9 @@ namespace Liftmanagement.Models
                 case Helper.Helper.TTypeMangement.MaintenanceAgreement:
                     AgreementId = agreement.MaintenanceAgreement.Id;
                     break;
+                case Helper.Helper.TTypeMangement.EmergencyAgreement:
+                    AgreementId = agreement.EmergencyAgreement.Id;
+                    break;
             }
         }
 

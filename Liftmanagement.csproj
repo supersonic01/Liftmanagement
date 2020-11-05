@@ -299,6 +299,7 @@
     <Compile Include="Helper\TestData.cs" />
     <Compile Include="Helper\Types.cs" />
     <Compile Include="Models\AdministratorCompany.cs" />
+    <Compile Include="Models\EmergencyAgreement.cs" />
     <Compile Include="Models\MaintenanceAgreementContent.cs" />
     <Compile Include="Models\RecordAgreementType.cs" />
     <Compile Include="Models\Category.cs" />
@@ -338,6 +339,7 @@
     <Compile Include="ViewModels\MachineInformationViewModel.cs" />
     <Compile Include="ViewModels\MaintenanceAgreementContentViewModel.cs" />
     <Compile Include="ViewModels\MaintenanceAgreementsViewModel.cs" />
+    <Compile Include="ViewModels\EmergencyAgreementViewModel.cs" />
     <Compile Include="ViewModels\ReportViewModel.cs" />
     <Compile Include="ViewModels\MaintenanceAgreementViewModel.cs" />
     <Compile Include="ViewModels\ManagementOverviewFilterViewModel.cs" />
@@ -389,6 +391,9 @@
     </Compile>
     <Compile Include="Views\MaintenanceAgreementsView.xaml.cs">
       <DependentUpon>MaintenanceAgreementsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EmergencyAgreementView.xaml.cs">
+      <DependentUpon>EmergencyAgreementView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ReportView.xaml.cs">
       <DependentUpon>ReportView.xaml</DependentUpon>
@@ -493,6 +498,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\EmergencyAgreementView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\ReportView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -551,6 +560,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\CostSaving.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

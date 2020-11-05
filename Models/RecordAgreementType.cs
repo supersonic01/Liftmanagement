@@ -10,10 +10,23 @@ namespace Liftmanagement.Models
     {
         public Helper.Helper.TTypeMangement AgreementType { get; set; }
         public MaintenanceAgreement MaintenanceAgreement { get; set; }
+        public EmergencyAgreement EmergencyAgreement { get; set; }
 
         public override string ToString()
         {
-            return string.Format("Wartungsvertrag {0}", MaintenanceAgreement.AgreementDate.Date.ToString("dd.MM.yyyy")) ;
+            string value= "";
+            switch (AgreementType)
+            {
+                case Helper.Helper.TTypeMangement.EmergencyAgreement:
+                    value= string.Format("Notrufvertrag {0}", EmergencyAgreement.AgreementDate.Date.ToString("dd.MM.yyyy"));
+                    break;
+                case Helper.Helper.TTypeMangement.MaintenanceAgreement:
+                    value = string.Format("Wartungsvertrag {0}", MaintenanceAgreement.AgreementDate.Date.ToString("dd.MM.yyyy"));
+
+                    break;
+            }
+
+            return value;
         }
 
     }

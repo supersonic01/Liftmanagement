@@ -144,6 +144,12 @@
   <data name="weeks" xml:space="preserve">
     <value>Wochen</value>
   </data>
+  <data name="withoutPersonsRescue" xml:space="preserve">
+    <value>Ohne Personenbefreiung</value>
+  </data>
+  <data name="withPersonsRescue" xml:space="preserve">
+    <value>Mit Personenbefreiung</value>
+  </data>
   <data name="yearly" xml:space="preserve">
     <value>jährlich</value>
   </data>

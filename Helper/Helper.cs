@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Liftmanagement.Helper
 {
-  public static  class Helper
+    public static class Helper
     {
         public enum TTypeMangement
         {
@@ -26,33 +26,35 @@ namespace Liftmanagement.Helper
 
         public enum VarietyType
         {
-            MACancellaration =0, //jährich monatlich
+            MACancellaration = 0, //jährich monatlich
             MACancelledBy = 1, //kunde
-            MAType=2 //Vollwartung, Systemwartung
+            MAType = 2 //Vollwartung, Systemwartung
 
         }
 
         public enum NotificationUnitType
         {
-            days = 0, 
+            days = 0,
             weeks = 1,
             months = 2
 
         }
 
-        public  static DateTime DefaultDate = new DateTime(1900, 01, 01);
+        public static DateTime DefaultDate = new DateTime(1900, 01, 01);
 
         private static Dictionary<Type, int> classTypeForeignKeyTypeMapper;
 
         public static Dictionary<Type, int> ClassTypeForeignKeyTypeMapper
         {
-            get {
+            get
+            {
                 if (classTypeForeignKeyTypeMapper == null)
                 {
                     classTypeForeignKeyTypeMapper = GetClassTypeForeignKeyTypeMapper();
                 }
-                return classTypeForeignKeyTypeMapper; }
-           
+                return classTypeForeignKeyTypeMapper;
+            }
+
         }
 
         private static Dictionary<Type, string> dataTypRederStringMapper;
@@ -73,15 +75,15 @@ namespace Liftmanagement.Helper
 
         public static void GetTabelValueHeaders(int amount)
         {
-            string header="";
+            string header = "";
             for (int i = 0; i < amount; i++)
             {
-                header = header + "[{"+i+"}],";
+                header = header + "[{" + i + "}],";
             }
             Console.WriteLine(header);
         }
 
-       public static void GenerateInsert(Type databaseObject)
+        public static void GenerateInsert(Type databaseObject)
         {
 
             StringBuilder insertScript = new StringBuilder();
@@ -116,8 +118,16 @@ namespace Liftmanagement.Helper
                     if (p.PropertyType == typeof(string) || p.PropertyType == typeof(DateTime))
                     {
 
-                        //.ToString("yyyy-MM-dd") 
-                        insertScriptValues.Append(string.Format("'\"+{0}+\"',", className + "." + p.Name));
+                        if (p.PropertyType == typeof(DateTime))
+                        {
+                            var dateformated = string.Format("'\"+{0}.ToString(\"yyyy-MM-dd\")+\"',", className + "." + p.Name);
+                            insertScriptValues.Append(dateformated);
+                        }
+                        else
+                        {
+                            insertScriptValues.Append(string.Format("'\"+{0}+\"',", className + "." + p.Name));
+                        }
+                        
                     }
                     else
                     {
@@ -134,54 +144,63 @@ namespace Liftmanagement.Helper
             Console.WriteLine(RemoveLastComma(insertScriptValues.ToString()));
         }
 
-       public static void GenerateUpdate(Type databaseObject)
-       {
-           StringBuilder insertScript = new StringBuilder();
-         
-           Type classType = databaseObject;
-           string className = classType.Name.ToLower();
-           string tableName = className.ToUpper();
+        public static void GenerateUpdate(Type databaseObject)
+        {
+            StringBuilder insertScript = new StringBuilder();
 
-           insertScript.Append("UPDATE " + tableName+" SET ");
-        
-           foreach (PropertyInfo p in classType.GetProperties())
-           {
-               bool updateableColumne = true;
+            Type classType = databaseObject;
+            string className = classType.Name.ToLower();
+            string tableName = className.ToUpper();
 
-               var attribute = p.GetCustomAttributes(typeof(DatabaseAttribute), true)
-                   .Cast<DatabaseAttribute>().FirstOrDefault();
+            insertScript.Append("UPDATE " + tableName + " SET ");
 
-               if (attribute != null && attribute.Updateable == false)
-               {
-                   updateableColumne = false;
-               }
+            foreach (PropertyInfo p in classType.GetProperties())
+            {
+                bool updateableColumne = true;
 
-               if (!p.DeclaringType.IsAbstract && !p.DeclaringType.IsInterface && updateableColumne)
-               {
-                   insertScript.Append(p.Name);
-                   insertScript.Append(" = ");
+                var attribute = p.GetCustomAttributes(typeof(DatabaseAttribute), true)
+                    .Cast<DatabaseAttribute>().FirstOrDefault();
 
-                   if (p.PropertyType == typeof(string) || p.PropertyType == typeof(DateTime))
-                   {
-                       insertScript.Append(string.Format("'\"+{0}+\"',", className + "." + p.Name));
-                   }
-                   else
-                   {
-                       insertScript.Append(string.Format("\"+{0}+\",", className + "." + p.Name));
-                   }
-               }
-           }
+                if (attribute != null && attribute.Updateable == false)
+                {
+                    updateableColumne = false;
+                }
+
+                if (!p.DeclaringType.IsAbstract && !p.DeclaringType.IsInterface && updateableColumne)
+                {
+                    insertScript.Append(p.Name);
+                    insertScript.Append(" = ");
+
+                    if (p.PropertyType == typeof(string) || p.PropertyType == typeof(DateTime))
+                    {
+                        if (p.PropertyType == typeof(DateTime))
+                        {
+                            var dateformated = string.Format("'\"+{0}.ToString(\"yyyy-MM-dd\")+\"',", className + "." + p.Name);
+                            insertScript.Append(dateformated);
+                        }
+                        else
+                        {
+                            insertScript.Append(string.Format("'\"+{0}+\"',", className + "." + p.Name));
+                        }
+
+                    }
+                    else
+                    {
+                        insertScript.Append(string.Format("\"+{0}+\",", className + "." + p.Name));
+                    }
+                }
+            }
 
             //insertScript.Append(")");
-            
+
             insertScript.AppendLine();
 
-            Console.WriteLine(string.Format("{0} WHERE ID = \"+{1}.Id", RemoveLastComma(insertScript.ToString()),className));
+            Console.WriteLine(string.Format("{0} WHERE ID = \"+{1}.Id", RemoveLastComma(insertScript.ToString()), className));
             //Console.WriteLine(insertScript.ToString());
-       }
+        }
 
         public static void GenerateSelect(Type databaseObject)
-        {          
+        {
             StringBuilder insertScriptValues = new StringBuilder();
 
             Type classType = databaseObject;
@@ -190,7 +209,7 @@ namespace Liftmanagement.Helper
 
 
             insertScriptValues.AppendLine(string.Format("List<{0}> {1}s = new List<{0}>();", databaseObject.Name, className));
-            insertScriptValues.AppendLine(string.Format("{0} {1} = new {0}();", databaseObject.Name, className));                   
+            insertScriptValues.AppendLine(string.Format("{0} {1} = new {0}();", databaseObject.Name, className));
 
             foreach (PropertyInfo p in classType.GetProperties())
             {
@@ -204,24 +223,24 @@ namespace Liftmanagement.Helper
                     updateableColumn = false;
                 }
 
-                if (!p.DeclaringType.IsAbstract && !p.DeclaringType.IsInterface )
+                if (!p.DeclaringType.IsAbstract && !p.DeclaringType.IsInterface)
                 {
 
                     if (p.PropertyType != typeof(Timestamp) && p.PropertyType != typeof(ContactPartner) && p.PropertyType != typeof(AdministratorCompany))
                     {
                         insertScriptValues.AppendLine(string.Format("{0}.{1} = reader.{2}(\"{3}\");", className, p.Name, GetReaderString(p.PropertyType), p.Name));
                     }
-                }              
+                }
             }
 
             insertScriptValues.AppendLine(string.Format("{0}s.Add({0});", className));
-            
+
             Console.WriteLine(RemoveLastComma(insertScriptValues.ToString()));
         }
 
         private static string GetReaderString(Type propertyType)
         {
-            string readerString ="";
+            string readerString = "";
             if (DataTypRederStringMapper.ContainsKey(propertyType))
             {
                 readerString = DataTypRederStringMapper[propertyType];
@@ -242,9 +261,10 @@ namespace Liftmanagement.Helper
         public static int GetForeignKeyType(BaseDatabaseField baseField)
         {
             Type classType = baseField.GetType();
-            int foreignKeyType=-1;
-            if (ClassTypeForeignKeyTypeMapper.ContainsKey(classType)){
-               foreignKeyType= ClassTypeForeignKeyTypeMapper[classType];
+            int foreignKeyType = -1;
+            if (ClassTypeForeignKeyTypeMapper.ContainsKey(classType))
+            {
+                foreignKeyType = ClassTypeForeignKeyTypeMapper[classType];
             }
             else
             {

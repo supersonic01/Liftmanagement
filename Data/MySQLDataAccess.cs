@@ -51,8 +51,8 @@ namespace Liftmanagement.Data
 
             var dbConnection = GetConnection();
 
-            string query = "INSERT INTO CUSTOMER(CompanyName,Address,Postcode,City,Selected,AdditionalInfo,GoogleDriveFolderName,GoogleDriveLink,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
-            string values = "VALUE('" + customer.CompanyName + "','" + customer.Address + "','" + customer.Postcode + "','" + customer.City + "'," + customer.Selected + ",'" + customer.AdditionalInfo + "','" + customer.GoogleDriveFolderName + "','" + customer.GoogleDriveLink + "','" + customer.CreatedPersonName + "','" + customer.ModifiedPersonName + "'," + customer.ReadOnly + ",'" + customer.UsedBy + "')";
+            string query = "INSERT INTO CUSTOMER(CompanyName,Address,Postcode,City,Selected,AdditionalInfo,GoogleDriveFolderName,GoogleDriveLink,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy,Deleted)";
+            string values = "VALUE('" + customer.CompanyName + "','" + customer.Address + "','" + customer.Postcode + "','" + customer.City + "'," + customer.Selected + ",'" + customer.AdditionalInfo + "','" + customer.GoogleDriveFolderName + "','" + customer.GoogleDriveLink + "','" + customer.CreatedPersonName + "','" + customer.ModifiedPersonName + "'," + customer.ReadOnly + ",'" + customer.UsedBy + "'," + customer.Deleted + ")";
             query = query + values;
 
 
@@ -93,8 +93,8 @@ namespace Liftmanagement.Data
 
         private static SQLQueryResult<ContactPartner> AddContactPartner(MySqlConnection dbConnection,  ContactPartner contactpartner)
         {
-            string query = "INSERT INTO CONTACTPARTNER(CustomerId,ForeignKey,ForeignKeyType,Name,PhoneWork,Mobile,EMail,ContactByDefect,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
-            string values = "VALUE(" + contactpartner.CustomerId + "," + contactpartner.ForeignKey + "," + contactpartner.ForeignKeyType + ",'" + contactpartner.Name + "','" + contactpartner.PhoneWork + "','" + contactpartner.Mobile + "','" + contactpartner.EMail + "'," + contactpartner.ContactByDefect + ",'" + contactpartner.CreatedPersonName + "','" + contactpartner.ModifiedPersonName + "'," + contactpartner.ReadOnly + ",'" + contactpartner.UsedBy + "')";
+            string query = "INSERT INTO CONTACTPARTNER(CustomerId,ForeignKey,ForeignKeyType,Name,PhoneWork,Mobile,EMail,ContactByDefect,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy,Deleted)";
+            string values = "VALUE(" + contactpartner.CustomerId + "," + contactpartner.ForeignKey + "," + contactpartner.ForeignKeyType + ",'" + contactpartner.Name + "','" + contactpartner.PhoneWork + "','" + contactpartner.Mobile + "','" + contactpartner.EMail + "'," + contactpartner.ContactByDefect + ",'" + contactpartner.CreatedPersonName + "','" + contactpartner.ModifiedPersonName + "'," + contactpartner.ReadOnly + ",'" + contactpartner.UsedBy + "'," + contactpartner.Deleted + ")";
             query = query + values;
 
 
@@ -109,8 +109,8 @@ namespace Liftmanagement.Data
         {
             var dbConnection = GetConnection();
 
-            string query = "INSERT INTO LOCATION(CustomerId,Address,Postcode,City,Selected,AdditionalInfo,GoogleDriveFolderName,GoogleDriveLink,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
-            string values = "VALUE(" + location.CustomerId + ",'" + location.Address + "','" + location.Postcode + "','" + location.City + "'," + location.Selected + ",'" + location.AdditionalInfo + "','" + location.GoogleDriveFolderName + "','" + location.GoogleDriveLink + "','" + location.CreatedPersonName + "','" + location.ModifiedPersonName + "'," + location.ReadOnly + ",'" + location.UsedBy + "')";
+            string query = "INSERT INTO LOCATION(CustomerId,Address,Postcode,City,Selected,AdditionalInfo,GoogleDriveFolderName,GoogleDriveLink,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy,Deleted)";
+            string values = "VALUE(" + location.CustomerId + ",'" + location.Address + "','" + location.Postcode + "','" + location.City + "'," + location.Selected + ",'" + location.AdditionalInfo + "','" + location.GoogleDriveFolderName + "','" + location.GoogleDriveLink + "','" + location.CreatedPersonName + "','" + location.ModifiedPersonName + "'," + location.ReadOnly + ",'" + location.UsedBy + "'," + location.Deleted + ")";
             query = query + values;
 
 
@@ -135,8 +135,8 @@ namespace Liftmanagement.Data
 
         private static SQLQueryResult<AdministratorCompany> AddAdministratorCompany(MySqlConnection dbConnection, AdministratorCompany administratorcompany)
         {
-            string query = "INSERT INTO ADMINISTRATORCOMPANY(CustomerId,Name,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
-            string values = "VALUE(" + administratorcompany.CustomerId + ",'" + administratorcompany.Name + "','" + administratorcompany.CreatedPersonName + "','" + administratorcompany.ModifiedPersonName + "'," + administratorcompany.ReadOnly + ",'" + administratorcompany.UsedBy + "')";
+            string query = "INSERT INTO ADMINISTRATORCOMPANY(CustomerId,Name,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy,Deleted)";
+            string values = "VALUE(" + administratorcompany.CustomerId + ",'" + administratorcompany.Name + "','" + administratorcompany.CreatedPersonName + "','" + administratorcompany.ModifiedPersonName + "'," + administratorcompany.ReadOnly + ",'" + administratorcompany.UsedBy + "'," + administratorcompany.Deleted + ")";
             query = query + values;
 
 
@@ -219,7 +219,7 @@ namespace Liftmanagement.Data
 
         public static List<Customer> GetCustomers()
         {
-            string query = "SELECT * FROM CUSTOMER";
+            string query = "SELECT * FROM CUSTOMER WHERE DELETED = FALSE"; 
             return GetCustomers(query);
         }
 
@@ -245,12 +245,13 @@ namespace Liftmanagement.Data
                 customer.ModifiedPersonName = reader.GetString("ModifiedPersonName");
                 customer.ReadOnly = reader.GetBoolean("ReadOnly");
                 customer.UsedBy = reader.GetString("UsedBy");
+                customer.Deleted = reader.GetBoolean("Deleted");
                 customers.Add(customer);
             });
 
             foreach (var customer in customers)
             {
-                query = "SELECT * FROM ADMINISTRATORCOMPANY WHERE CUSTOMERID = " + customer.Id;
+                query = "SELECT * FROM ADMINISTRATORCOMPANY WHERE CUSTOMERID = " + customer.Id + " AND DELETED = FALSE";
 
                 SelectItems(query, reader =>
                 {
@@ -264,6 +265,8 @@ namespace Liftmanagement.Data
                     administratorcompany.ModifiedPersonName = reader.GetString("ModifiedPersonName");
                     administratorcompany.ReadOnly = reader.GetBoolean("ReadOnly");
                     administratorcompany.UsedBy = reader.GetString("UsedBy");
+                    administratorcompany.Deleted = reader.GetBoolean("Deleted");
+
                     customer.Administrator = administratorcompany;
                 });
 
@@ -300,6 +303,7 @@ namespace Liftmanagement.Data
                 location.ModifiedPersonName = reader.GetString("ModifiedPersonName");
                 location.ReadOnly = reader.GetBoolean("ReadOnly");
                 location.UsedBy = reader.GetString("UsedBy");
+                location.Deleted = reader.GetBoolean("Deleted");
                 locations.Add(location);
             });
 
@@ -324,7 +328,7 @@ namespace Liftmanagement.Data
 
             var classname = typeof(T).Name.ToUpper();
 
-            string query = "SELECT * FROM " + classname + " WHERE ID= " + id;
+            string query = "SELECT * FROM " + classname + " WHERE ID= " + id + " AND DELETED = FALSE";
             var result = new SQLQueryResult<T>(0, id);
             result.DBRecords = GetRecords(query);
 
@@ -418,7 +422,7 @@ namespace Liftmanagement.Data
         {
             string query;
             List<ContactPartner> contactpartners = new List<ContactPartner>();
-            query = "SELECT * FROM CONTACTPARTNER WHERE FOREIGNKEY = " + foreignkey + " AND FOREIGNKEYTYPE = " + foreignkeytype;
+            query = "SELECT * FROM CONTACTPARTNER WHERE FOREIGNKEY = " + foreignkey + " AND FOREIGNKEYTYPE = " + foreignkeytype + " AND DELETED = FALSE";
 
             SelectItems(query, reader =>
             {
@@ -438,6 +442,7 @@ namespace Liftmanagement.Data
                 contactpartner.ModifiedPersonName = reader.GetString("ModifiedPersonName");
                 contactpartner.ReadOnly = reader.GetBoolean("ReadOnly");
                 contactpartner.UsedBy = reader.GetString("UsedBy");
+                contactpartner.Deleted = reader.GetBoolean("Deleted");
                 contactpartners.Add(contactpartner);
             });
             return contactpartners;
@@ -445,24 +450,24 @@ namespace Liftmanagement.Data
 
         public static List<Location> GetLocations()
         {
-            string query = "SELECT * FROM LOCATION";
+            string query = "SELECT * FROM LOCATION WHERE DELETED = FALSE";
             return GetLocations(query);
         }
         public static List<Location> GetLocations(Customer customer)
         {
-            string query = "SELECT * FROM LOCATION WHERE CUSTOMERID = " + customer.Id;
+            string query = "SELECT * FROM LOCATION WHERE CUSTOMERID = " + customer.Id + " AND DELETED = FALSE";
             return GetLocations(query);
         }
 
         public static List<Location> GetLocationsByCustomer(long id)
         {
-            string query = "SELECT * FROM LOCATION WHERE CUSTOMERID = " + id;
+            string query = "SELECT * FROM LOCATION WHERE CUSTOMERID = " + id + " AND DELETED = FALSE";
             return GetLocations(query);
         }
 
         public static List<Location> GetLocations(long id)
         {
-            string query = "SELECT * FROM LOCATION WHERE ID = " + id;
+            string query = "SELECT * FROM LOCATION WHERE ID = " + id + " AND DELETED = FALSE";
             return GetLocations(query);
         }
 
@@ -517,13 +522,13 @@ namespace Liftmanagement.Data
 
         public static List<MaintenanceAgreementContent> GetMaintenanceAgreementContents()
         {
-            string query = "SELECT * FROM MAINTENANCEAGREEMENTCONTENT";
+            string query = "SELECT * FROM MAINTENANCEAGREEMENTCONTENT WHERE DELETED = FALSE";
             return GetMaintenanceAgreementContents(query);
         }
 
         public static List<MaintenanceAgreementContent> GetMaintenanceAgreementContents(long maintenanceAgreementId)
         {
-            string query = "SELECT * FROM MAINTENANCEAGREEMENTCONTENT WHERE MAINTENANCEAGREEMENTID = " + maintenanceAgreementId;
+            string query = "SELECT * FROM MAINTENANCEAGREEMENTCONTENT WHERE MAINTENANCEAGREEMENTID = " + maintenanceAgreementId + " AND DELETED = FALSE";
             return GetMaintenanceAgreementContents(query);
         }
 
@@ -563,7 +568,7 @@ namespace Liftmanagement.Data
             var dbConnection = GetConnection();
 
             customer.ModifiedPersonName = Helper.Helper.GetPersonName();
-            string query = "UPDATE CUSTOMER SET CompanyName = '" + customer.CompanyName + "',Address = '" + customer.Address + "',Postcode = '" + customer.Postcode + "',City = '" + customer.City + "',Selected = " + customer.Selected + ",AdditionalInfo = '" + customer.AdditionalInfo + "',GoogleDriveFolderName = '" + customer.GoogleDriveFolderName + "',GoogleDriveLink = '" + customer.GoogleDriveLink + "',CreatedPersonName = '" + customer.CreatedPersonName + "',ModifiedPersonName = '" + customer.ModifiedPersonName + "',ReadOnly = " + customer.ReadOnly + ",UsedBy = '" + customer.UsedBy + "' WHERE ID = " + customer.Id;
+            string query = "UPDATE CUSTOMER SET CompanyName = '" + customer.CompanyName + "',Address = '" + customer.Address + "',Postcode = '" + customer.Postcode + "',City = '" + customer.City + "',Selected = " + customer.Selected + ",AdditionalInfo = '" + customer.AdditionalInfo + "',GoogleDriveFolderName = '" + customer.GoogleDriveFolderName + "',GoogleDriveLink = '" + customer.GoogleDriveLink + "',CreatedPersonName = '" + customer.CreatedPersonName + "',ModifiedPersonName = '" + customer.ModifiedPersonName + "',ReadOnly = " + customer.ReadOnly + ",UsedBy = '" + customer.UsedBy + "',Deleted = " + customer.Deleted + " WHERE ID = " + customer.Id;
 
             MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
@@ -724,8 +729,8 @@ namespace Liftmanagement.Data
         private static SQLQueryResult<ContactPartner> UpdateContactPartner(MySqlConnection dbConnection, ContactPartner contactpartner)
         {
             contactpartner.ModifiedPersonName = Helper.Helper.GetPersonName();
-            string query = "UPDATE CONTACTPARTNER SET CustomerId = " + contactpartner.CustomerId + ",ForeignKey = " + contactpartner.ForeignKey + ",ForeignKeyType = " + contactpartner.ForeignKeyType + ",Name = '" + contactpartner.Name + "',PhoneWork = '" + contactpartner.PhoneWork + "',Mobile = '" + contactpartner.Mobile + "',EMail = '" + contactpartner.EMail + "',ContactByDefect = " + contactpartner.ContactByDefect + ",CreatedPersonName = '" + contactpartner.CreatedPersonName + "',ModifiedPersonName = '" + contactpartner.ModifiedPersonName + "',ReadOnly = " + contactpartner.ReadOnly + ",UsedBy = '" + contactpartner.UsedBy + "' WHERE ID = " + contactpartner.Id;
-
+            string query = "UPDATE CONTACTPARTNER SET CustomerId = " + contactpartner.CustomerId + ",ForeignKey = " + contactpartner.ForeignKey + ",ForeignKeyType = " + contactpartner.ForeignKeyType + ",Name = '" + contactpartner.Name + "',PhoneWork = '" + contactpartner.PhoneWork + "',Mobile = '" + contactpartner.Mobile + "',EMail = '" + contactpartner.EMail + "',ContactByDefect = " + contactpartner.ContactByDefect + ",CreatedPersonName = '" + contactpartner.CreatedPersonName + "',ModifiedPersonName = '" + contactpartner.ModifiedPersonName + "',ReadOnly = " + contactpartner.ReadOnly + ",UsedBy = '" + contactpartner.UsedBy + "',Deleted = " + contactpartner.Deleted + " WHERE ID = " + contactpartner.Id;
+            
             MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
             int records = execQuery.ExecuteNonQuery();
@@ -737,7 +742,7 @@ namespace Liftmanagement.Data
             var dbConnection = GetConnection();
 
             location.ModifiedPersonName = Helper.Helper.GetPersonName();
-            string query = "UPDATE LOCATION SET CustomerId = " + location.CustomerId + ",Address = '" + location.Address + "',Postcode = '" + location.Postcode + "',City = '" + location.City + "',Selected = " + location.Selected + ",AdditionalInfo = '" + location.AdditionalInfo + "',GoogleDriveFolderName = '" + location.GoogleDriveFolderName + "',GoogleDriveLink = '" + location.GoogleDriveLink + "',CreatedPersonName = '" + location.CreatedPersonName + "',ModifiedPersonName = '" + location.ModifiedPersonName + "',ReadOnly = " + location.ReadOnly + ",UsedBy = '" + location.UsedBy + "' WHERE ID = " + location.Id;
+            string query = "UPDATE LOCATION SET CustomerId = " + location.CustomerId + ",Address = '" + location.Address + "',Postcode = '" + location.Postcode + "',City = '" + location.City + "',Selected = " + location.Selected + ",AdditionalInfo = '" + location.AdditionalInfo + "',GoogleDriveFolderName = '" + location.GoogleDriveFolderName + "',GoogleDriveLink = '" + location.GoogleDriveLink + "',CreatedPersonName = '" + location.CreatedPersonName + "',ModifiedPersonName = '" + location.ModifiedPersonName + "',ReadOnly = " + location.ReadOnly + ",UsedBy = '" + location.UsedBy + "',Deleted = " + location.Deleted + " WHERE ID = " + location.Id;
 
             MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
@@ -759,8 +764,8 @@ namespace Liftmanagement.Data
         private static SQLQueryResult<AdministratorCompany> UpdateAdministratorCompany(MySqlConnection dbConnection, AdministratorCompany administratorcompany)
         {
             administratorcompany.ModifiedPersonName = Helper.Helper.GetPersonName();
-            string query = "UPDATE ADMINISTRATORCOMPANY SET CustomerId = " + administratorcompany.CustomerId + ",Name = '" + administratorcompany.Name + "',CreatedPersonName = '" + administratorcompany.CreatedPersonName + "',ModifiedPersonName = '" + administratorcompany.ModifiedPersonName + "',ReadOnly = " + administratorcompany.ReadOnly + ",UsedBy = '" + administratorcompany.UsedBy + "' WHERE ID = " + administratorcompany.Id;
-
+            string query = "UPDATE ADMINISTRATORCOMPANY SET CustomerId = " + administratorcompany.CustomerId + ",Name = '" + administratorcompany.Name + "',CreatedPersonName = '" + administratorcompany.CreatedPersonName + "',ModifiedPersonName = '" + administratorcompany.ModifiedPersonName + "',ReadOnly = " + administratorcompany.ReadOnly + ",UsedBy = '" + administratorcompany.UsedBy + "',Deleted = " + administratorcompany.Deleted + " WHERE ID = " + administratorcompany.Id;
+            
             MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
             int records = execQuery.ExecuteNonQuery();
@@ -992,25 +997,25 @@ namespace Liftmanagement.Data
 
         public static List<MachineInformation> GetMachineInformations(Location location)
         {
-            string query = "SELECT * FROM MACHINEINFORMATION WHERE LOCATIONID = " + location.Id;
+            string query = "SELECT * FROM MACHINEINFORMATION WHERE LOCATIONID = " + location.Id + " AND DELETED = FALSE";
             return GetMachineInformations(query);
         }
 
         public static List<MachineInformation> GetMachineInformationsByLocation(long id)
         {
-            string query = "SELECT * FROM MACHINEINFORMATION WHERE LOCATIONID = " + id;
+            string query = "SELECT * FROM MACHINEINFORMATION WHERE LOCATIONID = " + id + " AND DELETED = FALSE";
             return GetMachineInformations(query);
         }
 
         public static List<MachineInformation> GetMachineInformations(long id)
         {
-            string query = "SELECT * FROM MACHINEINFORMATION WHERE ID = " + id;
+            string query = "SELECT * FROM MACHINEINFORMATION WHERE ID = " + id + " AND DELETED = FALSE";
             return GetMachineInformations(query);
         }
 
         public static List<MachineInformation> GetMachineInformations()
         {
-            string query = "SELECT * FROM MACHINEINFORMATION";
+            string query = "SELECT * FROM MACHINEINFORMATION WHERE DELETED = FALSE";
             return GetMachineInformations(query);
         }
 
@@ -1056,7 +1061,7 @@ namespace Liftmanagement.Data
 
         public static List<Customer> GetCustomersOnly()
         {
-            string query = "SELECT * FROM CUSTOMER";
+            string query = "SELECT * FROM CUSTOMER WHERE DELETED = FALSE";
 
             List<Customer> customers = new List<Customer>();
 
@@ -1296,13 +1301,13 @@ namespace Liftmanagement.Data
 
         public static List<Record> GetRecords()
         {
-            string query = "SELECT * FROM RECORD";
+            string query = "SELECT * FROM RECORD WHERE DELETED = FALSE";
             return GetRecords(query);
         }
 
         public static List<Record> GetRecords(long machineInformationId)
         {
-            string query = "SELECT * FROM RECORD WHERE MACHINEINFORMATIONID = " + machineInformationId;
+            string query = "SELECT * FROM RECORD WHERE MACHINEINFORMATIONID = " + machineInformationId + " AND DELETED = FALSE";
             return GetRecords(query);
         }
 
@@ -1456,13 +1461,13 @@ namespace Liftmanagement.Data
 
         public static List<OtherInformation> GetOtherInformations()
         {
-            string query = "SELECT * FROM OTHERINFORMATION";
+            string query = "SELECT * FROM OTHERINFORMATION WHERE DELETED = FALSE";
             return GetOtherInformations(query);
         }
 
         public static List<OtherInformation> GetOtherInformations(long machineInformationId)
         {
-            string query = "SELECT * FROM OTHERINFORMATION WHERE MACHINEINFORMATIONID = " + machineInformationId;
+            string query = "SELECT * FROM OTHERINFORMATION WHERE MACHINEINFORMATIONID = " + machineInformationId + " AND DELETED = FALSE";
             return GetOtherInformations(query);
         }
 

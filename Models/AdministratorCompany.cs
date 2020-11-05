@@ -15,7 +15,7 @@ namespace Liftmanagement.Models
         [DisplayName("Verwalter Firma"), DatabaseAttribute(DatabaseAttribute.NOT_NULL)]
         public string Name { get; set; }
 
-        [DisplayName("Ansprechpartner"), DatabaseAttribute(Updateable = false)]
+        [DisplayName("Ansprechpartner"), DatabaseAttribute(IsDbColumn = false, Updateable = false)]
         public List<ContactPartner> ContactPersons { get; set; } = new List<ContactPartner>();
 
         //private List<ContactPartner> contactPersons;
@@ -28,10 +28,10 @@ namespace Liftmanagement.Models
         //}
 
 
-        [DatabaseAttribute(Updateable = false)]
+        [DatabaseAttribute(IsDbColumn = false, Updateable = false)]
         public GetFullNameDelegate GetParentFullName { get; set; }
 
-        [ DatabaseAttribute(Updateable = false)]
+        [ DatabaseAttribute(IsDbColumn =false, Updateable = false)]
         public List<ContactPartner> DeletedContactPersons { get; set; } = new List<ContactPartner>();
 
         public AdministratorCompany()

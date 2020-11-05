@@ -45,8 +45,8 @@ namespace Liftmanagement
             //  dgCategory.ItemsSource = CategoryVM.Categories;
 
             //MySQLDataAccess.CreateConnection();
-            
-           // MySQLDataAccess.CreateTables();
+
+            // MySQLDataAccess.CreateTables();
 
 
 
@@ -56,17 +56,20 @@ namespace Liftmanagement
 
             //MySQLDataAccess.GetCustomers();
 
-           // Helper.Helper.GenerateInsert(typeof(EmergencyAgreement));
-            //Helper.Helper.GenerateInsert(typeof(OtherInformation));
-            // Helper.Helper.GenerateInsert(typeof(Record));
+            //Helper.Helper.GenerateInsert(typeof(AdministratorCompany));
+            //Helper.Helper.GenerateInsert(typeof(ContactPartner));
+            //Helper.Helper.GenerateInsert(typeof(Customer));
+            //Helper.Helper.GenerateInsert(typeof(Location));
 
-           // Helper.Helper.GenerateSelect(typeof(EmergencyAgreement));
-            //Helper.Helper.GenerateSelect(typeof(OtherInformation));
-            //Helper.Helper.GenerateSelect(typeof(Record));
+            //Helper.Helper.GenerateSelect(typeof(AdministratorCompany));
+            //Helper.Helper.GenerateSelect(typeof(ContactPartner));
+            //Helper.Helper.GenerateSelect(typeof(Customer));
+            //Helper.Helper.GenerateSelect(typeof(Location));
 
-           // Helper.Helper.GenerateUpdate(typeof(EmergencyAgreement));
-            //Helper.Helper.GenerateUpdate(typeof(OtherInformation));
-            //Helper.Helper.GenerateUpdate(typeof(Record));
+            //Helper.Helper.GenerateUpdate(typeof(AdministratorCompany));
+            //Helper.Helper.GenerateUpdate(typeof(ContactPartner));
+            //Helper.Helper.GenerateUpdate(typeof(Customer));
+            //Helper.Helper.GenerateUpdate(typeof(Location));
 
 
             //Helper.Helper.GetTabelValueHeaders(16);

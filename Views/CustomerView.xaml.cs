@@ -38,8 +38,8 @@ namespace Liftmanagement.View
             {
                 var customersVM = new CustomersViewModel();
                 customersVM.RefreshCustomers();
-               
-                Application.Current.Dispatcher.BeginInvoke(
+
+             var result=   Application.Current.Dispatcher.BeginInvoke(
                     DispatcherPriority.Background,
                     new Action(() =>
                     {
@@ -49,9 +49,8 @@ namespace Liftmanagement.View
                         customersView.dgCustomers.SelectionChanged += DgCustomers_SelectionChanged;
                         AssigneValuesToControl();
                         customersView.dgCustomers.SelectedIndex = 0;
+                        EnableContoles(false);
                     }));
-
-
 
             }).ContinueWith((task) =>
             {
@@ -62,7 +61,7 @@ namespace Liftmanagement.View
             //TODO Add refresh button to refrexh all data
         }
 
-        
+
 
         private void CustomerView_Loaded(object sender, RoutedEventArgs e)
         {
@@ -89,7 +88,7 @@ namespace Liftmanagement.View
             //dgAdministratorContactPersons.ItemsSource = customer.Administrator.ContactPersons;
             dgAdministratorContactPersons.SelectionChanged += DgAdministratorContactPersons_SelectionChanged;
             dgAdministratorContactPersons.SelectedIndex = 0;
-            
+
             location = new LocationDetailView(customer);
             frameLocations.Content = location;
 
@@ -119,7 +118,7 @@ namespace Liftmanagement.View
             lblAdministratorEmail.Content = CustomerVM.CustomerSelected.GetDisplayName<ContactPartner>(nameof(CustomerVM.CustomerSelected.ContactPerson.EMail)) + ":";
 
 
-            BindingText(txtCompanyName, ()=>CustomerVM.CustomerSelected.CompanyName,null,true,()=>new MandatoryRule());
+            BindingText(txtCompanyName, () => CustomerVM.CustomerSelected.CompanyName, null, true, () => new MandatoryRule());
             BindingText(txtContactPerson, () => CustomerVM.CustomerSelected.ContactPerson.Name);
             BindingText(txtAddress, () => CustomerVM.CustomerSelected.Address);
             BindingText(txtPostcode, () => CustomerVM.CustomerSelected.Postcode);
@@ -177,7 +176,7 @@ namespace Liftmanagement.View
 
             windowGoogleDriveTree.ShowDialog();
         }
-        
+
         private void ForceValidation()
         {
             txtCompanyName.GetBindingExpression(TextBox.TextProperty).UpdateSource();
@@ -194,10 +193,10 @@ namespace Liftmanagement.View
                 return;
             }
 
-            if (!string.IsNullOrWhiteSpace(CustomerVM.AdministratorContactPerson.Name) && 
+            if (!string.IsNullOrWhiteSpace(CustomerVM.AdministratorContactPerson.Name) &&
                 CustomerVM.AdministratorContactPerson.Id < 0 && CustomerVM.AdministratorContactPerson.Id > -10)
             {
-                    CustomerVM.CustomerSelected.Administrator.ContactPersons.Add(CustomerVM.AdministratorContactPerson);
+                CustomerVM.CustomerSelected.Administrator.ContactPersons.Add(CustomerVM.AdministratorContactPerson);
             }
 
             var result = CustomerVM.Add();
@@ -222,7 +221,8 @@ namespace Liftmanagement.View
         {
             MarkForDelete("Kunde", CustomerVM.CustomerSelected,
                 () => CustomerVM.MarkForDeleteCustomer(),
-                () => {
+                () =>
+                {
                     customersView.CustomersVM.RefreshCustomers();
                     customersView.dgCustomers.SelectedIndex = 0;
                 });
@@ -239,6 +239,15 @@ namespace Liftmanagement.View
 
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
+            var isSelected = IsILtemSelected("Kunde", () =>
+              {
+                  return (CustomerVM.CustomerSelected == null || CustomerVM.CustomerSelected.Id < 0);
+              });
+
+            if(!isSelected)
+                return;
+
+
             CustomerVM.CustomerSelectedLast = CustomerVM.CustomerSelected;
             var result = CustomerVM.EditCustomer();
             if (result.IsReadOnly)
@@ -292,16 +301,16 @@ namespace Liftmanagement.View
                 var msg = "Ansprechpartner darf nicht leer sein.";
                 new NotificationWindow("Fehler!", msg).Show();
                 return;
-              
+
             }
 
-           
+
             if (CustomerVM.AdministratorContactPerson.Id < 0 && CustomerVM.AdministratorContactPerson.Id > -10)
             {
                 CustomerVM.AdministratorContactPerson.Id = new Random().Next(-100, -10);
 
                 CustomerVM.CustomerSelected.Administrator.ContactPersons.Add(CustomerVM.AdministratorContactPerson);
-               
+
             }
             else
             {
@@ -338,7 +347,7 @@ namespace Liftmanagement.View
                 CustomerVM.ReleaseEditing();
             }
 
-            CustomerVM.CustomerSelected =(Customer) customersView.dgCustomers.SelectedItem;
+            CustomerVM.CustomerSelected = (Customer)customersView.dgCustomers.SelectedItem;
             EnableContoles(false);
 
         }

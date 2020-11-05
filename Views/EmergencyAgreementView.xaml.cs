@@ -187,7 +187,7 @@ namespace Liftmanagement.Views
             BindingHyperlink(hyperlinkGoogleDrive, () => EmergencyAgreementVM.EmergencyAgreementSelected.GoogleDriveLink);
             BindingTextBlock(txtGoogleDriveFolderName, () => EmergencyAgreementVM.EmergencyAgreementSelected.GoogleDriveFolderName);
 
-            BindingHyperlink(hyperlinkGoogleCalendar, () => EmergencyAgreementVM.EmergencyAgreementSelected.GoogleCalendarEventId);
+            BindingHyperlink(hyperlinkGoogleCalendar, () => EmergencyAgreementVM.EmergencyAgreementSelected.GoogleCalendarEventId,()=>new UriConverter());
             BindingTextBlockVisibility(txtGoogleCalendarHyperlink, () => EmergencyAgreementVM.EmergencyAgreementSelected.GoogleCalendarEventId, () => new ValueVisibilityConverter());
 
             BindingControl(dgEmergencyAgreements, () => EmergencyAgreementVM.EmergencyAgreements);

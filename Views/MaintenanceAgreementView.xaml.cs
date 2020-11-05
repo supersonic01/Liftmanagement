@@ -231,7 +231,7 @@ namespace Liftmanagement.Views
             BindingHyperlink(hyperlinkGoogleDrive, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleDriveLink);
             BindingTextBlock(txtGoogleDriveFolderName, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleDriveFolderName);
 
-            BindingHyperlink(hyperlinkGoogleCalendar, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleCalendarEventId);
+            BindingHyperlink(hyperlinkGoogleCalendar, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleCalendarEventId,()=>new UriConverter());
             BindingTextBlockVisibility(txtGoogleCalendarHyperlink, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleCalendarEventId, () => new ValueVisibilityConverter());
 
             BindingControl(dgMaintenanceAgreements, () => MaintenanceAgreementVM.MaintenanceAgreements);

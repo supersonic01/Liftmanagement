@@ -21,10 +21,16 @@ namespace Liftmanagement.BusinessLogic.GoogleManagement
 
         static string[] Scopes = { DriveService.Scope.DriveReadonly };
 
-        static string ApplicationName = "Drive API .NET Quickstart";
+        static string ApplicationName = "Google Drive API.NET Liftmanagement";
         static string credentials = "credentialsDrive.json";
-        static string email = "dominicphilomena @gmail.com";
+        static string email = "admin@aufzugsberatung-karlsruhe.de";
         string credPath = "token.json";
+
+
+        //static string ApplicationName = "Drive API .NET Quickstart";
+        //static string credentials = "credentialsDrive.json";
+        //static string email = "dominicphilomena @gmail.com";
+        //string credPath = "token.json";
 
         private DriveService service;
 

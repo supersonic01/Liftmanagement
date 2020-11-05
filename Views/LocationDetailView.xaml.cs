@@ -155,6 +155,15 @@ namespace Liftmanagement.Views
 
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
+
+            var isSelected = IsILtemSelected("Standort", () =>
+            {
+                return (LocationDetailVM.LocationSelected == null || LocationDetailVM.LocationSelected.Id < 0);
+            });
+
+            if (!isSelected)
+                return;
+            
             var result = LocationDetailVM.EditLocation();
             if (result.IsReadOnly)
             {

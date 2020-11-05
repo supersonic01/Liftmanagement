@@ -132,6 +132,8 @@ namespace Liftmanagement.ViewModels
             {
                 OtherInformations.Add(new OtherInformation("Infomation 1"));
                 OtherInformations.Add(new OtherInformation("Infomation 2"));
+                OtherInformations.Add(new OtherInformation("Infomation 3"));
+                OtherInformations.Add(new OtherInformation("Infomation 4"));
             }
         }
 

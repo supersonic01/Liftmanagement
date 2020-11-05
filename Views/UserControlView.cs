@@ -365,7 +365,7 @@ namespace Liftmanagement.Views
 
             control.SetBinding(ComboBox.SelectedValueProperty, binding);
         }
-        protected virtual void BindingHyperlink<T>(Hyperlink hyperlink, Expression<Func<T>> action)
+        protected virtual void BindingHyperlink<T>(Hyperlink hyperlink, Expression<Func<T>> action, Func<IValueConverter> converter = null)
         {
             //TODO Rework
 
@@ -375,7 +375,9 @@ namespace Liftmanagement.Views
             };
 
             binding.Mode = BindingMode.TwoWay;
-            binding.Converter = new UriConverter();
+
+            if (converter != null)
+                binding.Converter = converter();
 
             hyperlink.SetBinding(Hyperlink.NavigateUriProperty, binding);
         }
@@ -498,8 +500,14 @@ namespace Liftmanagement.Views
         }
 
 
-        protected void MarkForDelete<T>(string category,BaseDatabaseField model, Func<SQLQueryResult<T>> postActionDelete, Action postActionUpdate) where T : BaseDatabaseField
+        protected void MarkForDelete<T>(string category, BaseDatabaseField model, Func<SQLQueryResult<T>> postActionDelete, Action postActionUpdate) where T : BaseDatabaseField
         {
+            if (model == null || model.Id < 0)
+            {
+                new NotificationWindow("Fehler!", "Es sind kein " + category + " ausgewählt um zu löschen", null, NotificationWindow.MessageType.Waring).Show();
+                return;
+            }
+
 
             var msg = category + ": \n'" + model.GetFullName() + "' \nlöschen?";
             AskForceToDelete(msg, category + " löschen", () =>
@@ -604,6 +612,18 @@ namespace Liftmanagement.Views
             }
         }
 
+        protected bool IsILtemSelected(string name, Func<bool> conditonNotSelected)
+        {
+            bool isNotValid = conditonNotSelected();
+
+            if (isNotValid)
+            {
+                new NotificationWindow("Fehler!", "Es sind kein " + name + " ausgewählt um zu bearbeiten", null, NotificationWindow.MessageType.Waring).Show();
+            }
+
+            return !isNotValid;
+        }
+
         #region Validation
 
         public virtual void OnLoad(object sender, System.Windows.RoutedEventArgs e)
@@ -669,6 +689,7 @@ namespace Liftmanagement.Views
                 }
             }
         }
+
 
 
         #endregion

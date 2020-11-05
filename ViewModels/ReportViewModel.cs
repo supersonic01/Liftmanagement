@@ -100,6 +100,8 @@ namespace Liftmanagement.ViewModels
             DateTime dateEnd = reportEnd.AddDays(1);
             if (yearChecked)
             {
+                if(string.IsNullOrWhiteSpace(YearSelected))
+                    return;
                 //Take Year
                 dateStart= new DateTime(int.Parse(YearSelected), 01,01);
                 dateEnd = new DateTime(((int.Parse(YearSelected))+1), 01, 01);

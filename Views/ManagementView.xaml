@@ -4,6 +4,7 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
                  xmlns:local="clr-namespace:Liftmanagement.Views"
+                 xmlns:li="http://github.com/zeluisping/loadingIndicators/xaml/controls"
                  mc:Ignorable="d" 
                  d:DesignHeight="450" d:DesignWidth="800">
 
@@ -15,51 +16,52 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Background="#FFE5E5E5">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <Grid>
+        <Grid  x:Name="MainContent" Background="#FFE5E5E5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Background="AliceBlue">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+            <StackPanel Grid.Row="0" Background="AliceBlue">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-                <TextBox x:Name="txtSearch"  Grid.Column="0" Style="{StaticResource TextBoxStyle}" Margin="10" />
-                <Button x:Name="btnSearch"  Grid.Column="1"  HorizontalAlignment="Center"  VerticalAlignment="Center" BorderThickness="0" Background="Transparent"  Margin="10" >
-                    <StackPanel>
-                        <Image Source="..\Resources\Images\Icons\Aha-Soft-Large-Seo-Look.ico" Height="30"/>
-                    </StackPanel>
-                </Button>
-            </Grid>
+                    <TextBox x:Name="txtSearch"  Grid.Column="0" Style="{StaticResource TextBoxStyle}" Margin="10" />
+                    <Button x:Name="btnSearch"  Grid.Column="1"  HorizontalAlignment="Center"  VerticalAlignment="Center" BorderThickness="0" Background="Transparent"  Margin="10" >
+                        <StackPanel>
+                            <Image Source="..\Resources\Images\Icons\Aha-Soft-Large-Seo-Look.ico" Height="30"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
 
-        </StackPanel>
-        <StackPanel Grid.Row="1" >
+            </StackPanel>
+            <StackPanel Grid.Row="1" >
 
-            <Grid >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="300" />
-                    <ColumnDefinition Width="300" />
-                    <ColumnDefinition Width="300" />
-                    <ColumnDefinition Width="300" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="20" />
-                    <RowDefinition Height="40" />
-                </Grid.RowDefinitions>
-                <Label x:Name="lblAdministrator" Grid.Row="0" Grid.Column="0" Content="Verwalter Firma:" Style="{StaticResource LableHeaderStyle}"/>
-                <Label x:Name="lblCustomer" Grid.Row="0" Grid.Column="2" Content="Kunde:" Style="{StaticResource LableHeaderStyle}"/>
-                <Label x:Name="lblLocation" Grid.Row="0" Grid.Column="1" Content="Standort:" Style="{StaticResource LableHeaderStyle}"  />
-                <Label x:Name="lblMachineInformation" Grid.Row="0" Grid.Column="3"  Content="Anlage:" Style="{StaticResource LableHeaderStyle}" />
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300" />
+                        <ColumnDefinition Width="300" />
+                        <ColumnDefinition Width="300" />
+                        <ColumnDefinition Width="300" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="40" />
+                    </Grid.RowDefinitions>
+                    <Label x:Name="lblAdministrator" Grid.Row="0" Grid.Column="0" Content="Verwalter Firma:" Style="{StaticResource LableHeaderStyle}"/>
+                    <Label x:Name="lblCustomer" Grid.Row="0" Grid.Column="2" Content="Kunde:" Style="{StaticResource LableHeaderStyle}"/>
+                    <Label x:Name="lblLocation" Grid.Row="0" Grid.Column="1" Content="Standort:" Style="{StaticResource LableHeaderStyle}"  />
+                    <Label x:Name="lblMachineInformation" Grid.Row="0" Grid.Column="3"  Content="Anlage:" Style="{StaticResource LableHeaderStyle}" />
 
 
-                <local:FilterableComboBox ItemsSource="{Binding MyItemsSource}"
+                    <local:FilterableComboBox ItemsSource="{Binding MyItemsSource}"
                                           SelectedItem="{Binding MySelectedItem}"
                                           DisplayMemberPath="FullName" 
                                           IsEditable="True" 
@@ -69,14 +71,14 @@
                                           x:Name="cbAdministrators"
                                           OnlyValuesInList="True"
                                           Style="{StaticResource ComboBoxStyle}">
-                    <local:FilterableComboBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel VirtualizationMode="Recycling" />
-                        </ItemsPanelTemplate>
-                    </local:FilterableComboBox.ItemsPanel>
-                </local:FilterableComboBox>
+                        <local:FilterableComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel VirtualizationMode="Recycling" />
+                            </ItemsPanelTemplate>
+                        </local:FilterableComboBox.ItemsPanel>
+                    </local:FilterableComboBox>
 
-                <local:FilterableComboBox Grid.Row="1" Grid.Column="2" x:Name="cbCustomers" 
+                    <local:FilterableComboBox Grid.Row="1" Grid.Column="2" x:Name="cbCustomers" 
                                           ItemsSource="{Binding MyItemsSource}"
                                           SelectedItem="{Binding MySelectedItem}"
                                           DisplayMemberPath="FullName" 
@@ -85,14 +87,14 @@
                                           StaysOpenOnEdit="True"
                                           OnlyValuesInList="True"
                                           Style="{StaticResource ComboBoxStyle}" >
-                    <local:FilterableComboBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel VirtualizationMode="Recycling" />
-                        </ItemsPanelTemplate>
-                    </local:FilterableComboBox.ItemsPanel>
-                </local:FilterableComboBox>
+                        <local:FilterableComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel VirtualizationMode="Recycling" />
+                            </ItemsPanelTemplate>
+                        </local:FilterableComboBox.ItemsPanel>
+                    </local:FilterableComboBox>
 
-                <local:FilterableComboBox x:Name="cbLocations" Grid.Row="1" Grid.Column="1"
+                    <local:FilterableComboBox x:Name="cbLocations" Grid.Row="1" Grid.Column="1"
                                           ItemsSource="{Binding MyItemsSource}"
                                           SelectedItem="{Binding MySelectedItem}"
                                           DisplayMemberPath="FullName" 
@@ -101,14 +103,14 @@
                                           StaysOpenOnEdit="True"
                                           OnlyValuesInList="True"
                                           Style="{StaticResource ComboBoxStyle}" >
-                    <local:FilterableComboBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel VirtualizationMode="Recycling" />
-                        </ItemsPanelTemplate>
-                    </local:FilterableComboBox.ItemsPanel>
-                </local:FilterableComboBox>
+                        <local:FilterableComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel VirtualizationMode="Recycling" />
+                            </ItemsPanelTemplate>
+                        </local:FilterableComboBox.ItemsPanel>
+                    </local:FilterableComboBox>
 
-                <local:FilterableComboBox x:Name="cbMachineInformations" Grid.Row="1" Grid.Column="3"
+                    <local:FilterableComboBox x:Name="cbMachineInformations" Grid.Row="1" Grid.Column="3"
                                           ItemsSource="{Binding MyItemsSource}"
                                           SelectedItem="{Binding MySelectedItem}"
                                           DisplayMemberPath="FullName" 
@@ -117,14 +119,14 @@
                                           StaysOpenOnEdit="True"
                                           OnlyValuesInList="True"
                                           Style="{StaticResource ComboBoxStyle}" >
-                    <local:FilterableComboBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel VirtualizationMode="Recycling" />
-                        </ItemsPanelTemplate>
-                    </local:FilterableComboBox.ItemsPanel>
-                </local:FilterableComboBox>
+                        <local:FilterableComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel VirtualizationMode="Recycling" />
+                            </ItemsPanelTemplate>
+                        </local:FilterableComboBox.ItemsPanel>
+                    </local:FilterableComboBox>
 
-                <!--<ComboBox x:Name="cbCustomers" Grid.Row="1" Grid.Column="1"  Style="{StaticResource ComboBoxStyle}" IsTextSearchEnabled="True"
+                    <!--<ComboBox x:Name="cbCustomers" Grid.Row="1" Grid.Column="1"  Style="{StaticResource ComboBoxStyle}" IsTextSearchEnabled="True"
                           DisplayMemberPath="FullName" SelectedValuePath="CustomerId"  IsEditable="True" />
 
                 <ComboBox x:Name="cbLocations" Grid.Row="1" Grid.Column="2"  Style="{StaticResource ComboBoxStyle}"
@@ -132,261 +134,266 @@
                 <ComboBox x:Name="cbMachineInformations" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Style="{StaticResource ComboBoxStyle}"
                           DisplayMemberPath="FullName" SelectedValuePath="MachineInformationId"/>-->
 
-            </Grid>
-        </StackPanel>
+                </Grid>
+            </StackPanel>
 
-        <ScrollViewer  Grid.Row="2"  HorizontalScrollBarVisibility="Visible">
-            <StackPanel>
-                <Grid ScrollViewer.HorizontalScrollBarVisibility="Visible">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                    </Grid.RowDefinitions>
+            <ScrollViewer  Grid.Row="2"  HorizontalScrollBarVisibility="Visible">
+                <StackPanel>
+                    <Grid ScrollViewer.HorizontalScrollBarVisibility="Visible">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="300"/>
-                        <ColumnDefinition Width="250"/>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="180"/>
-                        <ColumnDefinition Width="200"/>
-                        <ColumnDefinition Width="200"/>
-                        <ColumnDefinition Width="200"/>
-                        <ColumnDefinition Width="200"/>
-                        <ColumnDefinition Width="200"/>
-                        <ColumnDefinition Width="200"/>
-                    </Grid.ColumnDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="300"/>
+                            <ColumnDefinition Width="250"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="200"/>
+                        </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Row="0" Grid.Column="0">
-                        <Label x:Name="lblOthersHeader" Content="Sonstiges:" Style="{StaticResource LableHeaderManagementStyle}" />
-                        <StackPanel x:Name="spOthers" HorizontalAlignment="Stretch" Margin="10,0,0,0" >
-                            <DataGrid  x:Name="dgOthers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  AutoGenerateColumns="False" HeadersVisibility="None" 
+                        <StackPanel Grid.Row="0" Grid.Column="0">
+                            <Label x:Name="lblOthersHeader" Content="Sonstiges:" Style="{StaticResource LableHeaderManagementStyle}" />
+                            <StackPanel x:Name="spOthers" HorizontalAlignment="Stretch" Margin="10,0,0,0" >
+                                <DataGrid  x:Name="dgOthers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  AutoGenerateColumns="False" HeadersVisibility="None" 
                                        RowHeight="60" Focusable="true" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" MaxHeight="160">
-                                <DataGrid.Columns >
-                                    <DataGridTemplateColumn x:Name="CompanyName" Width="300">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Width="270" HorizontalAlignment="Left">
-                                                    <TextBox x:Name="txtQty" Text="{Binding Text, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" FontSize="12" BorderThickness="0" MinHeight="60"
+                                    <DataGrid.Columns >
+                                        <DataGridTemplateColumn x:Name="CompanyName" Width="300">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Width="270" HorizontalAlignment="Left">
+                                                        <TextBox x:Name="txtQty" Text="{Binding Text, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" FontSize="12" BorderThickness="0" MinHeight="60"
                                                          TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" >
-                                                        <TextBox.ContextMenu>
-                                                            <ContextMenu 
+                                                            <TextBox.ContextMenu>
+                                                                <ContextMenu 
                                                                 Name="cxm"
                                                                 Opened="CxmOpened"
                                                             >
-                                                                <MenuItem 
+                                                                    <MenuItem 
                                                                     Header="Hinzufügen" 
                                                                     Name="cxmItemAdd"
                                                                     Click="Click_Add_OtherInformation" >
-                                                                    <MenuItem.Icon>
-                                                                        <Image Name="Add" Source="..\Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" Height="20" Width="20"></Image>
-                                                                    </MenuItem.Icon>
-                                                                </MenuItem>
-                                                                <MenuItem 
+                                                                        <MenuItem.Icon>
+                                                                            <Image Name="Add" Source="..\Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" Height="20" Width="20"></Image>
+                                                                        </MenuItem.Icon>
+                                                                    </MenuItem>
+                                                                    <MenuItem 
                                                                     Header="Löschen" 
                                                                     Name="cxmItemDelete"
                                                                     Click="Click_Delete_OtherInformation" >
-                                                                    <MenuItem.Icon>
-                                                                        <Image Name="Delete" Source="..\Resources\Images\Icons\Tatice-Just-Bins-Bin-red-full.ico" Height="20" Width="20"></Image>
-                                                                    </MenuItem.Icon>
-                                                                </MenuItem>
-                                                            </ContextMenu>
-                                                        </TextBox.ContextMenu>
-                                                    </TextBox>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                </DataGrid.Columns>
-                                <DataGrid.RowStyle>
-                                    <Style TargetType="DataGridRow">
-                                        <Style.Triggers>
-                                            <Trigger Property="IsSelected"
+                                                                        <MenuItem.Icon>
+                                                                            <Image Name="Delete" Source="..\Resources\Images\Icons\Tatice-Just-Bins-Bin-red-full.ico" Height="20" Width="20"></Image>
+                                                                        </MenuItem.Icon>
+                                                                    </MenuItem>
+                                                                </ContextMenu>
+                                                            </TextBox.ContextMenu>
+                                                        </TextBox>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                    <DataGrid.RowStyle>
+                                        <Style TargetType="DataGridRow">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsSelected"
                                                      Value="True">
-                                                <Setter Property="BorderBrush"
+                                                    <Setter Property="BorderBrush"
                                                         Value="Blue" />
-                                                <Setter Property="BorderThickness"
+                                                    <Setter Property="BorderThickness"
                                                         Value="2" />
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </DataGrid.RowStyle>
-                            </DataGrid>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGrid.RowStyle>
+                                </DataGrid>
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
 
-                    <Rectangle Grid.Row="0" Grid.Column="1"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
+                        <Rectangle Grid.Row="0" Grid.Column="1"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
 
-                    <StackPanel Grid.Row="0" Grid.Column="1">
-                        <Label x:Name="lblContactPersonHeader" Content="Ansprechpartner:" Style="{StaticResource LableHeaderManagementStyle}" />
+                        <StackPanel Grid.Row="0" Grid.Column="1">
+                            <Label x:Name="lblContactPersonHeader" Content="Ansprechpartner:" Style="{StaticResource LableHeaderManagementStyle}" />
 
-                        <StackPanel x:Name="spContactPersons" Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                            <DataGrid  x:Name="dgContactPersons" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"  SelectionUnit="FullRow" 
+                            <StackPanel x:Name="spContactPersons" Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                <DataGrid  x:Name="dgContactPersons" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"  SelectionUnit="FullRow" 
                            local:CustomColumnHeadersProperty.ItemType="{x:Type local:ManagementView}" IsReadOnly="True" SelectionMode="Single"
                        CellStyle="{StaticResource Body_Content_DataGrid_Centering}" >
-                                <DataGrid.RowStyle >
-                                    <Style TargetType="DataGridRow">
-                                        <Setter Property="Height" Value="30"/>
-                                        <Style.Triggers>
-                                            <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                                <Setter Property="Background" Value="#0078D7" />
-                                                <Setter Property="Foreground" Value="White" />
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </DataGrid.RowStyle>
-                            </DataGrid>
+                                    <DataGrid.RowStyle >
+                                        <Style TargetType="DataGridRow">
+                                            <Setter Property="Height" Value="30"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                                    <Setter Property="Background" Value="#0078D7" />
+                                                    <Setter Property="Foreground" Value="White" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGrid.RowStyle>
+                                </DataGrid>
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
 
-                    <Rectangle Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
+                        <Rectangle Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
 
-                    <StackPanel Grid.Row="0" Grid.Column="2">
-                        <Label x:Name="lblLocationHeader" Content="Standort:" Style="{StaticResource LableHeaderManagementStyle}" />
-                        <Label x:Name="lblAddressLocation"   Style="{StaticResource LableManagementStyle}"/>
-                        <Label x:Name="lblPostcodeCityLocation"  Style="{StaticResource LableManagementStyle}"/>
+                        <StackPanel Grid.Row="0" Grid.Column="2">
+                            <Label x:Name="lblLocationHeader" Content="Standort:" Style="{StaticResource LableHeaderManagementStyle}" />
+                            <Label x:Name="lblAddressLocation"   Style="{StaticResource LableManagementStyle}"/>
+                            <Label x:Name="lblPostcodeCityLocation"  Style="{StaticResource LableManagementStyle}"/>
 
-                        <Label  x:Name="lblCustomerHeader" Content="Kunde:" Style="{StaticResource LableHeaderManagementStyle}" />
-                        <Label x:Name="lblCompanyName"  Style="{StaticResource LableManagementStyle}" />
-                        <Label x:Name="lblAdministratorCompany"   Style="{StaticResource LableManagementStyle}" />
-                        <Label x:Name="lblAddress"   Style="{StaticResource LableManagementStyle}" />
-                        <Label x:Name="lblPostcodeCity"    Style="{StaticResource LableManagementStyle}" />
-                    </StackPanel>
+                            <Label  x:Name="lblCustomerHeader" Content="Kunde:" Style="{StaticResource LableHeaderManagementStyle}" />
+                            <Label x:Name="lblCompanyName"  Style="{StaticResource LableManagementStyle}" />
+                            <Label x:Name="lblAdministratorCompany"   Style="{StaticResource LableManagementStyle}" />
+                            <Label x:Name="lblAddress"   Style="{StaticResource LableManagementStyle}" />
+                            <Label x:Name="lblPostcodeCity"    Style="{StaticResource LableManagementStyle}" />
+                        </StackPanel>
 
-                    <Rectangle Grid.Row="0" Grid.Column="3"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
+                        <Rectangle Grid.Row="0" Grid.Column="3"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
 
-                    <StackPanel Grid.Row="0" Grid.Column="3">
-                        <Label x:Name="lblMaintenanceHeader" Content="Wartungsvertrag:" Style="{StaticResource LableHeaderManagementStyle}" />
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="150"/>
-                            </Grid.ColumnDefinitions>
-
-
-                            <StackPanel Grid.Column="0">
-                                <Label x:Name="lblMaintenanceDuration" Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMaintenanceNoticeOfPeriod"  Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMaintenanceCanBeCancelled"  Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMaintenanceDate"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
-                            </StackPanel>
-
-                            <StackPanel Grid.Column="1">
-                                <Label x:Name="lblMaintenanceDurationValue" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMaintenanceNoticeOfPeriodValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMaintenanceCanBeCancelledValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMaintenanceDateValue" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                            </StackPanel>
-                        </Grid>
-
-                        <Label x:Name="lblEmergencyHeader" Content="Notrufvertrag:" Style="{StaticResource LableHeaderManagementStyle}" />
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="150"/>
-                            </Grid.ColumnDefinitions>
-
-                            <StackPanel Grid.Column="0">
-                                <Label x:Name="lblEmergencyDuration" Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblEmergencyNoticeOfPeriod"  Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblEmergencyCanBeCancelled"   Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblEmergencyDate"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
-                            </StackPanel>
-
-                            <StackPanel Grid.Column="1">
-                                <Label x:Name="lblEmergencyDurationValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblEmergencyNoticeOfPeriodValue"   Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblEmergencyCanBeCancelledValue"   Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblEmergencyDateValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                            </StackPanel>
-                        </Grid>
-                    </StackPanel>
-
-                    <Rectangle Grid.Row="0" Grid.Column="4"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
-
-                    <StackPanel Grid.Row="0" Grid.Column="4">
-                        <Label x:Name="lblMachineInfoHeader" Content="Anlagedaten:" Style="{StaticResource LableHeaderManagementStyle}" />
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="150"/>
-                            </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Row="0" Grid.Column="3">
+                            <Label x:Name="lblMaintenanceHeader" Content="Wartungsvertrag:" Style="{StaticResource LableHeaderManagementStyle}" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="110"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
 
 
-                            <StackPanel Grid.Column="0">
-                                <Label x:Name="lblMachineInfoName"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoSerialNumber"   Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoHoldingPositions"   Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoEntrances"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoYearOfConstruction"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoPayload"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
-                            </StackPanel>
+                                <StackPanel Grid.Column="0">
+                                    <Label x:Name="lblMaintenanceDuration" Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblMaintenanceNoticeOfPeriod"  Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblMaintenanceCanBeCancelled"  Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblMaintenanceDate"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
+                                </StackPanel>
 
-                            <StackPanel Grid.Column="1">
-                                <Label x:Name="lblMachineInfoNameValue" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoSerialNumberValue"   Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoHoldingPositionsValue"   Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoEntrancesValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoYearOfConstructionValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                                <Label x:Name="lblMachineInfoPayloadValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
-                            </StackPanel>
-                        </Grid>
-                    </StackPanel>
+                                <StackPanel Grid.Column="1">
+                                    <Label x:Name="lblMaintenanceDurationValue" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblMaintenanceNoticeOfPeriodValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblMaintenanceCanBeCancelledValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblMaintenanceDateValue" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                </StackPanel>
+                            </Grid>
 
-                    <Rectangle Grid.Row="0" Grid.Column="5"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
+                            <Label x:Name="lblEmergencyHeader" Content="Notrufvertrag:" Style="{StaticResource LableHeaderManagementStyle}" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="110"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Row="0" Grid.Column="5">
-                        <Label x:Name="lblMaintenanceIntervalHeader" Height="60" Content="Wartungsinterval:/4x /vierteljährlich:" Style="{StaticResource LableHeaderManagementStyle}" />
-                    </StackPanel>
+                                <StackPanel Grid.Column="0">
+                                    <Label x:Name="lblEmergencyDuration" Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblEmergencyNoticeOfPeriod"  Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblEmergencyCanBeCancelled"   Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblEmergencyDate"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
+                                </StackPanel>
 
-                    <Rectangle Grid.Row="0" Grid.Column="6"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
+                                <StackPanel Grid.Column="1">
+                                    <Label x:Name="lblEmergencyDurationValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblEmergencyNoticeOfPeriodValue"   Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblEmergencyCanBeCancelledValue"   Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblEmergencyDateValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
 
-                    <StackPanel Grid.Row="0" Grid.Column="6">
-                        <Label x:Name="lblEmergencyMaintenanceHeader" Content="Notruf+Wartung:" Style="{StaticResource LableHeaderManagementStyle}" />
-                    </StackPanel>
-                    <StackPanel Grid.Row="0" Grid.Column="7">
-                        <Label x:Name="lblRepairMaintenanceHeader" Content="Reparatur/Instandhaltung:" Style="{StaticResource LableHeaderManagementStyle}" />
-                    </StackPanel>
-                    <StackPanel Grid.Row="0" Grid.Column="8">
-                        <Label x:Name="lblTechnicalSupervisoryAssociationHeader" Content="TÜV:" Style="{StaticResource LableHeaderManagementStyle}" />
-                    </StackPanel>
-                    <StackPanel Grid.Row="0" Grid.Column="9">
-                        <Label x:Name="lblMaintenancContentHeader" Content="Wartungsvertragart Inhalt:" Style="{StaticResource LableHeaderManagementStyle}" />
-                    </StackPanel>
+                        <Rectangle Grid.Row="0" Grid.Column="4"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
+
+                        <StackPanel Grid.Row="0" Grid.Column="4">
+                            <Label x:Name="lblMachineInfoHeader" Content="Anlagedaten:" Style="{StaticResource LableHeaderManagementStyle}" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="110"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+
+
+                                <StackPanel Grid.Column="0">
+                                    <Label x:Name="lblMachineInfoName"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblMachineInfoSerialNumber"   Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblMachineInfoHoldingPositions"   Margin="10,0,0,0"  Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblMachineInfoEntrances"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblMachineInfoYearOfConstruction"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblMachineInfoPayload"   Margin="10,0,0,0" Style="{StaticResource LableManagementStyle}"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1">
+                                    <Label x:Name="lblMachineInfoNameValue" Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblMachineInfoSerialNumberValue"   Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblMachineInfoHoldingPositionsValue"   Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblMachineInfoEntrancesValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblMachineInfoYearOfConstructionValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                    <Label x:Name="lblMachineInfoPayloadValue"  Margin="0" Padding="0" Style="{StaticResource LableManagementStyle}"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+
+                        <Rectangle Grid.Row="0" Grid.Column="5"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
+
+                        <StackPanel Grid.Row="0" Grid.Column="5">
+                            <Label x:Name="lblMaintenanceIntervalHeader" Height="60" Content="Wartungsinterval:/4x /vierteljährlich:" Style="{StaticResource LableHeaderManagementStyle}" />
+                        </StackPanel>
+
+                        <Rectangle Grid.Row="0" Grid.Column="6"  HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Stretch" Fill="Black" Width="1"/>
+
+                        <StackPanel Grid.Row="0" Grid.Column="6">
+                            <Label x:Name="lblEmergencyMaintenanceHeader" Content="Notruf+Wartung:" Style="{StaticResource LableHeaderManagementStyle}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="0" Grid.Column="7">
+                            <Label x:Name="lblRepairMaintenanceHeader" Content="Reparatur/Instandhaltung:" Style="{StaticResource LableHeaderManagementStyle}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="0" Grid.Column="8">
+                            <Label x:Name="lblTechnicalSupervisoryAssociationHeader" Content="TÜV:" Style="{StaticResource LableHeaderManagementStyle}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="0" Grid.Column="9">
+                            <Label x:Name="lblMaintenancContentHeader" Content="Wartungsvertragart Inhalt:" Style="{StaticResource LableHeaderManagementStyle}" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+
+            <StackPanel x:Name="spRecordBtns" IsEnabled="False" Grid.Row="3"   Orientation="Horizontal" HorizontalAlignment="Right">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="btnView" Grid.Column="1"  HorizontalAlignment="Center"  VerticalAlignment="Center"
+                            Click="btnView_Click" BorderThickness="0" Background="Transparent" Margin="10,0,10,0">
+                        <StackPanel>
+                            <Image Source="..\Resources\Images\Icons\icons8-view-40.png" Height="30"/>
+                        </StackPanel>
+                    </Button>
+                    <Button  x:Name="btnAdd" Grid.Column="0" HorizontalAlignment="Center"  VerticalAlignment="Center" 
+                         Click="btnAdd_Click" BorderThickness="0" Background="Transparent" Margin="10,0,10,0">
+                        <StackPanel>
+                            <Image Source="..\Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" Height="30"/>
+                        </StackPanel>
+                    </Button>
+                    <Button  x:Name="btnDelete" Grid.Column="2" HorizontalAlignment="Center"  VerticalAlignment="Center" 
+                         Click="btnDelete_Click" BorderThickness="0" Background="Transparent" Margin="10,0,10,0">
+                        <StackPanel>
+                            <Image Source="..\Resources\Images\Icons\Tatice-Just-Bins-Bin-red-full.ico" Height="30"/>
+                        </StackPanel>
+                    </Button>
                 </Grid>
             </StackPanel>
-        </ScrollViewer>
+            <ScrollViewer Grid.Row="4" VerticalScrollBarVisibility="Auto" >
+                <Frame x:Name="frameRecords" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            </ScrollViewer>
+        </Grid>
 
-        <StackPanel x:Name="spRecordBtns" IsEnabled="False" Grid.Row="3"   Orientation="Horizontal" HorizontalAlignment="Right">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Button x:Name="btnView" Grid.Column="1"  HorizontalAlignment="Center"  VerticalAlignment="Center"
-                            Click="btnView_Click" BorderThickness="0" Background="Transparent" Margin="10,0,10,0">
-                    <StackPanel>
-                        <Image Source="..\Resources\Images\Icons\icons8-view-40.png" Height="30"/>
-                    </StackPanel>
-                </Button>
-                <Button  x:Name="btnAdd" Grid.Column="0" HorizontalAlignment="Center"  VerticalAlignment="Center" 
-                         Click="btnAdd_Click" BorderThickness="0" Background="Transparent" Margin="10,0,10,0">
-                    <StackPanel>
-                        <Image Source="..\Resources\Images\Icons\Icojam-Blue-Bits-Document-add.ico" Height="30"/>
-                    </StackPanel>
-                </Button>
-                <Button  x:Name="btnDelete" Grid.Column="2" HorizontalAlignment="Center"  VerticalAlignment="Center" 
-                         Click="btnDelete_Click" BorderThickness="0" Background="Transparent" Margin="10,0,10,0">
-                    <StackPanel>
-                        <Image Source="..\Resources\Images\Icons\Tatice-Just-Bins-Bin-red-full.ico" Height="30"/>
-                    </StackPanel>
-                </Button>
-            </Grid>
-        </StackPanel>
-        <ScrollViewer Grid.Row="4" VerticalScrollBarVisibility="Auto" >
-            <Frame x:Name="frameRecords" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-        </ScrollViewer>
+        <Grid x:Name="LoadingIndicatorPanel" Background="White">
+            <li:LoadingIndicator x:Name="LoadingIndicatorx" SpeedRatio="1" IsActive="{Binding IsArcsActive}" Mode="Arcs" Foreground="DeepSkyBlue"/>
+        </Grid>
     </Grid>
 </local:UserControlView>

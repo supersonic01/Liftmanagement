@@ -318,8 +318,8 @@
                 </StackPanel>
             </Grid>
         </Grid>
-        <!--<Grid x:Name="LoadingIndicatorPanel" Background="White">
+        <Grid x:Name="LoadingIndicatorPanel" Background="White">
             <li:LoadingIndicator x:Name="LoadingIndicatorx" SpeedRatio="1" IsActive="{Binding IsArcsActive}" Mode="Arcs" Foreground="DeepSkyBlue"/>
-        </Grid>-->
+        </Grid>
     </Grid>
 </local:GoogleDriveDialogueView>

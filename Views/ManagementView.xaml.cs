@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Liftmanagement.Converters;
 using MachineInformation = Liftmanagement.Models.MachineInformation;
 
@@ -43,44 +44,69 @@ namespace Liftmanagement.Views
         {
             InitializeComponent();
 
-            recordsView = new RecordsView();
-            frameRecords.Content = recordsView;
-            recordsView.dgRecords.SelectionChanged += DgRecords_SelectionChanged;
-            dgCategory.SelectionChanged += DgCategory_SelectionChanged;
+            LoadingIndicatorPanel.Visibility = Visibility.Visible;
+            MainContent.IsEnabled = false;
+            Task.Factory.StartNew(() =>
+            {
 
-            ManagementVM.Refresh();
-
-            cbAdministrators.SelectionChanged += CbAdministrators_SelectionChanged;
-            cbCustomers.SelectionChanged += CbCustomers_SelectionChanged;
-            cbLocations.SelectionChanged += CbLocations_SelectionChanged;
-            cbMachineInformations.SelectionChanged += CbMachineInformations_SelectionChanged;
-
-            dgContactPersons.ToolTipOpening += DgContactPersons_ToolTipOpening;
-            dgContactPersons.LoadingRow += DgContactPersons_LoadingRow;
-
-            dgOthers.SelectionChanged += DgOthers_SelectionChanged;
-            dgOthers.PreviewKeyDown += DgOthers_PreviewKeyDown;
-            NotVisibleColumns.Add(nameof(ContactPartner.PhoneWork));
-            NotVisibleColumns.Add(nameof(ContactPartner.Mobile));
-            NotVisibleColumns.Add(nameof(ContactPartner.EMail));
-            NotVisibleColumns.Add(nameof(ContactPartner.ContactByDefect));
-            dgContactPersons.Tag = NotVisibleColumns;
+                Task.Factory.StartNew(() => ManagementVM.Refresh());
 
 
-            this.Loaded += ManagementView_Loaded;
+             var result=   Application.Current.Dispatcher.BeginInvoke(
+                    DispatcherPriority.Background,
+                    new Action(() =>
+                    {
+                        recordsView = new RecordsView();
+                        frameRecords.Content = recordsView;
+                        recordsView.dgRecords.SelectionChanged += DgRecords_SelectionChanged;
+                        dgCategory.SelectionChanged += DgCategory_SelectionChanged;
 
-            btnSearch.Click += BtnSearch_Click;
-            txtSearch.KeyUp += TxtSearch_KeyUp;
+                        //ManagementVM.Refresh();
 
-            //TODO dgOthers cell make vertical scrollabl
-            //TODO Keyordnavigation
+                        cbAdministrators.SelectionChanged += CbAdministrators_SelectionChanged;
+                        cbCustomers.SelectionChanged += CbCustomers_SelectionChanged;
+                        cbLocations.SelectionChanged += CbLocations_SelectionChanged;
+                        cbMachineInformations.SelectionChanged += CbMachineInformations_SelectionChanged;
 
-            AssigneValuesToControl();
-            this.Dispatcher.ShutdownStarted += Dispatcher_ShutdownStarted;
+                        dgContactPersons.ToolTipOpening += DgContactPersons_ToolTipOpening;
+                        dgContactPersons.LoadingRow += DgContactPersons_LoadingRow;
 
-            spRecordBtns.IsEnabled = false;
-            dgOthers.IsEnabled = false;
+                        dgOthers.SelectionChanged += DgOthers_SelectionChanged;
+                        dgOthers.PreviewKeyDown += DgOthers_PreviewKeyDown;
+                        NotVisibleColumns.Add(nameof(ContactPartner.PhoneWork));
+                        NotVisibleColumns.Add(nameof(ContactPartner.Mobile));
+                        NotVisibleColumns.Add(nameof(ContactPartner.EMail));
+                        NotVisibleColumns.Add(nameof(ContactPartner.ContactByDefect));
+                        dgContactPersons.Tag = NotVisibleColumns;
 
+
+                        //this.Loaded += ManagementView_Loaded;
+                        InitOverviewFilterView();
+                        overviewFilterView.SetDoubleClickEventHandler(Row_DoubleClick);
+
+                        InitRecordView();
+
+                        btnSearch.Click += BtnSearch_Click;
+                        txtSearch.KeyUp += TxtSearch_KeyUp;
+
+                        //TODO dgOthers cell make vertical scrollabl
+                        //TODO Keyordnavigation
+
+                        AssigneValuesToControl();
+                        this.Dispatcher.ShutdownStarted += Dispatcher_ShutdownStarted;
+
+                        spRecordBtns.IsEnabled = false;
+                        dgOthers.IsEnabled = false;
+                    }));
+
+
+
+            }).ContinueWith((task) =>
+            {
+                LoadingIndicatorPanel.Visibility = Visibility.Collapsed;
+                MainContent.IsEnabled = true;
+            }, TaskScheduler.FromCurrentSynchronizationContext());
+            
         }
 
         private void DgCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)

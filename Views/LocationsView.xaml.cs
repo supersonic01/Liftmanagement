@@ -26,7 +26,8 @@ namespace Liftmanagement.Views
 
             BindingControl(dgLocations, () => LocationsVM.Locations);
 
-            txtExpanderHeader.Text = new CategoryViewModel().Categories.Where(c => c.MangementType == Helper.Helper.TTypeMangement.Location).Select(c => c.Name).FirstOrDefault();
+            //txtExpanderHeader.Text = new CategoryViewModel().Categories.Where(c => c.MangementType == Helper.Helper.TTypeMangement.Location).Select(c => c.Name).FirstOrDefault();
+            txtExpanderHeader.Text = "Standorte";
             expanderLocations.Expanded += ExpanderLocations_Expanded;
             expanderLocations.Collapsed += ExpanderLocations_Collapsed;
         }

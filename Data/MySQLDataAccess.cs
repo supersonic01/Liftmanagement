@@ -20,52 +20,45 @@ namespace Liftmanagement.Data
     public static class MySQLDataAccess
     {
 
-        private static MySqlConnection databaseConnection = null;
+      //  private static MySqlConnection databaseConnection = null;
 
-        public static void CreateConnection()
-        {
-            string connectionString = GetConnectionString();
-            databaseConnection = new MySqlConnection(connectionString);
-        }
+        //public static void CreateConnection()
+        //{
+        //    string connectionString = GetConnectionString();
+        //    databaseConnection = new MySqlConnection(connectionString);
+        //}
 
         public static MySqlConnection GetConnection()
         {
             string connectionString = GetConnectionString();
-            var dd = new MySqlConnection(connectionString);
             return new MySqlConnection(connectionString);
         }
 
         public static void CreateTables()
         {
-            if (databaseConnection == null)
-            {
-                CreateConnection();
-            }
+            var dbConnection = GetConnection();
 
             var tblGenerator = new TableGenerator();
-            MySqlCommand Create_table = new MySqlCommand(tblGenerator.CreatScript.ToString(), databaseConnection);
-            databaseConnection.Open();
+            MySqlCommand Create_table = new MySqlCommand(tblGenerator.CreatScript.ToString(), dbConnection);
+            dbConnection.Open();
             Create_table.ExecuteNonQuery();
-            databaseConnection.Close();
+            dbConnection.Close();
         }
 
         public static SQLQueryResult<Customer> AddCustomer(Customer customer)
         {
             //TOTO do in trasaction
 
-            if (databaseConnection == null)
-            {
-                CreateConnection();
-            }
+            var dbConnection = GetConnection();
 
             string query = "INSERT INTO CUSTOMER(CompanyName,Address,Postcode,City,Selected,AdditionalInfo,GoogleDriveFolderName,GoogleDriveLink,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
             string values = "VALUE('" + customer.CompanyName + "','" + customer.Address + "','" + customer.Postcode + "','" + customer.City + "'," + customer.Selected + ",'" + customer.AdditionalInfo + "','" + customer.GoogleDriveFolderName + "','" + customer.GoogleDriveLink + "','" + customer.CreatedPersonName + "','" + customer.ModifiedPersonName + "'," + customer.ReadOnly + ",'" + customer.UsedBy + "')";
             query = query + values;
 
 
-            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
-            databaseConnection.Open();
+            dbConnection.Open();
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
             var result = new SQLQueryResult<Customer>(records, id);
@@ -73,11 +66,11 @@ namespace Liftmanagement.Data
             customer.ContactPerson.ForeignKey = id;
             customer.ContactPerson.CustomerId = id;
             customer.ContactPerson.ForeignKeyType = Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Customer)];
-            var contactResult = AddContactPartner(customer.ContactPerson);
+            var contactResult = AddContactPartner(dbConnection ,customer.ContactPerson);
             //  result.AddSQLSubQueryResult(contactResult, result);
 
             customer.Administrator.CustomerId = id;
-            var adminResult = AddAdministratorCompany(customer.Administrator);
+            var adminResult = AddAdministratorCompany(dbConnection ,customer.Administrator);
             // result.AddSQLSubQueryResult(adminResult, result);
 
             foreach (var contactPerson in customer.Administrator.ContactPersons)
@@ -88,24 +81,24 @@ namespace Liftmanagement.Data
                     contactPerson.CustomerId = customer.Administrator.CustomerId;
                     contactPerson.ForeignKeyType =
                         Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(AdministratorCompany)];
-                    var res = AddContactPartner(contactPerson);
+                    var res = AddContactPartner(dbConnection ,contactPerson);
                     //result.AddSQLSubQueryResult(res, adminResult);
                 }
             }
 
-            databaseConnection.Close();
+            dbConnection.Close();
 
             return result;
         }
 
-        private static SQLQueryResult<ContactPartner> AddContactPartner(ContactPartner contactpartner)
+        private static SQLQueryResult<ContactPartner> AddContactPartner(MySqlConnection dbConnection,  ContactPartner contactpartner)
         {
             string query = "INSERT INTO CONTACTPARTNER(CustomerId,ForeignKey,ForeignKeyType,Name,PhoneWork,Mobile,EMail,ContactByDefect,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
             string values = "VALUE(" + contactpartner.CustomerId + "," + contactpartner.ForeignKey + "," + contactpartner.ForeignKeyType + ",'" + contactpartner.Name + "','" + contactpartner.PhoneWork + "','" + contactpartner.Mobile + "','" + contactpartner.EMail + "'," + contactpartner.ContactByDefect + ",'" + contactpartner.CreatedPersonName + "','" + contactpartner.ModifiedPersonName + "'," + contactpartner.ReadOnly + ",'" + contactpartner.UsedBy + "')";
             query = query + values;
 
 
-            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
@@ -114,19 +107,16 @@ namespace Liftmanagement.Data
 
         public static SQLQueryResult<Location> AddLocation(Location location)
         {
-            if (databaseConnection == null)
-            {
-                CreateConnection();
-            }
+            var dbConnection = GetConnection();
 
             string query = "INSERT INTO LOCATION(CustomerId,Address,Postcode,City,Selected,AdditionalInfo,GoogleDriveFolderName,GoogleDriveLink,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
             string values = "VALUE(" + location.CustomerId + ",'" + location.Address + "','" + location.Postcode + "','" + location.City + "'," + location.Selected + ",'" + location.AdditionalInfo + "','" + location.GoogleDriveFolderName + "','" + location.GoogleDriveLink + "','" + location.CreatedPersonName + "','" + location.ModifiedPersonName + "'," + location.ReadOnly + ",'" + location.UsedBy + "')";
             query = query + values;
 
 
-            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
-            databaseConnection.Open();
+            dbConnection.Open();
 
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
@@ -135,22 +125,22 @@ namespace Liftmanagement.Data
             location.ContactPerson.ForeignKey = id;
             location.ContactPerson.CustomerId = location.CustomerId;
             location.ContactPerson.ForeignKeyType = Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Location)];
-            var contactResult = AddContactPartner(location.ContactPerson);
+            var contactResult = AddContactPartner(dbConnection,location.ContactPerson);
             // result.AddSQLSubQueryResult(contactResult, result);
 
-            databaseConnection.Close();
+            dbConnection.Close();
 
             return result;
         }
 
-        private static SQLQueryResult<AdministratorCompany> AddAdministratorCompany(AdministratorCompany administratorcompany)
+        private static SQLQueryResult<AdministratorCompany> AddAdministratorCompany(MySqlConnection dbConnection, AdministratorCompany administratorcompany)
         {
             string query = "INSERT INTO ADMINISTRATORCOMPANY(CustomerId,Name,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy)";
             string values = "VALUE(" + administratorcompany.CustomerId + ",'" + administratorcompany.Name + "','" + administratorcompany.CreatedPersonName + "','" + administratorcompany.ModifiedPersonName + "'," + administratorcompany.ReadOnly + ",'" + administratorcompany.UsedBy + "')";
             query = query + values;
 
 
-            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
@@ -160,28 +150,25 @@ namespace Liftmanagement.Data
 
         public static SQLQueryResult<MachineInformation> AddMachineInformation(MachineInformation machineinformation)
         {
-            if (databaseConnection == null)
-            {
-                CreateConnection();
-            }
+            var dbConnection = GetConnection();
 
             string query = "INSERT INTO MACHINEINFORMATION (LocationId,CustomerId,Name,YearOfConstruction,SerialNumber,HoldingPositions,Entrances,Payload,Description,GoogleDriveFolderName,GoogleDriveLink,CreatedPersonName,ModifiedPersonName,ReadOnly,UsedBy,Deleted)";
             string values = "VALUE(" + machineinformation.LocationId + "," + machineinformation.CustomerId + ",'" + machineinformation.Name + "','" + machineinformation.YearOfConstruction.ToString("yyyy-MM-dd") + "','" + machineinformation.SerialNumber + "'," + machineinformation.HoldingPositions + "," + machineinformation.Entrances + "," + machineinformation.Payload + ",'" + machineinformation.Description + "','" + machineinformation.GoogleDriveFolderName + "','" + machineinformation.GoogleDriveLink + "','" + machineinformation.CreatedPersonName + "','" + machineinformation.ModifiedPersonName + "'," + machineinformation.ReadOnly + ",'" + machineinformation.UsedBy + "'," + machineinformation.Deleted + ")";
             query = query + values;
 
 
-            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
-            databaseConnection.Open();
+            dbConnection.Open();
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
             var result = new SQLQueryResult<MachineInformation>(records, id);
 
             machineinformation.ContactPerson.ForeignKey = id;
             machineinformation.ContactPerson.ForeignKeyType = Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(MachineInformation)];
-            var contactResult = AddContactPartner(machineinformation.ContactPerson);
+            var contactResult = AddContactPartner(dbConnection,machineinformation.ContactPerson);
 
-            databaseConnection.Close();
+            dbConnection.Close();
             return result;
         }
 
@@ -352,17 +339,14 @@ namespace Liftmanagement.Data
             {
                 var updateQuery = "UPDATE " + classname + " SET READONLY = 1, USEDBY = '" + Helper.Helper.GetUsername() + "' WHERE ID = " + id;
 
-                if (databaseConnection == null)
-                {
-                    CreateConnection();
-                }
+                var dbConnection = GetConnection();
 
-                MySqlCommand execQuery = new MySqlCommand(updateQuery, databaseConnection);
+                MySqlCommand execQuery = new MySqlCommand(updateQuery, dbConnection);
 
-                databaseConnection.Open();
+                dbConnection.Open();
                 int records = execQuery.ExecuteNonQuery();
 
-                databaseConnection.Close();
+                dbConnection.Close();
 
                 result.DBRecords = GetRecords(query);
             }
@@ -418,16 +402,13 @@ namespace Liftmanagement.Data
         private static SQLQueryResult<T> SetEditing<T>(long id, string updateQuery)
             where T : BaseDatabaseField
         {
-            if (databaseConnection == null)
-            {
-                CreateConnection();
-            }
+            var dbConnection = GetConnection();
 
-            MySqlCommand execQuery = new MySqlCommand(updateQuery, databaseConnection);
+             MySqlCommand execQuery = new MySqlCommand(updateQuery, dbConnection);
 
-            databaseConnection.Open();
+             dbConnection.Open();
             int records = execQuery.ExecuteNonQuery();
-            databaseConnection.Close();
+            dbConnection.Close();
 
             return new SQLQueryResult<T>(records, id);
         }
@@ -579,24 +560,21 @@ namespace Liftmanagement.Data
             //TOTO do in trasaction
             //Check Timestemp if needed
 
-            if (databaseConnection == null)
-            {
-                CreateConnection();
-            }
+            var dbConnection = GetConnection();
 
             customer.ModifiedPersonName = Helper.Helper.GetPersonName();
             string query = "UPDATE CUSTOMER SET CompanyName = '" + customer.CompanyName + "',Address = '" + customer.Address + "',Postcode = '" + customer.Postcode + "',City = '" + customer.City + "',Selected = " + customer.Selected + ",AdditionalInfo = '" + customer.AdditionalInfo + "',GoogleDriveFolderName = '" + customer.GoogleDriveFolderName + "',GoogleDriveLink = '" + customer.GoogleDriveLink + "',CreatedPersonName = '" + customer.CreatedPersonName + "',ModifiedPersonName = '" + customer.ModifiedPersonName + "',ReadOnly = " + customer.ReadOnly + ",UsedBy = '" + customer.UsedBy + "' WHERE ID = " + customer.Id;
 
-            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
-            databaseConnection.Open();
+            dbConnection.Open();
             int records = execQuery.ExecuteNonQuery();
             long id = customer.Id;
             var result = new SQLQueryResult<Customer>(records, id);
 
-            UpdateContactPartner(customer.ContactPerson);
+            UpdateContactPartner(dbConnection ,customer.ContactPerson);
 
-            UpdateAdministratorCompany(customer.Administrator);
+            UpdateAdministratorCompany(dbConnection ,customer.Administrator);
 
             foreach (var contactPerson in customer.Administrator.ContactPersons)
             {
@@ -607,22 +585,22 @@ namespace Liftmanagement.Data
 
                 if (contactPerson.Id < 0)
                 {
-                    AddContactPartner(contactPerson);
+                    AddContactPartner(dbConnection,contactPerson);
                 }
                 else
                 {
-                    UpdateContactPartner(contactPerson);
+                    UpdateContactPartner(dbConnection ,contactPerson);
                 }
             }
 
             foreach (var contactPerson in customer.Administrator.DeletedContactPersons)
             {
                 query = "DELETE FROM CONTACTPARTNER WHERE ID = " + contactPerson.Id;
-                execQuery = new MySqlCommand(query, databaseConnection);
+                execQuery = new MySqlCommand(query, dbConnection);
                 execQuery.ExecuteNonQuery();
             }
 
-            databaseConnection.Close();
+            dbConnection.Close();
 
             return result;
         }
@@ -664,14 +642,14 @@ namespace Liftmanagement.Data
 
             //return result;
 
-            return MarkForDeletion<Customer>(customer, (dbConection) =>
+            return MarkForDeletion<Customer>(customer, (dbConnection) =>
             {
-                MarkForDeleteAdministratorCompany(customer.Administrator);
-                MarkSubObjectForDeletion<Location>(dbConection, customer);
-                MarkForDeleteContactPartner(dbConection, customer.ContactPerson);
-                MarkSubObjectForDeletion<MachineInformation>(dbConection, customer);
-                MarkSubObjectForDeletion<MaintenanceAgreement>(dbConection, customer);
-                MarkSubObjectForDeletion<MaintenanceAgreementContent>(dbConection, customer);
+                MarkForDeleteAdministratorCompany(dbConnection,customer.Administrator);
+                MarkSubObjectForDeletion<Location>(dbConnection, customer);
+                MarkForDeleteContactPartner(dbConnection, customer.ContactPerson);
+                MarkSubObjectForDeletion<MachineInformation>(dbConnection, customer);
+                MarkSubObjectForDeletion<MaintenanceAgreement>(dbConnection, customer);
+                MarkSubObjectForDeletion<MaintenanceAgreementContent>(dbConnection, customer);
             });
         }
 
@@ -720,35 +698,35 @@ namespace Liftmanagement.Data
 
             // return result;
 
-            return MarkForDeletion<Location>(location, (dbConection) =>
+            return MarkForDeletion<Location>(location, (dbConnection) =>
             { 
                 var customer = new Customer{Id = location.CustomerId };
 
-                MarkForDeleteContactPartner(dbConection, location.Id, Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Location)]);
-                MarkSubObjectForDeletion<MachineInformation>(dbConection, customer);
-                MarkSubObjectForDeletion<MaintenanceAgreement>(dbConection, customer);
-                MarkSubObjectForDeletion<MaintenanceAgreementContent>(dbConection, customer);
+                MarkForDeleteContactPartner(dbConnection, location.Id, Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Location)]);
+                MarkSubObjectForDeletion<MachineInformation>(dbConnection, customer);
+                MarkSubObjectForDeletion<MaintenanceAgreement>(dbConnection, customer);
+                MarkSubObjectForDeletion<MaintenanceAgreementContent>(dbConnection, customer);
             });
         }
 
-        private static SQLQueryResult<AdministratorCompany> MarkForDeleteAdministratorCompany(AdministratorCompany administratorcompany)
+        private static SQLQueryResult<AdministratorCompany> MarkForDeleteAdministratorCompany(MySqlConnection dbConnection, AdministratorCompany administratorcompany)
         {
             administratorcompany.ModifiedPersonName = Helper.Helper.GetPersonName();
             string query = "UPDATE ADMINISTRATORCOMPANY SET DELETED = " + administratorcompany.Deleted + ",MODIFIEDPERSONNAME = '" + administratorcompany.ModifiedPersonName + "' WHERE CustomerId = " + administratorcompany.CustomerId;
 
-            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
             int records = execQuery.ExecuteNonQuery();
 
             return new SQLQueryResult<AdministratorCompany>(records, administratorcompany.Id);
         }
 
-        private static SQLQueryResult<ContactPartner> UpdateContactPartner(ContactPartner contactpartner)
+        private static SQLQueryResult<ContactPartner> UpdateContactPartner(MySqlConnection dbConnection, ContactPartner contactpartner)
         {
             contactpartner.ModifiedPersonName = Helper.Helper.GetPersonName();
             string query = "UPDATE CONTACTPARTNER SET CustomerId = " + contactpartner.CustomerId + ",ForeignKey = " + contactpartner.ForeignKey + ",ForeignKeyType = " + contactpartner.ForeignKeyType + ",Name = '" + contactpartner.Name + "',PhoneWork = '" + contactpartner.PhoneWork + "',Mobile = '" + contactpartner.Mobile + "',EMail = '" + contactpartner.EMail + "',ContactByDefect = " + contactpartner.ContactByDefect + ",CreatedPersonName = '" + contactpartner.CreatedPersonName + "',ModifiedPersonName = '" + contactpartner.ModifiedPersonName + "',ReadOnly = " + contactpartner.ReadOnly + ",UsedBy = '" + contactpartner.UsedBy + "' WHERE ID = " + contactpartner.Id;
 
-            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
             int records = execQuery.ExecuteNonQuery();
             return new SQLQueryResult<ContactPartner>(records, contactpartner.Id);
@@ -756,17 +734,14 @@ namespace Liftmanagement.Data
 
         public static SQLQueryResult<Location> UpdateLocation(Location location)
         {
-            if (databaseConnection == null)
-            {
-                CreateConnection();
-            }
+            var dbConnection = GetConnection();
 
             location.ModifiedPersonName = Helper.Helper.GetPersonName();
             string query = "UPDATE LOCATION SET CustomerId = " + location.CustomerId + ",Address = '" + location.Address + "',Postcode = '" + location.Postcode + "',City = '" + location.City + "',Selected = " + location.Selected + ",AdditionalInfo = '" + location.AdditionalInfo + "',GoogleDriveFolderName = '" + location.GoogleDriveFolderName + "',GoogleDriveLink = '" + location.GoogleDriveLink + "',CreatedPersonName = '" + location.CreatedPersonName + "',ModifiedPersonName = '" + location.ModifiedPersonName + "',ReadOnly = " + location.ReadOnly + ",UsedBy = '" + location.UsedBy + "' WHERE ID = " + location.Id;
 
-            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
-            databaseConnection.Open();
+            dbConnection.Open();
 
             int records = execQuery.ExecuteNonQuery();
             var result = new SQLQueryResult<Location>(records, location.Id);
@@ -774,19 +749,19 @@ namespace Liftmanagement.Data
             location.ContactPerson.ForeignKey = location.Id;
             location.ContactPerson.CustomerId = location.CustomerId;
             location.ContactPerson.ForeignKeyType = Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Location)];
-            var contactResult = UpdateContactPartner(location.ContactPerson);
+            var contactResult = UpdateContactPartner(dbConnection,location.ContactPerson);
 
-            databaseConnection.Close();
+            dbConnection.Close();
 
             return result;
         }
 
-        private static SQLQueryResult<AdministratorCompany> UpdateAdministratorCompany(AdministratorCompany administratorcompany)
+        private static SQLQueryResult<AdministratorCompany> UpdateAdministratorCompany(MySqlConnection dbConnection, AdministratorCompany administratorcompany)
         {
             administratorcompany.ModifiedPersonName = Helper.Helper.GetPersonName();
             string query = "UPDATE ADMINISTRATORCOMPANY SET CustomerId = " + administratorcompany.CustomerId + ",Name = '" + administratorcompany.Name + "',CreatedPersonName = '" + administratorcompany.CreatedPersonName + "',ModifiedPersonName = '" + administratorcompany.ModifiedPersonName + "',ReadOnly = " + administratorcompany.ReadOnly + ",UsedBy = '" + administratorcompany.UsedBy + "' WHERE ID = " + administratorcompany.Id;
 
-            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
             int records = execQuery.ExecuteNonQuery();
 
@@ -940,23 +915,20 @@ namespace Liftmanagement.Data
 
         public static SQLQueryResult<MachineInformation> UpdateMachineInformation(MachineInformation machineinformation)
         {
-            if (databaseConnection == null)
-            {
-                CreateConnection();
-            }
+            var dbConnection = GetConnection();
 
             machineinformation.ModifiedPersonName = Helper.Helper.GetPersonName();
             string query = "UPDATE MACHINEINFORMATION SET LocationId = " + machineinformation.LocationId + ",CustomerId = " + machineinformation.CustomerId + ",Name = '" + machineinformation.Name + "',YearOfConstruction = '" + machineinformation.YearOfConstruction + "',SerialNumber = '" + machineinformation.SerialNumber + "',HoldingPositions = " + machineinformation.HoldingPositions + ",Entrances = " + machineinformation.Entrances + ",Payload = " + machineinformation.Payload + ",Description = '" + machineinformation.Description + "',GoogleDriveFolderName = '" + machineinformation.GoogleDriveFolderName + "',GoogleDriveLink = '" + machineinformation.GoogleDriveLink + "',CreatedPersonName = '" + machineinformation.CreatedPersonName + "',ModifiedPersonName = '" + machineinformation.ModifiedPersonName + "',ReadOnly = " + machineinformation.ReadOnly + ",UsedBy = '" + machineinformation.UsedBy + "',Deleted = " + machineinformation.Deleted + " WHERE ID = " + machineinformation.Id;
 
-            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
-            databaseConnection.Open();
+            dbConnection.Open();
             int records = execQuery.ExecuteNonQuery();
             var result = new SQLQueryResult<MachineInformation>(records, machineinformation.Id);
 
-            UpdateContactPartner(machineinformation.ContactPerson);
+            UpdateContactPartner(dbConnection, machineinformation.ContactPerson);
 
-            databaseConnection.Close();
+            dbConnection.Close();
 
             return result;
         }
@@ -978,10 +950,10 @@ namespace Liftmanagement.Data
 
         public static SQLQueryResult<MachineInformation> MarkForDeleteMachineInformation(MachineInformation machineInformation)
         {
-            return MarkForDeletion<MachineInformation>(machineInformation, (dbConection) =>
+            return MarkForDeletion<MachineInformation>(machineInformation, (dbConnection) =>
             {
-                MarkSubObjectForDeletion<MaintenanceAgreement>(dbConection, machineInformation);
-                MarkSubObjectForDeletion<MaintenanceAgreementContent>(dbConection, machineInformation);
+                MarkSubObjectForDeletion<MaintenanceAgreement>(dbConnection, machineInformation);
+                MarkSubObjectForDeletion<MaintenanceAgreementContent>(dbConnection, machineInformation);
             });
 
 
@@ -1180,9 +1152,9 @@ namespace Liftmanagement.Data
 
         public static SQLQueryResult<MaintenanceAgreement> MarkForDeleteMaintenanceAgreement(MaintenanceAgreement maintenanceAgreement)
         {
-            return MarkForDeletion<MaintenanceAgreement>(maintenanceAgreement, (dbConection) =>
+            return MarkForDeletion<MaintenanceAgreement>(maintenanceAgreement, (dbConnection) =>
             {
-                MarkSubObjectForDeletion<MaintenanceAgreementContent>(dbConection, maintenanceAgreement);
+                MarkSubObjectForDeletion<MaintenanceAgreementContent>(dbConnection, maintenanceAgreement);
             });
         }
 
@@ -1286,6 +1258,8 @@ namespace Liftmanagement.Data
             query = query + values;
 
             MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
+            
+            dbConnection.Open();
 
             int records = execQuery.ExecuteNonQuery();
             long id = execQuery.LastInsertedId;
@@ -1296,7 +1270,7 @@ namespace Liftmanagement.Data
             execQuery = new MySqlCommand(query, dbConnection);
             records = execQuery.ExecuteNonQuery();
 
-            databaseConnection.Close();
+            dbConnection.Close();
             return result;
         }
 
@@ -1516,7 +1490,7 @@ namespace Liftmanagement.Data
             if (subsequentWork != null)
                 subsequentWork();
 
-            databaseConnection.Close();
+            dbConnection.Close();
             return new SQLQueryResult<T>(records, id);
         }
 

@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Liftmanagement.Common;
 using Liftmanagement.Converters;
 
@@ -40,58 +41,74 @@ namespace Liftmanagement.Views
         {
             InitializeComponent();
             AssignSelectAllForTextBoxes();
-            InitMaintenanceAgreementContentView();
 
-            var customersVM = new CustomersViewModel();
-            customersVM.RefreshOnlyCustomers();
-            customersView = new CustomersView();
-            customersView.CustomersVM = customersVM;
-            frameCustomers.Content = customersView;
+            LoadingIndicatorPanel.Visibility = Visibility.Visible;
+            gridResizableMaintenanceAgreements.IsEnabled = false;
 
-            locationsView = new LocationsView();
-            frameLocations.Content = locationsView;
+            Task.Factory.StartNew(() =>
+            {
+                var customersVM = new CustomersViewModel();
+                customersVM.RefreshOnlyCustomers();
 
-            var machineInformationsView = new MachineInformationsView();
-            machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.GoogleDriveFolderName));
-            machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.ContactPerson));
-            machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.Description));
-            machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.Payload));
-            machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.Entrances));
-            machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.HoldingPositions));
-            machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.HoldingPositions));
-            frameMachineInformations.Content = machineInformationsView;
+              var result=  Application.Current.Dispatcher.BeginInvoke(
+                    DispatcherPriority.Background,
+                    new Action(() =>
+                    {
+                        InitMaintenanceAgreementContentView();
 
-            masterDataInfo = new MasterDataInfoView(Helper.Helper.TTypeMangement.MaintenanceAgreement);
-            masterDataInfo.cbMachineInformations.SelectionChanged += CbMachineInformations_SelectionChanged;
 
-            masterDataInfo.RefreshCustomers();
-            frameMasterDataInfo.Content = masterDataInfo;
+                        customersView = new CustomersView();
+                        customersView.CustomersVM = customersVM;
+                        frameCustomers.Content = customersView;
 
-            //customersView.expanderCustomers.Collapsed += ExpanderCustomers_Collapsed;
-            customersView.dgCustomers.SelectionChanged += DgCustomers_SelectionChanged;
+                        locationsView = new LocationsView();
+                        frameLocations.Content = locationsView;
 
-            //locationsView.expanderLocations.Collapsed += ExpanderLocations_Collapsed;
-            locationsView.dgLocations.SelectionChanged += DgLocations_SelectionChanged;
+                        var machineInformationsView = new MachineInformationsView();
+                        machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.GoogleDriveFolderName));
+                        machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.ContactPerson));
+                        machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.Description));
+                        machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.Payload));
+                        machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.Entrances));
+                        machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.HoldingPositions));
+                        machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.HoldingPositions));
+                        frameMachineInformations.Content = machineInformationsView;
 
-            // machineInformationsView.expanderMachineInformations.Collapsed += ExpanderMachineInformations_Collapsed;
-            machineInformationsView.dgMachineInformations.SelectionChanged += DgMachineInformations_SelectionChanged;
+                        masterDataInfo = new MasterDataInfoView(Helper.Helper.TTypeMangement.MaintenanceAgreement);
+                        masterDataInfo.cbMachineInformations.SelectionChanged += CbMachineInformations_SelectionChanged;
 
-            NotVisibleColumns.Add(nameof(MaintenanceAgreement.GoogleCalendarEventId));
-            dgMaintenanceAgreements.Tag = NotVisibleColumns;
+                        masterDataInfo.RefreshCustomers();
+                        frameMasterDataInfo.Content = masterDataInfo;
 
-            dgMaintenanceAgreements.SelectionChanged += DgMaintenanceAgreements_SelectionChanged;
-            dgMaintenanceAgreements.SelectedIndex = 0;
+                        customersView.dgCustomers.SelectionChanged += DgCustomers_SelectionChanged;
 
-            MaintenanceAgreementVM.LoadComboboxes();
-            AssigneValuesToControl();
+                        locationsView.dgLocations.SelectionChanged += DgLocations_SelectionChanged;
 
-            cbNoticeOfPeriodMonth.ItemsSource = GetMonths();
-            cbNoticeOfPeriodMonth.SelectedIndex = 2;
+                        machineInformationsView.dgMachineInformations.SelectionChanged += DgMachineInformations_SelectionChanged;
 
-            txtNoticeOfPeriod.Text = "Monate";
+                        NotVisibleColumns.Add(nameof(MaintenanceAgreement.GoogleCalendarEventId));
+                        dgMaintenanceAgreements.Tag = NotVisibleColumns;
 
-            EnableContoles(false);
+                        dgMaintenanceAgreements.SelectionChanged += DgMaintenanceAgreements_SelectionChanged;
+                        dgMaintenanceAgreements.SelectedIndex = 0;
 
+                        MaintenanceAgreementVM.LoadComboboxes();
+                        AssigneValuesToControl();
+
+                        cbNoticeOfPeriodMonth.ItemsSource = GetMonths();
+                        cbNoticeOfPeriodMonth.SelectedIndex = 2;
+
+                        txtNoticeOfPeriod.Text = "Monate";
+
+                        EnableContoles(false);
+                    }));
+
+            }).ContinueWith((task) =>
+            {
+                LoadingIndicatorPanel.Visibility = Visibility.Collapsed;
+                gridResizableMaintenanceAgreements.IsEnabled = true;
+            }, TaskScheduler.FromCurrentSynchronizationContext());
+            
         }
 
         private void InitMaintenanceAgreementContentView()

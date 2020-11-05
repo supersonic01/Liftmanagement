@@ -37,8 +37,6 @@ namespace Liftmanagement.Views
             //TODO select only Customer
             //TODO Datetime Validation and format of filed
 
-            LoadingIndicatorPanel.Visibility = Visibility.Visible;
-            gridResizableMachineInformation.IsEnabled = false;
 
             //Task.Factory.StartNew(() =>
             //{
@@ -67,6 +65,9 @@ namespace Liftmanagement.Views
 
             //});
 
+
+            LoadingIndicatorPanel.Visibility = Visibility.Visible;
+            gridResizableMachineInformation.IsEnabled = false;
 
             Task.Factory.StartNew(() =>
             {

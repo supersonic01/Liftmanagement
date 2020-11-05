@@ -297,7 +297,12 @@ namespace Liftmanagement.Views
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-
+            MarkForDelete("Anlage", MachineInformationVM.MachineInformationSelected,
+                () => MachineInformationVM.MarkForDeleteMachineInformation(),
+                () => {
+                    MachineInformationVM.RefreshByLocation(masterDataInfo.MasterDataInfoVM.LocationSelected.Id);
+                    dgMachineInformations.SelectedIndex = 0;
+                });
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)

@@ -172,7 +172,12 @@ namespace Liftmanagement.Views
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-
+            MarkForDelete("Standort", LocationDetailVM.LocationSelected,
+                () => LocationDetailVM.MarkForDeleteLocation(),
+                () => {
+                    LocationsVM.LocationsByCustomer(_customer);
+                    dgLocations.SelectedIndex = 0;
+                });
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)

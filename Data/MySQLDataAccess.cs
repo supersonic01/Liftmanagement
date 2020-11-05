@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Management;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -486,14 +487,14 @@ namespace Liftmanagement.Data
 
         public static List<MaintenanceAgreement> GetMaintenanceAgreements()
         {
-            string query = "SELECT * FROM MAINTENANCEAGREEMENT";
+            string query = "SELECT * FROM MAINTENANCEAGREEMENT WHERE DELETED = FALSE";
             return GetMaintenanceAgreements(query);
         }
 
 
         public static List<MaintenanceAgreement> GetMaintenanceAgreements(long machineInformationId)
         {
-            string query = "SELECT * FROM MAINTENANCEAGREEMENT WHERE MACHINEINFORMATIONID = " + machineInformationId;
+            string query = "SELECT * FROM MAINTENANCEAGREEMENT WHERE MACHINEINFORMATIONID = " + machineInformationId + " AND DELETED = FALSE";
             return GetMaintenanceAgreements(query);
         }
 
@@ -628,75 +629,106 @@ namespace Liftmanagement.Data
 
         public static SQLQueryResult<Customer> MarkForDeleteCustomer(Customer customer)
         {
-            //TOTO do in trasaction
-            //Check Timestemp if needed
+            ////TOTO do in trasaction
+            ////Check Timestemp if needed
 
-            if (databaseConnection == null)
+            //if (databaseConnection == null)
+            //{
+            //    CreateConnection();
+            //}
+
+            //customer.ModifiedPersonName = Helper.Helper.GetPersonName();
+            //string query = "UPDATE CUSTOMER SET Selected = " + customer.Selected + ",ModifiedPersonName = '" + customer.ModifiedPersonName + "' WHERE ID = " + customer.Id;
+
+            //MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+
+            //databaseConnection.Open();
+            //int records = execQuery.ExecuteNonQuery();
+            //long id = customer.Id;
+            //var result = new SQLQueryResult<Customer>(records, id);
+
+            //Task.Factory.StartNew(() =>
+            //{
+            //    MarkForDeleteContactPartner(customer.ContactPerson);
+
+            //    MarkForDeleteAdministratorCompany(customer.Administrator);
+
+            //    foreach (var contactPerson in customer.Administrator.ContactPersons)
+            //    {
+            //        MarkForDeleteContactPartner(contactPerson);
+            //    }
+            //}).ContinueWith((task) =>
+            //{
+            //    databaseConnection.Close();
+            //});
+
+            //return result;
+
+            return MarkForDeletion<Customer>(customer, (dbConection) =>
             {
-                CreateConnection();
-            }
-
-            customer.ModifiedPersonName = Helper.Helper.GetPersonName();
-            string query = "UPDATE CUSTOMER SET Selected = " + customer.Selected + ",ModifiedPersonName = '" + customer.ModifiedPersonName + "' WHERE ID = " + customer.Id;
-
-            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
-
-            databaseConnection.Open();
-            int records = execQuery.ExecuteNonQuery();
-            long id = customer.Id;
-            var result = new SQLQueryResult<Customer>(records, id);
-
-            Task.Factory.StartNew(() =>
-            {
-                MarkForDeleteContactPartner(customer.ContactPerson);
-
                 MarkForDeleteAdministratorCompany(customer.Administrator);
-
-                foreach (var contactPerson in customer.Administrator.ContactPersons)
-                {
-                    MarkForDeleteContactPartner(contactPerson);
-                }
-            }).ContinueWith((task) =>
-            {
-                databaseConnection.Close();
+                MarkSubObjectForDeletion<Location>(dbConection, customer);
+                MarkForDeleteContactPartner(dbConection, customer.ContactPerson);
+                MarkSubObjectForDeletion<MachineInformation>(dbConection, customer);
+                MarkSubObjectForDeletion<MaintenanceAgreement>(dbConection, customer);
+                MarkSubObjectForDeletion<MaintenanceAgreementContent>(dbConection, customer);
             });
-
-            return result;
         }
 
-        private static SQLQueryResult<ContactPartner> MarkForDeleteContactPartner(ContactPartner contactpartner)
+        private static SQLQueryResult<ContactPartner> MarkForDeleteContactPartner(MySqlConnection dbConnection, ContactPartner contactpartner)
         {
             contactpartner.ModifiedPersonName = Helper.Helper.GetPersonName();
-            string query = "UPDATE CONTACTPARTNER SET DELETED = " + contactpartner.Deleted + ",MODIFIEDPERSONNAME = '" + contactpartner.ModifiedPersonName + "' WHERE CustomerId = " + contactpartner.CustomerId;
+            string query = "UPDATE CONTACTPARTNER SET DELETED = TRUE ,MODIFIEDPERSONNAME = '" + contactpartner.ModifiedPersonName + "' WHERE CustomerId = " + contactpartner.CustomerId;
 
-            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
             int records = execQuery.ExecuteNonQuery();
             return new SQLQueryResult<ContactPartner>(records, contactpartner.Id);
         }
 
-        public static SQLQueryResult<Location> MarkForDeleteLocation(Location location)
+        private static SQLQueryResult<ContactPartner> MarkForDeleteContactPartner(MySqlConnection dbConnection, long foreignkey, int foreignkeytype)
         {
-            if (databaseConnection == null)
-            {
-                CreateConnection();
-            }
+            var modifiedPersonName = Helper.Helper.GetPersonName();
+            string query = "UPDATE CONTACTPARTNER SET DELETED = TRUE ,MODIFIEDPERSONNAME = '" + modifiedPersonName + "' WHERE FOREIGNKEY = " + foreignkey + " AND FOREIGNKEYTYPE = " + foreignkeytype;
 
-            location.ModifiedPersonName = Helper.Helper.GetPersonName();
-            string query = "UPDATE LOCATION SET DELETED = " + location.Deleted + ",MODIFIEDPERSONNAME = '" + location.ModifiedPersonName + "' WHERE CustomerId = " + location.CustomerId;
-
-            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
-
-            databaseConnection.Open();
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
             int records = execQuery.ExecuteNonQuery();
-            var result = new SQLQueryResult<Location>(records, location.Id);
+            return new SQLQueryResult<ContactPartner>(records, foreignkey);
+        }
 
-            var contactResult = MarkForDeleteContactPartner(location.ContactPerson);
+        public static SQLQueryResult<Location> MarkForDeleteLocation(Location location)
+        {
+            //if (databaseConnection == null)
+            //{
+            //    CreateConnection();
+            //}
 
-            databaseConnection.Close();
+            //location.ModifiedPersonName = Helper.Helper.GetPersonName();
+            //string query = "UPDATE LOCATION SET DELETED = " + location.Deleted + ",MODIFIEDPERSONNAME = '" + location.ModifiedPersonName + "' WHERE CustomerId = " + location.CustomerId;
 
-            return result;
+            //MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+
+            //databaseConnection.Open();
+
+            //int records = execQuery.ExecuteNonQuery();
+            //var result = new SQLQueryResult<Location>(records, location.Id);
+
+            //var contactResult = MarkForDeleteContactPartner(location.ContactPerson);
+
+            //databaseConnection.Close();
+
+            // return result;
+
+            return MarkForDeletion<Location>(location, (dbConection) =>
+            { 
+                var customer = new Customer{Id = location.CustomerId };
+
+                MarkForDeleteContactPartner(dbConection, location.Id, Helper.Helper.ClassTypeForeignKeyTypeMapper[typeof(Location)]);
+                MarkSubObjectForDeletion<MachineInformation>(dbConection, customer);
+                MarkSubObjectForDeletion<MaintenanceAgreement>(dbConection, customer);
+                MarkSubObjectForDeletion<MaintenanceAgreementContent>(dbConection, customer);
+            });
         }
 
         private static SQLQueryResult<AdministratorCompany> MarkForDeleteAdministratorCompany(AdministratorCompany administratorcompany)
@@ -946,25 +978,29 @@ namespace Liftmanagement.Data
 
         public static SQLQueryResult<MachineInformation> MarkForDeleteMachineInformation(MachineInformation machineInformation)
         {
-            return MarkForDeletion<MachineInformation>(machineInformation);
+            return MarkForDeletion<MachineInformation>(machineInformation, (dbConection) =>
+            {
+                MarkSubObjectForDeletion<MaintenanceAgreement>(dbConection, machineInformation);
+                MarkSubObjectForDeletion<MaintenanceAgreementContent>(dbConection, machineInformation);
+            });
+
+
         }
 
 
-        private static SQLQueryResult<T> MarkForDeletion<T>(BaseDatabaseField dbObject, Action postWork = null) where T : BaseDatabaseField
+        private static SQLQueryResult<T> MarkForDeletion<T>(BaseDatabaseField dbObject, Action<MySqlConnection> postWork = null) where T : BaseDatabaseField
         {
-            if (databaseConnection == null)
-            {
-                CreateConnection();
-            }
+            var dbConnection = GetConnection();
+            dbObject.Deleted = true;
 
             var classname = typeof(T).Name.ToUpper();
 
             dbObject.ModifiedPersonName = Helper.Helper.GetPersonName();
             string query = "UPDATE " + classname + " SET Deleted = " + dbObject.Deleted + ",ModifiedPersonName = '" + dbObject.ModifiedPersonName + "' WHERE ID = " + dbObject.Id;
 
-            MySqlCommand execQuery = new MySqlCommand(query, databaseConnection);
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
 
-            databaseConnection.Open();
+            dbConnection.Open();
             int records = execQuery.ExecuteNonQuery();
             var result = new SQLQueryResult<T>(records, dbObject.Id);
 
@@ -972,11 +1008,11 @@ namespace Liftmanagement.Data
             {
                 if (postWork != null)
                 {
-                    postWork();
+                    postWork(dbConnection);
                 }
             }).ContinueWith((task) =>
             {
-                databaseConnection.Close();
+                dbConnection.Close();
             });
 
             return result;
@@ -1144,12 +1180,33 @@ namespace Liftmanagement.Data
 
         public static SQLQueryResult<MaintenanceAgreement> MarkForDeleteMaintenanceAgreement(MaintenanceAgreement maintenanceAgreement)
         {
-            return MarkForDeletion<MaintenanceAgreement>(maintenanceAgreement);
+            return MarkForDeletion<MaintenanceAgreement>(maintenanceAgreement, (dbConection) =>
+            {
+                MarkSubObjectForDeletion<MaintenanceAgreementContent>(dbConection, maintenanceAgreement);
+            });
         }
+
+
+        private static SQLQueryResult<T> MarkSubObjectForDeletion<T>(MySqlConnection dbConnection ,BaseDatabaseField parentObject) where T : BaseDatabaseField
+        {
+            var classname = typeof(T).Name.ToUpper();
+            var parentId = parentObject.GetType().Name.ToUpper();
+
+            parentObject.ModifiedPersonName = Helper.Helper.GetPersonName();
+            string query = "UPDATE " + classname + " SET Deleted = TRUE ,ModifiedPersonName = '" + parentObject.ModifiedPersonName + "' WHERE "+ parentId+"ID = " + parentObject.Id;
+
+            MySqlCommand execQuery = new MySqlCommand(query, dbConnection);
+            
+            int records = execQuery.ExecuteNonQuery();
+            var result = new SQLQueryResult<T>(records, parentObject.Id);
+            
+            return result;
+        }
+
 
         public static List<MaintenanceAgreement> GetMaintenanceAgreementsByMachineInformation(long id)
         {
-            string query = "SELECT * FROM MAINTENANCEAGREEMENT WHERE MACHINEINFORMATIONID = " + id;
+            string query = "SELECT * FROM MAINTENANCEAGREEMENT WHERE MACHINEINFORMATIONID = " + id + " AND DELETED = FALSE";
             return GetMaintenanceAgreements(query);
         }
 
@@ -1434,5 +1491,34 @@ namespace Liftmanagement.Data
             string query = "SELECT * FROM OTHERINFORMATION WHERE MACHINEINFORMATIONID = " + machineInformationId;
             return GetOtherInformations(query);
         }
+
+        public static SQLQueryResult<MaintenanceAgreement> DeleteMaintenanceAgreement(MaintenanceAgreement maintenanceAgreement)
+        {
+          return  Delete<MaintenanceAgreement>(maintenanceAgreement.Id, () =>
+          {
+
+          });
+          
+        }
+
+        private static SQLQueryResult<T> Delete<T>(long id,Action subsequentWork ) where T : BaseDatabaseField
+        {
+            var dbConnection = GetConnection();
+
+            var classname = typeof(T).Name.ToUpper();
+            var query = "DELETE FROM " + classname + " WHERE ID = " +id;
+
+            var execQuery = new MySqlCommand(query, dbConnection);
+            int records = execQuery.ExecuteNonQuery();
+           
+            var result = new SQLQueryResult<MaintenanceAgreement>(records, id);
+
+            if (subsequentWork != null)
+                subsequentWork();
+
+            databaseConnection.Close();
+            return new SQLQueryResult<T>(records, id);
+        }
+
     }
 }

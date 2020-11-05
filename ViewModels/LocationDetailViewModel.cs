@@ -57,7 +57,7 @@ namespace Liftmanagement.ViewModels
             });
         }
 
-        public SQLQueryResult<Location> MarkForDeleteCustomer()
+        public SQLQueryResult<Location> MarkForDeleteLocation()
         {
             return MySQLDataAccess.MarkForDeleteLocation(LocationSelected);
         }

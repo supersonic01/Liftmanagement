@@ -27,8 +27,8 @@ namespace Liftmanagement.Views
     /// </summary>
     public partial class MaintenanceAgreementView : GoogleDriveDialogueView
     {
-        private CustomersView customersView ;
-        private LocationsView locationsView ;
+        private CustomersView customersView;
+        private LocationsView locationsView;
         private MachineInformationsView machineInfosView;
         private MasterDataInfoView masterDataInfo;
         private MaintenanceAgreementContentView maintenanceAgreementContentView;
@@ -58,7 +58,7 @@ namespace Liftmanagement.Views
             machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.Payload));
             machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.Entrances));
             machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.HoldingPositions));
-             machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.HoldingPositions));
+            machineInformationsView.NotVisibleColumns.Add(nameof(MachineInformation.HoldingPositions));
             frameMachineInformations.Content = machineInformationsView;
 
             masterDataInfo = new MasterDataInfoView(Helper.Helper.TTypeMangement.MaintenanceAgreement);
@@ -73,7 +73,7 @@ namespace Liftmanagement.Views
             //locationsView.expanderLocations.Collapsed += ExpanderLocations_Collapsed;
             locationsView.dgLocations.SelectionChanged += DgLocations_SelectionChanged;
 
-           // machineInformationsView.expanderMachineInformations.Collapsed += ExpanderMachineInformations_Collapsed;
+            // machineInformationsView.expanderMachineInformations.Collapsed += ExpanderMachineInformations_Collapsed;
             machineInformationsView.dgMachineInformations.SelectionChanged += DgMachineInformations_SelectionChanged;
 
             NotVisibleColumns.Add(nameof(MaintenanceAgreement.GoogleCalendarEventId));
@@ -97,7 +97,7 @@ namespace Liftmanagement.Views
         private void InitMaintenanceAgreementContentView()
         {
             maintenanceAgreementContentView = new MaintenanceAgreementContentView();
-           
+
             maintenanceAgreementContentViewWindow = new Window
             {
                 Content = maintenanceAgreementContentView,
@@ -192,39 +192,39 @@ namespace Liftmanagement.Views
             //BindingDatePicker(datePickerAgreementDate, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.AgreementDate, true, () => new DatetimeRule());
             //datePickerAgreementDate.BlackoutDates.Add(new CalendarDateRange(DateTime.MinValue, Helper.Helper.DefaultDate));
 
-          // BindingDatetime(txtDuration, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.Duration);
+            // BindingDatetime(txtDuration, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.Duration);
             BindingDatetime(txtAgreementDate, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.AgreementDate);
 
             BindingText(txtNotificationTime, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.NotificationTime);
 
             BindingText(txtNotificationTime, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.NotificationTime);
 
-            BindingComboBoxBindingModeOneWay(cbNotificationUnit,()=>MaintenanceAgreementVM.NotificationUnits);
-           BindingComboBoxSelectedValue(cbNotificationUnit,()=> MaintenanceAgreementVM.MaintenanceAgreementSelected.NotificationUnit);
-       
-           BindingComboBoxBindingModeOneWay(cbArreementCancelledBy, () => MaintenanceAgreementVM.ArreementCancelledBy);
-           BindingComboBoxText(cbArreementCancelledBy, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.AgreementCancelledBy);
+            BindingComboBoxBindingModeOneWay(cbNotificationUnit, () => MaintenanceAgreementVM.NotificationUnits);
+            BindingComboBoxSelectedValue(cbNotificationUnit, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.NotificationUnit);
+
+            BindingComboBoxBindingModeOneWay(cbArreementCancelledBy, () => MaintenanceAgreementVM.ArreementCancelledBy);
+            BindingComboBoxText(cbArreementCancelledBy, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.AgreementCancelledBy);
 
             BindingComboBoxBindingModeOneWay(cbMaintenanceType, () => MaintenanceAgreementVM.MaintenanceTypes);
             BindingComboBoxText(cbMaintenanceType, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.MaintenanceType);
 
-            BindingComboBoxBindingModeOneWay(cbTerminated,()=>MaintenanceAgreementVM.TerminationUnits);
+            BindingComboBoxBindingModeOneWay(cbTerminated, () => MaintenanceAgreementVM.TerminationUnits);
             BindingComboBoxText(cbTerminated, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.CanBeCancelled);
 
-            BindingHyperlink(hyperlinkGoogleDrive, ()=> MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleDriveLink);
+            BindingHyperlink(hyperlinkGoogleDrive, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleDriveLink);
             BindingTextBlock(txtGoogleDriveFolderName, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleDriveFolderName);
 
-            BindingHyperlink(hyperlinkGoogleCalendar, ()=> MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleCalendarEventId);
-            BindingTextBlockVisibility(txtGoogleCalendarHyperlink, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleCalendarEventId, ()=>new ValueVisibilityConverter());
+            BindingHyperlink(hyperlinkGoogleCalendar, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleCalendarEventId);
+            BindingTextBlockVisibility(txtGoogleCalendarHyperlink, () => MaintenanceAgreementVM.MaintenanceAgreementSelected.GoogleCalendarEventId, () => new ValueVisibilityConverter());
 
-            BindingControl(dgMaintenanceAgreements,()=>MaintenanceAgreementVM.MaintenanceAgreements);
+            BindingControl(dgMaintenanceAgreements, () => MaintenanceAgreementVM.MaintenanceAgreements);
         }
         private void CbLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-        //    var location = GetSelectedObject<Location>(sender);
+            //    var location = GetSelectedObject<Location>(sender);
 
-        //    if (location != null)
-        //        MaintenanceAgreementVM.RefreshByLocation(location.Id);
+            //    if (location != null)
+            //        MaintenanceAgreementVM.RefreshByLocation(location.Id);
         }
 
         protected override void EnableContoles(bool enable)
@@ -322,7 +322,7 @@ namespace Liftmanagement.Views
                 List<string> validationMsg = new List<string>();
 
 
-                if (MaintenanceAgreementVM.MaintenanceAgreementSelected.Duration<= Helper.Helper.DefaultDate)
+                if (MaintenanceAgreementVM.MaintenanceAgreementSelected.Duration <= Helper.Helper.DefaultDate)
                 {
                     validationMsg.Add("Vertragslaufzeitdatum ist unzulässig.");
                     isValid = false;
@@ -345,38 +345,75 @@ namespace Liftmanagement.Views
 
                 if (!isValid)
                 {
-                    new NotificationWindow("Fehler!", null,validationMsg,NotificationWindow.MessageType.Error).Show();
+                    new NotificationWindow("Fehler!", null, validationMsg, NotificationWindow.MessageType.Error).Show();
                     return;
                 }
 
-                var result = MaintenanceAgreementVM.Add(masterDataInfo.MasterDataInfoVM,maintenanceAgreementContentView.MaintenanceAgreementContentVM );
+                var result = MaintenanceAgreementVM.Add(masterDataInfo.MasterDataInfoVM, maintenanceAgreementContentView.MaintenanceAgreementContentVM);
                 if (result.Records > 0)
                 {
                     MaintenanceAgreementVM.RefreshByMachineInformatio(masterDataInfo.MasterDataInfoVM.MachineInformationSelected.Id);
                     var maintenanceAgreement = dgMaintenanceAgreements.Items.Cast<MaintenanceAgreement>().Single(c => c.Id == result.Id);
                     dgMaintenanceAgreements.SelectedItem = maintenanceAgreement;
 
-                    var titel = string.Format("Anlage : {0}", maintenanceAgreement.GetFullName());
-                    var msg = "Anlagedaten wurden gespeichert.";
+                    var titel = string.Format("Wartungsvertrag : {0}", maintenanceAgreement.GetFullName());
+                    var msg = "Wartungsvertrag wurden gespeichert.";
                     new NotificationWindow(titel, msg).Show();
                 }
                 else
                 {
-                    var msg = "Anlagedaten konnten nicht gespeichert werden.";
+                    var msg = "Wartungsvertrag konnten nicht gespeichert werden.";
                     new NotificationWindow("Fehler!", msg).Show();
                 }
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
-                var msg = "Anlagedaten konnten nicht gespeichert werden.";
-                new NotificationWindow("Fehler!", exception.ToString(),null,NotificationWindow.MessageType.Error).Show();
+                var msg = "Wartungsvertrag konnten nicht gespeichert werden.";
+                new NotificationWindow("Fehler!", exception.ToString(), null, NotificationWindow.MessageType.Error).Show();
             }
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            MaintenanceAgreementVM.MarkForDeleteMaintenanceAgreement();
+            MarkForDelete("Wartungsvertrag", MaintenanceAgreementVM.MaintenanceAgreementSelected,
+                () => MaintenanceAgreementVM.MarkForDeleteMaintenanceAgreement(),
+                () => {
+                                    MaintenanceAgreementVM.RefreshByMachineInformatio(masterDataInfo.MasterDataInfoVM.MachineInformationSelected.Id);
+                                    dgMaintenanceAgreements.SelectedIndex = 0;
+                                    });
+
+            //var category = new CategoryViewModel().Categories.Where(c => c.MangementType == Helper.Helper.TTypeMangement.MaintenanceAgreement).Select(c => c.Name).FirstOrDefault();
+
+            //var msg = "Möchten Sie den " + category + " \n'" + MaintenanceAgreementVM.MaintenanceAgreementSelected.GetFullName() + "' \nlöschen?";
+            //AskForceToDelete(msg, category + " löschen", () => { });
+
+            //try
+            //{
+            //    var titel = string.Format("{1} : {0}", MaintenanceAgreementVM.MaintenanceAgreementSelected.GetFullName(), category);
+
+            //    var result = MaintenanceAgreementVM.MarkForDeleteMaintenanceAgreement();
+
+            //    if (result.Records > 0)
+            //    {
+            //        MaintenanceAgreementVM.RefreshByMachineInformatio(masterDataInfo.MasterDataInfoVM.MachineInformationSelected.Id);
+            //        dgMaintenanceAgreements.SelectedIndex = 0;
+
+            //        msg = category + " wurden gelöscht.";
+            //        new NotificationWindow(titel, msg).Show();
+            //    }
+            //    else
+            //    {
+            //        msg = category + " konnten nicht gelöscht werden.";
+            //        new NotificationWindow("Fehler!", msg).Show();
+            //    }
+            //}
+            //catch (Exception exception)
+            //{
+            //    Console.WriteLine(exception);
+            //    msg = category + " konnten nicht gelöscht werden.";
+            //    new NotificationWindow("Fehler!", exception.ToString(), null, NotificationWindow.MessageType.Error).Show();
+            //}
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -396,7 +433,7 @@ namespace Liftmanagement.Views
             if (MaintenanceAgreementVM.MaintenanceAgreementSelected == null ||
                 MaintenanceAgreementVM.MaintenanceAgreements.Count == 0)
             {
-                new NotificationWindow("Fehler!", "Es sind keine Wartungsverträge ausgewählt um zu bearbeiten",null, NotificationWindow.MessageType.Waring).Show();
+                new NotificationWindow("Fehler!", "Es sind keine Wartungsverträge ausgewählt um zu bearbeiten", null, NotificationWindow.MessageType.Waring).Show();
                 return;
             }
 
@@ -423,7 +460,7 @@ namespace Liftmanagement.Views
                 MaintenanceAgreementVM.ReleaseEditing();
             }
 
-            MaintenanceAgreementVM.MaintenanceAgreementSelected = (MaintenanceAgreement) dgMaintenanceAgreements.SelectedItem;
+            MaintenanceAgreementVM.MaintenanceAgreementSelected = (MaintenanceAgreement)dgMaintenanceAgreements.SelectedItem;
             EnableContoles(false);
 
         }

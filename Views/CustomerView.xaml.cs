@@ -220,7 +220,12 @@ namespace Liftmanagement.View
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-
+            MarkForDelete("Kunde", CustomerVM.CustomerSelected,
+                () => CustomerVM.MarkForDeleteCustomer(),
+                () => {
+                    customersView.CustomersVM.RefreshCustomers();
+                    customersView.dgCustomers.SelectedIndex = 0;
+                });
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)

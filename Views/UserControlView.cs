@@ -105,7 +105,7 @@ namespace Liftmanagement.Views
             {
                 Source = this
             };
-            
+
             control.SetBinding(ItemsControl.ItemsSourceProperty, binding);
         }
 
@@ -245,7 +245,7 @@ namespace Liftmanagement.Views
             {
                 Source = this,
             };
-         
+
             binding.Converter = new Liftmanagement.Converters.DateTimeConverter(); ;
 
             control.SetBinding(TextBox.TextProperty, binding);
@@ -306,7 +306,7 @@ namespace Liftmanagement.Views
 
             binding.Mode = BindingMode.TwoWay;
             binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-          
+
             binding.StringFormat = stringFormat;
             //binding.Converter = new Liftmanagement.Converters.DateDateConverter();
 
@@ -322,14 +322,14 @@ namespace Liftmanagement.Views
             //}
         }
 
-     
+
         private void DatePicker_LostFocus(object sender, RoutedEventArgs e)
         {
             var db = (Control)sender;
             //Validation.ClearInvalid(db.GetBindingExpression(DatePicker.SelectedDateProperty));
             //Validation.ClearInvalid(db.GetBindingExpression(DatePicker.TextProperty));
             ((Control)sender).GetBindingExpression(DatePicker.TextProperty).UpdateSource();
-           // ((Control)sender).GetBindingExpression(DatePicker.SelectedDateProperty).UpdateSource();
+            // ((Control)sender).GetBindingExpression(DatePicker.SelectedDateProperty).UpdateSource();
         }
 
         private void Dd_LostFocus(object sender, RoutedEventArgs e)
@@ -375,12 +375,12 @@ namespace Liftmanagement.Views
             };
 
             binding.Mode = BindingMode.TwoWay;
-            binding.Converter= new UriConverter();
+            binding.Converter = new UriConverter();
 
             hyperlink.SetBinding(Hyperlink.NavigateUriProperty, binding);
         }
 
-        protected virtual void BindingTextBlock<T>(TextBlock control, Expression<Func<T>> action, Func<IValueConverter> converter = null, string stringFormat=null)
+        protected virtual void BindingTextBlock<T>(TextBlock control, Expression<Func<T>> action, Func<IValueConverter> converter = null, string stringFormat = null)
         {
             var binding = new Binding(GetPropertyPath(action))
             {
@@ -497,10 +497,60 @@ namespace Liftmanagement.Views
             //    BitmapSizeOptions.FromWidthAndHeight(width, height));
         }
 
+
+        protected void MarkForDelete<T>(string category,BaseDatabaseField model, Func<SQLQueryResult<T>> postActionDelete, Action postActionUpdate) where T : BaseDatabaseField
+        {
+
+            var msg = category + ": \n'" + model.GetFullName() + "' \nlöschen?";
+            AskForceToDelete(msg, category + " löschen", () =>
+            {
+                try
+                {
+                    var titel = string.Format("{1} : {0}", model.GetFullName(), category);
+
+                    var result = postActionDelete();
+
+                    if (result.Records > 0)
+                    {
+                        if (postActionUpdate != null)
+                        {
+                            postActionUpdate();
+                        }
+
+                        msg = category + " wurde gelöscht.";
+                        new NotificationWindow(titel, msg).Show();
+                    }
+                    else
+                    {
+                        msg = category + " konnte nicht gelöscht werden.";
+                        new NotificationWindow("Fehler!", msg).Show();
+                    }
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception);
+                    msg = category + " konnte nicht gelöscht werden.";
+                    new NotificationWindow("Fehler!", exception.ToString(), null, NotificationWindow.MessageType.Error)
+                        .Show();
+                }
+            });
+        }
+
         protected void AskForceToEdit(string currentlyUsedBy, Action forToEditing)
         {
             var msg = "Daten sind gerade von \"" + currentlyUsedBy + "\" in Benutzung.\n Möchten Sie trotzdem die Daten bearbeiten?";
             var titel = "Daten sind in Bearbeitung";
+            MessageBoxResult msgBoxResult = MessageBox.Show(msg, titel, MessageBoxButton.YesNo, MessageBoxImage.Exclamation,
+                MessageBoxResult.No);
+
+            if (msgBoxResult == MessageBoxResult.Yes)
+            {
+                forToEditing();
+            }
+        }
+
+        protected void AskForceToDelete(string msg, string titel, Action forToEditing)
+        {
             MessageBoxResult msgBoxResult = MessageBox.Show(msg, titel, MessageBoxButton.YesNo, MessageBoxImage.Exclamation,
                 MessageBoxResult.No);
 
